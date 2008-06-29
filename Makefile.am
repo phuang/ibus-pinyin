@@ -20,6 +20,7 @@
 
 SUBDIRS = \
 	engine \
+	icons \
 	m4 \
 	po \
 	$(NULL)
