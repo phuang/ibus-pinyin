@@ -1,4 +1,4 @@
-# vim:set noet ts=4:
+#!/bin/sh
 #
 # ibus - The Input Bus
 #
@@ -18,36 +18,6 @@
 # License along with this program; if not, write to the
 # Free Software Foundation, Inc., 59 Temple Place, Suite 330,
 # Boston, MA  02111-1307  USA
-SUBDIRS = \
-	engine \
-	m4 \
-	po \
-	$(NULL)
 
-ACLOCAL_AMFLAGS = -I m4
+python @prefix@/share/ibus/engine/enchant/main.py $@
 
-EXTRA_DIST = \
-	autogen.sh \
-	ibus-tmpl.spec.in \
-	$(NULL)
-
-noinst_DIST = \
-	$(NULL)
-
-
-DISTCLEANFILES = \
-	po/stamp-it \
-	$(NULL)
-
-rpm: dist ibus-tmpl.spec
-	rpmbuild -bb						\
-			--define "_sourcedir `pwd`" \
-			--define "_builddir `pwd`" 	\
-			--define "_srcrpmdir `pwd`" \
-			--define "_rpmdir `pwd`" 	\
-			--define "_specdir `pwd`" 	\
-			@PACKAGE_NAME@.spec
-clean-rpm:
-	$(RM) -r "`uname -i`"
-
-clean-local: clean-rpm

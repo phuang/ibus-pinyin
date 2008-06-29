@@ -40,17 +40,10 @@ rm -rf $RPM_BUILD_ROOT
 %doc AUTHORS COPYING README
 # %dir %{python_sitearch}/ibus
 # %{python_sitearch}/ibus/*
-# %dir %{_datadir}/ibus/
-# %dir %{_datadir}/ibus/daemon/
-# %dir %{_datadir}/ibus/panel/
-# %dir %{_datadir}/ibus/engine/
-# %dir %{_datadir}/ibus/icons/
-# %{_datadir}/ibus/daemon/*
-# %{_datadir}/ibus/panel/*
-# %{_datadir}/ibus/engine/*
+%dir %{_datadir}/ibus/engine/enchant
+%{_datadir}/ibus/engine/enchant/*
+%{_libexecdir}/ibus-engine-enchant
 # %{_datadir}/ibus/icons/*
-# %{_libexecdir}/ibus-daemon
-# %{_libexecdir}/ibus-panel
 
 %changelog
 * Wed Jun 25 2008 Huang Peng <shawn.p.huang@gmail.com> - 0.1.0-1

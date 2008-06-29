@@ -18,36 +18,25 @@
 # License along with this program; if not, write to the
 # Free Software Foundation, Inc., 59 Temple Place, Suite 330,
 # Boston, MA  02111-1307  USA
-SUBDIRS = \
-	engine \
-	m4 \
-	po \
+
+engine_enchant_PYTHON = \
+	engine.py \
+	factory.py \
+	main.py \
 	$(NULL)
 
-ACLOCAL_AMFLAGS = -I m4
+engine_enchantdir = $(datadir)/ibus/engine/enchant
+
+libexec_SCRIPTS = ibus-engine-enchant
+
+CLEANFILES = \
+	*.pyc \
+	$(NULL)
 
 EXTRA_DIST = \
-	autogen.sh \
-	ibus-tmpl.spec.in \
+	ibus-engine-enchant.in \
 	$(NULL)
 
-noinst_DIST = \
-	$(NULL)
+test:
+	$(ENV) PYTHONPATH=$(top_srcdir) $(PYTHON) $(srcdir)/main.py
 
-
-DISTCLEANFILES = \
-	po/stamp-it \
-	$(NULL)
-
-rpm: dist ibus-tmpl.spec
-	rpmbuild -bb						\
-			--define "_sourcedir `pwd`" \
-			--define "_builddir `pwd`" 	\
-			--define "_srcrpmdir `pwd`" \
-			--define "_rpmdir `pwd`" 	\
-			--define "_specdir `pwd`" 	\
-			@PACKAGE_NAME@.spec
-clean-rpm:
-	$(RM) -r "`uname -i`"
-
-clean-local: clean-rpm

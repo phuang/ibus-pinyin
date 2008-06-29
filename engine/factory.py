@@ -18,36 +18,37 @@
 # License along with this program; if not, write to the
 # Free Software Foundation, Inc., 59 Temple Place, Suite 330,
 # Boston, MA  02111-1307  USA
-SUBDIRS = \
-	engine \
-	m4 \
-	po \
-	$(NULL)
 
-ACLOCAL_AMFLAGS = -I m4
+from ibus import interface
+import engine
 
-EXTRA_DIST = \
-	autogen.sh \
-	ibus-tmpl.spec.in \
-	$(NULL)
+FACTORY_PATH = "/com/redhat/IBus/engines/Demo/Factory"
+ENGINE_PATH = "/com/redhat/IBus/engines/Demo/Engine/%d"
 
-noinst_DIST = \
-	$(NULL)
+class DemoEngineFactory (interface.IEngineFactory):
+	NAME = "Enchant"
+	LANG = "en"
+	ICON = ""
+	AUTHORS = "Huang Peng <shawn.p.huang@gmail.com>"
+	CREDITS = "GPLv2"
+
+	def __init__ (self, dbusconn):
+		interface.IEngineFactory.__init__ (self, dbusconn, object_path = FACTORY_PATH)
+		self._dbusconn = dbusconn
+		self._max_engine_id = 1
+	
+	def GetInfo (self):
+		return [
+			self.NAME,
+			self.LANG,
+			self.ICON,
+			self.AUTHORS,
+			self.CREDITS
+			]
+
+	def CreateEngine (self):
+		engine_path = ENGINE_PATH % self._max_engine_id
+		self._max_engine_id += 1
+		return engine.DemoEngine (self._dbusconn, engine_path)
 
 
-DISTCLEANFILES = \
-	po/stamp-it \
-	$(NULL)
-
-rpm: dist ibus-tmpl.spec
-	rpmbuild -bb						\
-			--define "_sourcedir `pwd`" \
-			--define "_builddir `pwd`" 	\
-			--define "_srcrpmdir `pwd`" \
-			--define "_rpmdir `pwd`" 	\
-			--define "_specdir `pwd`" 	\
-			@PACKAGE_NAME@.spec
-clean-rpm:
-	$(RM) -r "`uname -i`"
-
-clean-local: clean-rpm

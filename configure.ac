@@ -50,6 +50,9 @@ AC_ISC_POSIX
 AC_HEADER_STDC
 AM_PROG_LIBTOOL
 
+#check python
+AM_PATH_PYTHON([2.5])
+
 # define GETTEXT_* variables
 GETTEXT_PACKAGE=ibus-tmpl
 AC_SUBST(GETTEXT_PACKAGE)
@@ -63,6 +66,8 @@ AM_GNU_GETTEXT_VERSION(0.16.1)
 AC_CONFIG_FILES([ po/Makefile.in
 Makefile
 ibus-tmpl.spec
+engine/Makefile
+engine/ibus-engine-enchant
 m4/Makefile
 ])
 
