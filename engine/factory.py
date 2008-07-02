@@ -50,4 +50,8 @@ class DemoEngineFactory (interface.IEngineFactory):
 		self._max_engine_id += 1
 		return engine.DemoEngine (self._dbusconn, engine_path)
 
+	def Destroy (self):
+		self.remove_from_connection ()
+		self._dbusconn = None
+
 

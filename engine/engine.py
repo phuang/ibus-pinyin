@@ -183,6 +183,8 @@ class Engine (interface.IEngine):
 		print "PropertyActivate (%s)" % prop_name
 
 	def Destroy (self):
+		self.remove_from_connection ()
+		self._dbusconn = None
 		print "Destroy"
 
 class DemoEngine (Engine):
