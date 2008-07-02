@@ -2,53 +2,23 @@
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 <svg
    xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:cc="http://web.resource.org/cc/"
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:xlink="http://www.w3.org/1999/xlink"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:sodipodi="http://inkscape.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    width="48"
    height="48"
    id="svg14"
    sodipodi:version="0.32"
-   inkscape:version="0.46"
+   inkscape:version="0.43+devel"
    sodipodi:docbase="/home/silvestre/Desktop/Neu/scalable/categories"
-   sodipodi:docname="ibus-enchant.svg"
-   version="1.0"
-   inkscape:output_extension="org.inkscape.output.svg.inkscape">
+   sodipodi:docname="emblem-system.svg"
+   version="1.0">
   <defs
      id="defs3">
-    <linearGradient
-       id="linearGradient3186">
-      <stop
-         id="stop3188"
-         offset="0"
-         style="stop-color:#ff0000;stop-opacity:1;" />
-      <stop
-         id="stop3190"
-         offset="1"
-         style="stop-color:#fb4b12;stop-opacity:0.77840906;" />
-    </linearGradient>
-    <linearGradient
-       id="linearGradient3174">
-      <stop
-         style="stop-color:#000000;stop-opacity:1;"
-         offset="0"
-         id="stop3176" />
-      <stop
-         style="stop-color:#000000;stop-opacity:0;"
-         offset="1"
-         id="stop3178" />
-    </linearGradient>
-    <inkscape:perspective
-       sodipodi:type="inkscape:persp3d"
-       inkscape:vp_x="0 : 24 : 1"
-       inkscape:vp_y="0 : 1000 : 0"
-       inkscape:vp_z="48 : 24 : 1"
-       inkscape:persp3d-origin="24 : 16 : 1"
-       id="perspective23" />
     <linearGradient
        inkscape:collect="always"
        id="linearGradient6647">
@@ -114,15 +84,6 @@
        y2="26.680838"
        gradientUnits="userSpaceOnUse"
        gradientTransform="matrix(1.308298,0,0,1.26823,-17.41594,-13.94055)" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#linearGradient3186"
-       id="linearGradient3184"
-       x1="20.957657"
-       y1="35.310341"
-       x2="36.531876"
-       y2="35.310341"
-       gradientUnits="userSpaceOnUse" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -132,14 +93,14 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1"
-     inkscape:cx="-150.5"
+     inkscape:cx="24"
      inkscape:cy="24"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
-     inkscape:window-width="1024"
-     inkscape:window-height="693"
-     inkscape:window-x="0"
-     inkscape:window-y="26"
+     inkscape:window-width="823"
+     inkscape:window-height="536"
+     inkscape:window-x="143"
+     inkscape:window-y="107"
      inkscape:showpageshadow="false"
      width="48px"
      height="48px"
@@ -181,17 +142,5 @@
        d="M 26.401951,3.4838006 L 21.536258,9.0779654 L 15.695213,4.8708453 L 11.522975,7.3498089 L 12.523715,15.307816 L 5.2069064,17.450691 L 4.4838012,21.870413 L 10.520787,26.606458 L 5.9446345,32.965733 L 9.2725396,37.444359 L 15.62388,34.741164 L 18.823489,41.958265 L 25.391328,42.5162 L 27.779067,35.124781 L 34.539151,36.906487 L 37.686624,31.949474 L 34.089512,25.21076 L 39.51619,20.324311 L 38.185589,14.756151 L 31.316967,13.750636 L 31.347975,5.7573491 L 26.401951,3.4838006 z M 21.840731,16.884393 C 25.733827,16.884393 27.736921,19.625623 27.736921,22.988044 C 27.73692,26.350463 24.79605,29.537105 21.840731,29.537105 C 18.885413,29.537103 16.476076,26.350463 16.476076,22.988044 C 16.476077,19.625622 18.885413,16.884393 21.840731,16.884393 z "
        id="path5772"
        sodipodi:nodetypes="cccccccccccccccccccccccssss" />
-    <text
-       xml:space="preserve"
-       style="font-size:24px;font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:url(#linearGradient3184);fill-opacity:1.0;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Sans;-inkscape-font-specification:Sans Bold Italic"
-       x="20.453751"
-       y="44.058388"
-       id="text2396"
-       sodipodi:linespacing="100%"><tspan
-         sodipodi:role="line"
-         x="20.453751"
-         y="44.058388"
-         id="tspan2400"
-         style="fill-opacity:1.0;fill:url(#linearGradient3184)">E</tspan></text>
   </g>
 </svg>
