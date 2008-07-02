@@ -19,6 +19,7 @@
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 # if not 1, append datestamp to the version number.
+m4_define([package_name], [ibus-tmpl])
 m4_define([ibus_released], [0])
 m4_define([ibus_major_version], [0])
 m4_define([ibus_minor_version], [1])
@@ -29,7 +30,7 @@ m4_define(ibus_maybe_datestamp,
 m4_define([ibus_version],
 	ibus_major_version.ibus_minor_version.ibus_micro_version[]ibus_maybe_datestamp)
 
-AC_INIT([ibus-tmpl], [ibus_version], [http://code.google.com/p/ibus/issues/entry],[ibus-tmpl])
+AC_INIT([package_name], [ibus_version], [http://code.google.com/p/ibus/issues/entry], [package_name])
 AM_INIT_AUTOMAKE([1.10])
 AC_GNU_SOURCE
 
@@ -53,7 +54,7 @@ AM_PROG_LIBTOOL
 AM_PATH_PYTHON([2.5])
 
 # define GETTEXT_* variables
-GETTEXT_PACKAGE=ibus-tmpl
+GETTEXT_PACKAGE="$PACKAGE_NAME"
 AC_SUBST(GETTEXT_PACKAGE)
 AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE,"$GETTEXT_PACKAGE", [Define to the read-only architecture-independent data directory.])
 
@@ -62,13 +63,13 @@ AM_GNU_GETTEXT_VERSION(0.16.1)
 
 
 # OUTPUT files
-AC_CONFIG_FILES([ po/Makefile.in
+AC_CONFIG_FILES(po/Makefile.in
 Makefile
 ibus-tmpl.spec
 engine/Makefile
 engine/ibus-engine-enchant
 icons/Makefile
 m4/Makefile
-])
+)
 
 AC_OUTPUT

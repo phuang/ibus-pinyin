@@ -29,7 +29,7 @@ ACLOCAL_AMFLAGS = -I m4
 
 EXTRA_DIST = \
 	autogen.sh \
-	ibus-tmpl.spec.in \
+	@PACKAGE_NAME@.spec.in \
 	$(NULL)
 
 noinst_DIST = \
@@ -40,13 +40,13 @@ DISTCLEANFILES = \
 	po/stamp-it \
 	$(NULL)
 
-rpm: dist ibus-tmpl.spec
-	rpmbuild -bb						\
+rpm: dist @PACKAGE_NAME@.spec
+	rpmbuild -bb \
 			--define "_sourcedir `pwd`" \
-			--define "_builddir `pwd`" 	\
+			--define "_builddir `pwd`" \
+			--define "_specdir `pwd`" \
+			--define "_rpmdir `pwd`" \
 			--define "_srcrpmdir `pwd`" \
-			--define "_rpmdir `pwd`" 	\
-			--define "_specdir `pwd`" 	\
 			@PACKAGE_NAME@.spec
 clean-rpm:
 	$(RM) -r "`uname -i`"
