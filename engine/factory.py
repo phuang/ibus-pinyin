@@ -48,7 +48,7 @@ class EngineFactory(interface.IEngineFactory):
     def CreateEngine(self):
         engine_path = ENGINE_PATH % self._max_engine_id
         self._max_engine_id += 1
-        return engine.DemoEngine(self._dbusconn, engine_path)
+        return engine.Engine(self._dbusconn, engine_path)
 
     def Destroy(self):
         self.remove_from_connection()
