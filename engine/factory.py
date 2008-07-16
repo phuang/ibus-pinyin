@@ -25,9 +25,9 @@ FACTORY_PATH = "/com/redhat/IBus/engines/Demo/Factory"
 ENGINE_PATH = "/com/redhat/IBus/engines/Demo/Engine/%d"
 
 class EngineFactory(interface.IEngineFactory):
-    NAME = "Enchant"
-    LANG = "en"
-    ICON = "ibus-enchant"
+    NAME = "PinYin"
+    LANG = "zh_CN"
+    ICON = "ibus-pinyin"
     AUTHORS = "Huang Peng <shawn.p.huang@gmail.com>"
     CREDITS = "GPLv2"
 

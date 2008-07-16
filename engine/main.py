@@ -1,6 +1,6 @@
 # vim:set et sts=4 sw=4:
 #
-# ibus-tmpl - The Input Bus template project
+# ibus-pinyin - The PinYin engine for IBus
 #
 # Copyright (c) 2007-2008 Huang Peng <shawn.p.huang@gmail.com>
 #
