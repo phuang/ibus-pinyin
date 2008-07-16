@@ -18,27 +18,35 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-engine_enchant_PYTHON = \
+engine_pinyin_PYTHON = \
 	engine.py \
 	factory.py \
 	main.py \
+	pinyin.py
 	pycreatedb.py \
 	pydict.py \
 	pyparser.py \
+	pyspecialphrase.py \
+	pyspecialtable.py \
 	pysqlitedb.py \
 	pyutil.py \
 	$(NULL)
+engine_pinyin_DATA = \
+	special_phrase \
+	special_table \
+	py.db \
+	$(NULL)
 
-engine_enchantdir = $(datadir)/ibus/engine/enchant
+engine_pinyindir = $(datadir)/ibus/engine/pinyin
 
-libexec_SCRIPTS = ibus-engine-enchant
+libexec_SCRIPTS = ibus-engine-pinyin
 
 CLEANFILES = \
 	*.pyc \
 	$(NULL)
 
 EXTRA_DIST = \
-	ibus-engine-enchant.in \
+	ibus-engine-pinyin.in \
 	$(NULL)
 
 test:
