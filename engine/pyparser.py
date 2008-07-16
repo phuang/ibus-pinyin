@@ -26,14 +26,14 @@ import pydict
 class PinYinParser:
     pinyin_dict = set (pydict.PINYIN_DICT.keys () + pydict.SHENGMU_DICT.keys ())
     gb2312_pinyin_dict = pinyin_dict - set (["eng", "chua", "fe", "fiao", "liong"])
-    correct_yunmu = { 
-        "ing" : ("ign", "img"), "ui" : ("uei", "iu", "i"), 
+    correct_yunmu = {
+        "ing" : ("ign", "img"), "ui" : ("uei", "iu", "i"),
         "un" : ("uen",), "iu" : ("iou", "ui"),
         "ao" : ("au", ), "ei" : ("i", ),
         "iao" : ("ioa", "ia", "i"), "ian" : ("ia", "i"), "iang" : ("ian", "ia", "i")}
 
     correct_table = {}
-    
+
     def __init__ (self):
         self.init_corrent_table ()
 
@@ -59,7 +59,7 @@ class PinYinParser:
         p = None
         for i in range (l, 0, -1):
             py = string[-i:]
-            
+
             if gbk:
                 if py in self.pinyin_dict:
                     p = pyutil.PinYinWord (py)
@@ -68,7 +68,7 @@ class PinYinParser:
                 if py in self.gb2312_pinyin_dict:
                     p = pyutil.PinYinWord (py)
                     break
-            
+
             if p == None and auto_correct and py in PinYinParser.correct_table:
                 py = PinYinParser.correct_table[py]
                 if gbk:
@@ -113,7 +113,7 @@ class ShuangPinParser:
                     shengmu = ""
             except:
                 raise Exception ("can not parse '%s'" % string.encode ("utf-8"))
-            
+
             return [pyutil.PinYinWord (shengmu)]
 
         try:
@@ -131,7 +131,7 @@ class ShuangPinParser:
             if pinyin in PinYinParser.pinyin_dict:
                 p = pyutil.PinYinWord (pinyin)
                 break
-        
+
         if p == None:
             raise Exception ("can not parse '%s'" % string.encode ("utf-8"))
 
@@ -147,7 +147,7 @@ class ShuangPinParser:
 
 if __name__ == "__main__":
     # parser = PinYinParser ()
-    parser = ShuangPinParser ()    
+    parser = ShuangPinParser ()
     pys = parser.parse (sys.argv[1])
     print "'".join (map (str, pys))
-                
+

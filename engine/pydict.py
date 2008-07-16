@@ -20,7 +20,7 @@
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 N_ = lambda x : x
-PINYIN_DICT = { 
+PINYIN_DICT = {
     "a" : 1, "ai" : 2, "an" : 3, "ang" : 4, "ao" : 5,
     "ba" : 6, "bai" : 7, "ban" : 8, "bang" : 9, "bao" : 10,
     "bei" : 11, "ben" : 12, "beng" : 13, "bi" : 14, "bian" : 15,
@@ -34,7 +34,7 @@ PINYIN_DICT = {
     "chuan" : 51, "chuang" : 52, "chui" : 53, "chun" : 54, "chuo" : 55,
     "da" : 56, "dai" : 57, "dan" : 58, "dang" : 59, "dao" : 60,
     "de" : 61, "dei" : 62,
-    # "den" : 63, 
+    # "den" : 63,
     "deng" : 64, "di" : 65,
     "dia" : 66, "dian" : 67, "diao" : 68, "die" : 69, "ding" : 70,
     "diu" : 71, "dong" : 72, "dou" : 73, "du" : 74, "duan" : 75,
@@ -59,7 +59,7 @@ PINYIN_DICT = {
     "kun" : 161, "kuo" : 162, "la" : 163, "lai" : 164, "lan" : 165,
     "lang" : 166, "lao" : 167, "le" : 168, "lei" : 169, "leng" : 170,
     "li" : 171, "lia" : 172, "lian" : 173, "liang" : 174, "liao" : 175,
-    "lie" : 176, "lin" : 177, "ling" : 178, "liu" : 179, 
+    "lie" : 176, "lin" : 177, "ling" : 178, "liu" : 179,
     "lo" : 180,
     "long" : 181, "lou" : 182, "lu" : 183, "luan" : 184, "lue" : 185,
     "lun" : 186, "luo" : 187, "lv" : 188, "lve" : 189, "ma" : 190,
@@ -90,7 +90,7 @@ PINYIN_DICT = {
     "shuai" : 311, "shuan" : 312, "shuang" : 313, "shui" : 314, "shun" : 315,
     "shuo" : 316, "ta" : 317, "tai" : 318, "tan" : 319, "tang" : 320,
     "tao" : 321, "te" : 322,
-    # "tei" : 323, 
+    # "tei" : 323,
     "teng" : 324, "ti" : 325,
     "tian" : 326, "tiao" : 327, "tie" : 328, "ting" : 329, "tong" : 330,
     "tou" : 331, "tu" : 332, "tuan" : 333, "tui" : 334, "tun" : 335,
@@ -119,7 +119,7 @@ ID_PINYIN_DICT = {}
 for pinyin, id in PINYIN_DICT.items ():
     ID_PINYIN_DICT[id] = pinyin
 
-SHENGMU_DICT = { 
+SHENGMU_DICT = {
     "" : 0, "b" : 1, "p" : 2, "m" : 3, "f" : 4, "d" : 5,
     "t" : 6, "n" : 7, "l" : 8, "g" : 9, "k" : 10, "h" : 11,
     "j" : 12, "q" : 13, "x" : 14, "zh" : 15, "ch" : 16, "sh" : 17,
@@ -133,13 +133,13 @@ SHENGMU_LIST = SHENGMU_DICT.keys ()
             #~ PINYIN_PARTIAL_LIST.append (p[:i])
 #~ print PINYIN_PARTIAL_LIST
 PINYIN_PARTIAL_LIST = [
-'ro', 'zo', 'zon', 'so', 'son', 'tua', 'zua', 'no', 
-'non', 'be', 'ho', 'cua', 'jio', 'jion', 'xua', 'ko', 
-'kon', 'we', 'go', 'tia', 'fi', 'fia', 'fe', 'din', 'ra', 
-'yon', 'do', 'don', 'ron', 'to', 'nia', 'qua', 'cho', 
-'chon', 'mia', 'den', 'sho', 'nua', 'ten', 'co', 'ton', 
-'pe', 'tin', 'sua', 'xio', 'xion', 'pia', 'bia', 'dua', 
-'con', 'hon', 'jua', 'yua', 'zho', 'zhon', 'rua', 'lua', 
+'ro', 'zo', 'zon', 'so', 'son', 'tua', 'zua', 'no',
+'non', 'be', 'ho', 'cua', 'jio', 'jion', 'xua', 'ko',
+'kon', 'we', 'go', 'tia', 'fi', 'fia', 'fe', 'din', 'ra',
+'yon', 'do', 'don', 'ron', 'to', 'nia', 'qua', 'cho',
+'chon', 'mia', 'den', 'sho', 'nua', 'ten', 'co', 'ton',
+'pe', 'tin', 'sua', 'xio', 'xion', 'pia', 'bia', 'dua',
+'con', 'hon', 'jua', 'yua', 'zho', 'zhon', 'rua', 'lua',
 'lio', 'lion', 'qio', 'qion', 'lon', 'gon', 'len']
 
 ID_SHENGMU_DICT = {}

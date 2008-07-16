@@ -35,7 +35,7 @@ class PinYinWord:
             self._sheng_mu_id = SHENGMU_DICT [sheng_mu]
         else:
             self._sheng_mu_id = SHENGMU_DICT [self._pinyin]
-    
+
     def is_valid_pinyin (self):
         return PINYIN_DICT.has_key (self._pinyin)
 
@@ -89,19 +89,19 @@ class PinYinString:
         pass
 
 def load_pinyin_table (_file):
-    
+
     def pinyin_table_parser (f):
         for l in f:
             a = unicode (l, "utf-8").strip ().split ()
-            hanzi, pinyin, freq = a 
+            hanzi, pinyin, freq = a
             yield (hanzi, pinyin, int (freq))
     # db.add_phrases (pinyin_table_parser (bzf))
-    
+
     hanzi_dic = {}
     for hanzi, pinyin, freq in pinyin_table_parser (_file):
         if not hanzi_dic.has_key (hanzi):
             hanzi_dic[hanzi] = {}
-        
+
         if hanzi_dic[hanzi].has_key (pinyin):
             hanzi_dic[hanzi][pinyin] += freq
         else:
