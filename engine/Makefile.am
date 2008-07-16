@@ -24,6 +24,7 @@ engine_enchant_PYTHON = \
 	main.py \
 	pydict.py \
 	pyparser.py \
+	pyutil.py \
 	$(NULL)
 
 engine_enchantdir = $(datadir)/ibus/engine/enchant
