@@ -24,6 +24,7 @@ engine_enchant_PYTHON = \
 	main.py \
 	pydict.py \
 	pyparser.py \
+	pysqlitedb.py \
 	pyutil.py \
 	$(NULL)
 
