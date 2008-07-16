@@ -22,6 +22,7 @@ engine_enchant_PYTHON = \
 	engine.py \
 	factory.py \
 	main.py \
+	pycreatedb.py \
 	pydict.py \
 	pyparser.py \
 	pysqlitedb.py \
