@@ -19,7 +19,6 @@
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 engine_pinyin_PYTHON = \
-	engine.py \
 	factory.py \
 	main.py \
 	pinyin.py
