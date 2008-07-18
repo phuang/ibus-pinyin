@@ -1023,8 +1023,11 @@ class KeyEvent:
     def __init__(self, keyval, is_press, state):
         self.code = keyval
         self.mask = state
-        if is_press:
+        if not is_press:
             self.mask |= modifier.RELEASE_MASK
+    def __str__(self):
+        return "%s 0x%08x" % (keysyms.keycode_to_name(self.code), self.mask)
+        
 
 class UserInput:
     "UserInput holds user input chars"
