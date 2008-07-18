@@ -68,6 +68,7 @@ Makefile
 ibus-tmpl.spec
 engine/Makefile
 engine/ibus-engine-enchant
+engine/enchant.engine
 icons/Makefile
 m4/Makefile
 )

@@ -1,0 +1,6 @@
+Exec=@prefix@/libexec/ibus-engine-enchant
+Name=enchant
+Lang=en
+Icon=ibus-enchant
+Author=Huang Peng <shawn.p.huang@gmail.com>
+Credits=

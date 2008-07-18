@@ -23,10 +23,12 @@ engine_enchant_PYTHON = \
 	factory.py \
 	main.py \
 	$(NULL)
-
 engine_enchantdir = $(datadir)/ibus/engine/enchant
 
 libexec_SCRIPTS = ibus-engine-enchant
+
+engine_DATA = enchant.engine
+enginedir = $(datadir)/ibus/engine
 
 CLEANFILES = \
 	*.pyc \
@@ -34,6 +36,7 @@ CLEANFILES = \
 
 EXTRA_DIST = \
 	ibus-engine-enchant.in \
+	enchant.engine.in \
 	$(NULL)
 
 test:
