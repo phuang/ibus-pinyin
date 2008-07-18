@@ -20,6 +20,7 @@
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 import ibus
+import gobject
 from ibus import keysyms
 from ibus import modifier
 from ibus import ascii
@@ -108,6 +109,7 @@ class PinYinEngine(ibus.EngineBase):
     def __init__(self, conn, object_path):
         super(PinYinEngine, self).__init__(conn, object_path)
         
+        self.__need_update = False
         self.__lookup_table = ibus.LookupTable(PinYinEngine.__page_size)
         
         self.__py_parser = pyparser.PinYinParser()
@@ -138,6 +140,7 @@ class PinYinEngine(ibus.EngineBase):
         # self.__prop_list.append(self.__gbk_property)
         self.__setup_property = ibus.Property("setup")
         self.__prop_list.append(self.__setup_property)
+
 
     def __refresh_properties(self):
         if self.__mode == 1: # refresh mode
@@ -377,10 +380,17 @@ class PinYinEngine(ibus.EngineBase):
         else:
             self.update_aux_string(u"", None, False)
 
+    def __invalidate(self):
+        if self.__need_update:
+            return
+        self.__need_update = True
+        gobject.idle_add(self.__update, priority = gobject.PRIORITY_LOW)
+
     def __update(self):
-        self.__update_candidates()
-            
-        self.__update_ui()
+        if self.__need_update:
+            self.__update_candidates()
+            self.__update_ui()
+            self.__need_update = False
     
     def __is_gb2312(self, record):
         try:
@@ -411,7 +421,7 @@ class PinYinEngine(ibus.EngineBase):
     def __append_char(self, char):
         self.__user_input.append(char)
         self.__committed_phrases.clean()
-        self.__update()
+        self.__invalidate()
 
         return True
 
@@ -422,7 +432,7 @@ class PinYinEngine(ibus.EngineBase):
             self.__committed_phrases.pop()
         else:
             self.__user_input.pop()
-        self.__update()
+        self.__invalidate()
         
         return True
 
@@ -569,12 +579,12 @@ class PinYinEngine(ibus.EngineBase):
             self.__user_input.pop()
             if len(self.__user_input) == 0:
                 self.__i_mode = False
-            self.__update()
+            self.__invalidate()
             return True
         elif key.code == keysyms.Escape:
             self.__user_input.clean()
             self.__i_mode = False
-            self.__update()
+            self.__invalidate()
             return True
         elif key.code >= keysyms._1 and key.code <= keysyms._9:
             if not self.__candidates:
@@ -624,7 +634,7 @@ class PinYinEngine(ibus.EngineBase):
             return True
         
         self.__user_input.append(unichr(key.code))
-        self.__update()
+        self.__invalidate()
         
         return True
 
@@ -639,12 +649,12 @@ class PinYinEngine(ibus.EngineBase):
             self.__user_input.pop()
             if len(self.__user_input) == 0:
                 self.__temp_english_mode = False
-            self.__update()
+            self.__invalidate()
             return True
         elif key.code == keysyms.Escape:
             self.__user_input.clean()
             self.__temp_english_mode = False
-            self.__update()
+            self.__invalidate()
             return True
         elif key.code >= keysyms._1 and key.code <= keysyms._9 and self.__english_candidates:
             index = key.code - keysyms._1
@@ -656,7 +666,7 @@ class PinYinEngine(ibus.EngineBase):
                     self.__user_input.pop()
                 for c in self.__english_candidates[index]:
                     self.__user_input.append(c)
-                self.__update()
+                self.__invalidate()
                 return True
             return False
         elif key.code in(keysyms.Page_Down, ) and self.__english_candidates:
@@ -670,7 +680,7 @@ class PinYinEngine(ibus.EngineBase):
             return True
 
         self.__user_input.append(unichr(key.code))
-        self.__update()
+        self.__invalidate()
 
         return True
 
@@ -784,19 +794,19 @@ class PinYinEngine(ibus.EngineBase):
              and key.code in(keysyms.v, keysyms.u):
             self.__user_input.append(unichr(key.code))
             self.__temp_english_mode = True
-            self.__update()
+            self.__invalidate()
             return True
         elif key.code >= keysyms.A and key.code <= keysyms.Z and len(self.__user_input) == 0:
             self.__user_input.append(unichr(key.code))
             self.__temp_english_mode = True
-            self.__update()
+            self.__invalidate()
             return True
         elif not PinYinEngine.__shuangpin \
              and len(self.__user_input) == 0 \
              and key.code == keysyms.i:
             self.__user_input.append(unichr(key.code))
             self.__i_mode = True
-            self.__update()
+            self.__invalidate()
             return True
         elif(key.code >= keysyms.a and key.code <= keysyms.z) or \
            (key.code == keysyms.apostrophe and len(self.__user_input) != 0) or \
@@ -844,7 +854,7 @@ class PinYinEngine(ibus.EngineBase):
         if self.__committed_phrases.length_of_chars() == len(pinyin_list):
             return True
         
-        self.__update()
+        self.__invalidate()
 
         return False
 
@@ -863,7 +873,7 @@ class PinYinEngine(ibus.EngineBase):
 
         candidate = self.__candidates.pop(i)
         self.__pydb.remove_phrase(candidate)
-        self.__update()
+        self.__invalidate()
 
         return True
 
@@ -885,7 +895,7 @@ class PinYinEngine(ibus.EngineBase):
         self.__committed_special_phrase = u""
         super(PinYinEngine,self).commit_string(string)
         self.__prev_char = string[-1]
-        self.__update()
+        self.__invalidate()
 
     def lookup_table_page_up(self):
         if self.__lookup_table.page_up():
@@ -931,7 +941,7 @@ class PinYinEngine(ibus.EngineBase):
         self.__single_quotation_state = False
         self.__prev_key = None
         self.__prev_char = None
-        self.__update()
+        self.__invalidate()
 
     def __focus_in(self):
         self.__init_properties()
@@ -942,7 +952,7 @@ class PinYinEngine(ibus.EngineBase):
         self.__user_input.set_parser(self.__py_parser)
         self.__user_input.set_gbk(PinYinEngine.__gbk)
         self.__user_input.set_auto_correct(PinYinEngine.__auto_correct)
-        self.__update()
+        self.__invalidate()
     
     def focus_out(self):
         self.reset()

@@ -22,7 +22,7 @@ import ibus
 import pinyin
 
 FACTORY_PATH = "/com/redhat/IBus/engines/PinYin/Factory"
-ENGINE_PATH = "/com/redhat/IBus/engines/PinYin/Engine"
+ENGINE_PATH = "/com/redhat/IBus/engines/PinYin/Engine/"
 
 class EngineFactory(ibus.EngineFactoryBase):
     NAME = "PinYin"
