@@ -894,20 +894,20 @@ class PinYinEngine(ibus.EngineBase):
         self.__prev_char = string[-1]
         self.__invalidate()
 
-    def lookup_table_page_up(self):
+    def page_up(self):
         if self.__lookup_table.page_up():
             self.update_lookup_table(self.__lookup_table, True)
             return True
         
         return True
 
-    def lookup_table_page_down(self):
+    def page_down(self):
         if self.__lookup_table.page_down():
             self.update_lookup_table(self.__lookup_table, True)
             return True
         return True
 
-    def lookup_table_cursor_up(self):
+    def cursor_up(self):
         if len(self.__candidates) == 0:
             return False
         
@@ -915,7 +915,7 @@ class PinYinEngine(ibus.EngineBase):
             self.update_lookup_table(self.__lookup_table, True)
         return True
 
-    def lookup_table_cursor_down(self):
+    def cursor_down(self):
         if len(self.__candidates) == 0:
             return False
         
@@ -1000,18 +1000,6 @@ class PinYinEngine(ibus.EngineBase):
 
     def focus_out(self):
         print "FocusOut"
-
-    def page_up(self):
-        pass
-    
-    def page_down(self):
-        pass
-
-    def cursor_up(self):
-        pass
-
-    def cursor_down(self):
-        pass
 
     def property_activate(self, prop_name):
         print "PropertyActivate(%s)" % prop_name
