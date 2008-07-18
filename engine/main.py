@@ -25,13 +25,14 @@ import dbus
 import dbus.connection
 import dbus.mainloop.glib
 import ibus
+import gobject
 import factory
-import gtk
 
 class IMApp:
     def __init__(self):
+        self.__mainloop = gobject.MainLoop()
         self._dbusconn = dbus.connection.Connection(ibus.IBUS_ADDR)
-        self._dbusconn.add_signal_receiver(self._disconnected_cb,
+        self._dbusconn.add_signal_receiver(self.__disconnected_cb,
                             "Disconnected",
                             dbus_interface = dbus.LOCAL_IFACE)
         self._engine = factory.EngineFactory(self._dbusconn)
@@ -39,11 +40,10 @@ class IMApp:
         self._ibus.RegisterFactories([factory.FACTORY_PATH], **ibus.DEFAULT_ASYNC_HANDLERS)
 
     def run(self):
-        gtk.main()
+        self.__mainloop.run()
 
-    def _disconnected_cb(self):
-        print "disconnected"
-        gtk.main_quit()
+    def __disconnected_cb(self):
+        self.__mainloop.quit()
 
 
 def launch_engine():

@@ -18,40 +18,26 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-from ibus import interface
-import engine
+import ibus
+import pinyin
 
-FACTORY_PATH = "/com/redhat/IBus/engines/Demo/Factory"
-ENGINE_PATH = "/com/redhat/IBus/engines/Demo/Engine/%d"
+FACTORY_PATH = "/com/redhat/IBus/engines/PinYin/Factory"
+ENGINE_PATH = "/com/redhat/IBus/engines/PinYin/Engine"
 
-class EngineFactory(interface.IEngineFactory):
+class EngineFactory(ibus.EngineFactoryBase):
     NAME = "PinYin"
     LANG = "zh_CN"
     ICON = "ibus-pinyin"
     AUTHORS = "Huang Peng <shawn.p.huang@gmail.com>"
     CREDITS = "GPLv2"
 
-    def __init__(self, dbusconn):
-        super(EngineFactory, self).__init__(dbusconn, object_path = FACTORY_PATH)
-        self._dbusconn = dbusconn
-        self._max_engine_id = 1
-
-    def GetInfo(self):
-        return [
+    def __init__(self, conn):
+        self.__info = [
             self.NAME,
             self.LANG,
             self.ICON,
             self.AUTHORS,
             self.CREDITS
-            ]
-
-    def CreateEngine(self):
-        engine_path = ENGINE_PATH % self._max_engine_id
-        self._max_engine_id += 1
-        return engine.Engine(self._dbusconn, engine_path)
-
-    def Destroy(self):
-        self.remove_from_connection()
-        self._dbusconn = None
-
+        ]
+        super(EngineFactory, self).__init__(self.__info, pinyin.PinYinEngine, ENGINE_PATH, conn, FACTORY_PATH)
 

@@ -22,7 +22,6 @@
 import ibus
 from ibus import keysyms
 from ibus import modifier
-from ibus import interface
 from ibus import ascii
 
 # from scim import IMEngine
@@ -58,7 +57,7 @@ except:
 
 
 
-class PinYinEngine(interface.IEngine):
+class PinYinEngine(ibus.EngineBase):
     
     # create pinyin database
     __pydb = pysqlitedb.PYSQLiteDB(user_db = "user.db")
@@ -106,9 +105,8 @@ class PinYinEngine(interface.IEngine):
     __auto_commit = False
 
 
-    def __init__(self, dbusconn, object_path):
-        super(PinYinEngine, self).__init__(dbusconn, object_path)
-        self.__dbusconn = dbusconn
+    def __init__(self, conn, object_path):
+        super(PinYinEngine, self).__init__(conn, object_path)
         
         self.__lookup_table = ibus.LookupTable(PinYinEngine.__page_size)
         
@@ -120,11 +118,11 @@ class PinYinEngine(interface.IEngine):
         self.__mode = 1
         self.__full_width_letter = [False, False]
         self.__full_width_punct = [False, True]
-        self.__full_width_punct[1] = config.read("/IMEngine/Python/PinYin/FullWidthPunct", True)
+        self.__full_width_punct[1] = True #config.read("/IMEngine/Python/PinYin/FullWidthPunct", True)
 
         self.__committed_phrases = PhraseList()
         self.__preedit_phrases = PhraseList()
-        self.__reset()
+        self.reset()
 
         # init properties
         self.__prop_list = ibus.PropList()
@@ -228,7 +226,7 @@ class PinYinEngine(interface.IEngine):
             self.__candidates += self.__special_table.lookup(u"".join(chars))
             return
         
-        self.__preedit_phrases.clear()
+        self.__preedit_phrases.clean()
         
         if len(self.__user_input.get_pinyin_list()) == 0:
             self.__candidates = []
@@ -259,23 +257,19 @@ class PinYinEngine(interface.IEngine):
     def __update_ui(self):
         if self.__i_mode:
             preedit_string = u"".join(self.__user_input.get_chars())
-            self.update_preedit_string(preedit_string)
-            self.update_preedit_caret(len(preedit_string))
-            self.show_preedit_string()
+            self.update_preedit(preedit_string, None, len(preedit_string), True)
             
-            self.update_aux_string(u"")
-            self.hide_aux_string()
+            self.update_aux_string(u"", None, False)
             
-            self.__lookup_table.clear()
+            self.__lookup_table.clean()
             self.__lookup_table.show_cursor(True)
             if not self.__candidates:
-                self.hide_lookup_table()
+                self.update_lookup_table(self.__lookup_table, False)
             else:
                 for c in self.__candidates:
                     attrs = []
                     self.__lookup_table.append_candidate(c, attrs)
-                self.update_lookup_table(self.__lookup_table)
-                self.show_lookup_table()
+                self.update_lookup_table(self.__lookup_table, True)
             return 
             
         if self.__temp_english_mode:
@@ -292,36 +286,35 @@ class PinYinEngine(interface.IEngine):
                 aux_string = u""
 
             if preedit_string and self.__spell_check:
-                attrs = ibus.AttrList()
-                self.UpdatePreeditString(preedit_string, attrs.to_dbus_value(), dbus.Int32(len(preedit_string), True)
+                self.update_preedit(preedit_string, None, len(preedit_string), True)
                 attrs = ibus.AttrList()
                 if  not __EN_DICT__.check(aux_string): 
                     attr = ibus.AttributeForeground(PinYinEngine.__error_eng_phrase_color, 0, len(aux_string))
                     attrs.append(attr)
-                self.UpdateAuxString(aux_string, attrs.to_dbus_value(), True)
+                self.update_aux_string(aux_string, attrs, True)
             else:
                 attrs = ibus.AttrList()
-                self.UpdatePreeditString(u"", attrs.to_dbus_value(), 0, False)
-                self.UpdateAuxString(u"", attrs.to_dbus_value(), False)
+                self.update_preeditString(u"", attrs, 0, False)
+                self.update_aux_string(u"", attrs, False)
 
 
-            self.__lookup_table.clear()
+            self.__lookup_table.clean()
             self.__lookup_table.show_cursor(False)
             if not self.__english_candidates:
-                self.UpdateLookupTable(self.__lookup_table.to_dbus_value(), False)
+                self.update_lookup_table(self.__lookup_table, False)
             else:
                 for c in self.__english_candidates:
                     attrs = ibus.AttrList()
                     artr = ibus.AttributeForeground(PinYinEngine.__english_phrase_color, 0, len(c))
                     self.__lookup_table.append_candidate(c, attrs)
-                self.UpdateLookupTable(self.__lookup_table.to_dbus_value(), True)
+                self.update_lookup_table(self.__lookup_table, True)
                 
             return
 
         if len(self.__candidates) == 0:
-            self.hide_lookup_table()
+            self.update_lookup_table(self.__lookup_table, False)
         else:
-            self.__lookup_table.clear()
+            self.__lookup_table.clean()
             candidates = self.__candidates[:]
             if len(self.__preedit_phrases) != 1: # we need display the automatically created new phrase
                 attrs = ibus.AttrList ()
@@ -356,8 +349,7 @@ class PinYinEngine(interface.IEngine):
                 self.__lookup_table.append_candidate(c[pysqlitedb.PHRASE], attrs)
             self.__lookup_table.show_cursor(True)
             self.__lookup_table.set_cursor_pos(0)
-            self.update_lookup_table(self.__lookup_table)
-            self.show_lookup_table()
+            self.update_lookup_table(self.__lookup_table, True)
         
         committed_string = self.__committed_phrases.get_string()
         invalid_pinyin = self.__user_input.get_invalid_string()
@@ -365,13 +357,9 @@ class PinYinEngine(interface.IEngine):
         preedit_string = preedit_string.strip()
 
         if preedit_string:
-            self.update_preedit_string(preedit_string)
-            self.update_preedit_caret(len(preedit_string))
-            self.show_preedit_string()
+            self.update_preedit(preedit_string, None, len(preedit_string), True)
         else:
-            self.update_preedit_string(u"")
-            self.update_preedit_caret(0)
-            self.hide_preedit_string()
+            self.update_preedit("", None, 0, False)
             
         if committed_string or len(self.__user_input) != 0:
             pinyin_list = self.__user_input.get_pinyin_list()
@@ -383,14 +371,11 @@ class PinYinEngine(interface.IEngine):
                 aux_string = u"'".join(pinyin_list)
                 
             if aux_string:
-                self.update_aux_string(aux_string)
-                self.show_aux_string()
+                self.update_aux_string(aux_string, None, True)
             else:
-                self.update_aux_string(u"")
-                self.hide_aux_string()
+                self.update_aux_string(u"", None, False)
         else:
-            self.update_aux_string(u"")
-            self.hide_aux_string()
+            self.update_aux_string(u"", None, False)
 
     def __update(self):
         self.__update_candidates()
@@ -425,7 +410,7 @@ class PinYinEngine(interface.IEngine):
 
     def __append_char(self, char):
         self.__user_input.append(char)
-        self.__committed_phrases.clear()
+        self.__committed_phrases.clean()
         self.__update()
 
         return True
@@ -481,7 +466,7 @@ class PinYinEngine(interface.IEngine):
                 return True
             else:
                 self.trigger_property("status")
-                self.__reset()
+                self.reset()
             return True
         
         # Match full half letter mode switch hotkey
@@ -495,9 +480,9 @@ class PinYinEngine(interface.IEngine):
             return True
 
         # Match remove user phrase hotkeys
-        for code in xrange(keysyms.1, keysyms.1 + PinYinEngine.__page_size):
+        for code in xrange(keysyms._1, keysyms._1 + PinYinEngine.__page_size):
             if self.__match_hotkey(key, code, modifier.CONTROL_MASK):
-                index = code - keysyms.1 + self.__lookup_table.get_current_page_start()
+                index = code - keysyms._1 + self.__lookup_table.get_current_page_start()
                 return self.__remove_candidate(index)
 
         # we ignore all hotkeys
@@ -542,12 +527,12 @@ class PinYinEngine(interface.IEngine):
             else:
                 return u"\u2019"
  
-         elif c == u"<":
-             if not self.__is_input_english():
-                 return u"\u300a"
-         elif c == u">":
-             if not self.__is_input_english():
-                 return u"\u300b"
+        elif c == u"<":
+            if not self.__is_input_english():
+                return u"\u300a"
+        elif c == u">":
+            if not self.__is_input_english():
+                return u"\u300b"
          
         return ibus.unichar_half_to_full(c)
     
@@ -587,14 +572,14 @@ class PinYinEngine(interface.IEngine):
             self.__update()
             return True
         elif key.code == keysyms.Escape:
-            self.__user_input.clear()
+            self.__user_input.clean()
             self.__i_mode = False
             self.__update()
             return True
-        elif key.code >= keysyms.1 and key.code <= keysyms.9:
+        elif key.code >= keysyms._1 and key.code <= keysyms._9:
             if not self.__candidates:
                 return True
-            index = key.code - keysyms.1
+            index = key.code - keysyms._1
             if index >= PinYinEngine.__page_size:
                 return True
             index += self.__lookup_table.get_current_page_start()
@@ -617,22 +602,22 @@ class PinYinEngine(interface.IEngine):
             self.lookup_table_cursor_up()
             return True
         elif key.code == keysyms.Page_Down and self.__candidates: # press PageDown
-            self.__page_down()
+            self.page_down()
             return True
         elif key.code == keysyms.Page_Up and self.__candidates: # press PageUp
-            self.__page_up()
+            self.page_up()
             return True
         elif key.code == keysyms.period and self.__candidates and PinYinEngine.__comma_page_down_up: # press .
-            self.__page_down()
+            self.page_down()
             return True
         elif key.code == keysyms.comma and self.__candidates and PinYinEngine.__comma_page_down_up: # press ,
-            self.__page_up()
+            self.page_up()
             return True
         elif key.code == keysyms.equal and self.__candidates and PinYinEngine.__equal_page_down_up: # press =
-            self.__page_down()
+            self.page_down()
             return True
         elif key.code == keysyms.minus and self.__candidates and PinYinEngine.__equal_page_down_up: # press -
-            self.__page_up()
+            self.page_up()
             return True
 
         if key.code >= 128:
@@ -657,12 +642,12 @@ class PinYinEngine(interface.IEngine):
             self.__update()
             return True
         elif key.code == keysyms.Escape:
-            self.__user_input.clear()
+            self.__user_input.clean()
             self.__temp_english_mode = False
             self.__update()
             return True
-        elif key.code >= keysyms.1 and key.code <= keysyms.9 and self.__english_candidates:
-            index = key.code - keysyms.1
+        elif key.code >= keysyms._1 and key.code <= keysyms._9 and self.__english_candidates:
+            index = key.code - keysyms._1
             if index >= PinYinEngine.__page_size:
                 return False
             index += self.__lookup_table.get_current_page_start()
@@ -675,10 +660,10 @@ class PinYinEngine(interface.IEngine):
                 return True
             return False
         elif key.code in(keysyms.Page_Down, ) and self.__english_candidates:
-            self.__page_down()
+            self.page_down()
             return True
         elif key.code in(keysyms.Page_Up, ) and self.__english_candidates:
-            self.__page_up()
+            self.page_up()
             return True
 
         if key.code >= 128:
@@ -705,7 +690,7 @@ class PinYinEngine(interface.IEngine):
             return True
         elif key.code == keysyms.Escape:
             if len(self.__user_input) != 0:
-                self.__reset()
+                self.reset()
                 return True
             return False
         elif key.code == keysyms.Down:
@@ -714,11 +699,11 @@ class PinYinEngine(interface.IEngine):
             return self.lookup_table_cursor_up()
         elif key.code == keysyms.BackSpace:
             return self.__pop_char()
-        elif key.code >= keysyms.1 and key.code <= keysyms.9:
+        elif key.code >= keysyms._1 and key.code <= keysyms._9:
             if not self.__candidates:
                 self.commit_string(cond_letter_translate(unichr(key.code)))
             else:
-                index = key.code - keysyms.1
+                index = key.code - keysyms._1
                 if index >= PinYinEngine.__page_size:
                     return True
                 index += self.__lookup_table.get_current_page_start()
@@ -756,22 +741,22 @@ class PinYinEngine(interface.IEngine):
                             self.__pydb.new_phrase(commit_phrases)
             return True
         elif key.code == keysyms.Page_Down and self.__candidates: # press PageDown
-            self.__page_down()
+            self.page_down()
             return True
         elif key.code == keysyms.equal and self.__candidates and PinYinEngine.__equal_page_down_up: # press equal
-            self.__page_down()
+            self.page_down()
             return True
         elif key.code == keysyms.period and self.__candidates and PinYinEngine.__comma_page_down_up: # press period
-            self.__page_down()
+            self.page_down()
             return True
         elif key.code == keysyms.Page_Up and self.__candidates: # press PageUp
-            self.__page_up()
+            self.page_up()
             return True
         elif key.code == keysyms.minus and self.__candidates and PinYinEngine.__equal_page_down_up: # press minus
-            self.__page_up()
+            self.page_up()
             return True
         elif key.code == keysyms.comma and self.__candidates and PinYinEngine.__comma_page_down_up: #press comma
-            self.__page_up()
+            self.page_up()
             return True
 
         elif key.code in(keysyms.bracketleft, keysyms.bracketright) and self.__candidates:
@@ -882,7 +867,8 @@ class PinYinEngine(interface.IEngine):
 
         return True
 
-    def __process_key_event(self, key):
+    def process_key_event(self, keyval, is_press, state):
+        key = KeyEvent (keyval, is_press, state)
         result = self.__internal_process_key_event(key)
         self.__prev_key = key
         return result
@@ -893,24 +879,24 @@ class PinYinEngine(interface.IEngine):
         self.__candidates = []
         self.__english_candidates = []
         self.__cursor = 0
-        self.__user_input.clear()
+        self.__user_input.clean()
         self.__preedit_string = u""
-        self.__committed_phrases.clear()
+        self.__committed_phrases.clean()
         self.__committed_special_phrase = u""
-        self.CommitString(string)
+        super(PinYinEngine,self).commit_string(string)
         self.__prev_char = string[-1]
         self.__update()
 
     def lookup_table_page_up(self):
         if self.__lookup_table.page_up():
-            self.update_lookup_table(self.__lookup_table)
+            self.update_lookup_table(self.__lookup_table, True)
             return True
         
         return True
 
     def lookup_table_page_down(self):
         if self.__lookup_table.page_down():
-            self.update_lookup_table(self.__lookup_table)
+            self.update_lookup_table(self.__lookup_table, True)
             return True
         return True
 
@@ -919,7 +905,7 @@ class PinYinEngine(interface.IEngine):
             return False
         
         if self.__lookup_table.cursor_up():
-            self.update_lookup_table(self.__lookup_table)
+            self.update_lookup_table(self.__lookup_table, True)
         return True
 
     def lookup_table_cursor_down(self):
@@ -927,14 +913,14 @@ class PinYinEngine(interface.IEngine):
             return False
         
         if self.__lookup_table.cursor_down():
-            self.update_lookup_table(self.__lookup_table)
+            self.update_lookup_table(self.__lookup_table, True)
         return True
 
-    def __reset(self):
+    def reset(self):
         self.__temp_english_mode = False
         self.__i_mode = False
-        self.__user_input.clear()
-        self.__committed_phrases.clear()
+        self.__user_input.clean()
+        self.__committed_phrases.clean()
         self.__committed_special_phrase = u""
         self.__preedit_string = u""
         self.__special_candidates = []
@@ -958,8 +944,8 @@ class PinYinEngine(interface.IEngine):
         self.__user_input.set_auto_correct(PinYinEngine.__auto_correct)
         self.__update()
     
-    def __focus_out(self):
-        self.__reset()
+    def focus_out(self):
+        self.reset()
 
     def trigger_property(self, property):
         if property == "status":
@@ -972,7 +958,7 @@ class PinYinEngine(interface.IEngine):
             self.__refresh_properties()
         # elif property == "shuangpin":
         #     PinYinEngine.__shuangpin = not PinYinEngine.__shuangpin
-        #     self.__reset()
+        #     self.reset()
         #     if PinYinEngine.__shuangpin:
         #         self.__py_parser = pyparser.ShuangPinParser(PinYinEngine.__shuangpin_schema)
         #     else:
@@ -982,7 +968,7 @@ class PinYinEngine(interface.IEngine):
         #     self.__refresh_properties()
         # elif property == "gbk":
         #     PinYinEngine.__gbk = not PinYinEngine.__gbk
-        #     self.__reset()
+        #     self.reset()
         #     self.__config.write("/IMEngine/Python/PinYin/SupportGBK", PinYinEngine.__gbk)
         #     self.__refresh_properties()
 
@@ -1001,58 +987,34 @@ class PinYinEngine(interface.IEngine):
         self.__lookup_table.set_page_size(PinYinEngine.__page_size)
         self.focus_in()
     
-    # methods for dbus rpc
-    def ProcessKeyEvent(self, keyval, is_press, state):
-        try:
-            return self.__process_key_event(KeyEvent(keyval, is_press, state))
-        except Exception, e:
-            print e
-        return False
-
-    def FocusIn(self):
-        self.RegisterProperties(self.__prop_list.to_dbus_value())
+    def focus_in(self):
+        self.register_properties(self.__prop_list)
         print "FocusIn"
 
-    def FocusOut(self):
+    def focus_out(self):
         print "FocusOut"
 
-    def SetCursorLocation(self, x, y, w, h):
+    def page_up(self):
+        pass
+    
+    def page_down(self):
         pass
 
-    def Reset(self):
-        self.__reset()
+    def cursor_up(self):
+        pass
 
-    def PageUp(self):
-        self.__page_up()
+    def cursor_down(self):
+        pass
 
-    def PageDown(self):
-        self.__page_down()
-
-    def CursorUp(self):
-        self.__cursor_up()
-
-    def CursorDown(self):
-        self.__cursor_down()
-
-    def SetEnable(self, enable):
-        self.__enable = enable
-        if self.__enable:
-            self.RegisterProperties(self.__prop_list.to_dbus_value())
-
-    def PropertyActivate(self, prop_name):
+    def property_activate(self, prop_name):
         print "PropertyActivate(%s)" % prop_name
 
-    def Destroy(self):
-        self.remove_from_connection()
-        self.__dbusconn = None
-        print "Destroy"
-
 class KeyEvent:
-    def __init__(keyval, is_press, state):
+    def __init__(self, keyval, is_press, state):
         self.code = keyval
         self.mask = state
         if is_press:
-            self.mask |= modifiers.RELEASE_MASK
+            self.mask |= modifier.RELEASE_MASK
 
 class UserInput:
     "UserInput holds user input chars"
@@ -1065,21 +1027,21 @@ class UserInput:
         self.__pinyin_list = []
 
 
-    def clear(self):
+    def clean(self):
         self.__chars =([], [])
         self.__pinyin_list = []
 
     def set_parser(self, parser):
-        self.clear()
+        self.clean()
         self.__parser = parser
 
     def set_gbk(self, gbk):
         self.__gbk = gbk
-        self.clear()
+        self.clean()
 
     def set_auto_correct(self, auto_correct):
         self.__auto_correct = auto_correct
-        self.clear()
+        self.clean()
 
     def get_pinyin_list(self):
         return self.__pinyin_list
@@ -1129,7 +1091,7 @@ class PhraseList:
         self.__list = []
         self.__length_of_chars = 0
 
-    def clear(self):
+    def clean(self):
         """Remove all phrases from the list"""
         self.__list = []
         self.__length_of_chars = 0
