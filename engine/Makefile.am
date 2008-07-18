@@ -21,12 +21,12 @@
 engine_pinyin_PYTHON = \
 	factory.py \
 	main.py \
-	pinyin.py
+	pinyin.py \
 	pycreatedb.py \
 	pydict.py \
 	pyparser.py \
-	pyspecialphrase.py \
-	pyspecialtable.py \
+	specialphrase.py \
+	specialtable.py \
 	pysqlitedb.py \
 	pyutil.py \
 	$(NULL)
