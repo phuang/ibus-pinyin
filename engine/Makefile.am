@@ -35,10 +35,12 @@ engine_pinyin_DATA = \
 	special_table \
 	py.db \
 	$(NULL)
-
-engine_pinyindir = $(datadir)/ibus/engine/pinyin
+engine_pinyindir = $(datadir)/ibus-pinyin
 
 libexec_SCRIPTS = ibus-engine-pinyin
+
+engine_DATA = pinyin.engine
+enginedir = $(datadir)/ibus/engine
 
 CLEANFILES = \
 	*.pyc \
@@ -46,8 +48,9 @@ CLEANFILES = \
 
 EXTRA_DIST = \
 	ibus-engine-pinyin.in \
+	pinyin.engine.in \
 	$(NULL)
 
 test:
-	$(ENV) PYTHONPATH=$(top_srcdir) $(PYTHON) $(srcdir)/main.py
+	$(ENV) LANG=en_US PYTHONPATH=$(top_srcdir) $(PYTHON) $(srcdir)/main.py
 
