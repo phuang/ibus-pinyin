@@ -270,8 +270,7 @@ class PinYinEngine(ibus.EngineBase):
                 self.update_lookup_table(self.__lookup_table, False)
             else:
                 for c in self.__candidates:
-                    attrs = []
-                    self.__lookup_table.append_candidate(c, attrs)
+                    self.__lookup_table.append_candidate(c)
                 self.update_lookup_table(self.__lookup_table, True)
             return 
             
@@ -296,9 +295,8 @@ class PinYinEngine(ibus.EngineBase):
                     attrs.append(attr)
                 self.update_aux_string(aux_string, attrs, True)
             else:
-                attrs = ibus.AttrList()
-                self.update_preeditString(u"", attrs, 0, False)
-                self.update_aux_string(u"", attrs, False)
+                self.update_preeditString(u"", None, 0, False)
+                self.update_aux_string(u"", None, False)
 
 
             self.__lookup_table.clean()
@@ -337,10 +335,9 @@ class PinYinEngine(ibus.EngineBase):
                 del candidates[0]
 
             for c in self.__special_candidates:
-                attrs = ibus.AttrList ()
                 attr = ibus.AttributeForeground(PinYinEngine.__special_phrase_color, 0, len(c))
                 attrs.append(attr)
-                self.__lookup_table.append_candidate(c, attrs)
+                self.__lookup_table.append_candidate(c)
 
             for c in candidates:
                 attrs = ibus.AttrList ()
