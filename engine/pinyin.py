@@ -603,10 +603,10 @@ class PinYinEngine(ibus.EngineBase):
             self.commit_string(self.__candidates[index])
             return True
         elif key.code == keysyms.Down:
-            self.lookup_table_cursor_down()
+            self.cursor_down()
             return True
         elif key.code == keysyms.Up:
-            self.lookup_table_cursor_up()
+            self.cursor_up()
             return True
         elif key.code == keysyms.Page_Down and self.__candidates: # press PageDown
             self.page_down()
@@ -701,9 +701,9 @@ class PinYinEngine(ibus.EngineBase):
                 return True
             return False
         elif key.code == keysyms.Down:
-            return self.lookup_table_cursor_down()
+            return self.cursor_down()
         elif key.code == keysyms.Up:
-            return self.lookup_table_cursor_up()
+            return self.cursor_up()
         elif key.code == keysyms.BackSpace:
             return self.__pop_char()
         elif key.code >= keysyms._1 and key.code <= keysyms._9:
