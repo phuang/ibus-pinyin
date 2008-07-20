@@ -262,12 +262,12 @@ class PinYinEngine(ibus.EngineBase):
             preedit_string = u"".join(self.__user_input.get_chars())
             self.update_preedit(preedit_string, None, len(preedit_string), True)
             
-            self.update_aux_string(u"", None, False)
+            self.hide_aux_string()
             
             self.__lookup_table.clean()
             self.__lookup_table.show_cursor(True)
             if not self.__candidates:
-                self.update_lookup_table(self.__lookup_table, False)
+                self.hide_lookup_table()
             else:
                 for c in self.__candidates:
                     self.__lookup_table.append_candidate(c)
@@ -295,14 +295,14 @@ class PinYinEngine(ibus.EngineBase):
                     attrs.append(attr)
                 self.update_aux_string(aux_string, attrs, True)
             else:
-                self.update_preeditString(u"", None, 0, False)
-                self.update_aux_string(u"", None, False)
+                self.hide_preedit()
+                self.hide_aux_string()
 
 
             self.__lookup_table.clean()
             self.__lookup_table.show_cursor(False)
             if not self.__english_candidates:
-                self.update_lookup_table(self.__lookup_table, False)
+                self.hide_lookup_table()
             else:
                 for c in self.__english_candidates:
                     attrs = ibus.AttrList()
@@ -313,7 +313,7 @@ class PinYinEngine(ibus.EngineBase):
             return
 
         if len(self.__candidates) == 0:
-            self.update_lookup_table(self.__lookup_table, False)
+            self.hide_lookup_table()
         else:
             self.__lookup_table.clean()
             candidates = self.__candidates[:]
@@ -359,7 +359,7 @@ class PinYinEngine(ibus.EngineBase):
         if preedit_string:
             self.update_preedit(preedit_string, None, len(preedit_string), True)
         else:
-            self.update_preedit("", None, 0, False)
+            self.hide_preedit()
             
         if committed_string or len(self.__user_input) != 0:
             pinyin_list = self.__user_input.get_pinyin_list()
@@ -373,9 +373,9 @@ class PinYinEngine(ibus.EngineBase):
             if aux_string:
                 self.update_aux_string(aux_string, None, True)
             else:
-                self.update_aux_string(u"", None, False)
+                self.hide_aux_string()
         else:
-            self.update_aux_string(u"", None, False)
+            self.hide_aux_string()
 
     def __invalidate(self):
         if self.__need_update:
@@ -896,14 +896,14 @@ class PinYinEngine(ibus.EngineBase):
 
     def page_up(self):
         if self.__lookup_table.page_up():
-            self.update_lookup_table(self.__lookup_table, True)
+            self.page_up_lookup_table()
             return True
         
         return True
 
     def page_down(self):
         if self.__lookup_table.page_down():
-            self.update_lookup_table(self.__lookup_table, True)
+            self.page_down_lookup_table()
             return True
         return True
 
@@ -912,7 +912,7 @@ class PinYinEngine(ibus.EngineBase):
             return False
         
         if self.__lookup_table.cursor_up():
-            self.update_lookup_table(self.__lookup_table, True)
+            self.cursor_up_lookup_table()
         return True
 
     def cursor_down(self):
@@ -920,7 +920,7 @@ class PinYinEngine(ibus.EngineBase):
             return False
         
         if self.__lookup_table.cursor_down():
-            self.update_lookup_table(self.__lookup_table, True)
+            self.cursor_down_lookup_table()
         return True
 
     def reset(self):
