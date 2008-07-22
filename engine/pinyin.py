@@ -59,15 +59,15 @@ except:
 
 
 class PinYinEngine(ibus.EngineBase):
-    
+
     # create pinyin database
     __pydb = pysqlitedb.PYSQLiteDB(user_db = "user.db")
 
     # create special table
     __special_phrase = SpecialPhrase()
     __special_table = SpecialTable()
-    
-    # shuang pin 
+
+    # shuang pin
     __shuangpin = False
     __shuangpin_schema = "MSPY"
 
@@ -92,7 +92,7 @@ class PinYinEngine(ibus.EngineBase):
 
     # press [u] or [v] to temp English mode
     __uv_to_temp = True
-    
+
     # press [shift] to select candidates
     __shift_select_candidates = True
 
@@ -108,13 +108,13 @@ class PinYinEngine(ibus.EngineBase):
 
     def __init__(self, conn, object_path):
         super(PinYinEngine, self).__init__(conn, object_path)
-        
+
         self.__need_update = False
         self.__lookup_table = ibus.LookupTable(PinYinEngine.__page_size)
-        
+
         self.__py_parser = pyparser.PinYinParser()
         self.__user_input = UserInput(self.__py_parser)
-        
+
         # 0 = english input mode
         # 1 = chinese input mode
         self.__mode = 1
@@ -144,25 +144,25 @@ class PinYinEngine(ibus.EngineBase):
 
     def __refresh_properties(self):
         if self.__mode == 1: # refresh mode
-            self.__status_property.label = _("CN")
-            self.__status_property.tip = _("Switch to English mode")
+            self.__status_property._label = _("CN")
+            self.__status_property._tooltip = _("Switch to English mode")
         else:
-            self.__status_property.label = _("EN")
-            self.__status_property.tip = _("Switch to Chinese mode")
+            self.__status_property._label = _("EN")
+            self.__status_property._tooltip = _("Switch to Chinese mode")
 
         if self.__full_width_letter[self.__mode]:
-            self.__letter_property.icon = "/usr/share/scim/icons/full-letter.png" 
-            self.__letter_property.tip = _("Switch to half letter mode")
+            self.__letter_property._icon = "/usr/share/scim/icons/full-letter.png"
+            self.__letter_property._tooltip = _("Switch to half letter mode")
         else:
-            self.__letter_property.icon = "/usr/share/scim/icons/half-letter.png" 
-            self.__letter_property.tip = _("Switch to full letter mode")
+            self.__letter_property._icon = "/usr/share/scim/icons/half-letter.png"
+            self.__letter_property._tooltip = _("Switch to full letter mode")
 
         if self.__full_width_punct[self.__mode]:
-            self.__punct_property.icon = "/usr/share/scim/icons/full-punct.png" 
-            self.__punct_property.tip = _("Switch to half punctuation mode")
+            self.__punct_property._icon = "/usr/share/scim/icons/full-punct.png"
+            self.__punct_property._tooltip = _("Switch to half punctuation mode")
         else:
-            self.__punct_property.icon = "/usr/share/scim/icons/half-punct.png" 
-            self.__punct_property.tip = _("Switch to full punctuation mode")
+            self.__punct_property._icon = "/usr/share/scim/icons/half-punct.png"
+            self.__punct_property._tooltip = _("Switch to full punctuation mode")
 
         # if PinYinEngine.__shuangpin:
         #     self.__shuangpin_property.label = _("SHUANG")
@@ -177,18 +177,18 @@ class PinYinEngine(ibus.EngineBase):
         # else:
         #     self.__gbk_property.label = _("GB")
         #     self.__gbk_property.tip = _("Switch to GBK codeset")
-            
+
         properties =(
-            self.__status_property, 
-            self.__letter_property, 
-            self.__punct_property, 
-            # self.__shuangpin_property, 
+            self.__status_property,
+            self.__letter_property,
+            self.__punct_property,
+            # self.__shuangpin_property,
             # self.__gbk_property,
             )
 
         for prop in properties:
             self.update_property(prop)
-        
+
 
     def __change_mode(self):
         self.__mode =(self.__mode + 1) % 2
@@ -209,7 +209,7 @@ class PinYinEngine(ibus.EngineBase):
             if not words:
                 return
             word = words[-1]
-            
+
             if len(words) == 1 and word[0:1] in u"uv":
                 word = word[1:]
 
@@ -228,9 +228,9 @@ class PinYinEngine(ibus.EngineBase):
             self.__candidates = self.__special_phrase.lookup(u"".join(chars))
             self.__candidates += self.__special_table.lookup(u"".join(chars))
             return
-        
+
         self.__preedit_phrases.clean()
-        
+
         if len(self.__user_input.get_pinyin_list()) == 0:
             self.__candidates = []
             self.__special_candidates = []
@@ -240,7 +240,7 @@ class PinYinEngine(ibus.EngineBase):
             self.__special_candidates = self.__special_phrase.lookup(u"".join(self.__user_input.get_chars()))
         else:
             self.__special_candidates = []
-            
+
 
         pinyin_list = self.__user_input.get_pinyin_list()
         pinyin_list = pinyin_list [self.__committed_phrases.length_of_chars():]
@@ -261,9 +261,9 @@ class PinYinEngine(ibus.EngineBase):
         if self.__i_mode:
             preedit_string = u"".join(self.__user_input.get_chars())
             self.update_preedit(preedit_string, None, len(preedit_string), True)
-            
+
             self.hide_aux_string()
-            
+
             self.__lookup_table.clean()
             self.__lookup_table.show_cursor(True)
             if not self.__candidates:
@@ -272,8 +272,8 @@ class PinYinEngine(ibus.EngineBase):
                 for c in self.__candidates:
                     self.__lookup_table.append_candidate(c)
                 self.update_lookup_table(self.__lookup_table, True)
-            return 
-            
+            return
+
         if self.__temp_english_mode:
             preedit_string = u"".join(self.__user_input.get_chars())
             if preedit_string [0:1] in(u"v", u"u"):
@@ -290,7 +290,7 @@ class PinYinEngine(ibus.EngineBase):
             if preedit_string and self.__spell_check:
                 self.update_preedit(preedit_string, None, len(preedit_string), True)
                 attrs = ibus.AttrList()
-                if  not __EN_DICT__.check(aux_string): 
+                if  not __EN_DICT__.check(aux_string):
                     attr = ibus.AttributeForeground(PinYinEngine.__error_eng_phrase_color, 0, len(aux_string))
                     attrs.append(attr)
                 self.update_aux_string(aux_string, attrs, True)
@@ -309,7 +309,7 @@ class PinYinEngine(ibus.EngineBase):
                     artr = ibus.AttributeForeground(PinYinEngine.__english_phrase_color, 0, len(c))
                     self.__lookup_table.append_candidate(c, attrs)
                 self.update_lookup_table(self.__lookup_table, True)
-                
+
             return
 
         if len(self.__candidates) == 0:
@@ -335,9 +335,10 @@ class PinYinEngine(ibus.EngineBase):
                 del candidates[0]
 
             for c in self.__special_candidates:
+                attrs = ibus.AttrList ()
                 attr = ibus.AttributeForeground(PinYinEngine.__special_phrase_color, 0, len(c))
                 attrs.append(attr)
-                self.__lookup_table.append_candidate(c)
+                self.__lookup_table.append_candidate(c, attrs)
 
             for c in candidates:
                 attrs = ibus.AttrList ()
@@ -350,7 +351,7 @@ class PinYinEngine(ibus.EngineBase):
             self.__lookup_table.show_cursor(True)
             self.__lookup_table.set_cursor_pos(0)
             self.update_lookup_table(self.__lookup_table, True)
-        
+
         committed_string = self.__committed_phrases.get_string()
         invalid_pinyin = self.__user_input.get_invalid_string()
         preedit_string = " ".join([committed_string, self.__preedit_phrases.get_string(), invalid_pinyin])
@@ -360,7 +361,7 @@ class PinYinEngine(ibus.EngineBase):
             self.update_preedit(preedit_string, None, len(preedit_string), True)
         else:
             self.hide_preedit()
-            
+
         if committed_string or len(self.__user_input) != 0:
             pinyin_list = self.__user_input.get_pinyin_list()
             pinyin_list = pinyin_list [len(committed_string):]
@@ -369,7 +370,7 @@ class PinYinEngine(ibus.EngineBase):
                 aux_string = u"".join([committed_string, u" ", u"'".join(pinyin_list)])
             else:
                 aux_string = u"'".join(pinyin_list)
-                
+
             if aux_string:
                 self.update_aux_string(aux_string, None, True)
             else:
@@ -388,7 +389,7 @@ class PinYinEngine(ibus.EngineBase):
             self.__update_candidates()
             self.__update_ui()
             self.__need_update = False
-    
+
     def __is_gb2312(self, record):
         try:
             record[pysqlitedb.PHRASE].encode("gb2312")
@@ -398,7 +399,7 @@ class PinYinEngine(ibus.EngineBase):
 
     def __get_candidates(self, pinyin_list):
         candidates = []
-        
+
         for i in range(len(pinyin_list), 0, -1):
             candidates += self.__pydb.select_words_by_pinyin_list(pinyin_list[:i], PinYinEngine.__fuzzy_pinyin)
         if not PinYinEngine.__gbk:
@@ -430,7 +431,7 @@ class PinYinEngine(ibus.EngineBase):
         else:
             self.__user_input.pop()
         self.__invalidate()
-        
+
         return True
 
     def __match_hotkey(self, key, code, mask):
@@ -443,11 +444,11 @@ class PinYinEngine(ibus.EngineBase):
         return False
 
     def __internal_process_key_event(self, key):
-        
+
         # When CapsLock is lock, we ignore all key events
         if key.mask & modifier.LOCK_MASK:
             return False
-        
+
         # Match mode switch hotkey
         if self.__match_hotkey(key, keysyms.Shift_L, modifier.SHIFT_MASK + modifier.RELEASE_MASK) or \
             self.__match_hotkey(key, keysyms.Shift_R, modifier.SHIFT_MASK + modifier.RELEASE_MASK):
@@ -465,7 +466,7 @@ class PinYinEngine(ibus.EngineBase):
                         commit_phrases = self.__committed_phrases.get_phrases()
                         commit_string = self.__committed_phrases.get_string()
                         self.commit_string(commit_string + self.__user_input.get_invalid_string())
-                        
+
                         # adjust phrase freq and create new phrase
                         self.__pydb.commit_phrases(commit_phrases)
                         if len(commit_phrases) > 1:
@@ -475,12 +476,12 @@ class PinYinEngine(ibus.EngineBase):
                 self.trigger_property("status")
                 self.reset()
             return True
-        
+
         # Match full half letter mode switch hotkey
         if self.__match_hotkey(key, keysyms.space, modifier.SHIFT_MASK):
             self.trigger_property("full_letter")
             return True
-        
+
         # Match full half punct mode switch hotkey
         if self.__match_hotkey(key, keysyms.period, modifier.CONTROL_MASK):
             self.trigger_property("full_punct")
@@ -499,7 +500,7 @@ class PinYinEngine(ibus.EngineBase):
         # Ignore key release event
         if key.mask & modifier.RELEASE_MASK:
             return True
-        
+
         if self.__is_input_english():
             return self.__english_mode_process_key_event(key)
         else:
@@ -533,16 +534,16 @@ class PinYinEngine(ibus.EngineBase):
                 return u"\u2018"
             else:
                 return u"\u2019"
- 
+
         elif c == u"<":
             if not self.__is_input_english():
                 return u"\u300a"
         elif c == u">":
             if not self.__is_input_english():
                 return u"\u300b"
-         
+
         return ibus.unichar_half_to_full(c)
-    
+
     def __english_mode_process_key_event(self, key):
         # ignore if key code is not a normal ascii char
         if key.code >= 128:
@@ -556,14 +557,14 @@ class PinYinEngine(ibus.EngineBase):
             else:
                 self.commit_string(c)
                 return True
-            
+
         if self.__full_width_letter[self.__mode]: # if key code is a letter or digit
             self.commit_string(self.__convert_to_full_width(c))
             return True
         else:
             self.commit_string(c)
             return True
-        
+
         # should not reach there
         return False
 
@@ -629,10 +630,10 @@ class PinYinEngine(ibus.EngineBase):
 
         if key.code >= 128:
             return True
-        
+
         self.__user_input.append(unichr(key.code))
         self.__invalidate()
-        
+
         return True
 
     def __temp_english_mode_process_key_event(self, key):
@@ -722,7 +723,7 @@ class PinYinEngine(ibus.EngineBase):
                         commit_phrases = self.__committed_phrases.get_phrases()
                         commit_string = self.__committed_phrases.get_string()
                         self.commit_string(commit_string + self.__user_input.get_invalid_string())
-                        
+
                         # adjust phrase freq and create new phrase
                         self.__pydb.commit_phrases(commit_phrases)
                         if len(commit_phrases) > 1:
@@ -741,7 +742,7 @@ class PinYinEngine(ibus.EngineBase):
                         commit_phrases = self.__committed_phrases.get_phrases()
                         commit_string = self.__committed_phrases.get_string()
                         self.commit_string(commit_string + self.__user_input.get_invalid_string())
-                        
+
                         # adjust phrase freq and create new phrase
                         self.__pydb.commit_phrases(commit_phrases)
                         if len(commit_phrases) > 1:
@@ -824,7 +825,7 @@ class PinYinEngine(ibus.EngineBase):
             else:
                 self.commit_string(cond_letter_translate(unichr(key.code)))
             return True
-        
+
         return False
 
     def __commit_candidate(self, i):
@@ -832,11 +833,11 @@ class PinYinEngine(ibus.EngineBase):
             for phrase in self.__preedit_phrases.get_phrases():
                 self.__committed_phrases.append(phrase)
             return True
-            
+
         if i >=1 and i <= len(self.__special_candidates):
             self.__committed_special_phrase = self.__special_candidates [i - 1]
             return True
-            
+
         if len(self.__preedit_phrases) != 1:
             i -= 1
 
@@ -847,10 +848,10 @@ class PinYinEngine(ibus.EngineBase):
 
         self.__committed_phrases.append( self.__candidates[i])
         pinyin_list = self.__user_input.get_pinyin_list()
-        
+
         if self.__committed_phrases.length_of_chars() == len(pinyin_list):
             return True
-        
+
         self.__invalidate()
 
         return False
@@ -894,11 +895,19 @@ class PinYinEngine(ibus.EngineBase):
         self.__prev_char = string[-1]
         self.__invalidate()
 
+    def update_preedit(self, preedit_string, preedit_attrs, cursor_pos, visible):
+        if preedit_attrs == None:
+            preedit_attrs = ibus.AttrList()
+            attr = ibus.AttributeUnderline(ibus.ATTR_UNDERLINE_SINGLE, 0, len(preedit_string))
+            preedit_attrs.append(attr)
+
+        super(PinYinEngine, self).update_preedit(preedit_string, preedit_attrs, cursor_pos, visible)
+
     def page_up(self):
         if self.__lookup_table.page_up():
             self.page_up_lookup_table()
             return True
-        
+
         return True
 
     def page_down(self):
@@ -910,7 +919,7 @@ class PinYinEngine(ibus.EngineBase):
     def cursor_up(self):
         if len(self.__candidates) == 0:
             return False
-        
+
         if self.__lookup_table.cursor_up():
             self.cursor_up_lookup_table()
         return True
@@ -918,7 +927,7 @@ class PinYinEngine(ibus.EngineBase):
     def cursor_down(self):
         if len(self.__candidates) == 0:
             return False
-        
+
         if self.__lookup_table.cursor_down():
             self.cursor_down_lookup_table()
         return True
@@ -950,7 +959,7 @@ class PinYinEngine(ibus.EngineBase):
         self.__user_input.set_gbk(PinYinEngine.__gbk)
         self.__user_input.set_auto_correct(PinYinEngine.__auto_correct)
         self.__invalidate()
-    
+
     def focus_out(self):
         self.reset()
 
@@ -993,7 +1002,7 @@ class PinYinEngine(ibus.EngineBase):
     def reload_config(self, config):
         self.__lookup_table.set_page_size(PinYinEngine.__page_size)
         self.focus_in()
-    
+
     def focus_in(self):
         self.register_properties(self.__prop_list)
         print "FocusIn"
@@ -1012,7 +1021,7 @@ class KeyEvent:
             self.mask |= modifier.RELEASE_MASK
     def __str__(self):
         return "%s 0x%08x" % (keysyms.keycode_to_name(self.code), self.mask)
-        
+
 
 class UserInput:
     "UserInput holds user input chars"
@@ -1056,7 +1065,7 @@ class UserInput:
     def append(self, c):
         if len(self.__chars[0]) + len(self.__chars[1])  == self.__max_length:
             return
-            
+
         if self.__chars[1]:
             self.__chars[1].append(c)
         else:
@@ -1082,7 +1091,7 @@ class UserInput:
 
     def __len__(self):
         return len(self.__chars[0]) + len(self.__chars[1])
-    
+
 class PhraseList:
     """PhraseList contains phrases"""
     def __init__(self):
@@ -1115,7 +1124,7 @@ class PhraseList:
     def get_phrases(self):
         """Return all phrases"""
         return self.__list
-    
+
     def get_string(self):
         """Join all phrases into a string object and return it."""
         get_phrase = lambda x: x[pysqlitedb.PHRASE]
@@ -1170,5 +1179,6 @@ class PhraseList:
             config.read("/IMEngine/Python/PinYin/EqualPageDownUp", PinYinEngine.__equal_page_down_up)
         PinYinEngine.__auto_commit = \
             config.read("/IMEngine/Python/PinYin/AutoCommit", PinYinEngine.__auto_commit)
+
 
 
