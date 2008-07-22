@@ -52,5 +52,5 @@ EXTRA_DIST = \
 	$(NULL)
 
 test:
-	$(ENV) LANG=en_US PYTHONPATH=$(top_srcdir) $(PYTHON) $(srcdir)/main.py
+	$(ENV) DBUS_DEBUG=true LANG=en_US PYTHONPATH=$(top_srcdir) $(PYTHON) $(srcdir)/main.py
 
