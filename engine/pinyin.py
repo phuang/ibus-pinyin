@@ -152,16 +152,20 @@ class PinYinEngine(ibus.EngineBase):
 
         if self.__full_width_letter[self.__mode]:
             self.__letter_property._icon = "/usr/share/scim/icons/full-letter.png"
+            self.__letter_property._label = u"Ａａ"
             self.__letter_property._tooltip = _("Switch to half letter mode")
         else:
             self.__letter_property._icon = "/usr/share/scim/icons/half-letter.png"
+            self.__letter_property._label = u"Aa"
             self.__letter_property._tooltip = _("Switch to full letter mode")
 
         if self.__full_width_punct[self.__mode]:
             self.__punct_property._icon = "/usr/share/scim/icons/full-punct.png"
+            self.__punct_property._label = u"，。"
             self.__punct_property._tooltip = _("Switch to half punctuation mode")
         else:
             self.__punct_property._icon = "/usr/share/scim/icons/half-punct.png"
+            self.__punct_property._label = u".,"
             self.__punct_property._tooltip = _("Switch to full punctuation mode")
 
         # if PinYinEngine.__shuangpin:
@@ -473,18 +477,18 @@ class PinYinEngine(ibus.EngineBase):
                             self.__pydb.new_phrase(commit_phrases)
                 return True
             else:
-                self.trigger_property("status")
+                self.property_activate("status")
                 self.reset()
             return True
 
         # Match full half letter mode switch hotkey
         if self.__match_hotkey(key, keysyms.space, modifier.SHIFT_MASK):
-            self.trigger_property("full_letter")
+            self.property_activate("full_letter")
             return True
 
         # Match full half punct mode switch hotkey
         if self.__match_hotkey(key, keysyms.period, modifier.CONTROL_MASK):
-            self.trigger_property("full_punct")
+            self.property_activate("full_punct")
             return True
 
         # Match remove user phrase hotkeys
@@ -963,13 +967,13 @@ class PinYinEngine(ibus.EngineBase):
     def focus_out(self):
         self.reset()
 
-    def trigger_property(self, property):
-        if property == "status":
+    def property_activate(self, prop_name, prop_state = ibus.PROP_STATE_UNCHECKED):
+        if prop_name == "status":
             self.__change_mode()
-        elif property == "full_letter":
+        elif prop_name == "full_letter":
             self.__full_width_letter [self.__mode] = not self.__full_width_letter [self.__mode]
             self.__refresh_properties()
-        elif property == "full_punct":
+        elif prop_name == "full_punct":
             self.__full_width_punct [self.__mode] = not self.__full_width_punct [self.__mode]
             self.__refresh_properties()
         # elif property == "shuangpin":
@@ -988,10 +992,8 @@ class PinYinEngine(ibus.EngineBase):
         #     self.__config.write("/IMEngine/Python/PinYin/SupportGBK", PinYinEngine.__gbk)
         #     self.__refresh_properties()
 
-        elif property == "setup":
+        elif prop_name == "setup":
             self.start_helper("eebeecd7-cb22-48f4-8ced-70e42dad1a79")
-
-        IMEngine.trigger_property(self, property)
 
     def process_helper_event(self, helper_uuid, trans):
         IMEngine.process_helper_event(self, helper_uuid, trans)
@@ -1009,9 +1011,6 @@ class PinYinEngine(ibus.EngineBase):
 
     def focus_out(self):
         print "FocusOut"
-
-    def property_activate(self, prop_name):
-        print "PropertyActivate(%s)" % prop_name
 
 class KeyEvent:
     def __init__(self, keyval, is_press, state):
