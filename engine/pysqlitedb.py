@@ -59,7 +59,7 @@ class PYSQLiteDB:
         
         if user_db != None:
             home_path = os.getenv ("HOME")
-            pinyin_path = path.join (home_path, ".scim", "scim-python", "pinyin")
+            pinyin_path = path.join (home_path, ".ibus", "pinyin")
             user_db = path.join (pinyin_path, user_db)
             if not path.isdir (pinyin_path):
                 os.makedirs (pinyin_path)
