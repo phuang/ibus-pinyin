@@ -25,8 +25,6 @@ from ibus import keysyms
 from ibus import modifier
 from ibus import ascii
 
-# from scim import IMEngine
-# from scim import Attribute
 import pyparser
 import pysqlitedb
 from specialtable import SpecialTable
@@ -144,27 +142,29 @@ class PinYinEngine(ibus.EngineBase):
 
     def __refresh_properties(self):
         if self.__mode == 1: # refresh mode
+            self.__status_property._icon = "/usr/share/ibus-pinyin/chinese.svg"
             self.__status_property._label = _("CN")
             self.__status_property._tooltip = _("Switch to English mode")
         else:
+            self.__status_property._icon = "/usr/share/ibus-pinyin/english.svg"
             self.__status_property._label = _("EN")
             self.__status_property._tooltip = _("Switch to Chinese mode")
 
         if self.__full_width_letter[self.__mode]:
-            self.__letter_property._icon = "/usr/share/scim/icons/full-letter.png"
+            self.__letter_property._icon = "/usr/share/ibus-pinyin/full-letter.svg"
             self.__letter_property._label = u"Ａａ"
             self.__letter_property._tooltip = _("Switch to half letter mode")
         else:
-            self.__letter_property._icon = "/usr/share/scim/icons/half-letter.png"
+            self.__letter_property._icon = "/usr/share/ibus-pinyin/half-letter.svg"
             self.__letter_property._label = u"Aa"
             self.__letter_property._tooltip = _("Switch to full letter mode")
 
         if self.__full_width_punct[self.__mode]:
-            self.__punct_property._icon = "/usr/share/scim/icons/full-punct.png"
+            self.__punct_property._icon = "/usr/share/ibus-pinyin/full-punct.svg"
             self.__punct_property._label = u"，。"
             self.__punct_property._tooltip = _("Switch to half punctuation mode")
         else:
-            self.__punct_property._icon = "/usr/share/scim/icons/half-punct.png"
+            self.__punct_property._icon = "/usr/share/ibus-pinyin/half-punct.svg"
             self.__punct_property._label = u".,"
             self.__punct_property._tooltip = _("Switch to full punctuation mode")
 

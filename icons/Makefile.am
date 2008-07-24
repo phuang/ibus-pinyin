@@ -20,10 +20,16 @@
 
 icons_DATA = \
 	ibus-pinyin.svg \
+	full-letter.svg \
+	half-letter.svg \
+	full-punct.svg \
+	half-punct.svg \
+	chinese.svg \
+	english.svg \
 	$(NULL)
 
-iconsdir = $(datadir)/ibus/icons
+iconsdir = $(pkgdatadir)
 
 EXTRA_DIST = \
-	ibus-pinyin.svg \
+	$(icons_DATA) \
 	$(NULL)

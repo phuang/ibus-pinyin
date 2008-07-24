@@ -27,7 +27,7 @@ ENGINE_PATH = "/com/redhat/IBus/engines/PinYin/Engine/"
 class EngineFactory(ibus.EngineFactoryBase):
     NAME = "PinYin"
     LANG = "zh_CN"
-    ICON = "ibus-pinyin"
+    ICON = "/usr/share/ibus-pinyin/ibus-pinyin.svg"
     AUTHORS = "Huang Peng <shawn.p.huang@gmail.com>"
     CREDITS = "GPLv2"
 
