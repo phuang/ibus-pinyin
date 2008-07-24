@@ -25,7 +25,7 @@
          offset="0"
          id="stop3167" />
       <stop
-         style="stop-color:#3e9ade;stop-opacity:0;"
+         style="stop-color:#ffffff;stop-opacity:1;"
          offset="1"
          id="stop3169" />
     </linearGradient>
@@ -137,7 +137,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="7"
-     inkscape:cx="29.040096"
+     inkscape:cx="5.6829531"
      inkscape:cy="24.785714"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -162,6 +162,10 @@
      id="layer1"
      inkscape:label="Layer 1"
      inkscape:groupmode="layer">
+    <path
+       style="font-size:28px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000066;fill-opacity:1;stroke:#000066;stroke-width:0.57264608;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;font-family:'微软雅黑';-inkscape-font-specification:'微软雅黑 Bold'"
+       d="M 23.682634,2.3965916 L 23.682634,9.201567 L 8.8206981,9.201567 L 8.8206981,30.845779 L 14.701649,30.845779 L 14.701649,28.079885 L 23.682634,28.079885 L 23.682634,40.460551 L 29.745938,40.460551 L 29.745938,28.079885 L 38.726923,28.079885 L 38.726923,30.757973 L 44.607873,30.757973 L 44.607873,9.201567 L 29.745938,9.201567 L 29.745938,2.3965916 L 23.682634,2.3965916 z M 14.701649,14.513838 L 23.682634,14.513838 L 23.682634,22.811517 L 14.701649,22.811517 L 14.701649,14.513838 z M 29.745938,14.513838 L 38.726923,14.513838 L 38.726923,22.811517 L 29.745938,22.811517 L 29.745938,14.513838 z"
+       id="path3252" />
     <path
        sodipodi:type="arc"
        style="opacity:1;fill:#6b6b6b;fill-opacity:0.22110554;stroke:none;stroke-width:0.37799999;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"

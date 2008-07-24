@@ -25,7 +25,7 @@
          offset="0"
          id="stop3167" />
       <stop
-         style="stop-color:#3e9ade;stop-opacity:0;"
+         style="stop-color:#ffffff;stop-opacity:1;"
          offset="1"
          id="stop3169" />
     </linearGradient>
@@ -138,6 +138,16 @@
        y2="-8.0981693"
        gradientUnits="userSpaceOnUse"
        gradientTransform="matrix(0.9452362,0,0,0.9452361,1.5728255,0.5656012)" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3165"
+       id="linearGradient5069"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.9452362,0,0,0.9452361,4.0622424,2.958493)"
+       x1="10.56702"
+       y1="37.847939"
+       x2="55.943497"
+       y2="-8.0981693" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -147,7 +157,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="7"
-     inkscape:cx="43.479288"
+     inkscape:cx="20.122145"
      inkscape:cy="24.785714"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -172,6 +182,19 @@
      id="layer1"
      inkscape:label="Layer 1"
      inkscape:groupmode="layer">
+    <text
+       xml:space="preserve"
+       style="font-size:40.23707581000000033px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000066;fill-opacity:1;stroke:#000066;stroke-width:0.54162030999999999;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;font-family:'微软雅黑';-inkscape-font-specification:'微软雅黑 Bold'"
+       x="6.0973063"
+       y="36.399105"
+       id="text5065"
+       sodipodi:linespacing="125%"
+       transform="scale(1.0073595,0.9926943)"><tspan
+         sodipodi:role="line"
+         id="tspan5067"
+         x="6.0973063"
+         y="36.399105"
+         style="fill:#000066;fill-opacity:1;stroke-width:0.54162030999999999;stroke-miterlimit:4;stroke-dasharray:none;stroke:#000066;stroke-opacity:1">拼</tspan></text>
     <path
        sodipodi:type="arc"
        style="opacity:1;fill:#6b6b6b;fill-opacity:0.22110554;stroke:none;stroke-width:0.37799999;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"

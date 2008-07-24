@@ -25,7 +25,7 @@
          offset="0"
          id="stop3167" />
       <stop
-         style="stop-color:#3e9ade;stop-opacity:0;"
+         style="stop-color:#ffffff;stop-opacity:1;"
          offset="1"
          id="stop3169" />
     </linearGradient>
@@ -40,10 +40,10 @@
        inkscape:collect="always"
        xlink:href="#linearGradient3165"
        id="linearGradient3179"
-       x1="34.58041"
-       y1="14.429573"
-       x2="-1.6865795"
-       y2="47.372837"
+       x1="32.734177"
+       y1="13.687543"
+       x2="16.494907"
+       y2="44.930676"
        gradientUnits="userSpaceOnUse" />
   </defs>
   <sodipodi:namedview
@@ -54,7 +54,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="7"
-     inkscape:cx="13.09734"
+     inkscape:cx="33.12666"
      inkscape:cy="24"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -89,6 +89,18 @@
        sodipodi:ry="2.3571429"
        d="M 41.000001,45.357143 A 15.642858,2.3571429 0 1 1 9.7142859,45.357143 A 15.642858,2.3571429 0 1 1 41.000001,45.357143 z"
        transform="matrix(-1.2395906,0,0,1.4687983,55.558919,-22.406211)" />
+    <path
+       sodipodi:type="arc"
+       style="opacity:1;fill:#000066;fill-opacity:1;stroke:#000066;stroke-width:0.99999994000000003;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="path3236"
+       sodipodi:cx="25.857143"
+       sodipodi:cy="27.428572"
+       sodipodi:rx="19.857143"
+       sodipodi:ry="19.857143"
+       d="M 38.380563,42.838637 A 19.857143,19.857143 0 1 1 38.380563,12.018507 L 25.857143,27.428572 z"
+       transform="matrix(-0.9998878,1.4982287e-2,-1.4982287e-2,-0.9998878,50.428569,48.293688)"
+       sodipodi:start="0.88837259"
+       sodipodi:end="5.3948127" />
     <path
        sodipodi:type="arc"
        style="opacity:1;fill:url(#linearGradient3179);fill-opacity:1;stroke:#0066cc;stroke-width:0.99999996000000002;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
