@@ -968,6 +968,10 @@ class PinYinEngine(ibus.EngineBase):
     def focus_out(self):
         self.reset()
 
+    def enable(self):
+        print "enable"
+        self.focus_in()
+
     def property_activate(self, prop_name, prop_state = ibus.PROP_STATE_UNCHECKED):
         if prop_name == "status":
             self.__change_mode()
