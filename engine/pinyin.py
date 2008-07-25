@@ -953,8 +953,9 @@ class PinYinEngine(ibus.EngineBase):
         self.__prev_char = None
         self.__invalidate()
 
-    def __focus_in(self):
-        self.__init_properties()
+    def focus_in(self):
+        self.register_properties(self.__prop_list)
+        self.__refresh_properties()
         if PinYinEngine.__shuangpin:
             self.__py_parser = pyparser.ShuangPinParser(PinYinEngine.__shuangpin_schema)
         else:
@@ -1004,13 +1005,6 @@ class PinYinEngine(ibus.EngineBase):
     def reload_config(self, config):
         self.__lookup_table.set_page_size(PinYinEngine.__page_size)
         self.focus_in()
-
-    def focus_in(self):
-        self.register_properties(self.__prop_list)
-        print "FocusIn"
-
-    def focus_out(self):
-        print "FocusOut"
 
 class KeyEvent:
     def __init__(self, keyval, is_press, state):
