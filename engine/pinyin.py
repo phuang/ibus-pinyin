@@ -294,7 +294,7 @@ class PinYinEngine(ibus.EngineBase):
             if preedit_string and self.__spell_check:
                 self.update_preedit(preedit_string, None, len(preedit_string), True)
                 attrs = ibus.AttrList()
-                if  not __EN_DICT__.check(aux_string):
+                if  aux_string and not __EN_DICT__.check(aux_string):
                     attr = ibus.AttributeForeground(PinYinEngine.__error_eng_phrase_color, 0, len(aux_string))
                     attrs.append(attr)
                 self.update_aux_string(aux_string, attrs, True)
