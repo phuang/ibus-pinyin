@@ -31,13 +31,12 @@ import factory
 class IMApp:
     def __init__(self):
         self.__mainloop = gobject.MainLoop()
-        self._dbusconn = dbus.connection.Connection(ibus.IBUS_ADDR)
-        self._dbusconn.add_signal_receiver(self.__disconnected_cb,
+        self.__conn = ibus.Connection()
+        self.__conn.add_signal_receiver(self.__disconnected_cb,
                             "Disconnected",
                             dbus_interface = dbus.LOCAL_IFACE)
-        self._engine = factory.EngineFactory(self._dbusconn)
-        self._ibus = self._dbusconn.get_object(ibus.IBUS_NAME, ibus.IBUS_PATH)
-        self._ibus.RegisterFactories([factory.FACTORY_PATH], **ibus.DEFAULT_ASYNC_HANDLERS)
+        self.__engine = factory.EngineFactory(self.__conn)
+        self.__engine.register()
 
     def run(self):
         self.__mainloop.run()
