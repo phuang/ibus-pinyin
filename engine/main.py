@@ -21,9 +21,6 @@
 import os
 import sys
 import getopt
-import dbus
-import dbus.connection
-import dbus.mainloop.glib
 import ibus
 import gobject
 import factory
@@ -31,22 +28,19 @@ import factory
 class IMApp:
     def __init__(self):
         self.__mainloop = gobject.MainLoop()
-        self.__conn = ibus.Connection()
-        self.__conn.add_signal_receiver(self.__disconnected_cb,
-                            "Disconnected",
-                            dbus_interface = dbus.LOCAL_IFACE)
-        self.__engine = factory.EngineFactory(self.__conn)
+        self.__ibus = ibus.IBus()
+        self.__ibus.call_on_disconnection(self.__disconnected_cb)
+        self.__engine = factory.EngineFactory(self.__ibus)
         self.__engine.register()
 
     def run(self):
         self.__mainloop.run()
 
-    def __disconnected_cb(self):
+    def __disconnected_cb(self, conn):
         self.__mainloop.quit()
 
 
 def launch_engine():
-    dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
     IMApp().run()
 
 def print_help(out, v = 0):
