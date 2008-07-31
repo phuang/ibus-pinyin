@@ -24,18 +24,119 @@
                 <property name="row_spacing">2</property>
                 <property name="homogeneous">True</property>
                 <child>
-                  <widget class="GtkLabel" id="label21">
+                  <widget class="GtkLabel" id="label24">
                     <property name="visible">True</property>
                     <property name="xalign">0.89999997615814209</property>
-                    <property name="label" translatable="yes">Press [u] or [v]  to temporary English mode</property>
+                    <property name="label" translatable="yes">Press [,] [.] to page down up.</property>
                   </widget>
                   <packing>
-                    <property name="top_attach">6</property>
-                    <property name="bottom_attach">7</property>
+                    <property name="top_attach">9</property>
+                    <property name="bottom_attach">10</property>
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkCheckButton" id="UVToTemp">
+                  <widget class="GtkLabel" id="label23">
+                    <property name="visible">True</property>
+                    <property name="xalign">0.89999997615814209</property>
+                    <property name="label" translatable="yes">Auto commit</property>
+                  </widget>
+                  <packing>
+                    <property name="top_attach">10</property>
+                    <property name="bottom_attach">11</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkCheckButton" id="AutoCommit">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="response_id">0</property>
+                    <property name="draw_indicator">True</property>
+                    <child>
+                      <placeholder/>
+                    </child>
+                  </widget>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="right_attach">2</property>
+                    <property name="top_attach">10</property>
+                    <property name="bottom_attach">11</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkCheckButton" id="CommaPageDownUp">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="response_id">0</property>
+                    <property name="draw_indicator">True</property>
+                    <child>
+                      <placeholder/>
+                    </child>
+                  </widget>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="right_attach">2</property>
+                    <property name="top_attach">9</property>
+                    <property name="bottom_attach">10</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkCheckButton" id="EqualPageDownUp">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="response_id">0</property>
+                    <property name="draw_indicator">True</property>
+                    <child>
+                      <placeholder/>
+                    </child>
+                  </widget>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="right_attach">2</property>
+                    <property name="top_attach">8</property>
+                    <property name="bottom_attach">9</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkLabel" id="label22">
+                    <property name="visible">True</property>
+                    <property name="xalign">0.89999997615814209</property>
+                    <property name="label" translatable="yes">Press [-] [=] to page down up.</property>
+                  </widget>
+                  <packing>
+                    <property name="top_attach">8</property>
+                    <property name="bottom_attach">9</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkCheckButton" id="ShiftSelectCandidates">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="response_id">0</property>
+                    <property name="draw_indicator">True</property>
+                    <child>
+                      <placeholder/>
+                    </child>
+                  </widget>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="right_attach">2</property>
+                    <property name="top_attach">7</property>
+                    <property name="bottom_attach">8</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkLabel" id="label20">
+                    <property name="visible">True</property>
+                    <property name="xalign">0.89999997615814209</property>
+                    <property name="label" translatable="yes">Press [shift] to select candidates</property>
+                  </widget>
+                  <packing>
+                    <property name="top_attach">7</property>
+                    <property name="bottom_attach">8</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkCheckButton" id="SupportGBK">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="response_id">0</property>
@@ -48,12 +149,10 @@
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="right_attach">2</property>
-                    <property name="top_attach">6</property>
-                    <property name="bottom_attach">7</property>
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkCheckButton" id="SpellCheck">
+                  <widget class="GtkCheckButton" id="ShuangPin">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="response_id">0</property>
@@ -66,8 +165,98 @@
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="right_attach">2</property>
+                    <property name="top_attach">1</property>
+                    <property name="bottom_attach">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkLabel" id="label17">
+                    <property name="visible">True</property>
+                    <property name="xalign">0.89999997615814209</property>
+                    <property name="label" translatable="yes">Support GBK</property>
+                  </widget>
+                </child>
+                <child>
+                  <widget class="GtkLabel" id="label16">
+                    <property name="visible">True</property>
+                    <property name="xalign">0.89999997615814209</property>
+                    <property name="label" translatable="yes">ShuangPin</property>
+                  </widget>
+                  <packing>
+                    <property name="top_attach">1</property>
+                    <property name="bottom_attach">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkLabel" id="label10">
+                    <property name="visible">True</property>
+                    <property name="xalign">0.89999997615814209</property>
+                    <property name="label" translatable="yes">ShuangPin Schema</property>
+                  </widget>
+                  <packing>
+                    <property name="top_attach">2</property>
+                    <property name="bottom_attach">3</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkLabel" id="label11">
+                    <property name="visible">True</property>
+                    <property name="xalign">0.89999997615814209</property>
+                    <property name="label" translatable="yes">Lookup table page size</property>
+                  </widget>
+                  <packing>
+                    <property name="top_attach">3</property>
+                    <property name="bottom_attach">4</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkLabel" id="label13">
+                    <property name="visible">True</property>
+                    <property name="xalign">0.89999997615814209</property>
+                    <property name="label" translatable="yes">Wrong PinYin auto correct</property>
+                  </widget>
+                  <packing>
+                    <property name="top_attach">4</property>
+                    <property name="bottom_attach">5</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkLabel" id="label14">
+                    <property name="visible">True</property>
+                    <property name="xalign">0.89999997615814209</property>
+                    <property name="label" translatable="yes">English spelling check</property>
+                  </widget>
+                  <packing>
                     <property name="top_attach">5</property>
                     <property name="bottom_attach">6</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkComboBox" id="ShuangPinSchema">
+                    <property name="visible">True</property>
+                    <property name="items" translatable="yes">1
+</property>
+                    <signal name="changed" handler="on_value_changed"/>
+                  </widget>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="right_attach">2</property>
+                    <property name="top_attach">2</property>
+                    <property name="bottom_attach">3</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkComboBox" id="PageSize">
+                    <property name="visible">True</property>
+                    <property name="items" translatable="yes">1
+</property>
+                    <signal name="changed" handler="on_value_changed"/>
+                  </widget>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="right_attach">2</property>
+                    <property name="top_attach">3</property>
+                    <property name="bottom_attach">4</property>
                   </packing>
                 </child>
                 <child>
@@ -89,97 +278,25 @@
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkComboBox" id="PageSize">
+                  <widget class="GtkCheckButton" id="SpellCheck">
                     <property name="visible">True</property>
-                    <property name="items" translatable="yes">1
-</property>
-                    <signal name="changed" handler="on_value_changed"/>
+                    <property name="can_focus">True</property>
+                    <property name="response_id">0</property>
+                    <property name="draw_indicator">True</property>
+                    <signal name="toggled" handler="on_value_changed"/>
+                    <child>
+                      <placeholder/>
+                    </child>
                   </widget>
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="right_attach">2</property>
-                    <property name="top_attach">3</property>
-                    <property name="bottom_attach">4</property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="GtkComboBox" id="ShuangPinSchema">
-                    <property name="visible">True</property>
-                    <property name="items" translatable="yes">1
-</property>
-                    <signal name="changed" handler="on_value_changed"/>
-                  </widget>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="right_attach">2</property>
-                    <property name="top_attach">2</property>
-                    <property name="bottom_attach">3</property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="GtkLabel" id="label14">
-                    <property name="visible">True</property>
-                    <property name="xalign">0.89999997615814209</property>
-                    <property name="label" translatable="yes">English spelling check</property>
-                  </widget>
-                  <packing>
                     <property name="top_attach">5</property>
                     <property name="bottom_attach">6</property>
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkLabel" id="label13">
-                    <property name="visible">True</property>
-                    <property name="xalign">0.89999997615814209</property>
-                    <property name="label" translatable="yes">Wrong PinYin auto correct</property>
-                  </widget>
-                  <packing>
-                    <property name="top_attach">4</property>
-                    <property name="bottom_attach">5</property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="GtkLabel" id="label11">
-                    <property name="visible">True</property>
-                    <property name="xalign">0.89999997615814209</property>
-                    <property name="label" translatable="yes">Lookup table page size</property>
-                  </widget>
-                  <packing>
-                    <property name="top_attach">3</property>
-                    <property name="bottom_attach">4</property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="GtkLabel" id="label10">
-                    <property name="visible">True</property>
-                    <property name="xalign">0.89999997615814209</property>
-                    <property name="label" translatable="yes">ShuangPin Schema</property>
-                  </widget>
-                  <packing>
-                    <property name="top_attach">2</property>
-                    <property name="bottom_attach">3</property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="GtkLabel" id="label16">
-                    <property name="visible">True</property>
-                    <property name="xalign">0.89999997615814209</property>
-                    <property name="label" translatable="yes">ShuangPin</property>
-                  </widget>
-                  <packing>
-                    <property name="top_attach">1</property>
-                    <property name="bottom_attach">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="GtkLabel" id="label17">
-                    <property name="visible">True</property>
-                    <property name="xalign">0.89999997615814209</property>
-                    <property name="label" translatable="yes">Support GBK</property>
-                  </widget>
-                </child>
-                <child>
-                  <widget class="GtkCheckButton" id="ShuangPin">
+                  <widget class="GtkCheckButton" id="UVToTemp">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="response_id">0</property>
@@ -192,136 +309,19 @@
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="right_attach">2</property>
-                    <property name="top_attach">1</property>
-                    <property name="bottom_attach">2</property>
+                    <property name="top_attach">6</property>
+                    <property name="bottom_attach">7</property>
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkCheckButton" id="SupportGBK">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="response_id">0</property>
-                    <property name="draw_indicator">True</property>
-                    <signal name="toggled" handler="on_value_changed"/>
-                    <child>
-                      <placeholder/>
-                    </child>
-                  </widget>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="right_attach">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="GtkLabel" id="label20">
+                  <widget class="GtkLabel" id="label21">
                     <property name="visible">True</property>
                     <property name="xalign">0.89999997615814209</property>
-                    <property name="label" translatable="yes">Press [shift] to select candidates</property>
+                    <property name="label" translatable="yes">Press [u] or [v]  to temporary English mode</property>
                   </widget>
                   <packing>
-                    <property name="top_attach">7</property>
-                    <property name="bottom_attach">8</property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="GtkCheckButton" id="ShiftSelectCandidates">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="response_id">0</property>
-                    <property name="draw_indicator">True</property>
-                    <child>
-                      <placeholder/>
-                    </child>
-                  </widget>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="right_attach">2</property>
-                    <property name="top_attach">7</property>
-                    <property name="bottom_attach">8</property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="GtkLabel" id="label22">
-                    <property name="visible">True</property>
-                    <property name="xalign">0.89999997615814209</property>
-                    <property name="label" translatable="yes">Press [-] [=] to page down up.</property>
-                  </widget>
-                  <packing>
-                    <property name="top_attach">8</property>
-                    <property name="bottom_attach">9</property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="GtkCheckButton" id="EqualPageDownUp">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="response_id">0</property>
-                    <property name="draw_indicator">True</property>
-                    <child>
-                      <placeholder/>
-                    </child>
-                  </widget>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="right_attach">2</property>
-                    <property name="top_attach">8</property>
-                    <property name="bottom_attach">9</property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="GtkCheckButton" id="CommaPageDownUp">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="response_id">0</property>
-                    <property name="draw_indicator">True</property>
-                    <child>
-                      <placeholder/>
-                    </child>
-                  </widget>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="right_attach">2</property>
-                    <property name="top_attach">9</property>
-                    <property name="bottom_attach">10</property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="GtkCheckButton" id="AutoCommit">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="response_id">0</property>
-                    <property name="draw_indicator">True</property>
-                    <child>
-                      <placeholder/>
-                    </child>
-                  </widget>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="right_attach">2</property>
-                    <property name="top_attach">10</property>
-                    <property name="bottom_attach">11</property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="GtkLabel" id="label23">
-                    <property name="visible">True</property>
-                    <property name="xalign">0.89999997615814209</property>
-                    <property name="label" translatable="yes">Auto commit</property>
-                  </widget>
-                  <packing>
-                    <property name="top_attach">10</property>
-                    <property name="bottom_attach">11</property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="GtkLabel" id="label24">
-                    <property name="visible">True</property>
-                    <property name="xalign">0.89999997615814209</property>
-                    <property name="label" translatable="yes">Press [,] [.] to page down up.</property>
-                  </widget>
-                  <packing>
-                    <property name="top_attach">9</property>
-                    <property name="bottom_attach">10</property>
+                    <property name="top_attach">6</property>
+                    <property name="bottom_attach">7</property>
                   </packing>
                 </child>
               </widget>
@@ -393,84 +393,10 @@
                   <placeholder/>
                 </child>
                 <child>
-                  <widget class="GtkCheckButton" id="FuzzyPinYin">
+                  <widget class="GtkCheckButton" id="FuzzyAn_Ang">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="label" translatable="yes">Enable Fuzzy PinYin</property>
-                    <property name="use_underline">True</property>
-                    <property name="response_id">0</property>
-                    <property name="draw_indicator">True</property>
-                  </widget>
-                </child>
-                <child>
-                  <widget class="GtkCheckButton" id="FuzzyS_Sh">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="label" translatable="yes">s &lt;=&gt; sh</property>
-                    <property name="use_underline">True</property>
-                    <property name="response_id">0</property>
-                    <property name="draw_indicator">True</property>
-                  </widget>
-                  <packing>
-                    <property name="top_attach">1</property>
-                    <property name="bottom_attach">2</property>
-                    <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="GtkCheckButton" id="FuzzyC_Ch">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="label" translatable="yes">c &lt;=&gt; ch</property>
-                    <property name="use_underline">True</property>
-                    <property name="response_id">0</property>
-                    <property name="draw_indicator">True</property>
-                  </widget>
-                  <packing>
-                    <property name="top_attach">2</property>
-                    <property name="bottom_attach">3</property>
-                    <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="GtkCheckButton" id="FuzzyZ_Zh">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="label" translatable="yes">z &lt;=&gt; zh</property>
-                    <property name="use_underline">True</property>
-                    <property name="response_id">0</property>
-                    <property name="draw_indicator">True</property>
-                  </widget>
-                  <packing>
-                    <property name="top_attach">3</property>
-                    <property name="bottom_attach">4</property>
-                    <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="GtkCheckButton" id="FuzzyL_N">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="label" translatable="yes">l &lt;=&gt; n</property>
-                    <property name="use_underline">True</property>
-                    <property name="response_id">0</property>
-                    <property name="draw_indicator">True</property>
-                  </widget>
-                  <packing>
-                    <property name="top_attach">4</property>
-                    <property name="bottom_attach">5</property>
-                    <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="GtkCheckButton" id="FuzzyIn_Ing">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="label" translatable="yes">in &lt;=&gt; ing</property>
+                    <property name="label" translatable="yes">an &lt;=&gt; ang</property>
                     <property name="use_underline">True</property>
                     <property name="response_id">0</property>
                     <property name="draw_indicator">True</property>
@@ -478,8 +404,8 @@
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="right_attach">2</property>
-                    <property name="top_attach">1</property>
-                    <property name="bottom_attach">2</property>
+                    <property name="top_attach">3</property>
+                    <property name="bottom_attach">4</property>
                     <property name="x_options">GTK_FILL</property>
                     <property name="y_options"></property>
                   </packing>
@@ -503,10 +429,10 @@
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkCheckButton" id="FuzzyAn_Ang">
+                  <widget class="GtkCheckButton" id="FuzzyIn_Ing">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="label" translatable="yes">an &lt;=&gt; ang</property>
+                    <property name="label" translatable="yes">in &lt;=&gt; ing</property>
                     <property name="use_underline">True</property>
                     <property name="response_id">0</property>
                     <property name="draw_indicator">True</property>
@@ -514,11 +440,85 @@
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="right_attach">2</property>
+                    <property name="top_attach">1</property>
+                    <property name="bottom_attach">2</property>
+                    <property name="x_options">GTK_FILL</property>
+                    <property name="y_options"></property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkCheckButton" id="FuzzyL_N">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="label" translatable="yes">l &lt;=&gt; n</property>
+                    <property name="use_underline">True</property>
+                    <property name="response_id">0</property>
+                    <property name="draw_indicator">True</property>
+                  </widget>
+                  <packing>
+                    <property name="top_attach">4</property>
+                    <property name="bottom_attach">5</property>
+                    <property name="x_options">GTK_FILL</property>
+                    <property name="y_options"></property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkCheckButton" id="FuzzyZ_Zh">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="label" translatable="yes">z &lt;=&gt; zh</property>
+                    <property name="use_underline">True</property>
+                    <property name="response_id">0</property>
+                    <property name="draw_indicator">True</property>
+                  </widget>
+                  <packing>
                     <property name="top_attach">3</property>
                     <property name="bottom_attach">4</property>
                     <property name="x_options">GTK_FILL</property>
                     <property name="y_options"></property>
                   </packing>
+                </child>
+                <child>
+                  <widget class="GtkCheckButton" id="FuzzyC_Ch">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="label" translatable="yes">c &lt;=&gt; ch</property>
+                    <property name="use_underline">True</property>
+                    <property name="response_id">0</property>
+                    <property name="draw_indicator">True</property>
+                  </widget>
+                  <packing>
+                    <property name="top_attach">2</property>
+                    <property name="bottom_attach">3</property>
+                    <property name="x_options">GTK_FILL</property>
+                    <property name="y_options"></property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkCheckButton" id="FuzzyS_Sh">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="label" translatable="yes">s &lt;=&gt; sh</property>
+                    <property name="use_underline">True</property>
+                    <property name="response_id">0</property>
+                    <property name="draw_indicator">True</property>
+                  </widget>
+                  <packing>
+                    <property name="top_attach">1</property>
+                    <property name="bottom_attach">2</property>
+                    <property name="x_options">GTK_FILL</property>
+                    <property name="y_options"></property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkCheckButton" id="FuzzyPinYin">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="label" translatable="yes">Enable Fuzzy PinYin</property>
+                    <property name="use_underline">True</property>
+                    <property name="response_id">0</property>
+                    <property name="draw_indicator">True</property>
+                  </widget>
                 </child>
               </widget>
               <packing>
@@ -575,69 +575,7 @@
                   <placeholder/>
                 </child>
                 <child>
-                  <widget class="GtkLabel" id="label9">
-                    <property name="visible">True</property>
-                    <property name="xalign">0.89999997615814209</property>
-                    <property name="label" translatable="yes">Color of Spelling Error</property>
-                  </widget>
-                  <packing>
-                    <property name="top_attach">5</property>
-                    <property name="bottom_attach">6</property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="GtkLabel" id="label8">
-                    <property name="visible">True</property>
-                    <property name="xalign">0.89999997615814209</property>
-                    <property name="label" translatable="yes">Color of English Candidates</property>
-                  </widget>
-                  <packing>
-                    <property name="top_attach">4</property>
-                    <property name="bottom_attach">5</property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="GtkLabel" id="label7">
-                    <property name="visible">True</property>
-                    <property name="xalign">0.89999997615814209</property>
-                    <property name="label" translatable="yes">Color of Special Phrases</property>
-                  </widget>
-                  <packing>
-                    <property name="top_attach">3</property>
-                    <property name="bottom_attach">4</property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="GtkLabel" id="label6">
-                    <property name="visible">True</property>
-                    <property name="xalign">0.89999997615814209</property>
-                    <property name="label" translatable="yes">Color of User Phrases</property>
-                  </widget>
-                  <packing>
-                    <property name="top_attach">2</property>
-                    <property name="bottom_attach">3</property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="GtkLabel" id="label5">
-                    <property name="visible">True</property>
-                    <property name="xalign">0.89999997615814209</property>
-                    <property name="label" translatable="yes">Color of New Phrases</property>
-                  </widget>
-                  <packing>
-                    <property name="top_attach">1</property>
-                    <property name="bottom_attach">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="GtkLabel" id="label4">
-                    <property name="visible">True</property>
-                    <property name="xalign">0.89999997615814209</property>
-                    <property name="label" translatable="yes">Color of Normal Phrases</property>
-                  </widget>
-                </child>
-                <child>
-                  <widget class="GtkColorButton" id="ErrorEnglishPhraseColor">
+                  <widget class="GtkColorButton" id="PhraseColor">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="response_id">0</property>
@@ -646,50 +584,6 @@
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="right_attach">2</property>
-                    <property name="top_attach">5</property>
-                    <property name="bottom_attach">6</property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="GtkColorButton" id="EnglishPhraseColor">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="response_id">0</property>
-                    <signal name="color_set" handler="on_value_changed"/>
-                  </widget>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="right_attach">2</property>
-                    <property name="top_attach">4</property>
-                    <property name="bottom_attach">5</property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="GtkColorButton" id="SpecialPhraseColor">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="response_id">0</property>
-                    <signal name="color_set" handler="on_value_changed"/>
-                  </widget>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="right_attach">2</property>
-                    <property name="top_attach">3</property>
-                    <property name="bottom_attach">4</property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="GtkColorButton" id="UserPhraseColor">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="response_id">0</property>
-                    <signal name="color_set" handler="on_value_changed"/>
-                  </widget>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="right_attach">2</property>
-                    <property name="top_attach">2</property>
-                    <property name="bottom_attach">3</property>
                   </packing>
                 </child>
                 <child>
@@ -707,7 +601,7 @@
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkColorButton" id="PhraseColor">
+                  <widget class="GtkColorButton" id="UserPhraseColor">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="response_id">0</property>
@@ -716,6 +610,112 @@
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="right_attach">2</property>
+                    <property name="top_attach">2</property>
+                    <property name="bottom_attach">3</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkColorButton" id="SpecialPhraseColor">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="response_id">0</property>
+                    <signal name="color_set" handler="on_value_changed"/>
+                  </widget>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="right_attach">2</property>
+                    <property name="top_attach">3</property>
+                    <property name="bottom_attach">4</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkColorButton" id="EnglishPhraseColor">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="response_id">0</property>
+                    <signal name="color_set" handler="on_value_changed"/>
+                  </widget>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="right_attach">2</property>
+                    <property name="top_attach">4</property>
+                    <property name="bottom_attach">5</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkColorButton" id="ErrorEnglishPhraseColor">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="response_id">0</property>
+                    <signal name="color_set" handler="on_value_changed"/>
+                  </widget>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="right_attach">2</property>
+                    <property name="top_attach">5</property>
+                    <property name="bottom_attach">6</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkLabel" id="label4">
+                    <property name="visible">True</property>
+                    <property name="xalign">0.89999997615814209</property>
+                    <property name="label" translatable="yes">Color of Normal Phrases</property>
+                  </widget>
+                </child>
+                <child>
+                  <widget class="GtkLabel" id="label5">
+                    <property name="visible">True</property>
+                    <property name="xalign">0.89999997615814209</property>
+                    <property name="label" translatable="yes">Color of New Phrases</property>
+                  </widget>
+                  <packing>
+                    <property name="top_attach">1</property>
+                    <property name="bottom_attach">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkLabel" id="label6">
+                    <property name="visible">True</property>
+                    <property name="xalign">0.89999997615814209</property>
+                    <property name="label" translatable="yes">Color of User Phrases</property>
+                  </widget>
+                  <packing>
+                    <property name="top_attach">2</property>
+                    <property name="bottom_attach">3</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkLabel" id="label7">
+                    <property name="visible">True</property>
+                    <property name="xalign">0.89999997615814209</property>
+                    <property name="label" translatable="yes">Color of Special Phrases</property>
+                  </widget>
+                  <packing>
+                    <property name="top_attach">3</property>
+                    <property name="bottom_attach">4</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkLabel" id="label8">
+                    <property name="visible">True</property>
+                    <property name="xalign">0.89999997615814209</property>
+                    <property name="label" translatable="yes">Color of English Candidates</property>
+                  </widget>
+                  <packing>
+                    <property name="top_attach">4</property>
+                    <property name="bottom_attach">5</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkLabel" id="label9">
+                    <property name="visible">True</property>
+                    <property name="xalign">0.89999997615814209</property>
+                    <property name="label" translatable="yes">Color of Spelling Error</property>
+                  </widget>
+                  <packing>
+                    <property name="top_attach">5</property>
+                    <property name="bottom_attach">6</property>
                   </packing>
                 </child>
               </widget>
@@ -852,7 +852,6 @@ provided by
 
 Huang Peng &lt;shawn.p.huang@gmail.com&gt;
 </property>
-                <property name="use_markup">True</property>
                 <property name="justify">GTK_JUSTIFY_CENTER</property>
               </widget>
               <packing>

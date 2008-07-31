@@ -27,173 +27,175 @@ import ibus
 from pydict import SHUANGPIN_SCHEMAS
 
 from gettext import dgettext
-_ = lambda a : dgettext ("ibus-pinyin", a)
+_ = lambda a : dgettext("ibus-pinyin", a)
 
 RGB_COLOR = lambda c : ((c.red & 0xff00) << 8) + (c.green & 0xff00) + ((c.blue & 0xff00) >> 8)
-GDK_COLOR = lambda c : gdk.Color (((c >> 16) & 0xff) * 256, ((c >> 8) & 0xff) * 256, (c & 0xff) * 256)
+GDK_COLOR = lambda c : gdk.Color(((c >> 16) & 0xff) * 256, ((c >> 8) & 0xff) * 256, (c & 0xff) * 256)
 RGB = lambda r, g, b : ((r & 0xff) << 16) + ((g & 0xff) << 8) + (b & 0xff)
 
 
 class SetupUI ():
     def __init__ (self):
-        self._need_reload_config = False
+        self.__need_reload_config = False
+        self.__bus = ibus.Bus()
 
-        self._options = {
-            "SupportGBK" :        [True, self._checkbutton_op],
-            "ShuangPin" :        [False, self._checkbutton_op],
-            "AutoCorrect" :        [True, self._checkbutton_op],
-            #FuzzyPinYin Hacking by YW
-            "FuzzyPinYin" :        [False, self._checkbutton_op],#0
-            "FuzzyS_Sh" :        [False, self._checkbutton_op],#1
-            "FuzzyC_Ch" :        [False, self._checkbutton_op],#2
-            "FuzzyZ_Zh" :        [False, self._checkbutton_op],#3
-            "FuzzyL_N" :        [False, self._checkbutton_op],#4
-            "FuzzyIn_Ing" :        [False, self._checkbutton_op],#5
-            "FuzzyEn_Eng" :        [False, self._checkbutton_op],#6
-            "FuzzyAn_Ang" :        [False, self._checkbutton_op],#7
+        self.__options = {
+            "SupportGBK" :      [True, self.__checkbutton_op],
+            "ShuangPin" :       [False, self.__checkbutton_op],
+            "AutoCorrect" :     [True, self.__checkbutton_op],
 
-            "SpellCheck" :        [True, self._checkbutton_op],
-            "UVToTemp" :        [True, self._checkbutton_op],
+            "FuzzyPinYin" :     [False, self.__checkbutton_op],
+            "FuzzyS_Sh" :       [False, self.__checkbutton_op],
+            "FuzzyC_Ch" :       [False, self.__checkbutton_op],
+            "FuzzyZ_Zh" :       [False, self.__checkbutton_op],
+            "FuzzyL_N" :        [False, self.__checkbutton_op],
+            "FuzzyIn_Ing" :     [False, self.__checkbutton_op],
+            "FuzzyEn_Eng" :     [False, self.__checkbutton_op],
+            "FuzzyAn_Ang" :     [False, self.__checkbutton_op],
+
+            "SpellCheck" :      [True, self.__checkbutton_op],
+            "UVToTemp" :        [True, self.__checkbutton_op],
             "ShiftSelectCandidates" :
-                                [True, self._checkbutton_op],
+                                [True, self.__checkbutton_op],
 
-            "CommaPageDownUp" :    [True, self._checkbutton_op],
-            "EqualPageDownUp" :    [True, self._checkbutton_op],
-            "AutoCommit" :        [False, self._checkbutton_op],
+            "CommaPageDownUp" : [True, self.__checkbutton_op],
+            "EqualPageDownUp" : [True, self.__checkbutton_op],
+            "AutoCommit" :      [False, self.__checkbutton_op],
 
-            "PhraseColor" :        [RGB (0, 0, 0), self._colorbutton_op],
-            "NewPhraseColor" :     [RGB (0xef, 0, 0), self._colorbutton_op],
-            "UserPhraseColor" : [RGB (0, 0, 0xbf), self._colorbutton_op],
+            "PhraseColor" :     [RGB (0, 0, 0), self.__colorbutton_op],
+            "NewPhraseColor" :  [RGB (0xef, 0, 0), self.__colorbutton_op],
+            "UserPhraseColor" : [RGB (0, 0, 0xbf), self.__colorbutton_op],
             "SpecialPhraseColor" :
-                                [RGB (0, 0xbf, 0), self._colorbutton_op],
-            "EnglishPhraseColor" :     [RGB (0, 0xbf, 0), self._colorbutton_op],
+                                [RGB (0, 0xbf, 0), self.__colorbutton_op],
+            "EnglishPhraseColor" :
+                                [RGB (0, 0xbf, 0), self.__colorbutton_op],
             "ErrorEnglishPhraseColor" :
-                                [RGB (0xef, 0, 0), self._colorbutton_op],
-            "PageSize" :         [5, self._combobox_op, range (1, 10)],
-            "ShuangPinSchema" : ["MSPY", self._combobox_op, SHUANGPIN_SCHEMAS.keys ()],
+                                [RGB (0xef, 0, 0), self.__colorbutton_op],
+            "PageSize" :        [5, self.__combobox_op, range(1, 10)],
+            "ShuangPinSchema" : ["MSPY", self.__combobox_op, SHUANGPIN_SCHEMAS.keys()],
         }
 
-    def run (self):
+    def run(self):
 
-        self._init_ui ()
-        self._load_config ()
-        gtk.main ()
+        self.__init_ui()
+        self.__load_config()
+        gtk.main()
 
-    def _combobox_op (self, name, opt, info):
-        widget = self._xml.get_widget (name)
+    def _combobox_op(self, name, opt, info):
+        widget = self.__xml.get_widget(name)
         if widget == None:
             print >> sys.stderr, "Can not find widget %s" % name
             return False
         if opt == "read":
-            info[0] = self._read (name, info[0])
-            widget.set_active (info[2].index (info[0]))
+            info[0] = self.__read(name, info[0])
+            widget.set_active(info[2].index(info[0]))
             return True
         if opt == "write":
-            info[0] = info[2][widget.get_active ()]
-            self._write (name, info[0])
+            info[0] = info[2][widget.get_active()]
+            self.__write(name, info[0])
             return True
         if opt == "check":
-            return info[0] != info[2][widget.get_active ()]
+            return info[0] != info[2][widget.get_active()]
 
         if opt == "init":
-            model = gtk.ListStore (str)
+            model = gtk.ListStore(str)
             for v in info[2]:
-                model.append ([_(str (v))])
-            widget.set_model (model)
+                model.append([_(str(v))])
+            widget.set_model(model)
         return False
 
-    def _colorbutton_op (self, name, opt, info):
-        widget = self._xml.get_widget (name)
+    def _colorbutton_op(self, name, opt, info):
+        widget = self.__xml.get_widget(name)
         if widget == None:
             print >> sys.stderr, "Can not find widget %s" % name
             return False
         if opt == "read":
-            info[0] = self._read (name, info[0])
-            widget.set_color (GDK_COLOR (info[0]))
+            info[0] = self.__read(name, info[0])
+            widget.set_color(GDK_COLOR (info[0]))
             return True
         if opt == "write":
-            info[0] = RGB_COLOR (widget.get_color ())
-            self._write (name, info[0])
+            info[0] = RGB_COLOR (widget.get_color())
+            self.__write(name, info[0])
             return True
         if opt == "check":
-            return info[0] != RGB_COLOR (widget.get_color ())
+            return info[0] != RGB_COLOR (widget.get_color())
         return False
 
-    def _checkbutton_op (self, name, opt, info):
-        widget = self._xml.get_widget (name)
+    def _checkbutton_op(self, name, opt, info):
+        widget = self.__xml.get_widget(name)
         if widget == None:
             print >> sys.stderr, "Can not find widget %s" % name
             return False
 
         if opt == "read":
-            info[0] = self._read (name, info[0])
-            widget.set_active (info[0])
+            info[0] = self.__read(name, info[0])
+            widget.set_active(info[0])
             return True
         if opt == "write":
-            info[0] = widget.get_active ()
-            self._write (name, info[0])
+            info[0] = widget.get_active()
+            self.__write(name, info[0])
             return True
         if opt == "check":
-            return info[0] != widget.get_active ()
+            return info[0] != widget.get_active()
         return False
 
-    def _read (self, name, v):
-        # return self._config.read ("/engine/PinYin/" + name, v)
+    def _read(self, name, v):
+        # return self.__config.read("/engine/PinYin/" + name, v)
         return v
 
-    def _write (self, name, v):
-        #return self._config.write ("/engine/PinYin/" + name, v)
+    def _write(self, name, v):
+        #return self.__config.write("/engine/PinYin/" + name, v)
         pass
 
-    def _init_ui (self):
+    def _init_ui(self):
         glade.textdomain("ibus-pinyin")
-        glade_file = path.join (path.dirname (__file__), "setup.glade")
-        self._xml = glade.XML (glade_file)
-        self._window = self._xml.get_widget ("window_main")
-        for name, info in self._options.items ():
+        glade_file = path.join(path.dirname(__file__), "setup.glade")
+        self.__xml = glade.XML (glade_file)
+        self.__window = self.__xml.get_widget("window_main")
+        for name, info in self.__options.items():
             info[1] (name, "init", info)
             info[1] (name, "read", info)
-        self._xml.signal_autoconnect (self)
-        self._window.show_all ()
+        self.__xml.signal_autoconnect(self)
+        self.__window.show_all()
 
-    def _load_config (self):
-        for name, info in self._options.items ():
+    def _load_config(self):
+        for name, info in self.__options.items():
             info[1] (name, "read", info)
 
-    def _save_config (self):
-        self._need_reload_config = True
-        for name, info in self._options.items ():
+    def _save_config(self):
+        self.__need_reload_config = True
+        for name, info in self.__options.items():
             info[1] (name, "write", info)
 
-    def _query_changed (self):
-        for name, info in self._options.items ():
+    def _query_changed(self):
+        for name, info in self.__options.items():
             if info[1] (name, "check", info):
                 return True
         return False
 
-    def _quit (self, need_confirm ):
+    def _quit(self, need_confirm ):
         if need_confirm == False:
-            gtk.main_quit ()
+            gtk.main_quit()
             return True
         else:
-            dlg = gtk.MessageDialog (self._window, gtk.DIALOG_MODAL, gtk.MESSAGE_QUESTION,
+            dlg = gtk.MessageDialog(self.__window, gtk.DIALOG_MODAL, gtk.MESSAGE_QUESTION,
                         gtk.BUTTONS_YES_NO, _("Are you sure to close Python PinYin Setup without save configure?"))
-            id = dlg.run ()
-            dlg.destroy ()
+            id = dlg.run()
+            dlg.destroy()
             if id == gtk.RESPONSE_YES:
-                gtk.main_quit ()
+                gtk.main_quit()
                 return True
         return False
 
-    def _optimize_user_db (self):
+    def _optimize_user_db(self):
         import sqlite3
-        dlg = gtk.MessageDialog (self._window, gtk.DIALOG_MODAL, gtk.MESSAGE_INFO,
+        dlg = gtk.MessageDialog(self.__window, gtk.DIALOG_MODAL, gtk.MESSAGE_INFO,
                         gtk.BUTTONS_OK, _("The user phrases database will be reorganized! Please don't use python PinYin now."))
-        dlg.run ()
-        dlg.destroy ()
+        dlg.run()
+        dlg.destroy()
 
         try:
-            db = sqlite3.connect (path.expanduser ("~/.scim/scim-python/pinyin/user.db"))
+            db = sqlite3.connect(path.expanduser("~/.scim/scim-python/pinyin/user.db"))
             sqlstring = """
                 BEGIN TRANSACTION;
                 CREATE TABLE tmp AS SELECT * FROM py_phrase;
@@ -202,46 +204,46 @@ class SetupUI ():
                 DROP TABLE tmp;
                 COMMIT;
             """
-            db.executescript (sqlstring)
-            db.executescript ("VACUUM;")
+            db.executescript(sqlstring)
+            db.executescript("VACUUM;")
         except:
             import traceback
-            traceback.print_exc ()
+            traceback.print_exc()
 
-        dlg.destroy ()
-        dlg = gtk.MessageDialog (self._window, gtk.DIALOG_MODAL, gtk.MESSAGE_INFO,
+        dlg.destroy()
+        dlg = gtk.MessageDialog(self.__window, gtk.DIALOG_MODAL, gtk.MESSAGE_INFO,
                                 gtk.BUTTONS_OK, _("Reorganizing is over!"))
-        dlg.run ()
-        dlg.destroy ()
+        dlg.run()
+        dlg.destroy()
 
     # events handlers
-    def on_window_main_delete_event (self, widget, event):
-        result = self._quit (True)
+    def on_window_main_delete_event(self, widget, event):
+        result = self.__quit(True)
         return True
 
-    def on_button_ok_clicked (self, button):
-        changed = self._query_changed ()
+    def on_button_ok_clicked(self, button):
+        changed = self.__query_changed()
         if changed:
-            self._save_config ()
-        self._quit (False)
+            self.__save_config()
+        self.__quit(False)
 
-    def on_button_apply_clicked (self, button):
-        self._save_config ()
+    def on_button_apply_clicked(self, button):
+        self.__save_config()
 
-    def on_button_cancel_clicked (self, button):
-        changed = self._query_changed ()
-        self._quit (changed)
+    def on_button_cancel_clicked(self, button):
+        changed = self.__query_changed()
+        self.__quit(changed)
 
-    def on_button_optimize_db_clicked (self, button):
-        self._optimize_user_db ()
+    def on_button_optimize_db_clicked(self, button):
+        self.__optimize_user_db()
 
-    def on_value_changed (self, widget, data = None):
-        if self._query_changed ():
-            self._xml.get_widget ("button_apply").set_sensitive (True)
+    def on_value_changed(self, widget, data = None):
+        if self.__query_changed():
+            self.__xml.get_widget("button_apply").set_sensitive(True)
         else:
-            self._xml.get_widget ("button_apply").set_sensitive (False)
+            self.__xml.get_widget("button_apply").set_sensitive(False)
 
 
 if __name__ == "__main__":
-    SetupUI (). run ()
+    SetupUI(). run()
 
