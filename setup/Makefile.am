@@ -19,16 +19,7 @@
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 engine_pinyin_PYTHON = \
-	factory.py \
-	main.py \
-	pinyin.py \
-	pycreatedb.py \
-	pydict.py \
-	pyparser.py \
-	specialphrase.py \
-	specialtable.py \
-	pysqlitedb.py \
-	pyutil.py \
+	setupui.py \
 	$(NULL)
 engine_pinyin_DATA = \
 	special_phrase \

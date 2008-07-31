@@ -69,6 +69,7 @@ ibus-pinyin.spec
 engine/Makefile
 engine/ibus-engine-pinyin
 engine/pinyin.engine
+setup/Makefile
 icons/Makefile
 m4/Makefile
 )
