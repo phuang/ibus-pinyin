@@ -40,7 +40,7 @@ class EngineFactory(ibus.EngineFactoryBase):
             self.CREDITS
         ]
         self.__bus = bus
-        pinyin.PinYinEngine.reload_config(bus)
+        pinyin.PinYinEngine.CONFIG_RELOADED(bus)
         super(EngineFactory, self).__init__(self.__info, pinyin.PinYinEngine, ENGINE_PATH, bus, FACTORY_PATH)
 
         self.__bus.connect("config-reloaded", self.__config_reloaded_cb)
@@ -49,8 +49,8 @@ class EngineFactory(ibus.EngineFactoryBase):
 
 
     def __config_reloaded_cb(self, bus):
-        pinyin.PinYinEngine.reload_config(self.__bus)
+        pinyin.PinYinEngine.CONFIG_RELOADED(self.__bus)
 
     def __config_value_changed_cb(self, bus, key, value):
-        pinyin.PinYinEngine.config_value_changed(bus, key, value)
+        pinyin.PinYinEngine.CONFIG_VALUE_CHANGED(bus, key, value)
 

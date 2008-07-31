@@ -1008,7 +1008,7 @@ class PinYinEngine(ibus.EngineBase):
         IMEngine.update_client_capabilities(self, cap)
 
     @classmethod
-    def config_value_changed(cls, bus, key, value):
+    def CONFIG_VALUE_CHANGED(cls, bus, key, value):
         if key == "/engine/PinYin/ShuangPinSchema":
             PinYinEngine.__shuangpin_schema = \
                 bus.config_get_value("/engine/PinYin/ShuangPinSchema", "MSPY")
@@ -1071,7 +1071,7 @@ class PinYinEngine(ibus.EngineBase):
             print "Unknow key(%s)" % key
 
     @classmethod
-    def reload_config(cls, bus):
+    def CONFIG_RELOADED(cls, bus):
         PinYinEngine.__shuangpin_schema = \
             bus.config_get_value("/engine/PinYin/ShuangPinSchema", "MSPY")
         if PinYinEngine.__shuangpin_schema not in pydict.SHUANGPIN_SCHEMAS:
