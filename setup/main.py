@@ -81,7 +81,7 @@ class SetupUI ():
         self.__load_config()
         gtk.main()
 
-    def _combobox_op(self, name, opt, info):
+    def __combobox_op(self, name, opt, info):
         widget = self.__xml.get_widget(name)
         if widget == None:
             print >> sys.stderr, "Can not find widget %s" % name
@@ -104,7 +104,7 @@ class SetupUI ():
             widget.set_model(model)
         return False
 
-    def _colorbutton_op(self, name, opt, info):
+    def __colorbutton_op(self, name, opt, info):
         widget = self.__xml.get_widget(name)
         if widget == None:
             print >> sys.stderr, "Can not find widget %s" % name
@@ -121,7 +121,7 @@ class SetupUI ():
             return info[0] != RGB_COLOR (widget.get_color())
         return False
 
-    def _checkbutton_op(self, name, opt, info):
+    def __checkbutton_op(self, name, opt, info):
         widget = self.__xml.get_widget(name)
         if widget == None:
             print >> sys.stderr, "Can not find widget %s" % name
@@ -139,15 +139,15 @@ class SetupUI ():
             return info[0] != widget.get_active()
         return False
 
-    def _read(self, name, v):
+    def __read(self, name, v):
         # return self.__config.read("/engine/PinYin/" + name, v)
         return v
 
-    def _write(self, name, v):
+    def __write(self, name, v):
         #return self.__config.write("/engine/PinYin/" + name, v)
         pass
 
-    def _init_ui(self):
+    def __init_ui(self):
         glade.textdomain("ibus-pinyin")
         glade_file = path.join(path.dirname(__file__), "setup.glade")
         self.__xml = glade.XML (glade_file)
@@ -158,22 +158,22 @@ class SetupUI ():
         self.__xml.signal_autoconnect(self)
         self.__window.show_all()
 
-    def _load_config(self):
+    def __load_config(self):
         for name, info in self.__options.items():
             info[1] (name, "read", info)
 
-    def _save_config(self):
+    def __save_config(self):
         self.__need_reload_config = True
         for name, info in self.__options.items():
             info[1] (name, "write", info)
 
-    def _query_changed(self):
+    def __query_changed(self):
         for name, info in self.__options.items():
             if info[1] (name, "check", info):
                 return True
         return False
 
-    def _quit(self, need_confirm ):
+    def __quit(self, need_confirm ):
         if need_confirm == False:
             gtk.main_quit()
             return True
@@ -187,7 +187,7 @@ class SetupUI ():
                 return True
         return False
 
-    def _optimize_user_db(self):
+    def __optimize_user_db(self):
         import sqlite3
         dlg = gtk.MessageDialog(self.__window, gtk.DIALOG_MODAL, gtk.MESSAGE_INFO,
                         gtk.BUTTONS_OK, _("The user phrases database will be reorganized! Please don't use python PinYin now."))
