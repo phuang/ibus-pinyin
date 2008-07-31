@@ -70,6 +70,7 @@ engine/Makefile
 engine/ibus-engine-pinyin
 engine/pinyin.engine
 setup/Makefile
+setup/ibus-setup-pinyin
 icons/Makefile
 m4/Makefile
 )
