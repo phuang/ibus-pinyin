@@ -895,9 +895,10 @@ class PinYinEngine(ibus.EngineBase):
         self.__preedit_string = u""
         self.__committed_phrases.clean()
         self.__committed_special_phrase = u""
+        self.__need_update = True
+        self.__update()
         super(PinYinEngine,self).commit_string(string)
         self.__prev_char = string[-1]
-        self.__invalidate()
 
     def update_preedit(self, preedit_string, preedit_attrs, cursor_pos, visible):
         if preedit_attrs == None:
