@@ -111,14 +111,14 @@ class SetupUI ():
             return False
         if opt == "read":
             info[0] = self.__read(name, info[0])
-            widget.set_color(GDK_COLOR (info[0]))
+            widget.set_color(GDK_COLOR(info[0]))
             return True
         if opt == "write":
             info[0] = RGB_COLOR (widget.get_color())
             self.__write(name, info[0])
             return True
         if opt == "check":
-            return info[0] != RGB_COLOR (widget.get_color())
+            return info[0] != RGB_COLOR(widget.get_color())
         return False
 
     def __checkbutton_op(self, name, opt, info):
@@ -140,12 +140,10 @@ class SetupUI ():
         return False
 
     def __read(self, name, v):
-        # return self.__config.read("/engine/PinYin/" + name, v)
-        return v
+        return self.__bus.config_get_value("/engine/PinYin/" + name, v)
 
     def __write(self, name, v):
-        #return self.__config.write("/engine/PinYin/" + name, v)
-        pass
+        return self.__bus.config_set_value("/engine/PinYin/" + name, v)
 
     def __init_ui(self):
         glade.textdomain("ibus-pinyin")
@@ -245,5 +243,5 @@ class SetupUI ():
 
 
 if __name__ == "__main__":
-    SetupUI(). run()
+    SetupUI().run()
 
