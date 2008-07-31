@@ -28,7 +28,7 @@ import factory
 class IMApp:
     def __init__(self):
         self.__mainloop = gobject.MainLoop()
-        self.__bus = ibus.IBus()
+        self.__bus = ibus.Bus()
         self.__bus.connect("destroy", self.__bus_destroy_cb)
         self.__engine = factory.EngineFactory(self.__bus)
         self.__engine.register()
