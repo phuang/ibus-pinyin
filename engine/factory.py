@@ -31,7 +31,7 @@ class EngineFactory(ibus.EngineFactoryBase):
     AUTHORS = "Huang Peng <shawn.p.huang@gmail.com>"
     CREDITS = "GPLv2"
 
-    def __init__(self, _ibus):
+    def __init__(self, bus):
         self.__info = [
             self.NAME,
             self.LANG,
@@ -39,5 +39,18 @@ class EngineFactory(ibus.EngineFactoryBase):
             self.AUTHORS,
             self.CREDITS
         ]
-        super(EngineFactory, self).__init__(self.__info, pinyin.PinYinEngine, ENGINE_PATH, _ibus, FACTORY_PATH)
+        self.__bus = bus
+        pinyin.PinYinEngine.reload_config(bus)
+        super(EngineFactory, self).__init__(self.__info, pinyin.PinYinEngine, ENGINE_PATH, bus, FACTORY_PATH)
+
+        self.__bus.connect("config-reloaded", self.__config_reloaded_cb)
+        self.__bus.config_add_watch("/engine/PinYin")
+        self.__bus.connect("config-value-changed", self.__config_value_changed_cb)
+
+
+    def __config_reloaded_cb(self, bus):
+        pinyin.PinYinEngine.reload_config(self.__bus)
+
+    def __config_value_changed_cb(self, bus, key, value):
+        pinyin.PinYinEngine.config_value_changed(bus, key, value)
 
