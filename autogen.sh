@@ -5,7 +5,7 @@ set -x
 autopoint
 libtoolize --automake --copy
 aclocal -I m4
-autoheader
+# autoheader
 automake --add-missing --copy
 autoconf
 ./configure --enable-maintainer-mode $*
