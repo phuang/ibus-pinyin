@@ -40,7 +40,7 @@ class SetupUI ():
         self.__bus = ibus.Bus()
 
         self.__options = {
-            "SupportGBK" :      [True, self.__checkbutton_op],
+            "SupportGBK" :      [False, self.__checkbutton_op],
             "ShuangPin" :       [False, self.__checkbutton_op],
             "AutoCorrect" :     [True, self.__checkbutton_op],
 

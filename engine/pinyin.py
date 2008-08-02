@@ -70,7 +70,7 @@ class PinYinEngine(ibus.EngineBase):
     __shuangpin_schema = "MSPY"
 
     # gbk
-    __gbk = True
+    __gbk = False
 
     # fuzzy pinyin & auto correct
     __fuzzy_pinyin = False
@@ -1030,7 +1030,7 @@ class PinYinEngine(ibus.EngineBase):
                 PinYinEngine.__page_size = 5
         elif key == "/engine/PinYin/SupportGBK":
             PinYinEngine.__gbk = \
-                bus.config_get_value("/engine/PinYin/SupportGBK", True)
+                bus.config_get_value("/engine/PinYin/SupportGBK", False)
         elif key == "/engine/PinYin/ShuangPin":
             PinYinEngine.__shuangpin = \
                 bus.config_get_value("/engine/PinYin/ShuangPin", False)
@@ -1088,7 +1088,7 @@ class PinYinEngine(ibus.EngineBase):
         if PinYinEngine.__page_size < 1 or PinYinEngine.__page_size > 9:
             PinYinEngine.__page_size = 5
         PinYinEngine.__gbk = \
-            bus.config_get_value("/engine/PinYin/SupportGBK", True)
+            bus.config_get_value("/engine/PinYin/SupportGBK", False)
         PinYinEngine.__shuangpin = \
             bus.config_get_value("/engine/PinYin/ShuangPin", False)
 
@@ -1132,7 +1132,7 @@ class UserInput:
         self.__parser = parser
         self.__max_length = max_length
         self.__auto_correct = True
-        self.__gbk = True
+        self.__gbk = False
         self.__chars =([], [])
         self.__pinyin_list = []
 
