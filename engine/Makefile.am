@@ -42,6 +42,15 @@ libexec_SCRIPTS = ibus-engine-pinyin
 engine_DATA = pinyin.engine
 enginedir = $(datadir)/ibus/engine
 
+DBVER = 0.1.10.5
+DBTAR = pinyin-database-${DBVER}.tar.bz2
+
+${DBTAR}:
+	wget http://scim-python.googlecode.com/files/${DBTAR}
+
+py.db: ${DBTAR}
+	tar jxvfm ${DBTAR}
+
 CLEANFILES = \
 	*.pyc \
 	$(NULL)
@@ -53,4 +62,11 @@ EXTRA_DIST = \
 
 test:
 	$(ENV) DBUS_DEBUG=true LANG=en_US PYTHONPATH=$(top_srcdir) $(PYTHON) $(srcdir)/main.py
+
+install-data-hook:
+	@(if test "${NO_INDEX}" = ""; then \
+		cd $(DESTDIR)$(engine_pinyindir); \
+		echo "Creating INDEX"; \
+		$(PYTHON) -c "import pysqlitedb; db = pysqlitedb.PYSQLiteDB (filename='py.db'); db.create_indexes ();" ;\
+	fi)
 
