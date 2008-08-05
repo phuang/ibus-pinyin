@@ -46,7 +46,7 @@ class SpecialTable:
 				if key not in _dict:
 					_dict[key] = []
 				_dict[key] += list (values)
-		name = os.path.join (os.path.dirname (__file__), "special_table")
+		name = os.path.join (os.getenv("IBUS_PINYIN_LOCATION"), "engine", "special_table")
 		try:
 			parse_table (name, _dict)
 		except Exception, e:

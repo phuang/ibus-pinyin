@@ -37,7 +37,7 @@ class SpecialPhrase:
 
 	def _load_table (self):
 		self._dict = {}
-		name = os.path.join (os.path.dirname (__file__), "special_phrase")
+		name = os.path.join (os.getenv("IBUS_PINYIN_LOCATION"), "engine", "special_phrase")
 		for l in file (name):
 			l = l.strip ()
 			if l == "" or l[0] == "#":

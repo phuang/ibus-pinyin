@@ -879,6 +879,9 @@ class PinYinEngine(ibus.EngineBase):
 
         return True
 
+    def __start_setup(self):
+        pass
+
     def process_key_event(self, keyval, is_press, state):
         key = KeyEvent (keyval, is_press, state)
         result = self.__internal_process_key_event(key)
@@ -999,7 +1002,7 @@ class PinYinEngine(ibus.EngineBase):
         #     self.__refresh_properties()
 
         elif prop_name == "setup":
-            self.start_helper("eebeecd7-cb22-48f4-8ced-70e42dad1a79")
+            self.__start_setup()
 
     def process_helper_event(self, helper_uuid, trans):
         IMEngine.process_helper_event(self, helper_uuid, trans)
