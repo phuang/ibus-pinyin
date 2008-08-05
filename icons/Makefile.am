@@ -28,7 +28,7 @@ icons_DATA = \
 	english.svg \
 	$(NULL)
 
-iconsdir = $(pkgdatadir)
+iconsdir = $(pkgdatadir)/icons
 
 EXTRA_DIST = \
 	$(icons_DATA) \

@@ -20,6 +20,7 @@
 
 import ibus
 import pinyin
+import os
 
 FACTORY_PATH = "/com/redhat/IBus/engines/PinYin/Factory"
 ENGINE_PATH = "/com/redhat/IBus/engines/PinYin/Engine/"
@@ -27,7 +28,7 @@ ENGINE_PATH = "/com/redhat/IBus/engines/PinYin/Engine/"
 class EngineFactory(ibus.EngineFactoryBase):
     NAME = "PinYin"
     LANG = "zh_CN"
-    ICON = "/usr/share/ibus-pinyin/ibus-pinyin.svg"
+    ICON = os.getenv("IBUS_PINYIN_LOCATION") + "/icons/ibus-pinyin.svg"
     AUTHORS = "Huang Peng <shawn.p.huang@gmail.com>"
     CREDITS = "GPLv2"
 
