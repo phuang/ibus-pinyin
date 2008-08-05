@@ -564,17 +564,17 @@ class PinYinEngine(ibus.EngineBase):
         c = unichr(key.code)
         if ascii.ispunct(key.code): # if key code is a punctation
             if self.__full_width_punct[self.__mode]:
-                self.commit_string(self.__convert_to_full_width(c))
+                self.commit_string(self.__convert_to_full_width(c), False)
                 return True
             else:
-                self.commit_string(c)
+                self.commit_string(c, False)
                 return True
 
         if self.__full_width_letter[self.__mode]: # if key code is a letter or digit
-            self.commit_string(self.__convert_to_full_width(c))
+            self.commit_string(self.__convert_to_full_width(c), False)
             return True
         else:
-            self.commit_string(c)
+            self.commit_string(c, False)
             return True
 
         # should not reach there
@@ -903,7 +903,7 @@ class PinYinEngine(ibus.EngineBase):
         self.__prev_key = key
         return result
 
-    def commit_string(self, string):
+    def commit_string(self, string, need_update = True):
         self.__temp_english_mode = False
         self.__i_mode = False
         self.__candidates = []
@@ -913,8 +913,9 @@ class PinYinEngine(ibus.EngineBase):
         self.__preedit_string = u""
         self.__committed_phrases.clean()
         self.__committed_special_phrase = u""
-        self.__need_update = True
-        self.__update()
+        if need_update:
+            self.__need_update = True
+            self.__update()
         super(PinYinEngine,self).commit_string(string)
         self.__prev_char = string[-1]
 
