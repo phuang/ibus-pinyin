@@ -108,6 +108,9 @@ class PinYinEngine(ibus.EngineBase):
     # auto commit
     __auto_commit = False
 
+    # setup pid
+    __setup_pid = 0
+
 
     def __init__(self, conn, object_path):
         super(PinYinEngine, self).__init__(conn, object_path)
@@ -885,7 +888,14 @@ class PinYinEngine(ibus.EngineBase):
         return True
 
     def __start_setup(self):
-        pass
+        if PinYinEngine.__setup_pid != 0:
+            pid, state = os.waitpid(PinYinEngine.__setup_pid, os.P_NOWAIT)
+            if pid != PinYinEngine.__setup_pid:
+                return
+            PinYinEngine.__setup_pid = 0
+        setup_cmd = IBUS_PINYIN_LOCATION + "/../../libexec/ibus-setup-pinyin"
+        PinYinEngine.__setup_pid = os.spawnl(os.P_NOWAIT, setup_cmd, "ibus-setup-pinyin")
+
 
     def process_key_event(self, keyval, is_press, state):
         key = KeyEvent (keyval, is_press, state)
