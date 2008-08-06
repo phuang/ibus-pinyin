@@ -1,6 +1,6 @@
 Exec=@prefix@/libexec/ibus-engine-pinyin
 Name=PinYin
 Lang=zh_CN
-Icon=ibus-pinyin
+Icon=@prefix@/share/ibus-pinyin/icons/ibus-pinyin.svg
 Author=Huang Peng <shawn.p.huang@gmail.com>
 Credits=

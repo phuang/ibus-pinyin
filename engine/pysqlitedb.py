@@ -47,7 +47,9 @@ class PYSQLiteDB:
             self.parser = pyparser.PinYinParser ()
             return
 
-        name = os.path.join (os.getenv("IBUS_PINYIN_LOCATION"), "engine", name)
+        dirname = path.dirname(__file__)
+
+        name = os.path.join (dirname, name)
 
         # open system phrase database
         self.db = sqlite.connect (name)

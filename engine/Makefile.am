@@ -58,6 +58,8 @@ CLEANFILES = \
 EXTRA_DIST = \
 	ibus-engine-pinyin.in \
 	pinyin.engine.in \
+	special_phrase \
+	special_table \
 	$(NULL)
 
 test:

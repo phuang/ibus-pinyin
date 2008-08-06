@@ -9,6 +9,7 @@ License:    GPLv2+
 Group:      System Environment/Libraries
 URL:        http://code.google.com/p/ibus/
 Source0:    http://ibus.googlecode.com/files/%{name}-%{version}.tar.gz
+Source1:    http://scim-python.googlecode.com/files/pinyin-database-0.1.10.5.tar.bz2
 
 BuildRoot:  %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires: gettext-devel, libtool, python-devel, pygtk2-devel, perl(XML::Parser) gtk2-devel qt-devel
@@ -19,6 +20,7 @@ IBus template project
 
 %prep
 %setup -q
+cp %{SOURCE1} engine
 
 %build
 %configure --disable-static
@@ -27,12 +29,16 @@ make %{?_smp_mflags}
 
 %install
 rm -rf $RPM_BUILD_ROOT
-make DESTDIR=${RPM_BUILD_ROOT} install
+make DESTDIR=${RPM_BUILD_ROOT} NO_INDEX=true install
 
 # %find_lang %{name}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
+
+%post
+cd /usr/share/ibus-pinyin/engine
+python -c "import pysqlitedb; db = pysqlitedb.PYSQLiteDB (); db.create_indexes ();" >/dev/null
 
 %files
 # -f %{name}.lang
@@ -40,10 +46,11 @@ rm -rf $RPM_BUILD_ROOT
 %doc AUTHORS COPYING README
 # %dir %{python_sitearch}/ibus
 # %{python_sitearch}/ibus/*
-%dir %{_datadir}/ibus/engine/enchant
-%{_datadir}/ibus/engine/enchant/*
-%{_libexecdir}/ibus-engine-enchant
-%{_datadir}/ibus/icons/ibus-pinyin.svg
+%dir %{_datadir}/ibus-pinyin
+%{_datadir}/ibus-pinyin/*
+%{_datadir}/ibus/engine/pinyin.engine
+%{_libexecdir}/ibus-engine-pinyin
+%{_libexecdir}/ibus-setup-pinyin
 
 %changelog
 * Wed Jun 25 2008 Huang Peng <shawn.p.huang@gmail.com> - 0.1.0-1
