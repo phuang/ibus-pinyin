@@ -145,6 +145,7 @@ class PinYinEngine(ibus.EngineBase):
         # self.__gbk_property = ibus.Property("gbk")
         # self.__prop_list.append(self.__gbk_property)
         self.__setup_property = ibus.Property("setup")
+        self.__setup_property._tooltip = _("Configure PinYin")
         self.__prop_list.append(self.__setup_property)
 
 
