@@ -12,11 +12,13 @@ Source0:    http://ibus.googlecode.com/files/%{name}-%{version}.tar.gz
 Source1:    http://scim-python.googlecode.com/files/pinyin-database-0.1.10.5.tar.bz2
 
 BuildRoot:  %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
+BuildArch:  noarch
+
 BuildRequires: gettext-devel, libtool, python-devel, pygtk2-devel, perl(XML::Parser) gtk2-devel qt-devel
 Requires:   pygtk2
 
 %description
-IBus template project
+PinYin engine for IBus input framework.
 
 %prep
 %setup -q
@@ -53,5 +55,5 @@ python -c "import pysqlitedb; db = pysqlitedb.PYSQLiteDB (); db.create_indexes (
 %{_libexecdir}/ibus-setup-pinyin
 
 %changelog
-* Wed Jun 25 2008 Huang Peng <shawn.p.huang@gmail.com> - 0.1.0-1
+* Wed Jun 25 2008 Huang Peng <shawn.p.huang@gmail.com> - @VERSION@-1
 - The first version.

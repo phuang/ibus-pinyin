@@ -51,15 +51,18 @@ ${DBTAR}:
 py.db: ${DBTAR}
 	tar jxvfm ${DBTAR}
 
-CLEANFILES = \
-	*.pyc \
-	$(NULL)
 
 EXTRA_DIST = \
 	ibus-engine-pinyin.in \
 	pinyin.engine.in \
 	special_phrase \
 	special_table \
+	$(NULL)
+
+CLEANFILES = \
+	*.pyc \
+	py.db \
+	$(DBTAR) \
 	$(NULL)
 
 test:
