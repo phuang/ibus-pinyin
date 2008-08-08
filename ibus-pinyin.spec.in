@@ -1,10 +1,7 @@
-%{!?python_sitelib: %define python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
-%{!?python_sitearch: %define python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib(1)")}
-%define mod_path ibus-@PACKAGE_VERSION_MAJOR@.@PACKAGE_VERSION_MINOR@
 Name:       @PACKAGE_NAME@
 Version:    @PACKAGE_VERSION@
 Release:    1%{?dist}
-Summary:    IBus template project
+Summary:    The PinYin engine for IBus platform
 License:    GPLv2+
 Group:      System Environment/Libraries
 URL:        http://code.google.com/p/ibus/
@@ -14,8 +11,9 @@ Source1:    http://scim-python.googlecode.com/files/pinyin-database-0.1.10.5.tar
 BuildRoot:  %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildArch:  noarch
 
-BuildRequires: gettext-devel, libtool, python-devel, pygtk2-devel, perl(XML::Parser) gtk2-devel qt-devel
-Requires:   pygtk2
+BuildRequires:  gettext-devel
+
+Requires:   ibus
 
 %description
 PinYin engine for IBus platform. It provides a Chinese PinYin input method.
@@ -46,8 +44,6 @@ python -c "import pysqlitedb; db = pysqlitedb.PYSQLiteDB (); db.create_indexes (
 # -f %{name}.lang
 %defattr(-,root,root,-)
 %doc AUTHORS COPYING README
-# %dir %{python_sitearch}/ibus
-# %{python_sitearch}/ibus/*
 %dir %{_datadir}/ibus-pinyin
 %{_datadir}/ibus-pinyin/*
 %{_datadir}/ibus/engine/pinyin.engine
