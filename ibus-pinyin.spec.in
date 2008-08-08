@@ -18,7 +18,7 @@ BuildRequires: gettext-devel, libtool, python-devel, pygtk2-devel, perl(XML::Par
 Requires:   pygtk2
 
 %description
-PinYin engine for IBus input framework.
+PinYin engine for IBus platform. It provides a Chinese PinYin input method.
 
 %prep
 %setup -q
