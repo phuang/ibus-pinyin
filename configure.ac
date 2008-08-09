@@ -1,4 +1,4 @@
-# vim:set noet ts=4:
+# vim:set et ts=4:
 #
 # ibus-pinyin - The PinYin engine for IBus
 #
@@ -25,10 +25,10 @@ m4_define([ibus_major_version], [0])
 m4_define([ibus_minor_version], [1])
 m4_define([ibus_micro_version], [0])
 m4_define(ibus_maybe_datestamp,
-	m4_esyscmd([if test x]ibus_released[ != x1; then date +.%Y%m%d | tr -d '\n\r'; fi]))
+    m4_esyscmd([if test x]ibus_released[ != x1; then date +.%Y%m%d | tr -d '\n\r'; fi]))
 
 m4_define([ibus_version],
-	ibus_major_version.ibus_minor_version.ibus_micro_version[]ibus_maybe_datestamp)
+    ibus_major_version.ibus_minor_version.ibus_micro_version[]ibus_maybe_datestamp)
 
 AC_INIT([package_name], [ibus_version], [http://code.google.com/p/ibus/issues/entry], [package_name])
 AM_INIT_AUTOMAKE([1.10])
