@@ -284,7 +284,7 @@ class PinYinEngine(ibus.EngineBase):
             else:
                 for c in self.__candidates:
                     self.__lookup_table.append_candidate(c)
-                self.update_lookup_table(self.__lookup_table, True)
+                self.update_lookup_table(self.__lookup_table, True, True)
             return
 
         if self.__temp_english_mode:
@@ -321,7 +321,7 @@ class PinYinEngine(ibus.EngineBase):
                     attrs = ibus.AttrList()
                     artr = ibus.AttributeForeground(PinYinEngine.__english_phrase_color, 0, len(c))
                     self.__lookup_table.append_candidate(c, attrs)
-                self.update_lookup_table(self.__lookup_table, True)
+                self.update_lookup_table(self.__lookup_table, True, True)
 
             return
 
@@ -363,7 +363,7 @@ class PinYinEngine(ibus.EngineBase):
                 self.__lookup_table.append_candidate(c[pysqlitedb.PHRASE], attrs)
             self.__lookup_table.show_cursor(True)
             self.__lookup_table.set_cursor_pos(0)
-            self.update_lookup_table(self.__lookup_table, True)
+            self.update_lookup_table(self.__lookup_table, True, True)
 
         committed_string = self.__committed_phrases.get_string()
         invalid_pinyin = self.__user_input.get_invalid_string()
@@ -930,14 +930,14 @@ class PinYinEngine(ibus.EngineBase):
 
     def page_up(self):
         if self.__lookup_table.page_up():
-            self.page_up_lookup_table()
+            self.update_lookup_table(self.__lookup_table, True, True)
             return True
 
         return True
 
     def page_down(self):
         if self.__lookup_table.page_down():
-            self.page_down_lookup_table()
+            self.update_lookup_table(self.__lookup_table, True, True)
             return True
         return True
 
@@ -946,7 +946,7 @@ class PinYinEngine(ibus.EngineBase):
             return False
 
         if self.__lookup_table.cursor_up():
-            self.cursor_up_lookup_table()
+            self.update_lookup_table(self.__lookup_table, True, True)
         return True
 
     def cursor_down(self):
@@ -954,7 +954,7 @@ class PinYinEngine(ibus.EngineBase):
             return False
 
         if self.__lookup_table.cursor_down():
-            self.cursor_down_lookup_table()
+            self.update_lookup_table(self.__lookup_table, True, True)
         return True
 
     def reset(self):
