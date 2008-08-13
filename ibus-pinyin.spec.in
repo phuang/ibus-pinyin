@@ -31,7 +31,7 @@ make %{?_smp_mflags}
 rm -rf $RPM_BUILD_ROOT
 make DESTDIR=${RPM_BUILD_ROOT} NO_INDEX=true install
 
-# %find_lang %{name}
+%find_lang %{name}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -40,8 +40,7 @@ rm -rf $RPM_BUILD_ROOT
 cd /usr/share/ibus-pinyin/engine
 python -c "import pysqlitedb; db = pysqlitedb.PYSQLiteDB (); db.create_indexes ();" >/dev/null
 
-%files
-# -f %{name}.lang
+%files -f %{name}.lang
 %defattr(-,root,root,-)
 %doc AUTHORS COPYING README
 %dir %{_datadir}/ibus-pinyin
