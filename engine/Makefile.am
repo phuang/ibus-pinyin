@@ -37,7 +37,7 @@ engine_pinyin_DATA = \
 	$(NULL)
 engine_pinyindir = $(datadir)/ibus-pinyin/engine
 
-libexec_SCRIPTS = ibus-engine-pinyin
+bin_SCRIPTS = ibus-engine-pinyin
 
 engine_DATA = pinyin.engine
 enginedir = $(datadir)/ibus/engine

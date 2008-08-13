@@ -47,7 +47,7 @@ python -c "import pysqlitedb; db = pysqlitedb.PYSQLiteDB (); db.create_indexes (
 %dir %{_datadir}/ibus-pinyin
 %{_datadir}/ibus-pinyin/*
 %{_datadir}/ibus/engine/pinyin.engine
-%{_libexecdir}/ibus-engine-pinyin
+%{_bindir}/ibus-engine-pinyin
 %{_libexecdir}/ibus-setup-pinyin
 
 %changelog
