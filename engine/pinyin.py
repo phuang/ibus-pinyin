@@ -462,6 +462,9 @@ class PinYinEngine(ibus.EngineBase):
         if key.mask & modifier.LOCK_MASK:
             return False
 
+        # ignore NumLock mask
+        key.mask &= ~modifier.MOD2_MASK
+
         # Match mode switch hotkey
         if self.__match_hotkey(key, keysyms.Shift_L, modifier.SHIFT_MASK + modifier.RELEASE_MASK) or \
             self.__match_hotkey(key, keysyms.Shift_R, modifier.SHIFT_MASK + modifier.RELEASE_MASK):
