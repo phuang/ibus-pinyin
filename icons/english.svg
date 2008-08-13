@@ -164,9 +164,9 @@
      inkscape:grid-bbox="true"
      inkscape:document-units="px"
      inkscape:window-width="1024"
-     inkscape:window-height="693"
+     inkscape:window-height="695"
      inkscape:window-x="0"
-     inkscape:window-y="26" />
+     inkscape:window-y="25" />
   <metadata
      id="metadata2388">
     <rdf:RDF>
@@ -182,19 +182,11 @@
      id="layer1"
      inkscape:label="Layer 1"
      inkscape:groupmode="layer">
-    <text
-       xml:space="preserve"
-       style="font-size:40.23707581px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000066;fill-opacity:1;stroke:#000066;stroke-width:0.54162031;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;font-family:'微软雅黑';-inkscape-font-specification:'微软雅黑 Bold'"
-       x="5.5932789"
-       y="36.006672"
-       id="text3867"
-       sodipodi:linespacing="125%"
-       transform="scale(1.0073595,0.9926943)"><tspan
-         sodipodi:role="line"
-         id="tspan3869"
-         x="5.5932789"
-         y="36.006672"
-         style="fill:#000066;fill-opacity:1;stroke:#000066;stroke-width:0.54162031;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1">英</tspan></text>
+    <path
+       transform="scale(1.0073595,0.9926943)"
+       style="font-size:40.23707581px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000066;fill-opacity:1;stroke:#000066;stroke-width:0.54162031;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;font-family:'微软雅黑';-inkscape-font-specification:'微软雅黑 Bold'"
+       d="M 6.4970413,5.9663941 L 15.731136,5.9663941 L 15.731136,2.6656965 L 20.839358,2.6656965 L 20.839358,5.9663941 L 30.584275,5.9663941 L 30.584275,2.6656965 L 35.692498,2.6656965 L 35.692498,5.9663941 L 44.926592,5.9663941 L 44.926592,10.799558 L 35.692498,10.799558 L 35.692498,14.53249 L 30.584275,14.53249 L 30.584275,10.799558 L 20.839358,10.799558 L 20.839358,14.53249 L 15.731136,14.53249 L 15.731136,10.799558 L 6.4970413,10.799558 L 6.4970413,5.9663941 M 6.6149234,25.141876 L 10.858677,25.141876 L 10.858677,15.868487 L 22.725471,15.868487 L 22.725471,12.724965 L 28.462398,12.724965 L 28.462398,15.868487 L 40.525662,15.868487 L 40.525662,25.141876 L 45.123062,25.141876 L 45.123062,29.97504 L 29.582278,29.97504 C 32.791262,33.223348 37.919126,35.240439 44.965886,36.026319 L 41.036484,41.252423 C 33.911141,39.877129 28.802923,37.034864 25.711817,32.725621 C 22.869532,36.93008 17.735119,39.811639 10.308561,41.370306 C 9.234521,39.955717 7.9640157,38.331566 6.4970413,36.497847 C 14.905952,34.847499 19.739112,32.673233 20.996534,29.97504 L 6.6149234,29.97504 L 6.6149234,25.141876 M 28.246281,25.141876 L 34.828029,25.141876 L 34.828029,20.505181 L 28.462398,20.505181 C 28.462375,21.972172 28.390336,23.517735 28.246281,25.141876 M 22.489707,25.141876 C 22.646866,24.028557 22.725454,22.482994 22.725471,20.505181 L 16.55631,20.505181 L 16.55631,25.141876 L 22.489707,25.141876"
+       id="text3867" />
     <path
        sodipodi:type="arc"
        style="opacity:1;fill:#6b6b6b;fill-opacity:0.22110554;stroke:none;stroke-width:0.37799999;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
@@ -230,18 +222,10 @@
        style="font-size:28px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:url(#linearGradient2404);fill-opacity:1;stroke:#0066f0;stroke-width:0.57300001;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;font-family:'微软雅黑';-inkscape-font-specification:'微软雅黑 Bold'"
        d="M 80.515223,-1.5609984 L 80.515223,5.2439769 L 65.653287,5.2439769 L 65.653287,26.888189 L 71.534238,26.888189 L 71.534238,24.122295 L 80.515223,24.122295 L 80.515223,36.502961 L 86.578527,36.502961 L 86.578527,24.122295 L 95.559512,24.122295 L 95.559512,26.800383 L 101.44046,26.800383 L 101.44046,5.2439769 L 86.578527,5.2439769 L 86.578527,-1.5609984 L 80.515223,-1.5609984 z M 71.534238,10.556248 L 80.515223,10.556248 L 80.515223,18.853927 L 71.534238,18.853927 L 71.534238,10.556248 z M 86.578527,10.556248 L 95.559512,10.556248 L 95.559512,18.853927 L 86.578527,18.853927 L 86.578527,10.556248 z"
        id="text2400" />
-    <text
-       xml:space="preserve"
-       style="font-size:40.23707581px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:url(#linearGradient3183);fill-opacity:1;stroke:#0066f0;stroke-width:0.54162031;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;font-family:'微软雅黑';-inkscape-font-specification:'微软雅黑 Bold'"
-       x="3.6078904"
-       y="34.00621"
-       id="text2398"
-       sodipodi:linespacing="125%"
-       transform="scale(1.0073595,0.9926943)"><tspan
-         sodipodi:role="line"
-         id="tspan2400"
-         x="3.6078904"
-         y="34.00621"
-         style="fill:url(#linearGradient3183);fill-opacity:1;stroke-width:0.54162031;stroke-miterlimit:4;stroke-dasharray:none">英</tspan></text>
+    <path
+       transform="scale(1.0073595,0.9926943)"
+       style="font-size:40.23707581px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:url(#linearGradient3183);fill-opacity:1;stroke:#0066f0;stroke-width:0.54162031;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;font-family:'微软雅黑';-inkscape-font-specification:'微软雅黑 Bold'"
+       d="M 4.5116528,3.9659325 L 13.745747,3.9659325 L 13.745747,0.66523492 L 18.85397,0.66523492 L 18.85397,3.9659325 L 28.598887,3.9659325 L 28.598887,0.66523492 L 33.707109,0.66523492 L 33.707109,3.9659325 L 42.941204,3.9659325 L 42.941204,8.7990969 L 33.707109,8.7990969 L 33.707109,12.532029 L 28.598887,12.532029 L 28.598887,8.7990969 L 18.85397,8.7990969 L 18.85397,12.532029 L 13.745747,12.532029 L 13.745747,8.7990969 L 4.5116528,8.7990969 L 4.5116528,3.9659325 M 4.6295349,23.141414 L 8.873289,23.141414 L 8.873289,13.868025 L 20.740083,13.868025 L 20.740083,10.724504 L 26.47701,10.724504 L 26.47701,13.868025 L 38.540274,13.868025 L 38.540274,23.141414 L 43.137674,23.141414 L 43.137674,27.974578 L 27.596889,27.974578 C 30.805874,31.222887 35.933738,33.239978 42.980498,34.025857 L 39.051096,39.251962 C 31.925752,37.876667 26.817535,35.034403 23.726428,30.72516 C 20.884144,34.929619 15.74973,37.811177 8.3231727,39.369844 C 7.2491325,37.955255 5.9786272,36.331104 4.5116528,34.497386 C 12.920564,32.847038 17.753723,30.672771 19.011146,27.974578 L 4.6295349,27.974578 L 4.6295349,23.141414 M 26.260893,23.141414 L 32.842641,23.141414 L 32.842641,18.50472 L 26.47701,18.50472 C 26.476987,19.97171 26.404948,21.517274 26.260893,23.141414 M 20.504319,23.141414 C 20.661478,22.028095 20.740066,20.482532 20.740083,18.50472 L 14.570922,18.50472 L 14.570922,23.141414 L 20.504319,23.141414"
+       id="text2398" />
   </g>
 </svg>
