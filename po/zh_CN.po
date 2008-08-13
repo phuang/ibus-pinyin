@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1.1.20080813\n"
 "Report-Msgid-Bugs-To: http://code.google.com/p/ibus/issues/entry\n"
-"POT-Creation-Date: 2008-08-13 22:52+0800\n"
+"POT-Creation-Date: 2008-08-13 23:21+0800\n"
 "PO-Revision-Date: 2008-08-13 22:52+0800\n"
 "Last-Translator: Huang Peng <shawn.p.huang@gmail.com>\n"
 "Language-Team: Huang Peng <shawn.p.huang@gmail.com>\n"
@@ -15,83 +15,73 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ibus-pinyin-0.1.1.20080812/engine/pydict.py:358
-#: ibus-pinyin-0.1.1.20080812/setup/pydict.py:358 engine/pydict.py:358
-#: setup/pydict.py:358
+#: engine/pydict.py:358 setup/pydict.py:358
 msgid "MSPY"
 msgstr "微软拼音"
 
-#: ibus-pinyin-0.1.1.20080812/engine/pydict.py:359
-#: ibus-pinyin-0.1.1.20080812/setup/pydict.py:359 engine/pydict.py:359
-#: setup/pydict.py:359
+#: engine/pydict.py:359 setup/pydict.py:359
 msgid "ZRM"
 msgstr "自然码"
 
-#: ibus-pinyin-0.1.1.20080812/engine/pydict.py:360
-#: ibus-pinyin-0.1.1.20080812/setup/pydict.py:360 engine/pydict.py:360
-#: setup/pydict.py:360
+#: engine/pydict.py:360 setup/pydict.py:360
 msgid "ABC"
 msgstr "智能ABC"
 
-#: ibus-pinyin-0.1.1.20080812/engine/pydict.py:361
-#: ibus-pinyin-0.1.1.20080812/setup/pydict.py:361 engine/pydict.py:361
-#: setup/pydict.py:361
+#: engine/pydict.py:361 setup/pydict.py:361
 msgid "ZGPY"
 msgstr "紫光拼音"
 
-#: ibus-pinyin-0.1.1.20080812/engine/pydict.py:362
-#: ibus-pinyin-0.1.1.20080812/setup/pydict.py:362 engine/pydict.py:362
-#: setup/pydict.py:362
+#: engine/pydict.py:362 setup/pydict.py:362
 msgid "PYJJ"
 msgstr "拼音加加"
 
-#: ibus-pinyin-0.1.1.20080812/engine/pinyin.py:148 engine/pinyin.py:148
+#: engine/pinyin.py:148
 msgid "Configure PinYin"
 msgstr "拼音设置"
 
-#: ibus-pinyin-0.1.1.20080812/engine/pinyin.py:155 engine/pinyin.py:155
+#: engine/pinyin.py:155
 msgid "CN"
 msgstr "中"
 
-#: ibus-pinyin-0.1.1.20080812/engine/pinyin.py:156 engine/pinyin.py:156
+#: engine/pinyin.py:156
 msgid "Switch to English mode"
 msgstr "切换到英语"
 
-#: ibus-pinyin-0.1.1.20080812/engine/pinyin.py:159 engine/pinyin.py:159
+#: engine/pinyin.py:159
 msgid "EN"
 msgstr "英"
 
-#: ibus-pinyin-0.1.1.20080812/engine/pinyin.py:160 engine/pinyin.py:160
+#: engine/pinyin.py:160
 msgid "Switch to Chinese mode"
 msgstr "切换到中文"
 
-#: ibus-pinyin-0.1.1.20080812/engine/pinyin.py:165 engine/pinyin.py:165
+#: engine/pinyin.py:165
 msgid "Switch to half letter mode"
 msgstr "字母切换到半角"
 
-#: ibus-pinyin-0.1.1.20080812/engine/pinyin.py:169 engine/pinyin.py:169
+#: engine/pinyin.py:169
 msgid "Switch to full letter mode"
 msgstr "字母切换到全角"
 
-#: ibus-pinyin-0.1.1.20080812/engine/pinyin.py:174 engine/pinyin.py:174
+#: engine/pinyin.py:174
 msgid "Switch to half punctuation mode"
 msgstr "标点切换到半角"
 
-#: ibus-pinyin-0.1.1.20080812/engine/pinyin.py:178 engine/pinyin.py:178
+#: engine/pinyin.py:178
 msgid "Switch to full punctuation mode"
 msgstr "标点切换到全角"
 
-#: ibus-pinyin-0.1.1.20080812/setup/main.py:180 setup/main.py:180
+#: setup/main.py:180
 msgid "Are you sure to close Python PinYin Setup without save configure?"
 msgstr ""
 
-#: ibus-pinyin-0.1.1.20080812/setup/main.py:191 setup/main.py:191
+#: setup/main.py:191
 msgid ""
 "The user phrases database will be reorganized! Please don't use python "
 "PinYin now."
 msgstr "准备优化用户词库，请不要使用拼音输入法！"
 
-#: ibus-pinyin-0.1.1.20080812/setup/main.py:213 setup/main.py:213
+#: setup/main.py:213
 msgid "Reorganizing is over!"
 msgstr "优化完毕！"
 
