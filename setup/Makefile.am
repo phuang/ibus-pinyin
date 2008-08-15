@@ -25,7 +25,7 @@ setup_pinyin_PYTHON = \
 	$(NULL)
 setup_pinyindir = $(datadir)/ibus-pinyin/setup
 
-libexec_SCRIPTS = ibus-setup-pinyin
+bin_SCRIPTS = ibus-setup-pinyin
 
 CLEANFILES = \
 	*.pyc \
