@@ -815,9 +815,10 @@ class PinYinEngine(ibus.EngineBase):
             self.__temp_english_mode = True
             self.__invalidate()
             return True
-        elif not PinYinEngine.__shuangpin \
-             and len(self.__user_input) == 0 \
-             and key.code == keysyms.i:
+        elif key.code == keysyms.i and \
+             len(self.__user_input) == 0 and \
+             not PinYinEngine.__shuangpin:
+             # we goto i_mode
             self.__user_input.append(unichr(key.code))
             self.__i_mode = True
             self.__invalidate()
@@ -840,6 +841,8 @@ class PinYinEngine(ibus.EngineBase):
                 self.commit_string(cond_punct_translate(unichr(key.code)))
             else:
                 self.commit_string(cond_letter_translate(unichr(key.code)))
+            return True
+        elif len(self.__user_input) != 0:
             return True
 
         return False
