@@ -897,7 +897,7 @@ class PinYinEngine(ibus.EngineBase):
             if pid != PinYinEngine.__setup_pid:
                 return
             PinYinEngine.__setup_pid = 0
-        setup_cmd = IBUS_PINYIN_LOCATION + "/../../libexec/ibus-setup-pinyin"
+        setup_cmd = IBUS_PINYIN_LOCATION + "/../../bin/ibus-setup-pinyin"
         PinYinEngine.__setup_pid = os.spawnl(os.P_NOWAIT, setup_cmd, "ibus-setup-pinyin")
 
 
