@@ -134,48 +134,48 @@ class PinYinEngine(ibus.EngineBase):
 
         # init properties
         self.__prop_list = ibus.PropList()
-        self.__status_property = ibus.Property("status")
+        self.__status_property = ibus.Property(u"status")
         self.__prop_list.append(self.__status_property)
-        self.__letter_property = ibus.Property("full_letter")
+        self.__letter_property = ibus.Property(u"full_letter")
         self.__prop_list.append(self.__letter_property)
-        self.__punct_property = ibus.Property("full_punct")
+        self.__punct_property = ibus.Property(u"full_punct")
         self.__prop_list.append(self.__punct_property)
         # self.__shuangpin_property = ibus.Property("shuangpin")
         # self.__prop_list.append(self.__shuangpin_property)
         # self.__gbk_property = ibus.Property("gbk")
         # self.__prop_list.append(self.__gbk_property)
-        self.__setup_property = ibus.Property("setup")
-        self.__setup_property._tooltip = _("Configure PinYin")
+        self.__setup_property = ibus.Property(u"setup")
+        self.__setup_property.tooltip = _(u"Configure PinYin")
         self.__prop_list.append(self.__setup_property)
 
 
     def __refresh_properties(self):
         if self.__mode == 1: # refresh mode
-            self.__status_property._icon = IBUS_PINYIN_LOCATION + "/icons/chinese.svg"
-            self.__status_property._label = _("CN")
-            self.__status_property._tooltip = _("Switch to English mode")
+            self.__status_property.icon = IBUS_PINYIN_LOCATION + "/icons/chinese.svg"
+            self.__status_property.label = _(u"CN")
+            self.__status_property.tooltip = _(u"Switch to English mode")
         else:
-            self.__status_property._icon = IBUS_PINYIN_LOCATION + "/icons/english.svg"
-            self.__status_property._label = _("EN")
-            self.__status_property._tooltip = _("Switch to Chinese mode")
+            self.__status_property.icon = IBUS_PINYIN_LOCATION + "/icons/english.svg"
+            self.__status_property.label = _(u"EN")
+            self.__status_property.tooltip = _(u"Switch to Chinese mode")
 
         if self.__full_width_letter[self.__mode]:
-            self.__letter_property._icon = IBUS_PINYIN_LOCATION + "/icons/full-letter.svg"
-            self.__letter_property._label = u"Ａａ"
-            self.__letter_property._tooltip = _("Switch to half letter mode")
+            self.__letter_property.icon = IBUS_PINYIN_LOCATION + "/icons/full-letter.svg"
+            self.__letter_property.label = u"Ａａ"
+            self.__letter_property.tooltip = _(u"Switch to half letter mode")
         else:
-            self.__letter_property._icon = IBUS_PINYIN_LOCATION + "/icons/half-letter.svg"
-            self.__letter_property._label = u"Aa"
-            self.__letter_property._tooltip = _("Switch to full letter mode")
+            self.__letter_property.icon = IBUS_PINYIN_LOCATION + "/icons/half-letter.svg"
+            self.__letter_property.label = u"Aa"
+            self.__letter_property.tooltip = _(u"Switch to full letter mode")
 
         if self.__full_width_punct[self.__mode]:
-            self.__punct_property._icon = IBUS_PINYIN_LOCATION + "/icons/full-punct.svg"
-            self.__punct_property._label = u"，。"
-            self.__punct_property._tooltip = _("Switch to half punctuation mode")
+            self.__punct_property.icon = IBUS_PINYIN_LOCATION + "/icons/full-punct.svg"
+            self.__punct_property.label = u"，。"
+            self.__punct_property.tooltip = _(u"Switch to half punctuation mode")
         else:
-            self.__punct_property._icon = IBUS_PINYIN_LOCATION + "/icons/half-punct.svg"
-            self.__punct_property._label = u".,"
-            self.__punct_property._tooltip = _("Switch to full punctuation mode")
+            self.__punct_property.icon = IBUS_PINYIN_LOCATION + "/icons/half-punct.svg"
+            self.__punct_property.label = u".,"
+            self.__punct_property.tooltip = _(u"Switch to full punctuation mode")
 
         # if PinYinEngine.__shuangpin:
         #     self.__shuangpin_property.label = _("SHUANG")
