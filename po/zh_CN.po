@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1.1.20080813\n"
 "Report-Msgid-Bugs-To: http://code.google.com/p/ibus/issues/entry\n"
-"POT-Creation-Date: 2008-08-13 23:21+0800\n"
+"POT-Creation-Date: 2008-08-30 07:53+0800\n"
 "PO-Revision-Date: 2008-08-13 22:52+0800\n"
 "Last-Translator: Huang Peng <shawn.p.huang@gmail.com>\n"
 "Language-Team: Huang Peng <shawn.p.huang@gmail.com>\n"
@@ -70,6 +70,10 @@ msgstr "标点切换到半角"
 #: engine/pinyin.py:178
 msgid "Switch to full punctuation mode"
 msgstr "标点切换到全角"
+
+#: engine/factory.py:33
+msgid "PinYin"
+msgstr "拼音"
 
 #: setup/main.py:180
 msgid "Are you sure to close Python PinYin Setup without save configure?"

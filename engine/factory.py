@@ -22,11 +22,15 @@ import ibus
 import pinyin
 import os
 
+from gettext import dgettext
+_  = lambda a : dgettext("ibus-pinyin", a)
+N_ = lambda a : a
+
 FACTORY_PATH = "/com/redhat/IBus/engines/PinYin/Factory"
 ENGINE_PATH = "/com/redhat/IBus/engines/PinYin/Engine/"
 
 class EngineFactory(ibus.EngineFactoryBase):
-    NAME = "PinYin"
+    NAME = _("PinYin")
     LANG = "zh_CN"
     ICON = os.getenv("IBUS_PINYIN_LOCATION") + "/icons/ibus-pinyin.svg"
     AUTHORS = "Huang Peng <shawn.p.huang@gmail.com>"
