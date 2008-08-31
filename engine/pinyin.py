@@ -300,13 +300,14 @@ class PinYinEngine(ibus.EngineBase):
             else:
                 aux_string = u""
 
-            if preedit_string and self.__spell_check:
+            if preedit_string:
                 self.update_preedit(preedit_string, None, len(preedit_string), True)
-                attrs = ibus.AttrList()
-                if  aux_string and not __EN_DICT__.check(aux_string):
-                    attr = ibus.AttributeForeground(PinYinEngine.__error_eng_phrase_color, 0, len(aux_string))
-                    attrs.append(attr)
-                self.update_aux_string(aux_string, attrs, True)
+                if self.__spell_check:
+                    attrs = ibus.AttrList()
+                    if aux_string and not __EN_DICT__.check(aux_string):
+                        attr = ibus.AttributeForeground(PinYinEngine.__error_eng_phrase_color, 0, len(aux_string))
+                        attrs.append(attr)
+                    self.update_aux_string(aux_string, attrs, True)
             else:
                 self.hide_preedit()
                 self.hide_aux_string()
@@ -1046,9 +1047,9 @@ class PinYinEngine(ibus.EngineBase):
         elif key == "/engine/PinYin/AutoCorrect":
             PinYinEngine.__auto_correct = \
                 bus.config_get_value("/engine/PinYin/AutoCorrect", True)
-        elif key == "/engine/PinYin/AutoCorrect":
+        elif key == "/engine/PinYin/SpellCheck":
             PinYinEngine.__spell_check = \
-                bus.config_get_value("/engine/PinYin/AutoCorrect", True)
+                bus.config_get_value("/engine/PinYin/SpellCheck", True)
         elif key == "/engine/PinYin/PageSize":
             PinYinEngine.__page_size = \
                 bus.config_get_value("/engine/PinYin/PageSize", 5)
@@ -1108,7 +1109,7 @@ class PinYinEngine(ibus.EngineBase):
         PinYinEngine.__auto_correct = \
             bus.config_get_value("/engine/PinYin/AutoCorrect", True)
         PinYinEngine.__spell_check = \
-            bus.config_get_value("/engine/PinYin/AutoCorrect", True)
+            bus.config_get_value("/engine/PinYin/SpellCheck", True)
         PinYinEngine.__page_size = \
             bus.config_get_value("/engine/PinYin/PageSize", 5)
         if PinYinEngine.__page_size < 1 or PinYinEngine.__page_size > 9:
