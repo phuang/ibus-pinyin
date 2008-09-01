@@ -396,7 +396,6 @@ class PinYinEngine(ibus.EngineBase):
         if self.__need_update:
             return
         self.__need_update = True
-        gobject.idle_add(self.__update, priority = gobject.PRIORITY_LOW)
 
     def __update(self):
         if self.__need_update:
@@ -906,8 +905,9 @@ class PinYinEngine(ibus.EngineBase):
 
 
     def process_key_event(self, keyval, is_press, state):
-        key = KeyEvent (keyval, is_press, state)
+        key = KeyEvent(keyval, is_press, state)
         result = self.__internal_process_key_event(key)
+        self.__update()
         self.__prev_key = key
         return result
 
