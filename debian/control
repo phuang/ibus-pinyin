@@ -1,0 +1,12 @@
+Source: ibus-pinyin
+Section: unknown
+Priority: extra
+Maintainer: oneleaf <oneleaf@gmail.com>
+Build-Depends: debhelper (>= 5), autotools-dev
+Standards-Version: 3.7.2
+
+Package: ibus-pinyin
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, ibus
+Description: ibus-pinyin
+ It is a PinYin engine for IBus.
