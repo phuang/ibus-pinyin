@@ -31,7 +31,7 @@ import pyutil
 import pydict
 import pyparser
 
-(YLEN, Y0, Y1, Y2, Y3, YX, S0, S1, S2, S3, PHRASE, FREQ, USER_FREQ) = range (0, 13)
+(YLEN, Y0, Y1, Y2, Y3, YX, S0, S1, S2, S3, PHRASE, FREQ, USER_FREQ) = range(13)
 
 FLUSH_PERIOD = 60 * 5 # 5 minute
 

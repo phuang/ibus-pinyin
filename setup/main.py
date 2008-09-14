@@ -18,6 +18,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
+import sys
 from os import path
 import gobject
 import gtk
@@ -73,6 +74,7 @@ class SetupUI ():
                                 [RGB (0xef, 0, 0), self.__colorbutton_op],
             "PageSize" :        [5, self.__combobox_op, range(1, 10)],
             "ShuangPinSchema" : ["MSPY", self.__combobox_op, SHUANGPIN_SCHEMAS.keys()],
+            "HalfPunctuations" : ["+-*/=%", self.__entry_op],
         }
 
     def run(self):
@@ -80,6 +82,23 @@ class SetupUI ():
         self.__init_ui()
         self.__load_config()
         gtk.main()
+
+    def __entry_op(self, name, opt, info):
+        widget = self.__xml.get_widget(name)
+        if widget == None:
+            print >> sys.stderr, "Can not find widget %s" % name
+            return ""
+        if opt == "read":
+            info[0] = self.__read(name, info[0])
+            widget.set_text(info[0])
+            return True
+        if opt == "write":
+            info[0] = widget.get_text()
+            self.__write(name, info[0])
+            return True
+        if opt == "check":
+            return info[0] != widget.get_text()
+        return ""
 
     def __combobox_op(self, name, opt, info):
         widget = self.__xml.get_widget(name)

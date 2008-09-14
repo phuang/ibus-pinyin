@@ -111,6 +111,9 @@ class PinYinEngine(ibus.EngineBase):
     # setup pid
     __setup_pid = 0
 
+    # half punctuations
+    __half_puncts = u"+-*/=%"
+
 
     def __init__(self, conn, object_path):
         super(PinYinEngine, self).__init__(conn, object_path)
@@ -528,7 +531,9 @@ class PinYinEngine(ibus.EngineBase):
                 return self.__chinese_mode_process_key_event(key)
 
     def __convert_to_full_width(self, c):
-        if c == u".":
+        if c in PinYinEngine.__half_puncts:
+            return c
+        elif c == u".":
             return u"\u3002"
         elif c == u"\\":
             return u"\u3001"
@@ -1094,6 +1099,9 @@ class PinYinEngine(ibus.EngineBase):
         elif key == "/engine/PinYin/AutoCommit":
             PinYinEngine.__auto_commit = \
                 bus.config_get_value("/engine/PinYin/AutoCommit", PinYinEngine.__auto_commit)
+        elif key == "/engine/PinYin/HalfPnctuations":
+            PinYinEngine.__half_puncts = \
+                bus.config_get_value("/engine/PinYin/HalfPnctuations", PinYinEngine.__half_puncts)
         else:
             print "Unknow key(%s)" % key
 
@@ -1141,7 +1149,9 @@ class PinYinEngine(ibus.EngineBase):
             bus.config_get_value("/engine/PinYin/EqualPageDownUp", PinYinEngine.__equal_page_down_up)
         PinYinEngine.__auto_commit = \
             bus.config_get_value("/engine/PinYin/AutoCommit", PinYinEngine.__auto_commit)
-
+        PinYinEngine.__half_puncts = \
+            bus.config_get_value("/engine/PinYin/HalfPunctuations", PinYinEngine.__half_puncts)
+        PinYinEngine.__half_puncts = PinYinEngine.__half_puncts.replace(" ", "")
 
 class KeyEvent:
     def __init__(self, keyval, is_press, state):
