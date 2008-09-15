@@ -1099,9 +1099,9 @@ class PinYinEngine(ibus.EngineBase):
         elif key == "/engine/PinYin/AutoCommit":
             PinYinEngine.__auto_commit = \
                 bus.config_get_value("/engine/PinYin/AutoCommit", PinYinEngine.__auto_commit)
-        elif key == "/engine/PinYin/HalfPnctuations":
+        elif key == "/engine/PinYin/HalfPunctuations":
             PinYinEngine.__half_puncts = \
-                bus.config_get_value("/engine/PinYin/HalfPnctuations", PinYinEngine.__half_puncts)
+                bus.config_get_value("/engine/PinYin/HalfPunctuations", PinYinEngine.__half_puncts)
         else:
             print "Unknow key(%s)" % key
 
