@@ -23,50 +23,50 @@ import sys, os, re
 import pysqlitedb
 import bz2
 
-def main ():
+def main():
     srcdir = "."
-    if len (sys.argv) == 2:
+    if len(sys.argv) == 2:
         srcdir = sys.argv[1]
 
     filename = "py.db"
     try:
-        os.unlink (filename)
+        os.unlink(filename)
     except:
         pass
     
     print "Create DB"
-    db = pysqlitedb.PYSQLiteDB (filename = filename)
-    db.create_tables ()
-    db.init_pinyin_table ()
-    db.init_shengmu_table ()
+    db = pysqlitedb.PYSQLiteDB(filename = filename)
+    db.create_tables()
+    db.init_pinyin_table()
+    db.init_shengmu_table()
 
-    def phrase_pinyin_parser (f):
+    def phrase_pinyin_parser(f):
         for l in f:
-            phrase, pinyin, freq = unicode (l, "utf-8").strip ().split ()
-            pinyin = pinyin.replace (u"u:", u"v")
-            yield (phrase, pinyin, int (freq))
+            phrase, pinyin, freq = unicode(l, "utf-8").strip().split()
+            pinyin = pinyin.replace(u"u:", u"v")
+            yield (phrase, pinyin, int(freq))
 
-    def phrase_pinyin_parser_pinyin (f):
+    def phrase_pinyin_parser_pinyin(f):
         for l in f:
-            phrase, pinyin, freq = unicode (l, "utf-8").strip ().split ()
-            pinyin = pinyin.replace (u"u:", u"v")
-            yield (phrase, pinyin, int (freq)*1300)
+            phrase, pinyin, freq = unicode(l, "utf-8").strip().split()
+            pinyin = pinyin.replace(u"u:", u"v")
+            yield (phrase, pinyin, int(freq) * 1300)
 
     print "Load pinyin_table.txt"
-    filename = os.path.join (srcdir, "../../../data/pinyin_table.txt")
-    db.add_phrases (phrase_pinyin_parser_pinyin (file (filename)))
+    filename = os.path.join(srcdir, "../../../data/pinyin_table.txt")
+    db.add_phrases(phrase_pinyin_parser_pinyin(file(filename)))
 
     print "Load phrase_pinyin.txt.bz2"
-    filename = os.path.join (srcdir, "phrase_pinyin.txt.bz2")
-    bzf = bz2.BZ2File (filename, "r")
-    db.add_phrases (phrase_pinyin_parser (bzf))
+    filename = os.path.join(srcdir, "phrase_pinyin.txt.bz2")
+    bzf = bz2.BZ2File(filename, "r")
+    db.add_phrases(phrase_pinyin_parser(bzf))
     
     print "Load phrase_pinyin_duoyin.txt"
-    filename = os.path.join (srcdir, "phrase_pinyin_duoyin.txt")
-    db.add_phrases (phrase_pinyin_parser (file (filename)))
+    filename = os.path.join(srcdir, "phrase_pinyin_duoyin.txt")
+    db.add_phrases(phrase_pinyin_parser(file(filename)))
 
     print "Optimizing database"
-    db.optimize_database ()
+    db.optimize_database()
     
 if __name__ == "__main__":
-    main ()
+    main()
