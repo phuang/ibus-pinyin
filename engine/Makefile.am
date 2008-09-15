@@ -22,7 +22,6 @@ engine_pinyin_PYTHON = \
 	factory.py \
 	main.py \
 	pinyin.py \
-	pycreatedb.py \
 	pydict.py \
 	pyparser.py \
 	specialphrase.py \
@@ -42,11 +41,11 @@ bin_SCRIPTS = ibus-engine-pinyin
 engine_DATA = pinyin.engine
 enginedir = $(datadir)/ibus/engine
 
-DBVER = 0.1.10.5
+DBVER = 0.1.10.6
 DBTAR = pinyin-database-${DBVER}.tar.bz2
 
 ${DBTAR}:
-	wget http://scim-python.googlecode.com/files/${DBTAR}
+	wget http://ibus.googlecode.com/files/${DBTAR}
 
 py.db: ${DBTAR}
 	tar jxvfm ${DBTAR}
