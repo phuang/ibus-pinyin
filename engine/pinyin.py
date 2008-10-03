@@ -1040,117 +1040,119 @@ class PinYinEngine(ibus.EngineBase):
         IMEngine.update_client_capabilities(self, cap)
 
     @classmethod
-    def CONFIG_VALUE_CHANGED(cls, bus, key, value):
-        if key == "/engine/PinYin/ShuangPinSchema":
+    def CONFIG_VALUE_CHANGED(cls, bus, section, name, value):
+        if section != "engine/PinYin":
+            return
+        if name == "ShuangPinSchema":
             PinYinEngine.__shuangpin_schema = \
-                bus.config_get_value("/engine/PinYin/ShuangPinSchema", "MSPY")
+                bus.config_get_value("engine/PinYin", "ShuangPinSchema", "MSPY")
             if PinYinEngine.__shuangpin_schema not in pydict.SHUANGPIN_SCHEMAS:
                 PinYinEngine.__shuangpin_schema = "MSPY"
-        elif key == "/engine/PinYin/FuzzyPinYin":
+        elif name == "FuzzyPinYin":
             PinYinEngine.__fuzzy_pinyin = \
-                bus.config_get_value("/engine/PinYin/FuzzyPinYin", False)
-        elif key == "/engine/PinYin/AutoCorrect":
+                bus.config_get_value("engine/PinYin", "FuzzyPinYin", False)
+        elif name == "AutoCorrect":
             PinYinEngine.__auto_correct = \
-                bus.config_get_value("/engine/PinYin/AutoCorrect", True)
-        elif key == "/engine/PinYin/SpellCheck":
+                bus.config_get_value("engine/PinYin", "AutoCorrect", True)
+        elif name == "SpellCheck":
             PinYinEngine.__spell_check = \
-                bus.config_get_value("/engine/PinYin/SpellCheck", True)
-        elif key == "/engine/PinYin/PageSize":
+                bus.config_get_value("engine/PinYin", "SpellCheck", True)
+        elif name == "PageSize":
             PinYinEngine.__page_size = \
-                bus.config_get_value("/engine/PinYin/PageSize", 5)
+                bus.config_get_value("engine/PinYin", "PageSize", 5)
             if PinYinEngine.__page_size < 1 or PinYinEngine.__page_size > 9:
                 PinYinEngine.__page_size = 5
-        elif key == "/engine/PinYin/SupportGBK":
+        elif name == "SupportGBK":
             PinYinEngine.__gbk = \
-                bus.config_get_value("/engine/PinYin/SupportGBK", False)
-        elif key == "/engine/PinYin/ShuangPin":
+                bus.config_get_value("engine/PinYin", "SupportGBK", False)
+        elif name == "ShuangPin":
             PinYinEngine.__shuangpin = \
-                bus.config_get_value("/engine/PinYin/ShuangPin", False)
-        elif key == "/engine/PinYin/PhraseColor":
+                bus.config_get_value("engine/PinYin", "ShuangPin", False)
+        elif name == "PhraseColor":
             PinYinEngine.__phrase_color = \
-                bus.config_get_value("/engine/PinYin/PhraseColor", PinYinEngine.__phrase_color)
-        elif key == "/engine/PinYin/NewPhraseColor":
+                bus.config_get_value("engine/PinYin", "PhraseColor", PinYinEngine.__phrase_color)
+        elif name == "NewPhraseColor":
             PinYinEngine.__new_phrase_color = \
-                bus.config_get_value("/engine/PinYin/NewPhraseColor", PinYinEngine.__new_phrase_color)
-        elif key == "/engine/PinYin/UserPhraseColor":
+                bus.config_get_value("engine/PinYin", "NewPhraseColor", PinYinEngine.__new_phrase_color)
+        elif name == "UserPhraseColor":
             PinYinEngine.__user_phrase_color = \
-                bus.config_get_value("/engine/PinYin/UserPhraseColor", PinYinEngine.__user_phrase_color)
-        elif key == "/engine/PinYin/SpecialPhraseColor":
+                bus.config_get_value("engine/PinYin", "UserPhraseColor", PinYinEngine.__user_phrase_color)
+        elif name == "SpecialPhraseColor":
             PinYinEngine.__special_phrase_color = \
-                bus.config_get_value("/engine/PinYin/SpecialPhraseColor", PinYinEngine.__special_phrase_color)
-        elif key == "/engine/PinYin/EnglishPhraseColor":
+                bus.config_get_value("engine/PinYin", "SpecialPhraseColor", PinYinEngine.__special_phrase_color)
+        elif name == "EnglishPhraseColor":
             PinYinEngine.__english_phrase_color = \
-                bus.config_get_value("/engine/PinYin/EnglishPhraseColor", PinYinEngine.__english_phrase_color)
-        elif key == "/engine/PinYin/ErrorEnglishPhraseColor":
+                bus.config_get_value("engine/PinYin", "EnglishPhraseColor", PinYinEngine.__english_phrase_color)
+        elif name == "ErrorEnglishPhraseColor":
             PinYinEngine.__error_eng_phrase_color = \
-                bus.config_get_value("/engine/PinYin/ErrorEnglishPhraseColor", PinYinEngine.__error_eng_phrase_color)
-        elif key == "/engine/PinYin/UVToTemp":
+                bus.config_get_value("engine/PinYin", "ErrorEnglishPhraseColor", PinYinEngine.__error_eng_phrase_color)
+        elif name == "UVToTemp":
             PinYinEngine.__uv_to_temp = \
-                bus.config_get_value("/engine/PinYin/UVToTemp", PinYinEngine.__uv_to_temp)
-        elif key == "/engine/PinYin/ShiftSelectCandidates":
+                bus.config_get_value("engine/PinYin", "UVToTemp", PinYinEngine.__uv_to_temp)
+        elif name == "ShiftSelectCandidates":
             PinYinEngine.__shift_select_canidates = \
-                bus.config_get_value("/engine/PinYin/ShiftSelectCandidates", PinYinEngine.__shift_select_candidates)
-        elif key == "/engine/PinYin/CommaPageDownUp":
+                bus.config_get_value("engine/PinYin", "ShiftSelectCandidates", PinYinEngine.__shift_select_candidates)
+        elif name == "CommaPageDownUp":
             PinYinEngine.__comma_page_down_up = \
-                bus.config_get_value("/engine/PinYin/CommaPageDownUp", PinYinEngine.__comma_page_down_up)
-        elif key == "/engine/PinYin/EqualPageDownUp":
+                bus.config_get_value("engine/PinYin", "CommaPageDownUp", PinYinEngine.__comma_page_down_up)
+        elif name == "EqualPageDownUp":
             PinYinEngine.__equal_page_down_up = \
-                bus.config_get_value("/engine/PinYin/EqualPageDownUp", PinYinEngine.__equal_page_down_up)
-        elif key == "/engine/PinYin/AutoCommit":
+                bus.config_get_value("engine/PinYin", "EqualPageDownUp", PinYinEngine.__equal_page_down_up)
+        elif name == "AutoCommit":
             PinYinEngine.__auto_commit = \
-                bus.config_get_value("/engine/PinYin/AutoCommit", PinYinEngine.__auto_commit)
-        elif key == "/engine/PinYin/HalfPunctuations":
+                bus.config_get_value("engine/PinYin", "AutoCommit", PinYinEngine.__auto_commit)
+        elif name == "HalfPunctuations":
             PinYinEngine.__half_puncts = \
-                bus.config_get_value("/engine/PinYin/HalfPunctuations", PinYinEngine.__half_puncts)
+                bus.config_get_value("engine/PinYin", "HalfPunctuations", PinYinEngine.__half_puncts)
         else:
-            print "Unknow key(%s)" % key
+            print "Unknow name(%s)" % name
 
     @classmethod
     def CONFIG_RELOADED(cls, bus):
         PinYinEngine.__shuangpin_schema = \
-            bus.config_get_value("/engine/PinYin/ShuangPinSchema", "MSPY")
+            bus.config_get_value("engine/PinYin", "ShuangPinSchema", "MSPY")
         if PinYinEngine.__shuangpin_schema not in pydict.SHUANGPIN_SCHEMAS:
             PinYinEngine.__shuangpin_schema = "MSPY"
 
         PinYinEngine.__fuzzy_pinyin = \
-            bus.config_get_value("/engine/PinYin/FuzzyPinYin", False)
+            bus.config_get_value("engine/PinYin", "FuzzyPinYin", False)
         PinYinEngine.__auto_correct = \
-            bus.config_get_value("/engine/PinYin/AutoCorrect", True)
+            bus.config_get_value("engine/PinYin", "AutoCorrect", True)
         PinYinEngine.__spell_check = \
-            bus.config_get_value("/engine/PinYin/SpellCheck", True)
+            bus.config_get_value("engine/PinYin", "SpellCheck", True)
         PinYinEngine.__page_size = \
-            bus.config_get_value("/engine/PinYin/PageSize", 5)
+            bus.config_get_value("engine/PinYin", "PageSize", 5)
         if PinYinEngine.__page_size < 1 or PinYinEngine.__page_size > 9:
             PinYinEngine.__page_size = 5
         PinYinEngine.__gbk = \
-            bus.config_get_value("/engine/PinYin/SupportGBK", False)
+            bus.config_get_value("engine/PinYin", "SupportGBK", False)
         PinYinEngine.__shuangpin = \
-            bus.config_get_value("/engine/PinYin/ShuangPin", False)
+            bus.config_get_value("engine/PinYin", "ShuangPin", False)
 
         PinYinEngine.__phrase_color = \
-            bus.config_get_value("/engine/PinYin/PhraseColor", PinYinEngine.__phrase_color)
+            bus.config_get_value("engine/PinYin", "PhraseColor", PinYinEngine.__phrase_color)
         PinYinEngine.__new_phrase_color = \
-            bus.config_get_value("/engine/PinYin/NewPhraseColor", PinYinEngine.__new_phrase_color)
+            bus.config_get_value("engine/PinYin", "NewPhraseColor", PinYinEngine.__new_phrase_color)
         PinYinEngine.__user_phrase_color = \
-            bus.config_get_value("/engine/PinYin/UserPhraseColor", PinYinEngine.__user_phrase_color)
+            bus.config_get_value("engine/PinYin", "UserPhraseColor", PinYinEngine.__user_phrase_color)
         PinYinEngine.__special_phrase_color = \
-            bus.config_get_value("/engine/PinYin/SpecialPhraseColor", PinYinEngine.__special_phrase_color)
+            bus.config_get_value("engine/PinYin", "SpecialPhraseColor", PinYinEngine.__special_phrase_color)
         PinYinEngine.__english_phrase_color = \
-            bus.config_get_value("/engine/PinYin/EnglishPhraseColor", PinYinEngine.__english_phrase_color)
+            bus.config_get_value("engine/PinYin", "EnglishPhraseColor", PinYinEngine.__english_phrase_color)
         PinYinEngine.__error_eng_phrase_color = \
-            bus.config_get_value("/engine/PinYin/ErrorEnglishPhraseColor", PinYinEngine.__error_eng_phrase_color)
+            bus.config_get_value("engine/PinYin", "ErrorEnglishPhraseColor", PinYinEngine.__error_eng_phrase_color)
         PinYinEngine.__uv_to_temp = \
-            bus.config_get_value("/engine/PinYin/UVToTemp", PinYinEngine.__uv_to_temp)
+            bus.config_get_value("engine/PinYin", "UVToTemp", PinYinEngine.__uv_to_temp)
         PinYinEngine.__shift_select_canidates = \
-            bus.config_get_value("/engine/PinYin/ShiftSelectCandidates", PinYinEngine.__shift_select_candidates)
+            bus.config_get_value("engine/PinYin", "ShiftSelectCandidates", PinYinEngine.__shift_select_candidates)
         PinYinEngine.__comma_page_down_up = \
-            bus.config_get_value("/engine/PinYin/CommaPageDownUp", PinYinEngine.__comma_page_down_up)
+            bus.config_get_value("engine/PinYin", "CommaPageDownUp", PinYinEngine.__comma_page_down_up)
         PinYinEngine.__equal_page_down_up = \
-            bus.config_get_value("/engine/PinYin/EqualPageDownUp", PinYinEngine.__equal_page_down_up)
+            bus.config_get_value("engine/PinYin", "EqualPageDownUp", PinYinEngine.__equal_page_down_up)
         PinYinEngine.__auto_commit = \
-            bus.config_get_value("/engine/PinYin/AutoCommit", PinYinEngine.__auto_commit)
+            bus.config_get_value("engine/PinYin", "AutoCommit", PinYinEngine.__auto_commit)
         PinYinEngine.__half_puncts = \
-            bus.config_get_value("/engine/PinYin/HalfPunctuations", PinYinEngine.__half_puncts)
+            bus.config_get_value("engine/PinYin", "HalfPunctuations", PinYinEngine.__half_puncts)
         PinYinEngine.__half_puncts = PinYinEngine.__half_puncts.replace(" ", "")
 
 class KeyEvent:

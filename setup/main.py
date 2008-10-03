@@ -159,10 +159,10 @@ class SetupUI ():
         return False
 
     def __read(self, name, v):
-        return self.__bus.config_get_value("/engine/PinYin/" + name, v)
+        return self.__bus.config_get_value("engine/PinYin", name, v)
 
     def __write(self, name, v):
-        return self.__bus.config_set_value("/engine/PinYin/" + name, v)
+        return self.__bus.config_set_value("engine/PinYin", name, v)
 
     def __init_ui(self):
         glade.textdomain("ibus-pinyin")
