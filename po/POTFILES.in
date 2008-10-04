@@ -4,7 +4,6 @@
 ./engine/specialtable.py
 ./engine/pyparser.py
 ./engine/pinyin.py
-./engine/pycreatedb.py
 ./engine/pyutil.py
 ./engine/specialphrase.py
 ./engine/factory.py
