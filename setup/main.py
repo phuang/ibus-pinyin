@@ -212,7 +212,7 @@ class SetupUI ():
         dlg.destroy()
 
         try:
-            db = sqlite3.connect(path.expanduser("~/.scim/scim-python/pinyin/user.db"))
+            db = sqlite3.connect(path.expanduser("~/.ibus/pinyin/user.db"))
             sqlstring = """
                 BEGIN TRANSACTION;
                 CREATE TABLE tmp AS SELECT * FROM py_phrase;
