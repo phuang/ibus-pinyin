@@ -69,7 +69,7 @@ test:
 		IBUS_PINYIN_LOCATION=$(abs_top_srcdir) \
 		DBUS_DEBUG=true \
 		LANG=en_US \
-		PYTHONPATH=$(abs_top_srcdir) \
+		PYTHONPATH=$(abs_top_srcdir):$(pyexecdir) \
 		$(PYTHON) $(srcdir)/main.py
 
 install-data-hook:

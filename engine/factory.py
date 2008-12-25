@@ -26,10 +26,10 @@ from gettext import dgettext
 _  = lambda a : dgettext("ibus-pinyin", a)
 N_ = lambda a : a
 
-FACTORY_PATH = "/com/redhat/IBus/engines/PinYin/Factory"
-ENGINE_PATH = "/com/redhat/IBus/engines/PinYin/Engine/"
 
 class EngineFactory(ibus.EngineFactoryBase):
+    FACTORY_PATH = "/com/redhat/IBus/engines/PinYin/Factory"
+    ENGINE_PATH = "/com/redhat/IBus/engines/PinYin/Engine/"
     NAME = _("PinYin")
     LANG = "zh_CN"
     ICON = os.getenv("IBUS_PINYIN_LOCATION") + "/icons/ibus-pinyin.svg"
@@ -37,20 +37,19 @@ class EngineFactory(ibus.EngineFactoryBase):
     CREDITS = "GPLv2"
 
     def __init__(self, bus):
-        self.__info = [
-            self.NAME,
-            self.LANG,
-            self.ICON,
-            self.AUTHORS,
-            self.CREDITS
-        ]
+        self.__info = ibus.FactoryInfo(self.FACTORY_PATH,
+                                       self.NAME,
+                                       self.LANG,
+                                       self.ICON,
+                                       self.AUTHORS,
+                                       self.CREDITS)
         self.__bus = bus
         pinyin.PinYinEngine.CONFIG_RELOADED(bus)
-        super(EngineFactory, self).__init__(self.__info, pinyin.PinYinEngine, ENGINE_PATH, bus, FACTORY_PATH)
+        super(EngineFactory, self).__init__(self.__info, pinyin.PinYinEngine, self.ENGINE_PATH, bus, self.FACTORY_PATH)
 
-        self.__bus.connect("config-reloaded", self.__config_reloaded_cb)
-        self.__bus.config_add_watch("engine/PinYin")
-        self.__bus.connect("config-value-changed", self.__config_value_changed_cb)
+        # self.__bus.connect("config-reloaded", self.__config_reloaded_cb)
+        # self.__bus.config_add_watch("engine/PinYin")
+        # self.__bus.connect("config-value-changed", self.__config_value_changed_cb)
 
 
     def __config_reloaded_cb(self, bus):
