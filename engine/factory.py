@@ -47,14 +47,15 @@ class EngineFactory(ibus.EngineFactoryBase):
         pinyin.PinYinEngine.CONFIG_RELOADED(bus)
         super(EngineFactory, self).__init__(self.__info, pinyin.PinYinEngine, self.ENGINE_PATH, bus, self.FACTORY_PATH)
 
-        # self.__bus.connect("config-reloaded", self.__config_reloaded_cb)
-        # self.__bus.config_add_watch("engine/PinYin")
-        # self.__bus.connect("config-value-changed", self.__config_value_changed_cb)
+        self.__config = self.__bus.get_config()
+
+        self.__config.connect("reloaded", self.__config_reloaded_cb)
+        self.__config.connect("value-changed", self.__config_value_changed_cb)
 
 
-    def __config_reloaded_cb(self, bus):
+    def __config_reloaded_cb(self, config):
         pinyin.PinYinEngine.CONFIG_RELOADED(self.__bus)
 
-    def __config_value_changed_cb(self, bus, section, name, value):
-        pinyin.PinYinEngine.CONFIG_VALUE_CHANGED(bus, section, name, value)
+    def __config_value_changed_cb(self, config, section, name, value):
+        pinyin.PinYinEngine.CONFIG_VALUE_CHANGED(self.__bus, section, name, value)
 
