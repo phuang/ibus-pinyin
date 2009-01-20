@@ -1,7 +1,0 @@
-Exec=@prefix@/bin/ibus-engine-pinyin
-Name=PinYin
-Name.zh=拼音
-Lang=zh_CN
-Icon=@prefix@/share/ibus-pinyin/icons/ibus-pinyin.svg
-Author=Huang Peng <shawn.p.huang@gmail.com>
-Credits=
