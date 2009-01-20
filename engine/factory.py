@@ -29,7 +29,7 @@ N_ = lambda a : a
 
 class EngineFactory(ibus.EngineFactoryBase):
     FACTORY_PATH = "/com/redhat/IBus/engines/PinYin/Factory"
-    ENGINE_PATH = "/com/redhat/IBus/engines/PinYin/Engine/"
+    ENGINE_PATH = "/com/redhat/IBus/engines/PinYin/Engine"
     NAME = _("PinYin")
     LANG = "zh_CN"
     ICON = os.getenv("IBUS_PINYIN_LOCATION") + "/icons/ibus-pinyin.svg"
@@ -37,21 +37,22 @@ class EngineFactory(ibus.EngineFactoryBase):
     CREDITS = "GPLv2"
 
     def __init__(self, bus):
-        self.__info = ibus.FactoryInfo(self.FACTORY_PATH,
-                                       self.NAME,
-                                       self.LANG,
-                                       self.ICON,
-                                       self.AUTHORS,
-                                       self.CREDITS)
         self.__bus = bus
         pinyin.PinYinEngine.CONFIG_RELOADED(bus)
-        super(EngineFactory, self).__init__(self.__info, pinyin.PinYinEngine, self.ENGINE_PATH, bus, self.FACTORY_PATH)
+        super(EngineFactory, self).__init__(bus)
 
+        self.__id = 0
         self.__config = self.__bus.get_config()
 
         self.__config.connect("reloaded", self.__config_reloaded_cb)
         self.__config.connect("value-changed", self.__config_value_changed_cb)
 
+    def create_engine(self, engine_name):
+        if engine_name == "pinyin":
+            self.__id += 1
+            return pinyin.PinYinEngine(self.__bus, "%s/%d" % (self.ENGINE_PATH, self.__id))
+        
+        return super(EngineFactory, self).create_engine(engine_name)
 
     def __config_reloaded_cb(self, config):
         pinyin.PinYinEngine.CONFIG_RELOADED(self.__bus)

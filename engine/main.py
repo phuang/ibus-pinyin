@@ -27,11 +27,13 @@ import factory
 
 class IMApp:
     def __init__(self):
+        self.__component = ibus.Component("pinyin", "Chinese PinYin Component", "0.1.0", "GPL", "Peng Huang <shawn.p.huang@gmail.com>")
+        self.__component.add_engine("pinyin", "pinyin", "Chinese PinYin", "zh_CN", "GPL", "Peng Huang <shawn.p.huang@gmail.com>", "", "en")
         self.__mainloop = gobject.MainLoop()
         self.__bus = ibus.Bus()
         self.__bus.connect("destroy", self.__bus_destroy_cb)
-        self.__engine = factory.EngineFactory(self.__bus)
-        self.__engine.register()
+        self.__factory = factory.EngineFactory(self.__bus)
+        self.__bus.register_component(self.__component)
 
     def run(self):
         self.__mainloop.run()
