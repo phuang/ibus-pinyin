@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1.1.20080813\n"
 "Report-Msgid-Bugs-To: http://code.google.com/p/ibus/issues/entry\n"
-"POT-Creation-Date: 2008-09-15 02:55+0800\n"
+"POT-Creation-Date: 2009-02-05 15:57+0800\n"
 "PO-Revision-Date: 2008-08-13 22:52+0800\n"
 "Last-Translator: Huang Peng <shawn.p.huang@gmail.com>\n"
 "Language-Team: Huang Peng <shawn.p.huang@gmail.com>\n"
@@ -75,17 +75,17 @@ msgstr "标点切换到全角"
 msgid "PinYin"
 msgstr "拼音"
 
-#: setup/main.py:199
+#: setup/main.py:200
 msgid "Are you sure to close Python PinYin Setup without save configure?"
 msgstr ""
 
-#: setup/main.py:210
+#: setup/main.py:211
 msgid ""
 "The user phrases database will be reorganized! Please don't use python "
 "PinYin now."
 msgstr "准备优化用户词库，请不要使用拼音输入法！"
 
-#: setup/main.py:232
+#: setup/main.py:233
 msgid "Reorganizing is over!"
 msgstr "优化完毕！"
 
@@ -93,135 +93,135 @@ msgstr "优化完毕！"
 msgid "Python PinYin Setup"
 msgstr "拼音设置"
 
-#: setup/setup.glade:30
-msgid "Press [,] [.] to page down up."
-msgstr "按 [,] [.] 上下翻页。"
+#: setup/setup.glade:43
+msgid "Half punctuations"
+msgstr "半角标点"
 
-#: setup/setup.glade:41
-msgid "Auto commit"
-msgstr "自动上词"
-
-#: setup/setup.glade:103
-msgid "Press [-] [=] to page down up."
-msgstr "按 [-] [=] 上下翻页。"
-
-#: setup/setup.glade:131
-msgid "Press [shift] to select candidates"
-msgstr "按 [shift] 选词"
-
-#: setup/setup.glade:176
-msgid "Support GBK"
-msgstr "大字符集"
-
-#: setup/setup.glade:183
-msgid "ShuangPin"
-msgstr "双拼"
-
-#: setup/setup.glade:194
-msgid "ShuangPin Schema"
-msgstr "双拼方案"
-
-#: setup/setup.glade:205
-msgid "Lookup table page size"
-msgstr "候选词个数"
-
-#: setup/setup.glade:216
-msgid "Wrong PinYin auto correct"
-msgstr "自动纠正错误拼音"
-
-#: setup/setup.glade:227
-msgid "English spelling check"
-msgstr "英语单词拼写检查"
-
-#: setup/setup.glade:237 setup/setup.glade:251
-msgid "1\n"
-msgstr ""
-
-#: setup/setup.glade:320
+#: setup/setup.glade:54
 msgid "Press [u] or [v]  to temporary English mode"
 msgstr "使用[u]或者[v]自动进入临时英语模式"
 
-#: setup/setup.glade:331
-msgid "Half punctuations"
-msgstr "半角标点"
+#: setup/setup.glade:118 setup/setup.glade:132
+msgid "1\n"
+msgstr ""
+
+#: setup/setup.glade:147
+msgid "English spelling check"
+msgstr "英语单词拼写检查"
+
+#: setup/setup.glade:158
+msgid "Wrong PinYin auto correct"
+msgstr "自动纠正错误拼音"
+
+#: setup/setup.glade:169
+msgid "Lookup table page size"
+msgstr "候选词个数"
+
+#: setup/setup.glade:180
+msgid "ShuangPin Schema"
+msgstr "双拼方案"
+
+#: setup/setup.glade:191
+msgid "ShuangPin"
+msgstr "双拼"
+
+#: setup/setup.glade:202
+msgid "Support GBK"
+msgstr "大字符集"
+
+#: setup/setup.glade:243
+msgid "Press [shift] to select candidates"
+msgstr "按 [shift] 选词"
+
+#: setup/setup.glade:271
+msgid "Press [-] [=] to page down up."
+msgstr "按 [-] [=] 上下翻页。"
+
+#: setup/setup.glade:333
+msgid "Auto commit"
+msgstr "自动上词"
+
+#: setup/setup.glade:344
+msgid "Press [,] [.] to page down up."
+msgstr "按 [,] [.] 上下翻页。"
 
 #: setup/setup.glade:356
 msgid "Gernal"
 msgstr "通用"
 
 #: setup/setup.glade:423
-msgid "an <=> ang"
-msgstr ""
+msgid "Enable Fuzzy PinYin"
+msgstr "启动模糊拼音"
 
-#: setup/setup.glade:441
-msgid "en <=> eng"
-msgstr ""
-
-#: setup/setup.glade:459
-msgid "in <=> ing"
-msgstr ""
-
-#: setup/setup.glade:477
-msgid "l <=> n"
-msgstr ""
-
-#: setup/setup.glade:493
-msgid "z <=> zh"
-msgstr ""
-
-#: setup/setup.glade:509
-msgid "c <=> ch"
-msgstr ""
-
-#: setup/setup.glade:525
+#: setup/setup.glade:433
 msgid "s <=> sh"
 msgstr ""
 
-#: setup/setup.glade:541
-msgid "Enable Fuzzy PinYin"
-msgstr "启动模糊拼音"
+#: setup/setup.glade:449
+msgid "c <=> ch"
+msgstr ""
+
+#: setup/setup.glade:465
+msgid "z <=> zh"
+msgstr ""
+
+#: setup/setup.glade:481
+msgid "l <=> n"
+msgstr ""
+
+#: setup/setup.glade:497
+msgid "in <=> ing"
+msgstr ""
+
+#: setup/setup.glade:515
+msgid "en <=> eng"
+msgstr ""
+
+#: setup/setup.glade:533
+msgid "an <=> ang"
+msgstr ""
 
 #: setup/setup.glade:555
 msgid "Fuzzy PinYin"
 msgstr "模糊拼音"
 
-#: setup/setup.glade:687
-msgid "Color of Normal Phrases"
-msgstr "普通候选词的颜色"
+#: setup/setup.glade:605
+msgid "Color of Spelling Error"
+msgstr "错误拼写英文单词的颜色"
 
-#: setup/setup.glade:694
-msgid "Color of New Phrases"
-msgstr "系统自动生成的新候选词的颜色"
-
-#: setup/setup.glade:705
-msgid "Color of User Phrases"
-msgstr "用户自造词的颜色"
-
-#: setup/setup.glade:716
-msgid "Color of Special Phrases"
-msgstr "特殊词语的颜色"
-
-#: setup/setup.glade:727
+#: setup/setup.glade:616
 msgid "Color of English Candidates"
 msgstr "英文单词的颜色"
 
-#: setup/setup.glade:738
-msgid "Color of Spelling Error"
-msgstr "错误拼写英文单词的颜色"
+#: setup/setup.glade:627
+msgid "Color of Special Phrases"
+msgstr "特殊词语的颜色"
+
+#: setup/setup.glade:638
+msgid "Color of User Phrases"
+msgstr "用户自造词的颜色"
+
+#: setup/setup.glade:649
+msgid "Color of New Phrases"
+msgstr "系统自动生成的新候选词的颜色"
+
+#: setup/setup.glade:660
+msgid "Color of Normal Phrases"
+msgstr "普通候选词的颜色"
 
 #: setup/setup.glade:753
 msgid "Colors"
 msgstr "颜色"
 
-#: setup/setup.glade:838
+#: setup/setup.glade:839
 msgid "Optimize User DB"
 msgstr "优化用户词库"
 
-#: setup/setup.glade:862
+#: setup/setup.glade:863
 msgid "User DB"
 msgstr "用户词库"
 
-#: setup/setup.glade:873
+#: setup/setup.glade:874
 msgid ""
 "Python PinYin\n"
 "\n"
@@ -230,6 +230,6 @@ msgid ""
 "Huang Peng <shawn.p.huang@gmail.com>\n"
 msgstr ""
 
-#: setup/setup.glade:888
+#: setup/setup.glade:889
 msgid "About"
 msgstr "关于"

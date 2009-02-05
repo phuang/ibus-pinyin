@@ -36,10 +36,10 @@ engine_pinyin_DATA = \
 	$(NULL)
 engine_pinyindir = $(datadir)/ibus-pinyin/engine
 
-bin_SCRIPTS = ibus-engine-pinyin
+libexec_SCRIPTS = ibus-engine-pinyin
 
-engine_DATA = pinyin.engine
-enginedir = $(datadir)/ibus/engine
+engine_DATA = pinyin.xml
+enginedir = $(datadir)/ibus/component
 
 DBVER = 0.1.10.6
 DBTAR = pinyin-database-${DBVER}.tar.bz2
@@ -53,7 +53,7 @@ py.db: ${DBTAR}
 
 EXTRA_DIST = \
 	ibus-engine-pinyin.in \
-	pinyin.engine.in \
+	pinyin.xml.in \
 	special_phrase \
 	special_table \
 	$(NULL)
@@ -69,7 +69,7 @@ test:
 		IBUS_PINYIN_LOCATION=$(abs_top_srcdir) \
 		DBUS_DEBUG=true \
 		LANG=en_US \
-		PYTHONPATH=$(abs_top_srcdir) \
+		PYTHONPATH=$(abs_top_srcdir):$(pyexecdir) \
 		$(PYTHON) $(srcdir)/main.py
 
 install-data-hook:

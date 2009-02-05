@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ibus-pinyin VERSION\n"
 "Report-Msgid-Bugs-To: http://code.google.com/p/ibus/issues/entry\n"
-"POT-Creation-Date: 2008-09-15 02:55+0800\n"
+"POT-Creation-Date: 2009-02-05 15:57+0800\n"
 "PO-Revision-Date: 2008-08-28 19:19+0900\n"
 "Last-Translator: UTUMI Hirosi <utuhiro78@yahoo.co.jp>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
@@ -76,11 +76,11 @@ msgstr "全角句読点モードに切替"
 msgid "PinYin"
 msgstr "ピンイン"
 
-#: setup/main.py:199
+#: setup/main.py:200
 msgid "Are you sure to close Python PinYin Setup without save configure?"
 msgstr "設定を保存せずに Python ピンインセットアップを閉じますか？"
 
-#: setup/main.py:210
+#: setup/main.py:211
 msgid ""
 "The user phrases database will be reorganized! Please don't use python "
 "PinYin now."
@@ -88,7 +88,7 @@ msgstr ""
 "ユーザーフレーズデータベースを再構築します。Python ピンインを使わないでくださ"
 "い"
 
-#: setup/main.py:232
+#: setup/main.py:233
 msgid "Reorganizing is over!"
 msgstr "再構築しました"
 
@@ -96,136 +96,136 @@ msgstr "再構築しました"
 msgid "Python PinYin Setup"
 msgstr "Python ピンインセットアップ"
 
-#: setup/setup.glade:30
-msgid "Press [,] [.] to page down up."
-msgstr "[,] [.] でページを切替"
-
-#: setup/setup.glade:41
-msgid "Auto commit"
-msgstr "自動確定"
-
-#: setup/setup.glade:103
-msgid "Press [-] [=] to page down up."
-msgstr "[-] [=] でページを切替"
-
-#: setup/setup.glade:131
-msgid "Press [shift] to select candidates"
-msgstr "[shift] で候補を選択"
-
-#: setup/setup.glade:176
-msgid "Support GBK"
-msgstr "GBK をサポート"
-
-#: setup/setup.glade:183
-msgid "ShuangPin"
-msgstr "ShuangPin"
-
-#: setup/setup.glade:194
-msgid "ShuangPin Schema"
-msgstr "ShuangPin スキーマ"
-
-#: setup/setup.glade:205
-msgid "Lookup table page size"
-msgstr "ページ当たりの候補の数"
-
-#: setup/setup.glade:216
-msgid "Wrong PinYin auto correct"
-msgstr "誤ったピンインの自動修正"
-
-#: setup/setup.glade:227
-msgid "English spelling check"
-msgstr "英語スペルのチェック"
-
-#: setup/setup.glade:237 setup/setup.glade:251
-msgid "1\n"
-msgstr "1\n"
-
-#: setup/setup.glade:320
-msgid "Press [u] or [v]  to temporary English mode"
-msgstr "[u] か [v] で一時的な英語モード"
-
-#: setup/setup.glade:331
+#: setup/setup.glade:43
 #, fuzzy
 msgid "Half punctuations"
 msgstr "半角句読点モードに切替"
+
+#: setup/setup.glade:54
+msgid "Press [u] or [v]  to temporary English mode"
+msgstr "[u] か [v] で一時的な英語モード"
+
+#: setup/setup.glade:118 setup/setup.glade:132
+msgid "1\n"
+msgstr "1\n"
+
+#: setup/setup.glade:147
+msgid "English spelling check"
+msgstr "英語スペルのチェック"
+
+#: setup/setup.glade:158
+msgid "Wrong PinYin auto correct"
+msgstr "誤ったピンインの自動修正"
+
+#: setup/setup.glade:169
+msgid "Lookup table page size"
+msgstr "ページ当たりの候補の数"
+
+#: setup/setup.glade:180
+msgid "ShuangPin Schema"
+msgstr "ShuangPin スキーマ"
+
+#: setup/setup.glade:191
+msgid "ShuangPin"
+msgstr "ShuangPin"
+
+#: setup/setup.glade:202
+msgid "Support GBK"
+msgstr "GBK をサポート"
+
+#: setup/setup.glade:243
+msgid "Press [shift] to select candidates"
+msgstr "[shift] で候補を選択"
+
+#: setup/setup.glade:271
+msgid "Press [-] [=] to page down up."
+msgstr "[-] [=] でページを切替"
+
+#: setup/setup.glade:333
+msgid "Auto commit"
+msgstr "自動確定"
+
+#: setup/setup.glade:344
+msgid "Press [,] [.] to page down up."
+msgstr "[,] [.] でページを切替"
 
 #: setup/setup.glade:356
 msgid "Gernal"
 msgstr "一般"
 
 #: setup/setup.glade:423
-msgid "an <=> ang"
-msgstr "an <=> ang"
+msgid "Enable Fuzzy PinYin"
+msgstr "ファジーピンイン有効"
 
-#: setup/setup.glade:441
-msgid "en <=> eng"
-msgstr "en <=> eng"
-
-#: setup/setup.glade:459
-msgid "in <=> ing"
-msgstr "in <=> ing"
-
-#: setup/setup.glade:477
-msgid "l <=> n"
-msgstr "l <=> n"
-
-#: setup/setup.glade:493
-msgid "z <=> zh"
-msgstr "z <=> zh"
-
-#: setup/setup.glade:509
-msgid "c <=> ch"
-msgstr "c <=> ch"
-
-#: setup/setup.glade:525
+#: setup/setup.glade:433
 msgid "s <=> sh"
 msgstr "s <=> sh"
 
-#: setup/setup.glade:541
-msgid "Enable Fuzzy PinYin"
-msgstr "ファジーピンイン有効"
+#: setup/setup.glade:449
+msgid "c <=> ch"
+msgstr "c <=> ch"
+
+#: setup/setup.glade:465
+msgid "z <=> zh"
+msgstr "z <=> zh"
+
+#: setup/setup.glade:481
+msgid "l <=> n"
+msgstr "l <=> n"
+
+#: setup/setup.glade:497
+msgid "in <=> ing"
+msgstr "in <=> ing"
+
+#: setup/setup.glade:515
+msgid "en <=> eng"
+msgstr "en <=> eng"
+
+#: setup/setup.glade:533
+msgid "an <=> ang"
+msgstr "an <=> ang"
 
 #: setup/setup.glade:555
 msgid "Fuzzy PinYin"
 msgstr "ファジーピンイン"
 
-#: setup/setup.glade:687
-msgid "Color of Normal Phrases"
-msgstr "一般語句の色"
+#: setup/setup.glade:605
+msgid "Color of Spelling Error"
+msgstr "スペルエラーの色"
 
-#: setup/setup.glade:694
-msgid "Color of New Phrases"
-msgstr "新規語句の色"
-
-#: setup/setup.glade:705
-msgid "Color of User Phrases"
-msgstr "ユーザー語句の色"
-
-#: setup/setup.glade:716
-msgid "Color of Special Phrases"
-msgstr "特殊語句の色"
-
-#: setup/setup.glade:727
+#: setup/setup.glade:616
 msgid "Color of English Candidates"
 msgstr "英語候補の色"
 
-#: setup/setup.glade:738
-msgid "Color of Spelling Error"
-msgstr "スペルエラーの色"
+#: setup/setup.glade:627
+msgid "Color of Special Phrases"
+msgstr "特殊語句の色"
+
+#: setup/setup.glade:638
+msgid "Color of User Phrases"
+msgstr "ユーザー語句の色"
+
+#: setup/setup.glade:649
+msgid "Color of New Phrases"
+msgstr "新規語句の色"
+
+#: setup/setup.glade:660
+msgid "Color of Normal Phrases"
+msgstr "一般語句の色"
 
 #: setup/setup.glade:753
 msgid "Colors"
 msgstr "配色"
 
-#: setup/setup.glade:838
+#: setup/setup.glade:839
 msgid "Optimize User DB"
 msgstr "ユーザーDBを最適化"
 
-#: setup/setup.glade:862
+#: setup/setup.glade:863
 msgid "User DB"
 msgstr "ユーザーDB"
 
-#: setup/setup.glade:873
+#: setup/setup.glade:874
 msgid ""
 "Python PinYin\n"
 "\n"
@@ -239,6 +239,6 @@ msgstr ""
 "\n"
 "Huang Peng <shawn.p.huang@gmail.com>\n"
 
-#: setup/setup.glade:888
+#: setup/setup.glade:889
 msgid "About"
 msgstr "About"

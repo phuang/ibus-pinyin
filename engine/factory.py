@@ -26,10 +26,10 @@ from gettext import dgettext
 _  = lambda a : dgettext("ibus-pinyin", a)
 N_ = lambda a : a
 
-FACTORY_PATH = "/com/redhat/IBus/engines/PinYin/Factory"
-ENGINE_PATH = "/com/redhat/IBus/engines/PinYin/Engine/"
 
 class EngineFactory(ibus.EngineFactoryBase):
+    FACTORY_PATH = "/com/redhat/IBus/engines/PinYin/Factory"
+    ENGINE_PATH = "/com/redhat/IBus/engines/PinYin/Engine"
     NAME = _("PinYin")
     LANG = "zh_CN"
     ICON = os.getenv("IBUS_PINYIN_LOCATION") + "/icons/ibus-pinyin.svg"
@@ -37,25 +37,26 @@ class EngineFactory(ibus.EngineFactoryBase):
     CREDITS = "GPLv2"
 
     def __init__(self, bus):
-        self.__info = [
-            self.NAME,
-            self.LANG,
-            self.ICON,
-            self.AUTHORS,
-            self.CREDITS
-        ]
         self.__bus = bus
         pinyin.PinYinEngine.CONFIG_RELOADED(bus)
-        super(EngineFactory, self).__init__(self.__info, pinyin.PinYinEngine, ENGINE_PATH, bus, FACTORY_PATH)
+        super(EngineFactory, self).__init__(bus)
 
-        self.__bus.connect("config-reloaded", self.__config_reloaded_cb)
-        self.__bus.config_add_watch("engine/PinYin")
-        self.__bus.connect("config-value-changed", self.__config_value_changed_cb)
+        self.__id = 0
+        self.__config = self.__bus.get_config()
 
+        self.__config.connect("reloaded", self.__config_reloaded_cb)
+        self.__config.connect("value-changed", self.__config_value_changed_cb)
 
-    def __config_reloaded_cb(self, bus):
+    def create_engine(self, engine_name):
+        if engine_name == "pinyin":
+            self.__id += 1
+            return pinyin.PinYinEngine(self.__bus, "%s/%d" % (self.ENGINE_PATH, self.__id))
+
+        return super(EngineFactory, self).create_engine(engine_name)
+
+    def __config_reloaded_cb(self, config):
         pinyin.PinYinEngine.CONFIG_RELOADED(self.__bus)
 
-    def __config_value_changed_cb(self, bus, section, name, value):
-        pinyin.PinYinEngine.CONFIG_VALUE_CHANGED(bus, section, name, value)
+    def __config_value_changed_cb(self, config, section, name, value):
+        pinyin.PinYinEngine.CONFIG_VALUE_CHANGED(self.__bus, section, name, value)
 

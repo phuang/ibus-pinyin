@@ -39,6 +39,7 @@ class SetupUI ():
     def __init__ (self):
         self.__need_reload_config = False
         self.__bus = ibus.Bus()
+        self.__config = self.__bus.get_config()
 
         self.__options = {
             "SupportGBK" :      [False, self.__checkbutton_op],
@@ -159,10 +160,10 @@ class SetupUI ():
         return False
 
     def __read(self, name, v):
-        return self.__bus.config_get_value("engine/PinYin", name, v)
+        return self.__config.get_value("engine/PinYin", name, v)
 
     def __write(self, name, v):
-        return self.__bus.config_set_value("engine/PinYin", name, v)
+        return self.__config.set_value("engine/PinYin", name, v)
 
     def __init_ui(self):
         glade.textdomain("ibus-pinyin")

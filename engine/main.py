@@ -26,12 +26,28 @@ import gobject
 import factory
 
 class IMApp:
-    def __init__(self):
+    def __init__(self, exec_by_ibus):
+        self.__component = ibus.Component("org.freedesktop.IBus.PinYin",
+                                          "Chinese PinYin Component",
+                                          "0.1.0",
+                                          "GPL",
+                                          "Peng Huang <shawn.p.huang@gmail.com>")
+        self.__component.add_engine("pinyin",
+                                    "pinyin",
+                                    "Chinese PinYin",
+                                    "zh_CN",
+                                    "GPL",
+                                    "Peng Huang <shawn.p.huang@gmail.com>",
+                                    "",
+                                    "en")
         self.__mainloop = gobject.MainLoop()
         self.__bus = ibus.Bus()
         self.__bus.connect("destroy", self.__bus_destroy_cb)
-        self.__engine = factory.EngineFactory(self.__bus)
-        self.__engine.register()
+        self.__factory = factory.EngineFactory(self.__bus)
+        if exec_by_ibus:
+            self.__bus.request_name("org.freedesktop.IBus.PinYin", 0)
+        else:
+            self.__bus.register_component(self.__component)
 
     def run(self):
         self.__mainloop.run()
@@ -40,18 +56,20 @@ class IMApp:
         self.__mainloop.quit()
 
 
-def launch_engine():
-    IMApp().run()
+def launch_engine(exec_by_ibus):
+    IMApp(exec_by_ibus).run()
 
 def print_help(out, v = 0):
+    print >> out, "-i, --ibus             execute by ibus."
     print >> out, "-h, --help             show this message."
     print >> out, "-d, --daemonize        daemonize ibus"
     sys.exit(v)
 
 def main():
     daemonize = False
-    shortopt = "hd"
-    longopt = ["help", "daemonize"]
+    exec_by_ibus = False
+    shortopt = "hdi"
+    longopt = ["help", "daemonize", "ibus"]
     try:
         opts, args = getopt.getopt(sys.argv[1:], shortopt, longopt)
     except getopt.GetoptError, err:
@@ -62,6 +80,8 @@ def main():
             print_help(sys.stdout)
         elif o in ("-d", "--daemonize"):
             daemonize = True
+        elif o in ("-i", "--ibus"):
+            exec_by_ibus = True
         else:
             print >> sys.stderr, "Unknown argument: %s" % o
             print_help(sys.stderr, 1)
@@ -70,7 +90,7 @@ def main():
         if os.fork():
             sys.exit()
 
-    launch_engine()
+    launch_engine(exec_by_ibus)
 
 if __name__ == "__main__":
     main()

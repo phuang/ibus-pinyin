@@ -25,7 +25,7 @@ setup_pinyin_PYTHON = \
 	$(NULL)
 setup_pinyindir = $(datadir)/ibus-pinyin/setup
 
-bin_SCRIPTS = ibus-setup-pinyin
+libexec_SCRIPTS = ibus-setup-pinyin
 
 CLEANFILES = \
 	*.pyc \
@@ -36,5 +36,8 @@ EXTRA_DIST = \
 	$(NULL)
 
 test:
-	$(ENV) DBUS_DEBUG=true LANG=en_US PYTHONPATH=$(top_srcdir) $(PYTHON) $(srcdir)/main.py
+	$(ENV) DBUS_DEBUG=true \
+		   LANG=en_US \
+		   PYTHONPATH=$(abs_top_srcdir):$(pyexecdir) \
+		   $(PYTHON) $(srcdir)/main.py
 
