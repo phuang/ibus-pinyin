@@ -3,7 +3,7 @@
 <component>
 	<name>org.freedesktop.IBus.PinYin</name>
 	<description>PinYin Component</description>
-	<exec>@prefix@/libexec/ibus-engine-pinyin --ibus</exec>
+	<exec>${libexecdir}/ibus-engine-pinyin --ibus</exec>
 	<version>@VERSION@</version>
 	<author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
 	<license>GPL</license>
@@ -17,7 +17,7 @@
 			<language>zh_CN</language>
 			<license>GPL</license>
 			<author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
-			<icon>@prefix@/share/ibus-pinyin/icons/ibus-pinyin.svg</icon>
+			<icon>${pkgdatadir}/icons/ibus-pinyin.svg</icon>
 			<layout>us</layout>
 			<longname>PinYin</longname>
 			<description>PinYin Input Method</description>

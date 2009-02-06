@@ -68,7 +68,7 @@ Makefile
 ibus-pinyin.spec
 engine/Makefile
 engine/ibus-engine-pinyin
-engine/pinyin.xml
+engine/pinyin.xml.in
 setup/Makefile
 setup/ibus-setup-pinyin
 icons/Makefile

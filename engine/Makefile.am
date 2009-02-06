@@ -59,10 +59,19 @@ EXTRA_DIST = \
 	$(NULL)
 
 CLEANFILES = \
+	pinyin.xml \
 	*.pyc \
 	py.db \
 	$(DBTAR) \
 	$(NULL)
+
+pinyin.xml: pinyin.xml.in
+	( \
+		libexecdir=${libexecdir}; \
+		pkgdatadir=${pkgdatadir}; \
+		s=`cat $<`; \
+		eval "echo \"$${s}\""; \
+	) > $@
 
 test:
 	$(ENV) \
