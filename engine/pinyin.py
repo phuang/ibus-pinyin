@@ -25,6 +25,7 @@ __all__ = (
 import ibus
 import gobject
 import os
+import os.path as path
 from ibus import keysyms
 from ibus import modifier
 from ibus import ascii
@@ -41,6 +42,8 @@ _  = lambda a : dgettext("ibus-pinyin", a)
 N_ = lambda a : a
 
 IBUS_PINYIN_LOCATION = os.getenv("IBUS_PINYIN_LOCATION")
+LIBEXECDIR = os.getenv("LIBEXECDIR")
+
 __MAX_LEN__ = 64        # Max length of preedit pinyin
 
 # Define colours
@@ -154,29 +157,29 @@ class PinYinEngine(ibus.EngineBase):
 
     def __refresh_properties(self):
         if self.__mode == 1: # refresh mode
-            self.__status_property.icon = IBUS_PINYIN_LOCATION + "/icons/chinese.svg"
+            self.__status_property.icon = path.join(IBUS_PINYIN_LOCATION, "icons", "chinese.svg")
             self.__status_property.label = _(u"CN")
             self.__status_property.tooltip = _(u"Switch to English mode")
         else:
-            self.__status_property.icon = IBUS_PINYIN_LOCATION + "/icons/english.svg"
+            self.__status_property.icon = path.join(IBUS_PINYIN_LOCATION, "icons", "english.svg")
             self.__status_property.label = _(u"EN")
             self.__status_property.tooltip = _(u"Switch to Chinese mode")
 
         if self.__full_width_letter[self.__mode]:
-            self.__letter_property.icon = IBUS_PINYIN_LOCATION + "/icons/full-letter.svg"
+            self.__letter_property.icon = path.join(IBUS_PINYIN_LOCATION, "icons", "full-letter.svg")
             self.__letter_property.label = u"Ａａ"
             self.__letter_property.tooltip = _(u"Switch to half letter mode")
         else:
-            self.__letter_property.icon = IBUS_PINYIN_LOCATION + "/icons/half-letter.svg"
+            self.__letter_property.icon = path.join(IBUS_PINYIN_LOCATION, "icons", "half-letter.svg")
             self.__letter_property.label = u"Aa"
             self.__letter_property.tooltip = _(u"Switch to full letter mode")
 
         if self.__full_width_punct[self.__mode]:
-            self.__punct_property.icon = IBUS_PINYIN_LOCATION + "/icons/full-punct.svg"
+            self.__punct_property.icon = path.join(IBUS_PINYIN_LOCATION, "icons", "full-punct.svg")
             self.__punct_property.label = u"，。"
             self.__punct_property.tooltip = _(u"Switch to half punctuation mode")
         else:
-            self.__punct_property.icon = IBUS_PINYIN_LOCATION + "/icons/half-punct.svg"
+            self.__punct_property.icon = path.join(IBUS_PINYIN_LOCATION, "icons", "half-punct.svg")
             self.__punct_property.label = u".,"
             self.__punct_property.tooltip = _(u"Switch to full punctuation mode")
 
@@ -905,7 +908,7 @@ class PinYinEngine(ibus.EngineBase):
             if pid != PinYinEngine.__setup_pid:
                 return
             PinYinEngine.__setup_pid = 0
-        setup_cmd = IBUS_PINYIN_LOCATION + "/../../libexec/ibus-setup-pinyin"
+        setup_cmd = path.join(LIBEXECDIR, "ibus-setup-pinyin")
         PinYinEngine.__setup_pid = os.spawnl(os.P_NOWAIT, setup_cmd, "ibus-setup-pinyin")
 
 

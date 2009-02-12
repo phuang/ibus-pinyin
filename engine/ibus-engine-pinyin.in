@@ -20,8 +20,10 @@
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 prefix=@prefix@
 exec_prefix=@exec_prefix@
+libexecdir=@libexecdir@
 pyexecdir=@pyexecdir@
 export PYTHONPATH=@pyexecdir@:$PYTHONPATH
 export IBUS_PINYIN_LOCATION=@prefix@/share/ibus-pinyin
+export LIBEXECDIR=$libexecdir
 exec python @prefix@/share/ibus-pinyin/engine/main.py $@
 
