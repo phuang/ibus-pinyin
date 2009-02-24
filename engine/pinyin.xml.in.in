@@ -21,6 +21,7 @@
 			<layout>us</layout>
 			<longname>PinYin</longname>
 			<description>PinYin Input Method</description>
+			<priority>99</priority>
 		</engine>
 	</engines>
 </component>
