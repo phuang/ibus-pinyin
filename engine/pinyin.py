@@ -490,9 +490,12 @@ class PinYinEngine(ibus.EngineBase):
                         self.commit_string(commit_string + self.__user_input.get_invalid_string())
 
                         # adjust phrase freq and create new phrase
-                        self.__pydb.commit_phrases(commit_phrases)
-                        if len(commit_phrases) > 1:
-                            self.__pydb.new_phrase(commit_phrases)
+                        try:
+                            self.__pydb.commit_phrases(commit_phrases)
+                            if len(commit_phrases) > 1:
+                                self.__pydb.new_phrase(commit_phrases)
+                        except:
+                            print "Can not inster phrases in db"
                 return True
             else:
                 self.property_activate("status")
@@ -749,9 +752,12 @@ class PinYinEngine(ibus.EngineBase):
                         self.commit_string(commit_string + self.__user_input.get_invalid_string())
 
                         # adjust phrase freq and create new phrase
-                        self.__pydb.commit_phrases(commit_phrases)
-                        if len(commit_phrases) > 1:
-                            self.__pydb.new_phrase(commit_phrases)
+                        try:
+                            self.__pydb.commit_phrases(commit_phrases)
+                            if len(commit_phrases) > 1:
+                                self.__pydb.new_phrase(commit_phrases)
+                        except:
+                            print "Can not inster phrases in db"
             return True
         elif key.code in(keysyms.KP_Space, keysyms.space):
             if not self.__candidates:
@@ -768,9 +774,12 @@ class PinYinEngine(ibus.EngineBase):
                         self.commit_string(commit_string + self.__user_input.get_invalid_string())
 
                         # adjust phrase freq and create new phrase
-                        self.__pydb.commit_phrases(commit_phrases)
-                        if len(commit_phrases) > 1:
-                            self.__pydb.new_phrase(commit_phrases)
+                        try:
+                            self.__pydb.commit_phrases(commit_phrases)
+                            if len(commit_phrases) > 1:
+                                self.__pydb.new_phrase(commit_phrases)
+                        except:
+                            print "Can not inster phrases in db"
             return True
         elif key.code == keysyms.Page_Down and self.__candidates: # press PageDown
             self.page_down()
@@ -897,7 +906,10 @@ class PinYinEngine(ibus.EngineBase):
             return False
 
         candidate = self.__candidates.pop(i)
-        self.__pydb.remove_phrase(candidate)
+        try:
+            self.__pydb.remove_phrase(candidate)
+        except:
+            print "Can not remove phrase from db"
         self.__invalidate()
 
         return True
