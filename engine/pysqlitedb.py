@@ -38,10 +38,10 @@ FLUSH_PERIOD = 60 * 5 # 5 minute
 class PYSQLiteDB:
     """phrase database that contains all phrases and phrases' pinyin"""
     def __init__ (self, name = "py.db", user_db = None, filename = None):
-    
+
         # init last flush time
         self._last_flush_time = None
-    
+
         if filename:
             self.db = sqlite.connect (filename)
             self.parser = pyparser.PinYinParser ()
@@ -58,7 +58,7 @@ class PYSQLiteDB:
         # self.db.execute ("PRAGMA locking_mode = EXCLUSIVE;")
         self.db.execute ("PRAGMA synchronous = NORMAL;")
         self.db.execute ("PRAGMA temp_store = MEMORY;")
-        
+
         if user_db != None:
             home_path = os.getenv ("HOME")
             pinyin_path = path.join (home_path, ".ibus", "pinyin")
@@ -76,8 +76,8 @@ class PYSQLiteDB:
                 pass
         else:
             user_db = ":memory:"
-        
-        
+
+
         # open user phrase database
         try:
             self.db.execute ("ATTACH DATABASE \"%s\" AS user_db;" % user_db)
@@ -86,7 +86,7 @@ class PYSQLiteDB:
             os.rename (user_db, "%s.%d" % (user_db, os.getpid ()))
             self.db.execute ("ATTACH DATABASE \"%s\" AS user_db;" % user_db)
 
-        
+
         # try create all tables in user database
         self.create_tables ("user_db")
         self.create_indexes ("user_db")
@@ -96,7 +96,7 @@ class PYSQLiteDB:
 
     def create_tables (self, database = "main"):
         """create all phrases tables that contain all phrases"""
-        
+
         try:
             self.db.executescript ("PRAGMA default_cache_size = 5000;")
             self.flush (True)
@@ -106,19 +106,19 @@ class PYSQLiteDB:
         # create pinyin table
         sqlstring = "CREATE TABLE IF NOT EXISTS %s.py_pinyin (pinyin TEXT PREMARY KEY);" % database
         self.db.execute (sqlstring)
-        
+
         # create pinyin table
         sqlstring = "CREATE TABLE IF NOT EXISTS %s.py_shengmu (shengmu TEXT PREMARY KEY);" % database
         self.db.execute (sqlstring)
 
         # create phrase table
         sqlstring = """CREATE TABLE IF NOT EXISTS %(database)s.py_phrase (
-                            ylen INTEGER, 
+                            ylen INTEGER,
                             y0 INTEGER, y1 INTEGER, y2 INTEGER, y3 INTEGER, yx TEXT,
                             s0 INTEGER, s1 INTEGER, s2 INTEGER, s3 INTEGER,
                             phrase TEXT,
                             freq INTEGER, user_freq INTEGER);"""
-        
+
         self.db.executescript (sqlstring % { "database":database })
         self.flush (True)
 
@@ -138,16 +138,22 @@ class PYSQLiteDB:
     def create_indexes (self, database = "main"):
         # create indexes
         sqlstring = """
+                /*
                 CREATE INDEX IF NOT EXISTS %(database)s.py_phrase_index_1 ON
                     py_phrase (y0, y1, y2, y3);
+                */
+
                 CREATE INDEX IF NOT EXISTS %(database)s.py_phrase_index_2 ON
                     py_phrase (ylen, y0, y1, y2, y3);
                 CREATE INDEX IF NOT EXISTS %(database)s.py_phrase_index_3 ON
                     py_phrase (ylen, s0, s1, s2, s3);
+
+                /*
                 CREATE INDEX IF NOT EXISTS %(database)s.py_phrase_index_4 ON
                     py_phrase (s0, s1, s2, s2, s3);
                 CREATE INDEX IF NOT EXISTS %(database)s.py_phrase_index_5 ON
                     py_phrase (phrase);
+                */
                 """
         self.db.executescript (sqlstring % { "database" : database })
         self.flush (True)
@@ -168,7 +174,7 @@ class PYSQLiteDB:
         for py in pydict.PINYIN_DICT.keys ():
             self.db.execute (sqlstring, (unicode (py),))
         self.flush (True)
-    
+
     def init_shengmu_table (self):
         """create table shengmu that contains all shengmu of pinyin"""
         sqlstring = "INSERT INTO py_shengmu (shengmu) VALUES (?)"
@@ -208,7 +214,7 @@ class PYSQLiteDB:
                 traceback.print_exc ()
                 # print e
             line += 1
-            
+
         self.flush (True)
 
     def get_pinyin_table (self):
@@ -219,7 +225,7 @@ class PYSQLiteDB:
             pass
 
         sql = "SELECT phrase, y0, s0 FROM py_phrase WHERE ylen = 1"
-        
+
         pinyin_table = {}
         result = self.db.execute (sql % i)
         for phrase, y0, s0 in result:
@@ -227,25 +233,25 @@ class PYSQLiteDB:
                 pinyin_table [phrase] = []
             pinyin_table [phrase].append ((y0, s0))
         self._pinyin_table = pinyin_table
-        
+
         return pinyin_table
 
     def select_words_by_pinyin_list (self, pys, mohu = False):
         """select words from database by list that contains pyutil.PinYinWord objects"""
-        
+
         pinyin_string = u"'".join (map (str, pys))
         result = self.select_cache [pinyin_string]
         if result != None:
             return result
-        
+
         tables_union = """( SELECT * FROM main.py_phrase WHERE %(conditions)s UNION ALL
         SELECT * FROM user_db.py_phrase WHERE %(conditions)s )"""
-        
+
         if mohu:
             sql_conditions = ["+ylen = %d" % len (pys) ]
         else:
             sql_conditions = ["ylen = %d" % len (pys) ]
-            
+
 
         i = 0
         if mohu == False:
@@ -269,7 +275,7 @@ class PYSQLiteDB:
                         yunmu_list = pydict.MOHU_YUNMU[yunmu]
                     else:
                         yunmu_list = [yunmu]
-                        
+
                     pinyin_ids = []
                     for s in shengmu_list:
                         for y in yunmu_list:
@@ -280,7 +286,7 @@ class PYSQLiteDB:
                         sql_conditions.append ("y%d in (%s)" % (i, ",".join (pinyin_ids)))
                     else:
                         sql_conditions.append ("y%d == %s" % (i, pinyin_ids[0]))
-                        
+
                 else:
                     shengmu = py.get_shengmu ()
                     if shengmu in pydict.MOHU_SHENGMU:
@@ -291,12 +297,12 @@ class PYSQLiteDB:
                     else:
                         sql_conditions.append ("s%d = %d" % (i, py.get_sheng_mu_id ()))
                 i += 1
-        
+
         if pys[4:]:
             pp = lambda (x): x.get_pattern (mohu)
             pattern = "'".join (map (pp, pys[4:]))
             sql_conditions.append ("yx LIKE \"" + pattern + "\"")
-        
+
 
         tables_union = tables_union % { "conditions" : " AND ".join (sql_conditions) }
         sql_prefix = "SELECT * FROM " + tables_union
@@ -304,11 +310,11 @@ class PYSQLiteDB:
         sql_string = sql_prefix + " GROUP BY phrase ORDER BY user_freq DESC, freq DESC;"
 
         result = list (self.db.execute (sql_string).fetchall ())
-        
+
         self.select_cache [pinyin_string] = result
 
         return result
-    
+
     def select_words_by_pinyin_string (self, string, mohu = False):
         """select words from the database by pinyin string"""
 
@@ -359,9 +365,9 @@ class PYSQLiteDB:
                     w = pyutil.PinYinWord (ys[i - 4])
                     pinyin_ids.append (w.get_pinyin_id ())
                     shengmu_ids.append (w.get_sheng_mu_id ())
-        
+
         sql = """INSERT INTO user_db.py_phrase
-            (ylen, y0, y1, y2, y3, yx, s0, s1, s2, s3, phrase, freq, user_freq) 
+            (ylen, y0, y1, y2, y3, yx, s0, s1, s2, s3, phrase, freq, user_freq)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"""
 
         values = [phrase_length, None, None, None, None, None, None, None, None, None, phrase, freq, user_freq]
@@ -386,7 +392,7 @@ class PYSQLiteDB:
         sql = "DELETE FROM user_db.py_phrase WHERE ylen = ? AND y0 = ? AND phrase = ?"
 
         self.db.execute (sql, (record[YLEN], record[Y0], record[PHRASE]))
-        
+
         self.flush ()
         self.select_cache.clear ()
 
@@ -397,7 +403,7 @@ class PYSQLiteDB:
             self.db.commit ()
             self._last_flush_time = time.time ()
 
-    
+
 class Cache:
     """cache object for cache history queries"""
 
@@ -407,7 +413,7 @@ class Cache:
             self.time = -1
             self.value = None
             self.index = None
-    
+
     def __init__ (self, max_slot = 1024):
         self._max_slot = max_slot
         self.clear ()
@@ -427,7 +433,7 @@ class Cache:
         it will retrun None."""
         if not self._dict.has_key (index):
             return None
-        
+
         slot = self._dict [index]
         self._time += 1
         slot.time = self._time
@@ -445,13 +451,13 @@ class Cache:
         self._dict[index] = slot
 
     def get_slot (self):
-        """get_slot will return a empty slot. If there is not any empty slot, 
+        """get_slot will return a empty slot. If there is not any empty slot
         it will find the oldest slot and return it."""
         if len (self._slots) < self._max_slot:
             slot = Cache.Slot ()
             self._slots.append (slot)
         else:
-            self._slots.sort (lambda x,y : x.time - y.time)        
+            self._slots.sort (lambda x,y : x.time - y.time)
             slot = self._slots[0]
             del self._dict[slot.index]
         return slot
@@ -478,9 +484,9 @@ def test_select_words ():
             break
         t = time.time ()
         res = db.select_words_by_pinyin_string (l)
-        
+
         t = time.time () - t
-        
+
         i = 0
         for p in res:
             print "%s = %s %s " % (i, str (p), p[PHRASE].encode ("utf8"))
@@ -498,7 +504,7 @@ def test_select_words ():
                 continue
             break
 
-    
+
 
 def test_case (string):
     db = PYSQLiteDB ()
@@ -524,7 +530,7 @@ def test ():
     test_case ("woguojuminshoumingqiwangtigaodaoqishisansui")
     test_case ("wgjmshmqwtgdqshss")
     test_case ("xjinyhuiyouyongme")
-    
+
 if __name__ == "__main__":
     import timeit
     t = timeit.Timer ("pysqlitedb.test ()", "import pysqlitedb")
