@@ -873,6 +873,7 @@ provided by
 
 Huang Peng &lt;shawn.p.huang@gmail.com&gt;
 </property>
+                <property name="justify">center</property>
               </widget>
               <packing>
                 <property name="position">4</property>
