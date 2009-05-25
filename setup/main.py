@@ -241,8 +241,8 @@ class SetupUI ():
 
     # events handlers
     def on_window_main_delete_event(self, widget, event):
-        result = self.__quit(True)
-        return True
+        changed = self.__query_changed()
+        self.__quit(changed)
 
     def on_button_ok_clicked(self, button):
         changed = self.__query_changed()
