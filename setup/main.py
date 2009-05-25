@@ -20,6 +20,7 @@
 
 import sys
 from os import path
+import signal
 import gobject
 import gtk
 import gtk.gdk as gdk
@@ -79,10 +80,14 @@ class SetupUI ():
         }
 
     def run(self):
-
         self.__init_ui()
         self.__load_config()
+        signal.signal(signal.SIGUSR1, self.__sigusr1_cb)
         gtk.main()
+
+    def __sigusr1_cb(self, *arg):
+        window = self.__xml.get_widget("window_main")
+        window.present()
 
     def __entry_op(self, name, opt, info):
         widget = self.__xml.get_widget(name)
@@ -263,5 +268,6 @@ class SetupUI ():
 
 
 if __name__ == "__main__":
-    SetupUI().run()
+    ui = SetupUI()
+    ui.run()
 

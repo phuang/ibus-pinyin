@@ -25,6 +25,7 @@ __all__ = (
 import ibus
 import gobject
 import os
+import signal
 import os.path as path
 from ibus import keysyms
 from ibus import modifier
@@ -918,6 +919,7 @@ class PinYinEngine(ibus.EngineBase):
         if PinYinEngine.__setup_pid != 0:
             pid, state = os.waitpid(PinYinEngine.__setup_pid, os.P_NOWAIT)
             if pid != PinYinEngine.__setup_pid:
+                os.kill(PinYinEngine.__setup_pid, signal.SIGUSR1)
                 return
             PinYinEngine.__setup_pid = 0
         setup_cmd = path.join(LIBEXECDIR, "ibus-setup-pinyin")
