@@ -988,6 +988,10 @@ class PinYinEngine(ibus.EngineBase):
             self.update_lookup_table(self.__lookup_table, True, True)
         return True
 
+    def candidate_clicked(self, index, button, state):
+        if button == 1:
+            self.process_key_event(keysyms._1 + index, state)
+
     def reset(self):
         self.__temp_english_mode = False
         self.__i_mode = False
