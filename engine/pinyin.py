@@ -926,7 +926,7 @@ class PinYinEngine(ibus.EngineBase):
         PinYinEngine.__setup_pid = os.spawnl(os.P_NOWAIT, setup_cmd, "ibus-setup-pinyin")
 
 
-    def process_key_event(self, keyval, state):
+    def process_key_event(self, keyval, keycode, state):
         key = KeyEvent(keyval, state & modifier.RELEASE_MASK == 0, state)
         result = self.__internal_process_key_event(key)
         self.__update()
