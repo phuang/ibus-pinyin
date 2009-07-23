@@ -392,6 +392,9 @@ class PinYinEngine(ibus.EngineBase):
             else:
                 aux_string = u"'".join(pinyin_list)
 
+            if PinYinEngine.__shuangpin:
+                aux_string += " [" + u"".join(self.__user_input.get_chars()) + "]" 
+
             if aux_string:
                 self.update_aux_string(aux_string, None, True)
             else:
