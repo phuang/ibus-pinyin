@@ -470,6 +470,8 @@ class PinYinEngine(ibus.EngineBase):
 
         # When CapsLock is lock, we ignore all key events
         if key.mask & modifier.LOCK_MASK:
+            if self.__user_input:
+                self.reset()
             return False
 
         # ignore NumLock mask
