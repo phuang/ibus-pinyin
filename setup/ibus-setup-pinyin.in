@@ -19,5 +19,11 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+datarootdir=@datarootdir@
+export IBUS_PREFIX=@prefix@
+export IBUS_DATAROOTDIR=@datarootdir@
+export IBUS_LOCALEDIR=@localedir@
 exec python @prefix@/share/ibus-pinyin/setup/main.py $@
 

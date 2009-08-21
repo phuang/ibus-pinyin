@@ -20,12 +20,15 @@
 
 import sys
 from os import path
+import os
 import signal
 import gobject
 import gtk
 import gtk.gdk as gdk
 import gtk.glade as glade
 import ibus
+import gettext
+import locale
 from pydict import SHUANGPIN_SCHEMAS
 
 from gettext import dgettext
@@ -171,7 +174,15 @@ class SetupUI ():
         return self.__config.set_value("engine/PinYin", name, v)
 
     def __init_ui(self):
+
+        locale.setlocale(locale.LC_ALL, "")
+        localedir = os.getenv("IBUS_LOCALEDIR")
+
+        gettext.bindtextdomain("ibus-pinyin", localedir)
+        gettext.bind_textdomain_codeset("ibus-pinyin", "UTF-8")
+        glade.bindtextdomain("ibus-pinyin", localedir)
         glade.textdomain("ibus-pinyin")
+
         glade_file = path.join(path.dirname(__file__), "setup.glade")
         self.__xml = glade.XML (glade_file)
         self.__window = self.__xml.get_widget("window_main")
