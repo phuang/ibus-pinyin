@@ -327,7 +327,8 @@ class PinYinEngine(ibus.EngineBase):
             else:
                 for c in self.__english_candidates:
                     attrs = ibus.AttrList()
-                    artr = ibus.AttributeForeground(PinYinEngine.__english_phrase_color, 0, len(c))
+                    attr = ibus.AttributeForeground(PinYinEngine.__english_phrase_color, 0, len(c))
+                    attrs.append(attr)
                     self.__lookup_table.append_candidate(ibus.Text(c, attrs))
                 self.update_lookup_table(self.__lookup_table, True, True)
 
