@@ -1082,6 +1082,7 @@ class PinYinEngine(ibus.EngineBase):
         elif name == "FuzzyPinYin":
             PinYinEngine.__fuzzy_pinyin = \
                 config.get_value("engine/PinYin", "FuzzyPinYin", False)
+            PinYinEngine.__fuzzy_pinyin = False
         elif name == "AutoCorrect":
             PinYinEngine.__auto_correct = \
                 config.get_value("engine/PinYin", "AutoCorrect", True)
@@ -1150,6 +1151,7 @@ class PinYinEngine(ibus.EngineBase):
 
         PinYinEngine.__fuzzy_pinyin = \
             config.get_value("engine/PinYin", "FuzzyPinYin", False)
+        PinYinEngine.__fuzzy_pinyin = False
         PinYinEngine.__auto_correct = \
             config.get_value("engine/PinYin", "AutoCorrect", True)
         PinYinEngine.__spell_check = \
