@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ibus-pinyin VERSION\n"
 "Report-Msgid-Bugs-To: http://code.google.com/p/ibus/issues/entry\n"
-"POT-Creation-Date: 2009-01-25 15:21+0800\n"
+"POT-Creation-Date: 2009-09-19 15:09+0800\n"
 "PO-Revision-Date: 2008-08-28 19:19+0900\n"
 "Last-Translator: UTUMI Hirosi <utuhiro78@yahoo.co.jp>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
@@ -36,39 +36,39 @@ msgstr "ZGPY"
 msgid "PYJJ"
 msgstr "PYJJ"
 
-#: engine/pinyin.py:151
+#: engine/pinyin.py:155
 msgid "Configure PinYin"
 msgstr "ピンインを設定"
 
-#: engine/pinyin.py:158
+#: engine/pinyin.py:162
 msgid "CN"
 msgstr "中"
 
-#: engine/pinyin.py:159
+#: engine/pinyin.py:163
 msgid "Switch to English mode"
 msgstr "英語モードに切替"
 
-#: engine/pinyin.py:162
+#: engine/pinyin.py:166
 msgid "EN"
 msgstr "英"
 
-#: engine/pinyin.py:163
+#: engine/pinyin.py:167
 msgid "Switch to Chinese mode"
 msgstr "中国語モードに切替"
 
-#: engine/pinyin.py:168
+#: engine/pinyin.py:172
 msgid "Switch to half letter mode"
 msgstr "半角文字モードに切替"
 
-#: engine/pinyin.py:172
+#: engine/pinyin.py:176
 msgid "Switch to full letter mode"
 msgstr "全角文字モードに切替"
 
-#: engine/pinyin.py:177
+#: engine/pinyin.py:181
 msgid "Switch to half punctuation mode"
 msgstr "半角句読点モードに切替"
 
-#: engine/pinyin.py:181
+#: engine/pinyin.py:185
 msgid "Switch to full punctuation mode"
 msgstr "全角句読点モードに切替"
 
@@ -76,11 +76,11 @@ msgstr "全角句読点モードに切替"
 msgid "PinYin"
 msgstr "ピンイン"
 
-#: setup/main.py:200
+#: setup/main.py:216
 msgid "Are you sure to close Python PinYin Setup without save configure?"
 msgstr "設定を保存せずに Python ピンインセットアップを閉じますか？"
 
-#: setup/main.py:211
+#: setup/main.py:227
 msgid ""
 "The user phrases database will be reorganized! Please don't use python "
 "PinYin now."
@@ -88,7 +88,7 @@ msgstr ""
 "ユーザーフレーズデータベースを再構築します。Python ピンインを使わないでくださ"
 "い"
 
-#: setup/main.py:233
+#: setup/main.py:249
 msgid "Reorganizing is over!"
 msgstr "再構築しました"
 
@@ -150,82 +150,83 @@ msgid "Press [,] [.] to page down up."
 msgstr "[,] [.] でページを切替"
 
 #: setup/setup.glade:356
-msgid "Gernal"
+#, fuzzy
+msgid "General"
 msgstr "一般"
 
-#: setup/setup.glade:423
+#: setup/setup.glade:373
 msgid "Enable Fuzzy PinYin"
 msgstr "ファジーピンイン有効"
 
-#: setup/setup.glade:433
+#: setup/setup.glade:383
 msgid "s <=> sh"
 msgstr "s <=> sh"
 
-#: setup/setup.glade:449
+#: setup/setup.glade:398
 msgid "c <=> ch"
 msgstr "c <=> ch"
 
-#: setup/setup.glade:465
+#: setup/setup.glade:413
 msgid "z <=> zh"
 msgstr "z <=> zh"
 
-#: setup/setup.glade:481
+#: setup/setup.glade:428
 msgid "l <=> n"
 msgstr "l <=> n"
 
-#: setup/setup.glade:497
+#: setup/setup.glade:443
 msgid "in <=> ing"
 msgstr "in <=> ing"
 
-#: setup/setup.glade:515
+#: setup/setup.glade:460
 msgid "en <=> eng"
 msgstr "en <=> eng"
 
-#: setup/setup.glade:533
+#: setup/setup.glade:477
 msgid "an <=> ang"
 msgstr "an <=> ang"
 
-#: setup/setup.glade:555
+#: setup/setup.glade:547
 msgid "Fuzzy PinYin"
 msgstr "ファジーピンイン"
 
-#: setup/setup.glade:605
+#: setup/setup.glade:567
 msgid "Color of Spelling Error"
 msgstr "スペルエラーの色"
 
-#: setup/setup.glade:616
+#: setup/setup.glade:578
 msgid "Color of English Candidates"
 msgstr "英語候補の色"
 
-#: setup/setup.glade:627
+#: setup/setup.glade:589
 msgid "Color of Special Phrases"
 msgstr "特殊語句の色"
 
-#: setup/setup.glade:638
+#: setup/setup.glade:600
 msgid "Color of User Phrases"
 msgstr "ユーザー語句の色"
 
-#: setup/setup.glade:649
+#: setup/setup.glade:611
 msgid "Color of New Phrases"
 msgstr "新規語句の色"
 
-#: setup/setup.glade:660
+#: setup/setup.glade:622
 msgid "Color of Normal Phrases"
 msgstr "一般語句の色"
 
-#: setup/setup.glade:753
+#: setup/setup.glade:745
 msgid "Colors"
 msgstr "配色"
 
-#: setup/setup.glade:839
+#: setup/setup.glade:784
 msgid "Optimize User DB"
 msgstr "ユーザーDBを最適化"
 
-#: setup/setup.glade:863
+#: setup/setup.glade:858
 msgid "User DB"
 msgstr "ユーザーDB"
 
-#: setup/setup.glade:874
+#: setup/setup.glade:869
 msgid ""
 "Python PinYin\n"
 "\n"
@@ -239,6 +240,6 @@ msgstr ""
 "\n"
 "Huang Peng <shawn.p.huang@gmail.com>\n"
 
-#: setup/setup.glade:889
+#: setup/setup.glade:883
 msgid "About"
 msgstr "About"
