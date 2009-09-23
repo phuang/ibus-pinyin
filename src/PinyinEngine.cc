@@ -93,12 +93,15 @@ PinyinEngine::~PinyinEngine (void)
     delete m_pinyin_editor;
 }
 
-#define MASK_FILTER(modifiers)          \
-    (modifiers & (IBUS_CONTROL_MASK |   \
-                  IBUS_MOD1_MASK |      \
-                  IBUS_SUPER_MASK |     \
-                  IBUS_HYPER_MASK |     \
-                  IBUS_META_MASK))
+#define CMSHM_MASK              \
+        (IBUS_CONTROL_MASK |    \
+         IBUS_MOD1_MASK |       \
+         IBUS_SUPER_MASK |      \
+         IBUS_HYPER_MASK |      \
+         IBUS_META_MASK)
+
+#define CMSHM_FILTER(modifiers)  \
+    (modifiers & (CMSHM_MASK))
 
 /**
  * process ascii letter
@@ -106,7 +109,7 @@ PinyinEngine::~PinyinEngine (void)
 inline gboolean
 PinyinEngine::processPinyin (guint keyval, guint keycode, guint modifiers)
 {
-    if (G_UNLIKELY (MASK_FILTER(modifiers) != 0))
+    if (G_UNLIKELY (CMSHM_FILTER(modifiers) != 0))
         return FALSE;
 
     if (G_UNLIKELY (m_mode_chinese == FALSE)) {
@@ -133,7 +136,7 @@ PinyinEngine::processNumber (guint keyval, guint keycode, guint modifiers)
 
     /* Chinese mode, if empty */
     if (G_UNLIKELY (m_pinyin_editor->isEmpty ())) {
-        if (G_UNLIKELY (MASK_FILTER (modifiers) != 0))
+        if (G_UNLIKELY (CMSHM_FILTER (modifiers) != 0))
             return FALSE;
         commit ((gunichar) m_mode_full ? HalfFullConverter::toFull (keyval) : keyval);
         return TRUE;
@@ -156,8 +159,21 @@ PinyinEngine::processNumber (guint keyval, guint keycode, guint modifiers)
 inline gboolean
 PinyinEngine::processPunct (guint keyval, guint keycode, guint modifiers)
 {
-    if (G_UNLIKELY (MASK_FILTER(modifiers) != 0))
+    guint cmshm_modifiers = CMSHM_FILTER (modifiers);
+
+    if (G_UNLIKELY (keyval == IBUS_period && cmshm_modifiers == IBUS_CONTROL_MASK)) {
+        toggleModeFullPunct ();
+        return TRUE;
+    }
+
+    /* check ctrl, alt, hyper, supper masks */
+    if (cmshm_modifiers != 0)
         return FALSE;
+
+    if (G_UNLIKELY (keyval == IBUS_space && (modifiers & IBUS_SHIFT_MASK))) {
+        toggleModeFull ();
+        return TRUE;
+    }
 
     /* English mode */
     if (G_UNLIKELY (!m_mode_chinese)) {
