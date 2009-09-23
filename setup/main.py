@@ -1,284 +1,225 @@
-# vim:set et sts=4 sw=4:
-#
-# ibus-pinyin - The PinYin engine for IBus
-#
-# Copyright (c) 2007-2008 Huang Peng <shawn.p.huang@gmail.com>
-#
-# This program is free software; you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2, or (at your option)
-# any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
-import sys
-from os import path
-import os
-import signal
-import gobject
 import gtk
-import gtk.gdk as gdk
-import gtk.glade as glade
 import ibus
-import gettext
 import locale
-from pydict import SHUANGPIN_SCHEMAS
+import os
+import gettext
 
-from gettext import dgettext
-_ = lambda a : dgettext("ibus-pinyin", a)
-
-RGB_COLOR = lambda c : ((c.red & 0xff00) << 8) + (c.green & 0xff00) + ((c.blue & 0xff00) >> 8)
-GDK_COLOR = lambda c : gdk.Color(((c >> 16) & 0xff) * 256, ((c >> 8) & 0xff) * 256, (c & 0xff) * 256)
-RGB = lambda r, g, b : ((r & 0xff) << 16) + ((g & 0xff) << 8) + (b & 0xff)
-
-
-class SetupUI ():
-    def __init__ (self):
-        self.__need_reload_config = False
-        self.__bus = ibus.Bus()
-        self.__config = self.__bus.get_config()
-
-        self.__options = {
-            "SupportGBK" :      [False, self.__checkbutton_op],
-            "ShuangPin" :       [False, self.__checkbutton_op],
-            "AutoCorrect" :     [True, self.__checkbutton_op],
-
-            "FuzzyPinYin" :     [False, self.__checkbutton_op],
-            "FuzzyS_Sh" :       [False, self.__checkbutton_op],
-            "FuzzyC_Ch" :       [False, self.__checkbutton_op],
-            "FuzzyZ_Zh" :       [False, self.__checkbutton_op],
-            "FuzzyL_N" :        [False, self.__checkbutton_op],
-            "FuzzyIn_Ing" :     [False, self.__checkbutton_op],
-            "FuzzyEn_Eng" :     [False, self.__checkbutton_op],
-            "FuzzyAn_Ang" :     [False, self.__checkbutton_op],
-
-            "SpellCheck" :      [True, self.__checkbutton_op],
-            "UVToTemp" :        [True, self.__checkbutton_op],
-            "ShiftSelectCandidates" :
-                                [True, self.__checkbutton_op],
-
-            "CommaPageDownUp" : [True, self.__checkbutton_op],
-            "EqualPageDownUp" : [True, self.__checkbutton_op],
-            "AutoCommit" :      [False, self.__checkbutton_op],
-
-            "PhraseColor" :     [RGB (0, 0, 0), self.__colorbutton_op],
-            "NewPhraseColor" :  [RGB (0xef, 0, 0), self.__colorbutton_op],
-            "UserPhraseColor" : [RGB (0, 0, 0xbf), self.__colorbutton_op],
-            "SpecialPhraseColor" :
-                                [RGB (0, 0xbf, 0), self.__colorbutton_op],
-            "EnglishPhraseColor" :
-                                [RGB (0, 0xbf, 0), self.__colorbutton_op],
-            "ErrorEnglishPhraseColor" :
-                                [RGB (0xef, 0, 0), self.__colorbutton_op],
-            "PageSize" :        [5, self.__combobox_op, range(1, 10)],
-            "ShuangPinSchema" : ["MSPY", self.__combobox_op, SHUANGPIN_SCHEMAS.keys()],
-            "HalfPunctuations" : ["+-*/=%", self.__entry_op],
-        }
-
-    def run(self):
-        self.__init_ui()
-        self.__load_config()
-        signal.signal(signal.SIGUSR1, self.__sigusr1_cb)
-        gtk.main()
-
-    def __sigusr1_cb(self, *arg):
-        window = self.__xml.get_widget("window_main")
-        window.present()
-
-    def __entry_op(self, name, opt, info):
-        widget = self.__xml.get_widget(name)
-        if widget == None:
-            print >> sys.stderr, "Can not find widget %s" % name
-            return ""
-        if opt == "read":
-            info[0] = self.__read(name, info[0])
-            widget.set_text(info[0])
-            return True
-        if opt == "write":
-            info[0] = widget.get_text()
-            self.__write(name, info[0])
-            return True
-        if opt == "check":
-            return info[0] != widget.get_text()
-        return ""
-
-    def __combobox_op(self, name, opt, info):
-        widget = self.__xml.get_widget(name)
-        if widget == None:
-            print >> sys.stderr, "Can not find widget %s" % name
-            return False
-        if opt == "read":
-            info[0] = self.__read(name, info[0])
-            widget.set_active(info[2].index(info[0]))
-            return True
-        if opt == "write":
-            info[0] = info[2][widget.get_active()]
-            self.__write(name, info[0])
-            return True
-        if opt == "check":
-            return info[0] != info[2][widget.get_active()]
-
-        if opt == "init":
-            model = gtk.ListStore(str)
-            for v in info[2]:
-                model.append([_(str(v))])
-            widget.set_model(model)
-        return False
-
-    def __colorbutton_op(self, name, opt, info):
-        widget = self.__xml.get_widget(name)
-        if widget == None:
-            print >> sys.stderr, "Can not find widget %s" % name
-            return False
-        if opt == "read":
-            info[0] = self.__read(name, info[0])
-            widget.set_color(GDK_COLOR(info[0]))
-            return True
-        if opt == "write":
-            info[0] = RGB_COLOR (widget.get_color())
-            self.__write(name, info[0])
-            return True
-        if opt == "check":
-            return info[0] != RGB_COLOR(widget.get_color())
-        return False
-
-    def __checkbutton_op(self, name, opt, info):
-        widget = self.__xml.get_widget(name)
-        if widget == None:
-            print >> sys.stderr, "Can not find widget %s" % name
-            return False
-
-        if opt == "read":
-            info[0] = self.__read(name, info[0])
-            widget.set_active(info[0])
-            return True
-        if opt == "write":
-            info[0] = widget.get_active()
-            self.__write(name, info[0])
-            return True
-        if opt == "check":
-            return info[0] != widget.get_active()
-        return False
-
-    def __read(self, name, v):
-        return self.__config.get_value("engine/PinYin", name, v)
-
-    def __write(self, name, v):
-        return self.__config.set_value("engine/PinYin", name, v)
-
-    def __init_ui(self):
-
+class PreferencesDialog:
+    def __init__(self):
         locale.setlocale(locale.LC_ALL, "")
         localedir = os.getenv("IBUS_LOCALEDIR")
-
         gettext.bindtextdomain("ibus-pinyin", localedir)
         gettext.bind_textdomain_codeset("ibus-pinyin", "UTF-8")
-        glade.bindtextdomain("ibus-pinyin", localedir)
-        glade.textdomain("ibus-pinyin")
 
-        glade_file = path.join(path.dirname(__file__), "setup.glade")
-        self.__xml = glade.XML (glade_file)
-        self.__window = self.__xml.get_widget("window_main")
-        for name, info in self.__options.items():
-            info[1] (name, "init", info)
-            info[1] (name, "read", info)
-        self.__xml.signal_autoconnect(self)
-        self.__window.show_all()
+        self.__bus = ibus.Bus()
+        self.__config = self.__bus.get_config()
+        self.__builder = gtk.Builder()
+        self.__builder.set_translation_domain("ibus-pinyin")
+        self.__builder.add_from_file("ibus-pinyin-preferences.glade")
+        self.__dialog = self.__builder.get_object("dialog")
 
-    def __load_config(self):
-        for name, info in self.__options.items():
-            info[1] (name, "read", info)
+        self.__init_pinyin()
+        self.__init_init_state()
+        self.__init_others()
+        self.__init_correct_pinyin()
+        self.__init_fuzzy_pinyin()
 
-    def __save_config(self):
-        self.__need_reload_config = True
-        for name, info in self.__options.items():
-            info[1] (name, "write", info)
+    def __init_pinyin(self):
+        # pinyin
+        self.__full_pinyin = self.__builder.get_object("FullPinyin")
+        self.__simple_pinyin = self.__builder.get_object("SimplePinyin")
+        self.__double_pinyin = self.__builder.get_object("DoublePinyin")
+        self.__double_pinyin_schema = self.__builder.get_object("DoublePinyinSchema")
+        self.__double_pinyin_schema_label = self.__builder.get_object("labelDoublePinyinSchema")
 
-    def __query_changed(self):
-        for name, info in self.__options.items():
-            if info[1] (name, "check", info):
-                return True
-        return False
+        renderer = gtk.CellRendererText()
+        self.__double_pinyin_schema.pack_start(renderer)
+        self.__double_pinyin_schema.set_attributes(renderer, text=0)
 
-    def __quit(self, need_confirm ):
-        if need_confirm == False:
-            gtk.main_quit()
-            return True
+        # read value
+        self.__simple_pinyin.set_active(self.__get_value("SimplePinyin", True))
+        self.__full_pinyin.set_active(not self.__get_value("DoublePinyin", False))
+        self.__double_pinyin_schema.set_active(self.__get_value("DoublePinyinSchema", 0))
+        if self.__full_pinyin.get_active():
+            self.__simple_pinyin.set_sensitive(True)
+            self.__double_pinyin_schema.set_sensitive(False)
+            self.__double_pinyin_schema_label.set_sensitive(False)
         else:
-            dlg = gtk.MessageDialog(self.__window, gtk.DIALOG_MODAL, gtk.MESSAGE_QUESTION,
-                        gtk.BUTTONS_YES_NO, _("Are you sure to close Python PinYin Setup without save configure?"))
-            id = dlg.run()
-            dlg.destroy()
-            if id == gtk.RESPONSE_YES:
-                gtk.main_quit()
-                return True
-        return False
+            self.__simple_pinyin.set_sensitive(False)
+            self.__double_pinyin_schema.set_sensitive(True)
+            self.__double_pinyin_schema_label.set_sensitive(True)
 
-    def __optimize_user_db(self):
-        import sqlite3
-        dlg = gtk.MessageDialog(self.__window, gtk.DIALOG_MODAL, gtk.MESSAGE_INFO,
-                        gtk.BUTTONS_OK, _("The user phrases database will be reorganized! Please don't use python PinYin now."))
-        dlg.run()
-        dlg.destroy()
+        def __full_pinyin_toggled_cb(widget):
+            val = widget.get_active()
+            self.__set_value("DoublePinyin", not val)
+            self.__simple_pinyin.set_sensitive(val)
 
-        try:
-            db = sqlite3.connect(path.expanduser("~/.ibus/pinyin/user.db"))
-            sqlstring = """
-                BEGIN TRANSACTION;
-                CREATE TABLE tmp AS SELECT * FROM py_phrase;
-                DELETE FROM py_phrase;
-                INSERT INTO py_phrase SELECT * FROM tmp ORDER BY ylen, y0, y1, y2, y3, yx, phrase;
-                DROP TABLE tmp;
-                COMMIT;
-            """
-            db.executescript(sqlstring)
-            db.executescript("VACUUM;")
-        except:
-            import traceback
-            traceback.print_exc()
+        def __double_pinyin_toggled_cb(widget):
+            val = widget.get_active()
+            self.__set_value("DoublePinyin", val)
+            self.__double_pinyin_schema.set_sensitive(val)
+            self.__double_pinyin_schema_label.set_sensitive(val)
 
-        dlg.destroy()
-        dlg = gtk.MessageDialog(self.__window, gtk.DIALOG_MODAL, gtk.MESSAGE_INFO,
-                                gtk.BUTTONS_OK, _("Reorganizing is over!"))
-        dlg.run()
-        dlg.destroy()
+        def __double_pinyin_schema_changed_cb(widget):
+            self.__set_value("DoublePinyinSchema", widget.get_active())
 
-    # events handlers
-    def on_window_main_delete_event(self, widget, event):
-        changed = self.__query_changed()
-        self.__quit(changed)
+        # connect signals
+        self.__full_pinyin.connect("toggled", __full_pinyin_toggled_cb)
+        self.__double_pinyin.connect("toggled", __double_pinyin_toggled_cb)
+        self.__simple_pinyin.connect("toggled", self.__toggled_cb, "SimplePinyin")
+        self.__double_pinyin_schema.connect("changed", __double_pinyin_schema_changed_cb)
 
-    def on_button_ok_clicked(self, button):
-        changed = self.__query_changed()
-        if changed:
-            self.__save_config()
-        self.__quit(False)
+    def __init_init_state(self):
+        # init state
+        self.__init_chinese = self.__builder.get_object("InitChinese")
+        self.__init_english = self.__builder.get_object("InitEnglish")
+        self.__init_full = self.__builder.get_object("InitFull")
+        self.__init_half = self.__builder.get_object("InitHalf")
+        self.__init_full_punct = self.__builder.get_object("InitFullPunct")
+        self.__init_half_punct = self.__builder.get_object("InitHalfPunct")
 
-    def on_button_apply_clicked(self, button):
-        self.__save_config()
+        # read values
+        self.__init_chinese.set_active(self.__get_value("InitChinese", True))
+        self.__init_full.set_active(self.__get_value("InitFull", False))
+        self.__init_full_punct.set_active(self.__get_value("InitFullPunct", True))
 
-    def on_button_cancel_clicked(self, button):
-        changed = self.__query_changed()
-        self.__quit(changed)
+        # connect signals
+        self.__init_chinese.connect("toggled", self.__toggled_cb, "InitChinese")
+        self.__init_full.connect("toggled", self.__toggled_cb, "InitFull")
+        self.__init_full_punct.connect("toggled", self.__toggled_cb, "InitFullPunct")
 
-    def on_button_optimize_db_clicked(self, button):
-        self.__optimize_user_db()
+    def __init_others(self):
+        #others
+        self.__lookup_table_page_size = self.__builder.get_object("LookupTablePageSize")
+        renderer = gtk.CellRendererText()
+        self.__lookup_table_page_size.pack_start(renderer)
+        self.__lookup_table_page_size.set_attributes(renderer, text=0)
 
-    def on_value_changed(self, widget, data = None):
-        if self.__query_changed():
-            self.__xml.get_widget("button_apply").set_sensitive(True)
-        else:
-            self.__xml.get_widget("button_apply").set_sensitive(False)
+        self.__shift_select_candidate = self.__builder.get_object("ShiftSelectCandidate")
+        self.__minus_equal_page = self.__builder.get_object("MinusEqualPage")
+        self.__comma_period_page = self.__builder.get_object("CommaPeriodPage")
+        self.__auto_commit = self.__builder.get_object("AutoCommit")
+        self.__half_width_puncts = self.__builder.get_object("HalfWidthPuncts")
+
+        # read values
+        self.__lookup_table_page_size.set_active(self.__get_value("LookupTablePageSize", 5) - 1)
+        self.__shift_select_candidate.set_active(self.__get_value("ShiftSelectCandidate", False))
+        self.__minus_equal_page.set_active(self.__get_value("MinusEqualPage", True))
+        self.__comma_period_page.set_active(self.__get_value("CommaPeriodPage", True))
+        self.__half_width_puncts.set_text(self.__get_value("HalfWidthPuncts", "+-*/=%"))
+
+        # connect signals
+        def __lookup_table_page_size_changed_cb(widget):
+            self.__set_value("LookupTablePageSize", widget.get_active() + 1)
+
+        self.__shift_select_candidate.connect("toggled", self.__toggled_cb, "ShiftSelectCandidate")
+        self.__minus_equal_page.connect("toggled", self.__toggled_cb, "MinusEqualPage")
+        self.__comma_period_page.connect("toggled", self.__toggled_cb, "CommaPeriodPage")
+        self.__lookup_table_page_size.connect("changed", __lookup_table_page_size_changed_cb)
+
+        def __entry_activate_cb(widget, name):
+            text = widget.get_text()
+            self.__set_value(name, text)
+        self.__half_width_puncts.connect("activate", __entry_activate_cb, "HalfWidthPuncts")
+
+    def __init_correct_pinyin(self):
+        # auto correct
+        self.__correct_pinyin = self.__builder.get_object("CorrectPinyin")
+        self.__correct_pinyin_widgets = [
+            ("CorrectPinyin_GN_NG", True),
+            ("CorrectPinyin_MG_NG", True),
+            ("CorrectPinyin_IOU_IU", True),
+            ("CorrectPinyin_UEI_UI", True),
+            ("CorrectPinyin_UEN_UN", True),
+            ("CorrectPinyin_VE_UE", True),
+        ]
+
+        def __correct_pinyin_toggled_cb(widget):
+            val = widget.get_active()
+            map(lambda w: self.__builder.get_object(w[0]).set_sensitive(val),
+                self.__correct_pinyin_widgets)
+        self.__correct_pinyin.connect("toggled", __correct_pinyin_toggled_cb)
+
+        # init value
+        self.__correct_pinyin.set_active(self.__get_value("CorrectPinyin", True))
+        for name, defval in self.__correct_pinyin_widgets:
+            widget = self.__builder.get_object(name)
+            widget.set_active(self.__get_value(name, defval))
+
+        self.__correct_pinyin.connect("toggled", self.__toggled_cb, "CorrectPinyin")
+        for name, defval in self.__correct_pinyin_widgets:
+            widget = self.__builder.get_object(name)
+            widget.connect("toggled", self.__toggled_cb, name)
+
+    def __init_fuzzy_pinyin(self):
+        # fuzzy pinyin
+        self.__fuzzy_pinyin = self.__builder.get_object("FuzzyPinyin")
+        self.__fuzzy_pinyin_widgets = [
+            ("FuzzyPinyin_C_CH", True),
+            ("FuzzyPinyin_Z_ZH", True),
+            ("FuzzyPinyin_S_SH", True),
+            ("FuzzyPinyin_CH_C", False),
+            ("FuzzyPinyin_ZH_Z", False),
+            ("FuzzyPinyin_SH_S", False),
+            ("FuzzyPinyin_L_N", True),
+            ("FuzzyPinyin_F_H", True),
+            ("FuzzyPinyin_L_R", False),
+            ("FuzzyPinyin_K_G", True),
+            ("FuzzyPinyin_N_L", False),
+            ("FuzzyPinyin_H_F", False),
+            ("FuzzyPinyin_R_L", False),
+            ("FuzzyPinyin_G_K", False),
+            ("FuzzyPinyin_AN_ANG", True),
+            ("FuzzyPinyin_EN_ENG", True),
+            ("FuzzyPinyin_IN_ING", True),
+            ("FuzzyPinyin_ANG_AN", True),
+            ("FuzzyPinyin_ENG_EN", True),
+            ("FuzzyPinyin_ING_IN", True),
+            ("FuzzyPinyin_IAN_IANG", False),
+            ("FuzzyPinyin_UAN_UANG", False),
+            ("FuzzyPinyin_IANG_IAN", False),
+            ("FuzzyPinyin_UANG_UAN", False),
+        ]
+
+        def __fuzzy_pinyin_toggled_cb(widget):
+            val = widget.get_active()
+            map(lambda w: self.__builder.get_object(w[0]).set_sensitive(val),
+                self.__fuzzy_pinyin_widgets)
+        self.__fuzzy_pinyin.connect("toggled", __fuzzy_pinyin_toggled_cb)
+
+        # init value
+        self.__fuzzy_pinyin.set_active(self.__get_value("FuzzyPinyin", False))
+        for name, defval in self.__fuzzy_pinyin_widgets:
+            widget = self.__builder.get_object(name)
+            widget.set_active(self.__get_value(name, defval))
+
+        self.__fuzzy_pinyin.connect("toggled", self.__toggled_cb, "FuzzyPinyin")
+        for name, defval in self.__fuzzy_pinyin_widgets:
+            widget = self.__builder.get_object(name)
+            widget.connect("toggled", self.__toggled_cb, name)
+
+    def __changed_cb(self, widget, name):
+        self.__set_value(name, widget.get_active())
+
+    def __toggled_cb(self, widget, name):
+        self.__set_value(name, widget.get_active ())
+
+    def __get_value(self, name, defval):
+        value = self.__config.get_value("engine/Pinyin", name, "test_default_value_9898")
+        if value != "test_default_value_9898":
+            return value
+        self.__set_value(name, defval)
+        return defval
+
+    def __set_value(self, name, val):
+        self.__config.set_value("engine/Pinyin", name, val)
+
+    def run(self):
+        return self.__dialog.run()
+
+def main():
+    PreferencesDialog().run()
 
 
 if __name__ == "__main__":
-    ui = SetupUI()
-    ui.run()
-
+    main()

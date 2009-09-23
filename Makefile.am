@@ -1,6 +1,6 @@
 # vim:set noet ts=4:
 #
-# ibus-pinyin - The PinYin engine for IBus
+# ibus-pinyin - The Chinese PinYin engine for IBus
 #
 # Copyright (c) 2007-2008 Huang Peng <shawn.p.huang@gmail.com>
 #
@@ -19,9 +19,9 @@
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 SUBDIRS = \
-	engine \
+	src \
 	setup \
-	icons \
+	data \
 	m4 \
 	po \
 	$(NULL)
@@ -30,7 +30,7 @@ ACLOCAL_AMFLAGS = -I m4
 
 EXTRA_DIST = \
 	autogen.sh \
-	@PACKAGE_NAME@.spec.in \
+	ibus-pinyin.spec.in \
 	$(NULL)
 
 noinst_DIST = \
@@ -44,18 +44,18 @@ DISTCLEANFILES = \
 rpm: dist @PACKAGE_NAME@.spec
 	rpmbuild -bb \
 			--define "_sourcedir `pwd`" \
-			--define "_builddir `pwd`" \
+			--define "_builddir `pwd`/rpm" \
+			--define "_srcrpmdir `pwd`/rpm" \
+			--define "_rpmdir `pwd`/rpm" \
 			--define "_specdir `pwd`" \
-			--define "_rpmdir `pwd`" \
-			--define "_srcrpmdir `pwd`" \
 			@PACKAGE_NAME@.spec
 
 srpm: dist @PACKAGE_NAME@.spec
 	rpmbuild -bs \
 			--define "_sourcedir `pwd`" \
-			--define "_builddir `pwd`" \
-			--define "_srcrpmdir `pwd`" \
-			--define "_rpmdir `pwd`" \
+			--define "_builddir `pwd`/rpm" \
+			--define "_srcrpmdir `pwd`/rpm" \
+			--define "_rpmdir `pwd`/rpm" \
 			--define "_specdir `pwd`" \
 			@PACKAGE_NAME@.spec
 

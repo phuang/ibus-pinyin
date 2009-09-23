@@ -1,7 +1,6 @@
-#!/bin/sh
 # vim:set noet ts=4:
 #
-# ibus-tmpl - The Input Bus template project
+# ibus-pinyin - The Chinese PinYin engine for IBus
 #
 # Copyright (c) 2007-2008 Huang Peng <shawn.p.huang@gmail.com>
 #
@@ -19,12 +18,43 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-prefix=@prefix@
-exec_prefix=@exec_prefix@
-datarootdir=@datarootdir@
-export IBUS_PREFIX=@prefix@
-export IBUS_DATAROOTDIR=@datarootdir@
-export IBUS_LOCALEDIR=@localedir@
-cd @prefix@/share/ibus-pinyin/setup/
-exec python main.py $@
 
+SUBDIRS = \
+	icons \
+	$(NULL)
+
+main_db_DATA = \
+	db/main.db \
+	db/COPYING \
+	db/create_index.sql \
+	$(NULL)
+main_dbdir = $(pkgdatadir)/db
+
+install-data-hook:
+	@( \
+if test "$(NO_INDEX)" = ""; then \
+  cd $(DESTDIR)$(main_dbdir); \
+  echo "Create INDEX"; \
+  sqlite3 main.db ".read create_index.sql"; \
+fi)
+
+DBVER = 1.2.99
+DBTAR = pinyin-database-$(DBVER).tar.bz2
+
+$(DBTAR):
+	wget http://ibus.googlecode.com/files/$(DBTAR)
+
+db.stamp: $(DBTAR)
+	tar jxvfm $(DBTAR)
+	touch $@
+
+$(main_db_DATA): db.stamp
+
+CLEANFILES = \
+	db.stamp \
+	db/* \
+	$(NULL)
+
+DISTCLEANFILES = \
+	$(DBTAR) \
+	$(NULL)

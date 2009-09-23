@@ -1,26 +1,32 @@
 Name:       @PACKAGE_NAME@
 Version:    @PACKAGE_VERSION@
 Release:    1%{?dist}
-Summary:    The PinYin engine for IBus platform
+Summary:    The Chinese Pinyin engine for IBus input platform
 License:    GPLv2+
 Group:      System Environment/Libraries
 URL:        http://code.google.com/p/ibus/
 Source0:    http://ibus.googlecode.com/files/%{name}-%{version}.tar.gz
-Source1:    http://scim-python.googlecode.com/files/pinyin-database-0.1.10.6.tar.bz2
+Source1:    pinyin-database-1.2.99.tar.bz2
 
 BuildRoot:  %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
-BuildArch:  noarch
 
 BuildRequires:  gettext-devel
+BuildRequires:  libtool
+BuildRequires:  pkgconfig
+BuildRequires:  sqlite-devel
+BuildRequires:  libuuid-devel
+BuildRequires:  ibus-devel >= 1.2.0
 
-Requires:   ibus
+Requires(post): sqlite
+
+Requires:   ibus >= 1.2.0
 
 %description
-PinYin engine for IBus platform. It provides a Chinese PinYin input method.
+The Chinese Pinyin input method for IBus platform.
 
 %prep
 %setup -q
-cp %{SOURCE1} engine
+cp %{SOURCE1} data
 
 %build
 %configure --disable-static
@@ -37,17 +43,17 @@ make DESTDIR=${RPM_BUILD_ROOT} NO_INDEX=true install
 rm -rf $RPM_BUILD_ROOT
 
 %post
-cd /usr/share/ibus-pinyin/engine
-python -c "import pysqlitedb; db = pysqlitedb.PYSQLiteDB (); db.create_indexes ();" >/dev/null
+cd %{_datadir}/ibus-pinyin/db
+sqlite3 main.db ".read create_index.sql"
 
 %files -f %{name}.lang
 %defattr(-,root,root,-)
 %doc AUTHORS COPYING README
-%{_datadir}/ibus-pinyin
-%{_datadir}/ibus/component/*
 %{_libexecdir}/ibus-engine-pinyin
 %{_libexecdir}/ibus-setup-pinyin
+%{_datadir}/@PACKAGE@
+%{_datadir}/ibus/component/*
 
 %changelog
-* Wed Jun 25 2008 Huang Peng <shawn.p.huang@gmail.com> - @VERSION@-1
+* Fri Aug 08 2008 Huang Peng <shawn.p.huang@gmail.com> - @VERSION@-1
 - The first version.

@@ -19,9 +19,8 @@
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 setup_pinyin_PYTHON = \
-	pydict.py \
 	main.py \
-	setup.glade \
+	ibus-pinyin-preferences.glade \
 	$(NULL)
 setup_pinyindir = $(datadir)/ibus-pinyin/setup
 
