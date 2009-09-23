@@ -338,15 +338,13 @@ def gen_special_table(pinyins):
 
 
 def main():
-    gen_header()
+    # gen_header()
     # gen_macros()
     pinyins = gen_tables()
     # gen_full_pinyin_table (pinyins)
     gen_special_table(pinyins)
     # gen_option_check("pinyin_option_check_sheng", fuzzy_shengmu)
     # gen_option_check("pinyin_option_check_yun", fuzzy_yunmu)
-
-    print "};"
 
 
 if __name__ == "__main__":

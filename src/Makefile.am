@@ -19,7 +19,6 @@
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 @MAINTAINER_MODE_FALSE@skip_genpytable=test -f $@ ||
-GENPYTABLE = scripts/genpytable.py
 
 AM_CFLAGS = \
 	@IBUS_CFLAGS@ \
@@ -34,7 +33,6 @@ AM_LDFLAGS = \
 AM_CXXFLAGS = $(AM_CFLAGS)
 
 libexec_PROGRAMS = ibus-engine-pinyin
-
 ibus_engine_c_sources = \
 	Config.cc \
 	Database.cc \
@@ -47,7 +45,12 @@ ibus_engine_c_sources = \
 	PinyinEditor.cc \
 	PinyinEngine.cc \
 	PinyinParser.cc \
+	SimpTradConverter.cc \
 	SpecialTable.cc \
+	$(NULL)
+ibus_engine_built_h_sources = \
+	PinyinParserTable.h \
+	SimpTradConverterTable.h \
 	$(NULL)
 ibus_engine_h_sources = \
 	Array.h \
@@ -66,11 +69,13 @@ ibus_engine_h_sources = \
 	PinyinEditor.h \
 	PinyinEngine.h \
 	PinyinParser.h \
+	PinyinParserTable.h \
 	Pointer.h \
 	Property.h \
+	SimpTradConverter.h \
+	SimpTradConverterTable.h \
 	SpecialTable.h \
 	String.h \
-	Table.h \
 	Text.h \
 	Types.h \
 	Util.h \
@@ -78,6 +83,8 @@ ibus_engine_h_sources = \
 ibus_engine_pinyin_SOURCES = \
 	$(ibus_engine_c_sources) \
 	$(ibus_engine_h_sources) \
+	$(ibus_engine__built_c_sources) \
+	$(ibus_engine__built_h_sources) \
 	$(NULL)
 ibus_engine_pinyin_CXXFLAGS = \
 	@IBUS_CFLAGS@ \
@@ -142,8 +149,11 @@ TESTS = \
 	$(check_PROGRAMS) \
 	$(NULL)
 
-Table.h:
-	$(skip_genpytable) $(PYTHON) $(srcdir)/$(GENPYTABLE) > $@
+PinyinParserTable.h:
+	$(skip_genpytable) $(PYTHON) $(srcdir)/scripts/genpytable.py > $@
+
+SimpTradConverterTable.h:
+	$(skip_genpytable) $(PYTHON) $(srcdir)/scripts/gensimptradtable.py > $@
 
 pinyin.xml: pinyin.xml.in
 	( \

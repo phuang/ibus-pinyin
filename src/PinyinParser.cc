@@ -2,10 +2,11 @@
 #include <string.h>
 #include <stdlib.h>
 #include <glib.h>
-#include "Table.h"
 #include "PinyinParser.h"
 
 namespace PY {
+
+#include "PinyinParserTable.h"
 
 static int
 py_cmp (const void *p1, const void *p2)
