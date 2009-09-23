@@ -283,7 +283,7 @@ def get_freq_sum_1(db, p1):
 
 def compaired_special():
     import sqlite3
-    db = sqlite3.connect("py.db")
+    db = sqlite3.connect("main.db")
 
     for p1, p2, p3, p4 in get_all_special():
         if p3 not in pinyin_list or p4 not in pinyin_list:
