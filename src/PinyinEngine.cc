@@ -24,6 +24,7 @@ PinyinEngine::PinyinEngine (IBusEngine *engine)
       m_mode_chinese (Config::initChinese ()),
       m_mode_full (Config::initFull ()),
       m_mode_full_punct (Config::initFullPunct ()),
+      m_mode_simp (FALSE),
       m_quote (TRUE),
       m_double_quote (TRUE),
       m_prev_pressed_key (0)
@@ -73,6 +74,18 @@ PinyinEngine::PinyinEngine (IBusEngine *engine)
                                            PROP_STATE_UNCHECKED,
                                            NULL);
     m_props.append (m_prop_full_punct);
+    
+    m_prop_simp = ibus_property_new ("simp",
+                                      PROP_TYPE_NORMAL,
+                                      Text (m_mode_simp ? "SC" : "TC"),
+                                      NULL,
+                                      Text (_("Simplfied/Traditional Chinese")),
+                                      TRUE,
+                                      TRUE,
+                                      PROP_STATE_UNCHECKED,
+                                      NULL);
+    m_props.append (m_prop_simp);
+
 
     m_prop_setup = ibus_property_new ("setup",
                                       PROP_TYPE_NORMAL,
@@ -594,6 +607,7 @@ PinyinEngine::updateLookupTable (void)
 
     for (guint i = 0; i < candidate_nr; i++) {
         //const Phrase &phrase = m_phrase_editor.candidates()[i];
+        m_buffer.truncate (0);
         Text text (m_phrase_editor.candidate (i));
         if (m_phrase_editor.candidateInUserPhease (i))
             text.appendAttribute (IBUS_ATTR_TYPE_FOREGROUND, 0x000000ef, 0, -1);

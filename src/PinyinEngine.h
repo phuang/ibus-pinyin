@@ -95,6 +95,7 @@ private:
     PinyinEditor *m_pinyin_editor;      // pinyin editor
     PhraseEditor m_phrase_editor;       // phrase editor
     String m_buffer;                    // string buffer
+    String m_buffer2;                   // String buffer
 
     gint m_need_update;                 // need update preedit, aux, or lookup table
 
@@ -102,12 +103,14 @@ private:
     Property    m_prop_chinese;
     Property    m_prop_full;
     Property    m_prop_full_punct;
+    Property    m_prop_simp;
     Property    m_prop_setup;
     PropList    m_props;
 
     gboolean m_mode_chinese;
     gboolean m_mode_full;
     gboolean m_mode_full_punct;
+    gboolean m_mode_simp;
 
     gboolean m_quote;
     gboolean m_double_quote;
