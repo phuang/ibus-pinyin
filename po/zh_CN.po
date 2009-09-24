@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ibus-pinyin 1.3.0\n"
 "Report-Msgid-Bugs-To: http://code.google.com/p/ibus/issues/entry\n"
-"POT-Creation-Date: 2009-09-24 07:55+0800\n"
+"POT-Creation-Date: 2009-09-24 11:45+0800\n"
 "PO-Revision-Date: 2009-09-20 16:05+8\n"
 "Last-Translator: Peng Huang <shawn.p.huang@gmail.com>\n"
 "Language-Team: Peng Huang <shawn.p.huang@gmail.com>\n"
@@ -19,23 +19,23 @@ msgstr ""
 msgid "Pinyin input method"
 msgstr "拼音输入法"
 
-#: src/PinyinEngine.cc:45 setup/ibus-pinyin-preferences.glade:188
+#: src/PinyinEngine.cc:46 setup/ibus-pinyin-preferences.glade:188
 msgid "Chinese"
 msgstr "中文"
 
-#: src/PinyinEngine.cc:58
+#: src/PinyinEngine.cc:59
 msgid "Full/Half width"
 msgstr "全角/半角"
 
-#: src/PinyinEngine.cc:71
+#: src/PinyinEngine.cc:72
 msgid "Full/Half width punctuation"
 msgstr "半角符号"
 
-#: src/PinyinEngine.cc:82
+#: src/PinyinEngine.cc:85
 msgid "Simplfied/Traditional Chinese"
-msgstr ""
+msgstr "简体/繁体中文"
 
-#: src/PinyinEngine.cc:92 src/PinyinEngine.cc:94
+#: src/PinyinEngine.cc:95 src/PinyinEngine.cc:97
 #: setup/ibus-pinyin-preferences.glade:7
 msgid "Pinyin preferences"
 msgstr "拼音设置"
@@ -86,83 +86,95 @@ msgstr "全角"
 msgid "Half"
 msgstr "半角"
 
-#: setup/ibus-pinyin-preferences.glade:285
+#: setup/ibus-pinyin-preferences.glade:282
+msgid "Chinese:"
+msgstr "中文:"
+
+#: setup/ibus-pinyin-preferences.glade:291
+msgid "Simplified"
+msgstr "简体"
+
+#: setup/ibus-pinyin-preferences.glade:308
+msgid "Traditional"
+msgstr "繁体"
+
+#: setup/ibus-pinyin-preferences.glade:329
 msgid "<b>Initial state</b>"
 msgstr "<b>初始状态</b>"
 
-#: setup/ibus-pinyin-preferences.glade:316
+#: setup/ibus-pinyin-preferences.glade:360
 msgid "Number of candidates:"
 msgstr "每页候选词个数:"
 
-#: setup/ibus-pinyin-preferences.glade:335
+#: setup/ibus-pinyin-preferences.glade:379
 msgid "Press [Shift] key to select candidate"
 msgstr "按[Shift]键选词"
 
-#: setup/ibus-pinyin-preferences.glade:350
+#: setup/ibus-pinyin-preferences.glade:394
 msgid "Press [-] [=] key to flip page"
 msgstr "按[-][=]键翻页"
 
-#: setup/ibus-pinyin-preferences.glade:365
+#: setup/ibus-pinyin-preferences.glade:409
 msgid "Press [,] [.] key to flip page"
 msgstr "按[,][.]键翻页"
 
-#: setup/ibus-pinyin-preferences.glade:380
+#: setup/ibus-pinyin-preferences.glade:424
 msgid "Auto commit phrase"
 msgstr "自动上词"
 
-#: setup/ibus-pinyin-preferences.glade:397
+#: setup/ibus-pinyin-preferences.glade:441
 msgid "Half width punctuations:"
 msgstr "半角符号:"
 
-#: setup/ibus-pinyin-preferences.glade:410
+#: setup/ibus-pinyin-preferences.glade:454
 msgid "+-*/=%"
 msgstr "+-*/=%"
 
-#: setup/ibus-pinyin-preferences.glade:426
+#: setup/ibus-pinyin-preferences.glade:470
 msgid "<b>Others</b>"
 msgstr "<b>其他</b>"
 
-#: setup/ibus-pinyin-preferences.glade:443
+#: setup/ibus-pinyin-preferences.glade:487
 msgid "General"
 msgstr "常规"
 
-#: setup/ibus-pinyin-preferences.glade:463
-#: setup/ibus-pinyin-preferences.glade:595
+#: setup/ibus-pinyin-preferences.glade:507
+#: setup/ibus-pinyin-preferences.glade:639
 msgid "Correct pinyin"
 msgstr "拼音纠错"
 
-#: setup/ibus-pinyin-preferences.glade:575
+#: setup/ibus-pinyin-preferences.glade:619
 msgid "<b>Correct pinyin</b>"
 msgstr "<b>拼音纠错</b>"
 
-#: setup/ibus-pinyin-preferences.glade:616
-#: setup/ibus-pinyin-preferences.glade:1037
+#: setup/ibus-pinyin-preferences.glade:660
+#: setup/ibus-pinyin-preferences.glade:1081
 msgid "Fuzzy pinyin"
 msgstr "模糊拼音"
 
-#: setup/ibus-pinyin-preferences.glade:1017
+#: setup/ibus-pinyin-preferences.glade:1061
 msgid "<b>Fuzzy pinyin</b>"
 msgstr "<b>模糊拼音</b>"
 
-#: setup/ibus-pinyin-preferences.glade:1074
+#: setup/ibus-pinyin-preferences.glade:1118
 msgid "<big><b>IBus Pinyin 1.3.0</b></big>"
 msgstr "<big><b>IBus Pinyin 1.3.0</b></big>"
 
-#: setup/ibus-pinyin-preferences.glade:1085
+#: setup/ibus-pinyin-preferences.glade:1129
 msgid "Pinyin input method for IBus"
 msgstr "Pinyin input method for IBus"
 
-#: setup/ibus-pinyin-preferences.glade:1095
+#: setup/ibus-pinyin-preferences.glade:1139
 msgid ""
 "<small>Copyright (c) 2009 Huang Peng &lt;shawn.p.huang@gmail.com&gt;</small>"
 msgstr ""
 "<small>Copyright (c) 2009 Huang Peng &lt;shawn.p.huang@gmail.com&gt;</small>"
 
-#: setup/ibus-pinyin-preferences.glade:1105
+#: setup/ibus-pinyin-preferences.glade:1149
 msgid "http://ibus.googlecode.com"
 msgstr "http://ibus.googlecode.com"
 
-#: setup/ibus-pinyin-preferences.glade:1135
+#: setup/ibus-pinyin-preferences.glade:1179
 msgid "About"
 msgstr "关于"
 

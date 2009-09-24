@@ -14,6 +14,7 @@ gint Config::m_double_pinyin_schema = 0;
 gboolean Config::m_init_chinese = TRUE;
 gboolean Config::m_init_full = FALSE;
 gboolean Config::m_init_full_punct = TRUE;
+gboolean Config::m_init_simp_chinese = TRUE;
 
 static const StaticString engine_pinyin ("engine/Pinyin");
 static const StaticString correct_pinyin ("CorrectPinyin");
@@ -26,6 +27,7 @@ static const StaticString double_pinyin_schema ("DoublePinyinSchema");
 static const StaticString init_chinese ("InitChinese");
 static const StaticString init_full ("InitFull");
 static const StaticString init_full_punct ("InitFullPunct");
+static const StaticString init_simp_chinese ("InitSimplifiedChinese");
 
 static const struct {
     StaticString name;
@@ -77,6 +79,7 @@ Config::readDefaultValues (void)
     m_init_chinese = read (engine_pinyin, init_chinese, true);
     m_init_full = read (engine_pinyin, init_full, false);
     m_init_full_punct = read (engine_pinyin, init_full_punct, true);
+    m_init_simp_chinese = read (engine_pinyin, init_simp_chinese, true);
     
     /* others */
     m_page_size = read (engine_pinyin, page_size, 5);
@@ -164,6 +167,8 @@ Config::valueChangedCallback (IBusConfig    *config,
         m_init_full = normalizeGValue (value, true);
     else if (init_full_punct == name)
         m_init_full_punct = normalizeGValue (value, true);
+    else if (init_simp_chinese == name)
+        m_init_simp_chinese = normalizeGValue (value, true);
     /* lookup table page size */
     else if (page_size == name)
         m_page_size = normalizeGValue (value, 5);

@@ -25,7 +25,7 @@ PinyinEngine::PinyinEngine (IBusEngine *engine)
       m_mode_chinese (Config::initChinese ()),
       m_mode_full (Config::initFull ()),
       m_mode_full_punct (Config::initFullPunct ()),
-      m_mode_simp (TRUE),
+      m_mode_simp (Config::initSimpChinese ()),
       m_quote (TRUE),
       m_double_quote (TRUE),
       m_prev_pressed_key (0)
