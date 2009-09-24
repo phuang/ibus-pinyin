@@ -67,7 +67,7 @@ PinyinEngine::PinyinEngine (IBusEngine *engine)
                                            PROP_TYPE_NORMAL,
                                            StaticText (m_mode_full_punct ? "，。" : ",."),
                                            m_mode_full_punct ?
-                                           PKGDATADIR"/icons/full-punct.svg" :
+                                                PKGDATADIR"/icons/full-punct.svg" :
                                                 PKGDATADIR"/icons/half-punct.svg",
                                            StaticText (_("Full/Half width punctuation")),
                                            TRUE,
@@ -79,7 +79,9 @@ PinyinEngine::PinyinEngine (IBusEngine *engine)
     m_prop_simp = ibus_property_new ("mode.simp",
                                       PROP_TYPE_NORMAL,
                                       StaticText (m_mode_simp ? "简" : "繁"),
-                                      NULL,
+                                      m_mode_simp ?
+                                        PKGDATADIR"/icons/simp-chinese.svg" :
+                                        PKGDATADIR"/icons/trad-chinese.svg",
                                       StaticText (_("Simplfied/Traditional Chinese")),
                                       TRUE,
                                       TRUE,
@@ -504,11 +506,9 @@ PinyinEngine::toggleModeSimp (void)
 {
     m_mode_simp = !m_mode_simp;
     m_prop_simp.setLabel (m_mode_simp ? "简" : "繁");
-    #if 0
     m_prop_simp.setIcon (m_mode_simp ?
-                            PKGDATADIR"/icons/full-punct.svg" :
-                            PKGDATADIR"/icons/half-punct.svg");
-    #endif
+                            PKGDATADIR"/icons/simp-chinese.svg" :
+                            PKGDATADIR"/icons/trad-chinese.svg");
     ibus_engine_update_property (m_engine, m_prop_simp);
 }
 

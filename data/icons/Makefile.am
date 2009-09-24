@@ -27,6 +27,8 @@ icons_DATA = \
 	full-punct.svg \
 	half.svg \
 	half-punct.svg \
+	simp-chinese.svg \
+	trad-chinese.svg \
 	$(NULL)
 
 iconsdir = $(pkgdatadir)/icons
