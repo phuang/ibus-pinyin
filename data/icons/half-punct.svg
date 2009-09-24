@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
+
 <svg
    xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:cc="http://creativecommons.org/ns#"
@@ -13,9 +14,10 @@
    height="48px"
    id="svg2383"
    sodipodi:version="0.32"
-   inkscape:version="0.46"
+   inkscape:version="0.46+devel"
    sodipodi:docname="half-punct.svg"
-   inkscape:output_extension="org.inkscape.output.svg.inkscape">
+   inkscape:output_extension="org.inkscape.output.svg.inkscape"
+   version="1.1">
   <defs
      id="defs2385">
     <linearGradient
@@ -144,8 +146,9 @@
      inkscape:document-units="px"
      inkscape:window-width="1024"
      inkscape:window-height="693"
-     inkscape:window-x="0"
-     inkscape:window-y="26" />
+     inkscape:window-x="3"
+     inkscape:window-y="46"
+     inkscape:window-maximized="0" />
   <metadata
      id="metadata2388">
     <rdf:RDF>
@@ -191,16 +194,6 @@
        sodipodi:ry="2.3571429"
        d="M 41.000001,45.357143 A 15.642858,2.3571429 0 1 1 9.7142859,45.357143 A 15.642858,2.3571429 0 1 1 41.000001,45.357143 z"
        transform="matrix(1.2304582,0,0,1.4687983,-6.0580467,-22.40621)" />
-    <path
-       sodipodi:type="arc"
-       style="opacity:1;fill:url(#linearGradient2385);fill-opacity:1;stroke:#0066cc;stroke-width:1;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       id="path2393"
-       sodipodi:cx="25.857143"
-       sodipodi:cy="27.428572"
-       sodipodi:rx="19.857143"
-       sodipodi:ry="19.857143"
-       d="M 45.714287,27.428572 A 19.857143,19.857143 0 1 1 6,27.428572 A 19.857143,19.857143 0 1 1 45.714287,27.428572 z"
-       transform="translate(46.714286,-7.4285714)" />
     <text
        xml:space="preserve"
        style="font-size:12px;font-style:normal;font-weight:bold;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
