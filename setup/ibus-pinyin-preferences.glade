@@ -287,14 +287,14 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkRadioButton" id="InitSimplified">
+                                  <object class="GtkRadioButton" id="InitSimplifiedChinese">
                                     <property name="label" translatable="yes">Simplified</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
                                     <property name="active">True</property>
                                     <property name="draw_indicator">True</property>
-                                    <property name="group">InitTraditional</property>
+                                    <property name="group">InitTraditionalChinese</property>
                                   </object>
                                   <packing>
                                     <property name="left_attach">1</property>
@@ -304,7 +304,7 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkRadioButton" id="InitTraditional">
+                                  <object class="GtkRadioButton" id="InitTraditionalChinese">
                                     <property name="label" translatable="yes">Traditional</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
