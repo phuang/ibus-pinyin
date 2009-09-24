@@ -6,20 +6,34 @@
 
 namespace PY {
 
-class Text : public Pointer <IBusText> {
+class Text : public Pointer<IBusText> {
 public:
     Text (const gchar *str)
-        : Pointer <IBusText> (ibus_text_new_from_static_string (str)) { }
+        : Pointer<IBusText> (ibus_text_new_from_string (str)) { }
 
     Text (gunichar ch)
-        : Pointer <IBusText> (ibus_text_new_from_unichar (ch)) { }
+        : Pointer<IBusText> (ibus_text_new_from_unichar (ch)) { }
     
     Text (const String & str)
-        : Pointer <IBusText> (ibus_text_new_from_static_string ((const gchar *) str)) { }
+        : Pointer<IBusText> (ibus_text_new_from_string ((const gchar *) str)) { }
 
     void appendAttribute (guint type, guint value, guint start, guint end) {
         ibus_text_append_attribute (*this, type, value, start, end);
     }
+};
+
+class StaticText : public Pointer<IBusText> {
+public:
+    StaticText (const gchar *str)
+        : Pointer<IBusText> (ibus_text_new_from_static_string (str)) { }
+
+    StaticText (const String & str)
+        : Pointer<IBusText> (ibus_text_new_from_static_string ((const gchar *) str)) { }
+
+    void appendAttribute (guint type, guint value, guint start, guint end) {
+        ibus_text_append_attribute (*this, type, value, start, end);
+    }
+
 };
 
 };

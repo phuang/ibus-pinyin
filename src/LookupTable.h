@@ -26,7 +26,7 @@ public:
     void setPageSize (guint size) { ibus_lookup_table_set_page_size (*this, size); }
     void clear (void) { ibus_lookup_table_clear (*this); }
 
-    void appendCandidate (Text & text) {
+    void appendCandidate (IBusText *text) {
         ibus_lookup_table_append_candidate (*this, text);
     }
 };

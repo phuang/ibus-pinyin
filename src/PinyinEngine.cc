@@ -7,6 +7,7 @@
 #include "DoublePinyinEditor.h"
 #include "PinyinEngine.h"
 #include "HalfFullConverter.h"
+#include "SimpTradConverter.h"
 #include "Config.h"
 #include "Text.h"
 #include "Util.h"
@@ -24,7 +25,7 @@ PinyinEngine::PinyinEngine (IBusEngine *engine)
       m_mode_chinese (Config::initChinese ()),
       m_mode_full (Config::initFull ()),
       m_mode_full_punct (Config::initFullPunct ()),
-      m_mode_simp (FALSE),
+      m_mode_simp (TRUE),
       m_quote (TRUE),
       m_double_quote (TRUE),
       m_prev_pressed_key (0)
@@ -38,11 +39,11 @@ PinyinEngine::PinyinEngine (IBusEngine *engine)
     /* create properties */
     m_prop_chinese = ibus_property_new ("mode.chinese",
                                         PROP_TYPE_NORMAL,
-                                        Text ("CN"),
+                                        StaticText ("CN"),
                                         m_mode_chinese ?
                                             PKGDATADIR"/icons/chinese.svg" :
                                             PKGDATADIR"/icons/english.svg",
-                                        Text (_("Chinese")),
+                                        StaticText (_("Chinese")),
                                         TRUE,
                                         TRUE,
                                         PROP_STATE_UNCHECKED,
@@ -51,11 +52,11 @@ PinyinEngine::PinyinEngine (IBusEngine *engine)
 
     m_prop_full = ibus_property_new ("mode.full",
                                      PROP_TYPE_NORMAL,
-                                     Text (m_mode_full? "Ａａ" : "Aa"),
+                                     StaticText (m_mode_full? "Ａａ" : "Aa"),
                                      m_mode_full ?
                                         PKGDATADIR"/icons/full.svg" :
                                         PKGDATADIR"/icons/half.svg",
-                                     Text (_("Full/Half width")),
+                                     StaticText (_("Full/Half width")),
                                      TRUE,
                                      TRUE,
                                      PROP_STATE_UNCHECKED,
@@ -64,22 +65,22 @@ PinyinEngine::PinyinEngine (IBusEngine *engine)
 
     m_prop_full_punct = ibus_property_new ("mode.full_punct",
                                            PROP_TYPE_NORMAL,
-                                           Text (m_mode_full_punct ? "，。" : ",."),
+                                           StaticText (m_mode_full_punct ? "，。" : ",."),
                                            m_mode_full_punct ?
                                            PKGDATADIR"/icons/full-punct.svg" :
                                                 PKGDATADIR"/icons/half-punct.svg",
-                                           Text (_("Full/Half width punctuation")),
+                                           StaticText (_("Full/Half width punctuation")),
                                            TRUE,
                                            TRUE,
                                            PROP_STATE_UNCHECKED,
                                            NULL);
     m_props.append (m_prop_full_punct);
     
-    m_prop_simp = ibus_property_new ("simp",
+    m_prop_simp = ibus_property_new ("mode.simp",
                                       PROP_TYPE_NORMAL,
-                                      Text (m_mode_simp ? "SC" : "TC"),
+                                      StaticText (m_mode_simp ? "简" : "繁"),
                                       NULL,
-                                      Text (_("Simplfied/Traditional Chinese")),
+                                      StaticText (_("Simplfied/Traditional Chinese")),
                                       TRUE,
                                       TRUE,
                                       PROP_STATE_UNCHECKED,
@@ -89,9 +90,9 @@ PinyinEngine::PinyinEngine (IBusEngine *engine)
 
     m_prop_setup = ibus_property_new ("setup",
                                       PROP_TYPE_NORMAL,
-                                      Text (_("Pinyin preferences")),
+                                      StaticText (_("Pinyin preferences")),
                                       "gtk-preferences",
-                                      Text (_("Pinyin preferences")),
+                                      StaticText (_("Pinyin preferences")),
                                       TRUE,
                                       TRUE,
                                       PROP_STATE_UNCHECKED,
@@ -499,6 +500,19 @@ PinyinEngine::toggleModeFullPunct (void)
 }
 
 inline void
+PinyinEngine::toggleModeSimp (void)
+{
+    m_mode_simp = !m_mode_simp;
+    m_prop_simp.setLabel (m_mode_simp ? "简" : "繁");
+    #if 0
+    m_prop_simp.setIcon (m_mode_simp ?
+                            PKGDATADIR"/icons/full-punct.svg" :
+                            PKGDATADIR"/icons/half-punct.svg");
+    #endif
+    ibus_engine_update_property (m_engine, m_prop_simp);
+}
+
+inline void
 PinyinEngine::showSetupDialog (void)
 {
     g_spawn_command_line_async (LIBEXECDIR"/ibus-setup-pinyin", NULL);
@@ -510,6 +524,7 @@ PinyinEngine::propertyActivate (const gchar *prop_name, guint prop_state)
     const static StaticString mode_chinese ("mode.chinese");
     const static StaticString mode_full ("mode.full");
     const static StaticString mode_full_punct ("mode.full_punct");
+    const static StaticString mode_simp ("mode.simp");
     const static StaticString setup ("setup");
 
     if (mode_chinese == prop_name) {
@@ -520,6 +535,9 @@ PinyinEngine::propertyActivate (const gchar *prop_name, guint prop_state)
     }
     else if (mode_full_punct == prop_name) {
         toggleModeFullPunct ();
+    }
+    else if (mode_simp == prop_name) {
+        toggleModeSimp ();
     }
     else if (setup == prop_name) {
         showSetupDialog ();
@@ -535,13 +553,23 @@ PinyinEngine::updatePreeditText (void)
     }
 
     m_buffer.truncate (0);
-    if (G_UNLIKELY (m_phrase_editor.string1 ()))
-        m_buffer << m_phrase_editor.string1 () << ' ';
+    if (G_UNLIKELY (m_phrase_editor.string1 ())) {
+        if (G_LIKELY (m_mode_simp))
+            m_buffer << m_phrase_editor.string1 ();
+        else
+            SimpTradConverter::simpToTrad (m_phrase_editor.string1 (), m_buffer);
+        m_buffer << ' ';
+    }
 
-    m_buffer << m_phrase_editor.string2 ()
-             << m_pinyin_editor->textAfterPinyin ();
+    if (G_LIKELY (m_mode_simp)) {
+        m_buffer << m_phrase_editor.string2 ();
+    }
+    else {
+        SimpTradConverter::simpToTrad (m_phrase_editor.string2 (), m_buffer);
+    }
+    m_buffer << m_pinyin_editor->textAfterPinyin ();
 
-    Text preedit_text (m_buffer);
+    StaticText preedit_text (m_buffer);
     preedit_text.appendAttribute (IBUS_ATTR_TYPE_UNDERLINE, IBUS_ATTR_UNDERLINE_SINGLE, 0, -1);
     ibus_engine_update_preedit_text (m_engine, preedit_text, m_buffer.length (), TRUE);
 }
@@ -560,7 +588,10 @@ PinyinEngine::updateAuxiliaryText (void)
 
     m_buffer.truncate (0);
     if (G_UNLIKELY (m_phrase_editor.string1 ())) {
-        m_buffer << m_phrase_editor.string1 ();
+        if (G_LIKELY (m_mode_simp))
+            m_buffer << m_phrase_editor.string1 ();
+        else
+            SimpTradConverter::simpToTrad (m_phrase_editor.string1 (), m_buffer);
     }
 
     for (guint i = m_phrase_editor.cursor (); i < m_pinyin_editor->pinyin().length (); ++i) {
@@ -584,7 +615,7 @@ PinyinEngine::updateAuxiliaryText (void)
         m_buffer  << '|' << m_pinyin_editor->textAfterCursor ();
     }
 
-    Text aux_text (m_buffer);
+    StaticText aux_text (m_buffer);
     /*
     aux_text.appendAttribute (IBUS_ATTR_TYPE_FOREGROUND, 0x00afafaf, len, cursor_pos);
     aux_text.appendAttribute (IBUS_ATTR_TYPE_FOREGROUND, 0x00afafaf, cursor_pos + 1, -1);
@@ -605,13 +636,23 @@ PinyinEngine::updateLookupTable (void)
         return;
     }
 
-    for (guint i = 0; i < candidate_nr; i++) {
-        //const Phrase &phrase = m_phrase_editor.candidates()[i];
-        m_buffer.truncate (0);
-        Text text (m_phrase_editor.candidate (i));
-        if (m_phrase_editor.candidateInUserPhease (i))
-            text.appendAttribute (IBUS_ATTR_TYPE_FOREGROUND, 0x000000ef, 0, -1);
-        m_lookup_table.appendCandidate (text);
+    if (G_LIKELY (m_mode_simp)) {
+        for (guint i = 0; i < candidate_nr; i++) {
+            StaticText text (m_phrase_editor.candidate (i));
+            if (m_phrase_editor.candidateInUserPhease (i))
+                text.appendAttribute (IBUS_ATTR_TYPE_FOREGROUND, 0x000000ef, 0, -1);
+            m_lookup_table.appendCandidate (text);
+        }
+    }
+    else {
+        for (guint i = 0; i < candidate_nr; i++) {
+            m_buffer.truncate (0);
+            SimpTradConverter::simpToTrad (m_phrase_editor.candidate (i), m_buffer);
+            Text text (m_buffer);
+            if (m_phrase_editor.candidateInUserPhease (i))
+                text.appendAttribute (IBUS_ATTR_TYPE_FOREGROUND, 0x000000ef, 0, -1);
+            m_lookup_table.appendCandidate (text);
+        }
     }
 
     ibus_engine_update_lookup_table_fast (m_engine,
@@ -629,19 +670,19 @@ inline void
 PinyinEngine::commit (gchar ch)
 {
     gchar str[2] = {ch, 0};
-    ibus_engine_commit_text (m_engine, Text (str));
+    ibus_engine_commit_text (m_engine, StaticText (str));
 }
 
 inline void
 PinyinEngine::commit (gunichar ch)
 {
-    ibus_engine_commit_text (m_engine, Text (ch));
+    ibus_engine_commit_text (m_engine, StaticText (ch));
 }
 
 inline void
 PinyinEngine::commit (const gchar *str)
 {
-    ibus_engine_commit_text (m_engine, Text (str));
+    ibus_engine_commit_text (m_engine, StaticText (str));
 }
 
 inline void
@@ -657,7 +698,14 @@ PinyinEngine::commit (void)
         return;
 
     m_buffer.truncate (0);
-    m_buffer << m_phrase_editor.string1 () << m_phrase_editor.string2 ();
+    if (G_LIKELY (m_mode_simp)) {
+        m_buffer << m_phrase_editor.string1 () << m_phrase_editor.string2 ();
+    }
+    else {
+        SimpTradConverter::simpToTrad (m_phrase_editor.string1 (), m_buffer);
+        SimpTradConverter::simpToTrad (m_phrase_editor.string2 (), m_buffer);
+    }
+
     const gchar *p = m_pinyin_editor->textAfterPinyin ();
     if (G_UNLIKELY (m_mode_full)) {
         while (*p != 0)

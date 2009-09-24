@@ -74,6 +74,7 @@ private:
     void toggleModeChinese (void);
     void toggleModeFull (void);
     void toggleModeFullPunct (void);
+    void toggleModeSimp (void);
     void showSetupDialog (void);
 
     gboolean selectCandidate (guint i);
@@ -95,7 +96,6 @@ private:
     PinyinEditor *m_pinyin_editor;      // pinyin editor
     PhraseEditor m_phrase_editor;       // phrase editor
     String m_buffer;                    // string buffer
-    String m_buffer2;                   // String buffer
 
     gint m_need_update;                 // need update preedit, aux, or lookup table
 
