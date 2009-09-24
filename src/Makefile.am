@@ -18,7 +18,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-@MAINTAINER_MODE_FALSE@skip_genpytable=test -f $@ ||
+# @MAINTAINER_MODE_FALSE@skip_gentable=test -f $@ ||
 
 AM_CFLAGS = \
 	@IBUS_CFLAGS@ \
@@ -150,10 +150,10 @@ TESTS = \
 	$(NULL)
 
 PinyinParserTable.h:
-	$(skip_genpytable) $(PYTHON) $(srcdir)/scripts/genpytable.py > $@
+	$(PYTHON) $(srcdir)/scripts/genpytable.py > $@
 
 SimpTradConverterTable.h:
-	$(skip_genpytable) $(PYTHON) $(srcdir)/scripts/gensimptradtable.py > $@
+	$(PYTHON) $(srcdir)/scripts/gensimptradtable.py > $@
 
 pinyin.xml: pinyin.xml.in
 	( \
