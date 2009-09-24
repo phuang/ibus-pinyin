@@ -15,7 +15,7 @@
    id="svg2383"
    sodipodi:version="0.32"
    inkscape:version="0.46+devel"
-   sodipodi:docname="simpchinese.svg"
+   sodipodi:docname="simp-chinese.svg"
    inkscape:output_extension="org.inkscape.output.svg.inkscape"
    version="1.1">
   <defs
@@ -273,26 +273,6 @@
          x="17"
          y="16.714287"
          style="font-style:normal;font-weight:bold" /></text>
-    <g
-       id="g3620"
-       transform="translate(-105.28571,4.1428571)">
-      <g
-         transform="translate(52.714286,-15.142857)"
-         id="g2837">
-        <g
-           id="g2832">
-          <path
-             id="path3252"
-             d="m 23.682634,2.3965916 0,6.8049754 -14.8619359,0 0,21.644212 5.8809509,0 0,-2.765894 8.980985,0 0,12.380666 6.063304,0 0,-12.380666 8.980985,0 0,2.678088 5.88095,0 0,-21.556406 -14.861935,0 0,-6.8049754 -6.063304,0 z m -8.980985,12.1172464 8.980985,0 0,8.297679 -8.980985,0 0,-8.297679 z m 15.044289,0 8.980985,0 0,8.297679 -8.980985,0 0,-8.297679 z"
-             style="font-size:28px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000066;fill-opacity:1;stroke:#000066;stroke-width:0.57264608;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:'微软雅黑';-inkscape-font-specification:'微软雅黑 Bold'" />
-        </g>
-        <path
-           sodipodi:nodetypes="ccccccccccccccccccccccccccc"
-           style="font-size:28px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:url(#linearGradient3635);fill-opacity:1;stroke:#0066f0;stroke-width:0.573;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:'微软雅黑';-inkscape-font-specification:'微软雅黑 Bold'"
-           d="m 21.658081,0.29614445 0,6.80497535 -14.8619362,0 0,21.6442122 5.8809512,0 0,-2.765894 8.980985,0 0,12.380666 6.063304,0 0,-12.380666 8.980985,0 0,2.678088 5.88095,0 0,-21.5564062 -14.861935,0 0,-6.80497535 -6.063304,0 z m -8.980985,12.11724655 8.980985,0 0,8.297679 -8.980985,0 0,-8.297679 z m 15.044289,0 8.980985,0 0,8.297679 -8.980985,0 0,-8.297679 z"
-           id="text2400" />
-      </g>
-    </g>
     <g
        id="g3680"
        transform="translate(-0.28571429,-0.28571429)">
