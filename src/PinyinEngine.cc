@@ -676,7 +676,7 @@ PinyinEngine::commit (gchar ch)
 inline void
 PinyinEngine::commit (gunichar ch)
 {
-    ibus_engine_commit_text (m_engine, StaticText (ch));
+    ibus_engine_commit_text (m_engine, Text (ch));
 }
 
 inline void
