@@ -18,6 +18,7 @@ SimpTradConverter::simpToTrad (const gchar *in, String &out)
 {
     if (!g_utf8_validate (in, -1 , NULL)) {
         g_debug ("\%s\" is not an utf8 string!", in);
+        g_assert_not_reached ();
     }
 
     for (const gchar *p = in; *p != '\0'; p = g_utf8_next_char (p)) {
