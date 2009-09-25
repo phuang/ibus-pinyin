@@ -95,9 +95,6 @@ class PreferencesDialog:
     def __init_others(self):
         #others
         self.__lookup_table_page_size = self.__builder.get_object("LookupTablePageSize")
-        renderer = gtk.CellRendererText()
-        self.__lookup_table_page_size.pack_start(renderer)
-        self.__lookup_table_page_size.set_attributes(renderer, text=0)
 
         self.__shift_select_candidate = self.__builder.get_object("ShiftSelectCandidate")
         self.__minus_equal_page = self.__builder.get_object("MinusEqualPage")
@@ -106,20 +103,20 @@ class PreferencesDialog:
         self.__half_width_puncts = self.__builder.get_object("HalfWidthPuncts")
 
         # read values
-        self.__lookup_table_page_size.set_active(self.__get_value("LookupTablePageSize", 5) - 1)
+        self.__lookup_table_page_size.set_value(self.__get_value("LookupTablePageSize", 5))
         self.__shift_select_candidate.set_active(self.__get_value("ShiftSelectCandidate", False))
         self.__minus_equal_page.set_active(self.__get_value("MinusEqualPage", True))
         self.__comma_period_page.set_active(self.__get_value("CommaPeriodPage", True))
         self.__half_width_puncts.set_text(self.__get_value("HalfWidthPuncts", "+-*/=%"))
 
         # connect signals
-        def __lookup_table_page_size_changed_cb(widget):
-            self.__set_value("LookupTablePageSize", widget.get_active() + 1)
+        def __lookup_table_page_size_changed_cb(adjustment):
+            self.__set_value("LookupTablePageSize", int(adjustment.get_value()))
 
         self.__shift_select_candidate.connect("toggled", self.__toggled_cb, "ShiftSelectCandidate")
         self.__minus_equal_page.connect("toggled", self.__toggled_cb, "MinusEqualPage")
         self.__comma_period_page.connect("toggled", self.__toggled_cb, "CommaPeriodPage")
-        self.__lookup_table_page_size.connect("changed", __lookup_table_page_size_changed_cb)
+        self.__lookup_table_page_size.connect("value-changed", __lookup_table_page_size_changed_cb)
 
         def __entry_activate_cb(widget, name):
             text = widget.get_text()

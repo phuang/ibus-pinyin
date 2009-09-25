@@ -356,7 +356,6 @@
                                 <property name="n_columns">2</property>
                                 <property name="column_spacing">12</property>
                                 <property name="row_spacing">6</property>
-                                <property name="homogeneous">True</property>
                                 <child>
                                   <object class="GtkLabel" id="label16">
                                     <property name="visible">True</property>
@@ -366,16 +365,6 @@
                                   </object>
                                   <packing>
                                     <property name="x_options">GTK_FILL</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkComboBox" id="LookupTablePageSize">
-                                    <property name="visible">True</property>
-                                    <property name="model">liststorePageSize</property>
-                                  </object>
-                                  <packing>
-                                    <property name="left_attach">1</property>
-                                    <property name="right_attach">2</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -436,6 +425,19 @@
                                     <property name="right_attach">2</property>
                                     <property name="top_attach">4</property>
                                     <property name="bottom_attach">5</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkHScale" id="hscaleLookupTablePageSize">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="adjustment">LookupTablePageSize</property>
+                                    <property name="digits">0</property>
+                                    <property name="value_pos">left</property>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">1</property>
+                                    <property name="right_attach">2</property>
                                   </packing>
                                 </child>
                               </object>
@@ -1282,42 +1284,12 @@
       </row>
     </data>
   </object>
-  <object class="GtkListStore" id="liststorePageSize">
-    <columns>
-      <!-- column-name pageSize -->
-      <column type="gchararray"/>
-    </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes">1</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">2</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">3</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">4</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">5</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">6</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">7</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">8</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">9</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">10</col>
-      </row>
-    </data>
+  <object class="GtkAdjustment" id="LookupTablePageSize">
+    <property name="value">1</property>
+    <property name="lower">1</property>
+    <property name="upper">11</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">1</property>
+    <property name="page_size">1</property>
   </object>
 </interface>
