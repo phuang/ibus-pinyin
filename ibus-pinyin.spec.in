@@ -55,5 +55,5 @@ sqlite3 main.db ".read create_index.sql"
 %{_datadir}/ibus/component/*
 
 %changelog
-* Fri Aug 08 2008 Huang Peng <shawn.p.huang@gmail.com> - @VERSION@-1
+* Fri Aug 08 2008 Peng Huang <shawn.p.huang@gmail.com> - @VERSION@-1
 - The first version.
