@@ -88,7 +88,7 @@ public:
         return *this;
     }
 
-    gunichar operator[] (guint i) {
+    gunichar operator[] (guint i) const {
         if (i >= length ())
             return 0;
         return m_string[i];
