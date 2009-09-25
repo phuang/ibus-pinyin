@@ -424,10 +424,7 @@ PinyinEngine::processKeyEvent (guint keyval, guint keycode, guint modifiers)
         break;
     }
 
-    if (!retval)
-        m_prev_pressed_key = keyval;
-    else
-        m_prev_pressed_key = 0;
+    m_prev_pressed_key = retval ? 0 : keyval;
     return retval;
 }
 
