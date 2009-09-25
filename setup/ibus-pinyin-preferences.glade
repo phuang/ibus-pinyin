@@ -431,6 +431,7 @@
                                   <object class="GtkHScale" id="hscaleLookupTablePageSize">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
+                                    <property name="update_policy">delayed</property>
                                     <property name="adjustment">LookupTablePageSize</property>
                                     <property name="digits">0</property>
                                     <property name="value_pos">left</property>
