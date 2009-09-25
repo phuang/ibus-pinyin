@@ -75,7 +75,7 @@ PinyinEngine::PinyinEngine (IBusEngine *engine)
                                            PROP_STATE_UNCHECKED,
                                            NULL);
     m_props.append (m_prop_full_punct);
-    
+
     m_prop_simp = ibus_property_new ("mode.simp",
                                       PROP_TYPE_NORMAL,
                                       StaticText (m_mode_simp ? "简" : "繁"),
@@ -151,7 +151,7 @@ PinyinEngine::processNumber (guint keyval, guint keycode, guint modifiers)
     }
 
     /* Chinese mode, if empty */
-    if (G_UNLIKELY (m_pinyin_editor->isEmpty ())) {
+    if (G_UNLIKELY (isEmpty ())) {
         if (G_UNLIKELY (CMSHM_FILTER (modifiers) != 0))
             return FALSE;
         commit ((gunichar) m_mode_full ? HalfFullConverter::toFull (keyval) : keyval);
@@ -201,71 +201,86 @@ PinyinEngine::processPunct (guint keyval, guint keycode, guint modifiers)
     }
 
     /* Chinese mode */
-    if (G_UNLIKELY (isEmpty ())) {
-        if (m_mode_full_punct) {
-            switch (keyval) {
-            case '.':
-                commit ("。"); break;
-            case '\\':
-                commit ("、"); break;
-            case '^':
-                commit ("……"); break;
-            case '_':
-                commit ("——"); break;
-            case '$':
-                commit ("￥"); break;
-            case '<':
-                commit ("《"); break;
-            case '>':
-                commit ("》"); break;
-            case '"':
-                commit (m_double_quote ? "“" : "”");
-                m_double_quote = !m_double_quote;
-                break;
-            case '\'':
-                commit (m_quote ? "‘" : "’");
-                m_quote = !m_quote;
-                break;
-            default:
-                commit (HalfFullConverter::toFull (keyval));
-                break;
+    if (G_UNLIKELY (!isEmpty ())) {
+        switch (keyval) {
+        case IBUS_space:
+            commit ();
+            return TRUE;
+        case IBUS_apostrophe:
+            return processPinyin (keyval, keycode, modifiers);
+        case IBUS_comma:
+            if (Config::commaPeriodPage ()) {
+                pageUp ();
+                return TRUE;
             }
+            break;
+        case IBUS_minus:
+            if (Config::minusEqualPage ()) {
+                pageUp ();
+                return TRUE;
+            }
+            break;
+        case IBUS_period:
+            if (Config::commaPeriodPage ()) {
+                pageDown ();
+                return TRUE;
+            }
+            break;
+        case IBUS_equal:
+            if (Config::minusEqualPage ()) {
+                pageDown ();
+                return TRUE;
+            }
+            break;
+        case IBUS_semicolon:
+            if (G_UNLIKELY (Config::doublePinyin ())) {
+                /* double pinyin need process ';' */
+                if (processPinyin (keyval, keycode, modifiers))
+                    return TRUE;
+            }
+            break;
         }
-        else {
-            commit (keyval);
-        }
-        return TRUE;
+
+        if (G_LIKELY (!Config::autoCommit ()))
+            return TRUE;
+        commit ();
     }
 
-    switch (keyval) {
-    case IBUS_space:
-        commit (); return TRUE;
-    case IBUS_apostrophe:
-        return processPinyin (keyval, keycode, modifiers);
-    case IBUS_comma:
-        if (Config::commaPeriodPage ())
-            pageUp ();
-        return TRUE;
-    case IBUS_minus:
-        if (Config::minusEqualPage ())
-            pageUp ();
-        return TRUE;
-    case IBUS_period:
-        if (Config::commaPeriodPage ())
-            pageDown ();
-        return TRUE;
-    case IBUS_equal:
-        if (Config::minusEqualPage ())
-            pageDown ();
-        return TRUE;
-    case IBUS_semicolon:
-        /* double pinyin need process ';' */
-        if (G_UNLIKELY (Config::doublePinyin ()))
-            return processPinyin (keyval, keycode, modifiers);
-        return TRUE;
-    default:
-        return TRUE;
+    g_assert (isEmpty ());
+
+    if (m_mode_full_punct) {
+        switch (keyval) {
+        case '.':
+            commit ("。"); break;
+        case '\\':
+            commit ("、"); break;
+        case '^':
+            commit ("……"); break;
+        case '_':
+            commit ("——"); break;
+        case '$':
+            commit ("￥"); break;
+        case '<':
+            commit ("《"); break;
+        case '>':
+            commit ("》"); break;
+        case '"':
+            commit (m_double_quote ? "“" : "”");
+            m_double_quote = !m_double_quote;
+            break;
+        case '\'':
+            commit (m_quote ? "‘" : "’");
+            m_quote = !m_quote;
+            break;
+        default:
+            commit (HalfFullConverter::toFull (keyval));
+            break;
+        }
     }
+    else {
+        commit (keyval);
+    }
+    return TRUE;
 }
 
 inline gboolean
