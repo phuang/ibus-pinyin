@@ -79,6 +79,7 @@ ibus_engine_h_sources = \
 	Text.h \
 	Types.h \
 	Util.h \
+	WideString.h \
 	$(NULL)
 ibus_engine_pinyin_SOURCES = \
 	$(ibus_engine_c_sources) \
