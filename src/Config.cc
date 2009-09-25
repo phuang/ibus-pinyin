@@ -6,11 +6,16 @@ namespace PY {
 
 guint Config::m_option = PINYIN_SIMPLE_PINYIN | PINYIN_CORRECT_ALL;
 guint Config::m_option_mask = PINYIN_SIMPLE_PINYIN | PINYIN_CORRECT_ALL;
+
 guint Config::m_page_size = 5;
+gboolean Config::m_shift_select_candidate = FALSE;
 gboolean Config::m_minus_equal_page = TRUE;
 gboolean Config::m_comma_period_page = TRUE;
+gboolean Config::m_auto_commit = FALSE;
+
 gboolean Config::m_double_pinyin = FALSE;
 gint Config::m_double_pinyin_schema = 0;
+
 gboolean Config::m_init_chinese = TRUE;
 gboolean Config::m_init_full = FALSE;
 gboolean Config::m_init_full_punct = TRUE;
@@ -19,11 +24,16 @@ gboolean Config::m_init_simp_chinese = TRUE;
 static const StaticString engine_pinyin ("engine/Pinyin");
 static const StaticString correct_pinyin ("CorrectPinyin");
 static const StaticString fuzzy_pinyin ("FuzzyPinyin");
+
 static const StaticString page_size ("LookupTablePageSize");
+static const StaticString shift_select_candidate ("ShiftSelectCandidate");
 static const StaticString minus_equal_page ("MinusEqualPage");
 static const StaticString comma_period_page ("CommaPeriodPage");
+static const StaticString auto_commit ("AutoCommit");
+
 static const StaticString double_pinyin ("DoublePinyin");
 static const StaticString double_pinyin_schema ("DoublePinyinSchema");
+
 static const StaticString init_chinese ("InitChinese");
 static const StaticString init_full ("InitFull");
 static const StaticString init_full_punct ("InitFullPunct");
@@ -80,11 +90,13 @@ Config::readDefaultValues (void)
     m_init_full = read (engine_pinyin, init_full, false);
     m_init_full_punct = read (engine_pinyin, init_full_punct, true);
     m_init_simp_chinese = read (engine_pinyin, init_simp_chinese, true);
-    
+
     /* others */
     m_page_size = read (engine_pinyin, page_size, 5);
+    m_shift_select_candidate = read (engine_pinyin, shift_select_candidate, false);
     m_minus_equal_page = read (engine_pinyin, minus_equal_page, true);
     m_comma_period_page = read (engine_pinyin, comma_period_page, true);
+    m_auto_commit = read (engine_pinyin, auto_commit, false);
 
     /* correct pinyin */
     if (read (engine_pinyin, correct_pinyin, true))
@@ -154,7 +166,7 @@ Config::valueChangedCallback (IBusConfig    *config,
 {
     if (engine_pinyin != section)
         return;
-    
+
     /* double pinyin */
     if (double_pinyin == name)
         m_double_pinyin = normalizeGValue (value, false);
@@ -172,10 +184,14 @@ Config::valueChangedCallback (IBusConfig    *config,
     /* lookup table page size */
     else if (page_size == name)
         m_page_size = normalizeGValue (value, 5);
+    else if (shift_select_candidate == name)
+        m_shift_select_candidate = normalizeGValue (value, false);
     else if (minus_equal_page == name)
         m_minus_equal_page = normalizeGValue (value, true);
     else if (comma_period_page == name)
         m_comma_period_page = normalizeGValue (value, true);
+    else if (auto_commit == name)
+        m_auto_commit = normalizeGValue (value, false);
     /* correct pinyin */
     else if (correct_pinyin == name) {
         if (normalizeGValue (value, TRUE))

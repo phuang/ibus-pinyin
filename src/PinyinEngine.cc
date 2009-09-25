@@ -277,6 +277,18 @@ PinyinEngine::processOthers (guint keyval, guint keycode, guint modifiers)
     /* process some cursor control keys */
     gboolean _update = FALSE;
     switch (keyval) {
+    case IBUS_Shift_L:
+        if (Config::shiftSelectCandidate () &&
+            m_mode_chinese) {
+            selectCandidate (1);
+        }
+        break;
+    case IBUS_Shift_R:
+        if (Config::shiftSelectCandidate () &&
+            m_mode_chinese) {
+            selectCandidate (2);
+        }
+        break;
     case IBUS_Return:
         if (G_UNLIKELY (m_mode_full)) {
             m_buffer.truncate (0);
@@ -405,12 +417,17 @@ PinyinEngine::processKeyEvent (guint keyval, guint keycode, guint modifiers)
         retval = processPunct (keyval, keycode, modifiers);
         break;
     /* others */
+    case IBUS_Shift_L:
+    case IBUS_Shift_R:
     default:
         retval = processOthers (keyval, keycode, modifiers);
         break;
     }
 
-    m_prev_pressed_key = keyval;
+    if (!retval)
+        m_prev_pressed_key = keyval;
+    else
+        m_prev_pressed_key = 0;
     return retval;
 }
 

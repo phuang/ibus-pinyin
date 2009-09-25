@@ -107,6 +107,7 @@ class PreferencesDialog:
         self.__shift_select_candidate.set_active(self.__get_value("ShiftSelectCandidate", False))
         self.__minus_equal_page.set_active(self.__get_value("MinusEqualPage", True))
         self.__comma_period_page.set_active(self.__get_value("CommaPeriodPage", True))
+        self.__auto_commit.set_active(self.__get_value("AutoCommit", False))
         self.__half_width_puncts.set_text(self.__get_value("HalfWidthPuncts", "+-*/=%"))
 
         # connect signals
@@ -116,6 +117,7 @@ class PreferencesDialog:
         self.__shift_select_candidate.connect("toggled", self.__toggled_cb, "ShiftSelectCandidate")
         self.__minus_equal_page.connect("toggled", self.__toggled_cb, "MinusEqualPage")
         self.__comma_period_page.connect("toggled", self.__toggled_cb, "CommaPeriodPage")
+        self.__auto_commit.connect("toggled", self.__toggled_cb, "AutoCommit")
         self.__lookup_table_page_size.connect("value-changed", __lookup_table_page_size_changed_cb)
 
         def __entry_activate_cb(widget, name):

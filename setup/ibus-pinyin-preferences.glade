@@ -372,7 +372,6 @@
                                   <object class="GtkCheckButton" id="ShiftSelectCandidate">
                                     <property name="label" translatable="yes">Press [Shift] key to select candidate</property>
                                     <property name="visible">True</property>
-                                    <property name="sensitive">False</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
                                     <property name="draw_indicator">True</property>
