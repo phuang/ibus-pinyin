@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ibus-pinyin 1.3.0\n"
 "Report-Msgid-Bugs-To: http://code.google.com/p/ibus/issues/entry\n"
-"POT-Creation-Date: 2009-09-24 11:45+0800\n"
+"POT-Creation-Date: 2009-09-25 08:14+0800\n"
 "PO-Revision-Date: 2009-09-20 16:05+8\n"
 "Last-Translator: Peng Huang <shawn.p.huang@gmail.com>\n"
 "Language-Team: Peng Huang <shawn.p.huang@gmail.com>\n"
@@ -65,12 +65,12 @@ msgid "Language:"
 msgstr "语言:"
 
 #: setup/ibus-pinyin-preferences.glade:168
-msgid "Half/full with:"
+msgid "Half/full width:"
 msgstr "全角/半角:"
 
 #: setup/ibus-pinyin-preferences.glade:179
-msgid "Half/full punctuation:"
-msgstr "全角/半角标点:"
+msgid "Punctuations:"
+msgstr "标点符号:"
 
 #: setup/ibus-pinyin-preferences.glade:203
 msgid "English"
@@ -177,6 +177,9 @@ msgstr "http://ibus.googlecode.com"
 #: setup/ibus-pinyin-preferences.glade:1179
 msgid "About"
 msgstr "关于"
+
+#~ msgid "Half/full punctuation:"
+#~ msgstr "全角/半角标点:"
 
 #~ msgid "gtk-close"
 #~ msgstr "gtk-close"
