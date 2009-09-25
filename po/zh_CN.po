@@ -38,7 +38,7 @@ msgstr "简体/繁体中文"
 #: src/PinyinEngine.cc:95 src/PinyinEngine.cc:97
 #: setup/ibus-pinyin-preferences.glade:7
 msgid "Pinyin preferences"
-msgstr "拼音设置"
+msgstr "拼音首选项"
 
 #: setup/ibus-pinyin-preferences.glade:52
 msgid "Full pinyin"
