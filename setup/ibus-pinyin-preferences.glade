@@ -3,6 +3,7 @@
   <requires lib="gtk+" version="2.16"/>
   <!-- interface-naming-policy project-wide -->
   <object class="GtkDialog" id="dialog">
+    <property name="width_request">400</property>
     <property name="border_width">5</property>
     <property name="title" translatable="yes">Pinyin preferences</property>
     <property name="icon_name">gtk-preferences</property>
@@ -43,9 +44,10 @@
                               <object class="GtkTable" id="table2">
                                 <property name="visible">True</property>
                                 <property name="n_rows">2</property>
-                                <property name="n_columns">2</property>
+                                <property name="n_columns">3</property>
                                 <property name="column_spacing">12</property>
                                 <property name="row_spacing">6</property>
+                                <property name="homogeneous">True</property>
                                 <child>
                                   <object class="GtkRadioButton" id="FullPinyin">
                                     <property name="label" translatable="yes">Full pinyin</property>
@@ -85,13 +87,14 @@
                                   </object>
                                   <packing>
                                     <property name="left_attach">1</property>
-                                    <property name="right_attach">2</property>
+                                    <property name="right_attach">3</property>
                                   </packing>
                                 </child>
                                 <child>
                                   <object class="GtkHBox" id="hbox1">
                                     <property name="visible">True</property>
                                     <property name="spacing">6</property>
+                                    <property name="homogeneous">True</property>
                                     <child>
                                       <object class="GtkLabel" id="labelDoublePinyinSchema">
                                         <property name="visible">True</property>
@@ -117,7 +120,7 @@
                                   </object>
                                   <packing>
                                     <property name="left_attach">1</property>
-                                    <property name="right_attach">2</property>
+                                    <property name="right_attach">3</property>
                                     <property name="top_attach">1</property>
                                     <property name="bottom_attach">2</property>
                                   </packing>
@@ -353,6 +356,7 @@
                                 <property name="n_columns">2</property>
                                 <property name="column_spacing">12</property>
                                 <property name="row_spacing">6</property>
+                                <property name="homogeneous">True</property>
                                 <child>
                                   <object class="GtkLabel" id="label16">
                                     <property name="visible">True</property>
@@ -477,20 +481,6 @@
                     <property name="orientation">vertical</property>
                     <property name="spacing">12</property>
                     <child>
-                      <object class="GtkCheckButton" id="CorrectPinyin">
-                        <property name="label" translatable="yes">Correct pinyin</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="active">True</property>
-                        <property name="draw_indicator">True</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
                       <object class="GtkFrame" id="frame2">
                         <property name="visible">True</property>
                         <property name="label_xalign">0</property>
@@ -588,16 +578,19 @@
                           </object>
                         </child>
                         <child type="label">
-                          <object class="GtkLabel" id="label5">
+                          <object class="GtkCheckButton" id="CorrectPinyin">
+                            <property name="label" translatable="yes">Correct pinyin</property>
                             <property name="visible">True</property>
-                            <property name="label" translatable="yes">&lt;b&gt;Correct pinyin&lt;/b&gt;</property>
-                            <property name="use_markup">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">False</property>
+                            <property name="active">True</property>
+                            <property name="draw_indicator">True</property>
                           </object>
                         </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
-                        <property name="position">1</property>
+                        <property name="position">0</property>
                       </packing>
                     </child>
                   </object>
@@ -629,19 +622,6 @@
                     <property name="visible">True</property>
                     <property name="orientation">vertical</property>
                     <property name="spacing">12</property>
-                    <child>
-                      <object class="GtkCheckButton" id="FuzzyPinyin">
-                        <property name="label" translatable="yes">Fuzzy pinyin</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="draw_indicator">True</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
                     <child>
                       <object class="GtkFrame" id="frame1">
                         <property name="visible">True</property>
@@ -1030,16 +1010,18 @@
                           </object>
                         </child>
                         <child type="label">
-                          <object class="GtkLabel" id="label4">
+                          <object class="GtkCheckButton" id="FuzzyPinyin">
+                            <property name="label" translatable="yes">Fuzzy pinyin</property>
                             <property name="visible">True</property>
-                            <property name="label" translatable="yes">&lt;b&gt;Fuzzy pinyin&lt;/b&gt;</property>
-                            <property name="use_markup">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">False</property>
+                            <property name="draw_indicator">True</property>
                           </object>
                         </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
-                        <property name="position">1</property>
+                        <property name="position">0</property>
                       </packing>
                     </child>
                   </object>
@@ -1079,6 +1061,7 @@
                         <child>
                           <object class="GtkImage" id="image1">
                             <property name="visible">True</property>
+                            <property name="can_focus">True</property>
                             <property name="pixel_size">48</property>
                             <property name="icon_name">gtk-about</property>
                           </object>
@@ -1110,8 +1093,9 @@
                         <child>
                           <object class="GtkLabel" id="label15">
                             <property name="visible">True</property>
-                            <property name="label" translatable="yes">&lt;small&gt;Copyright (c) 2009 Huang Peng &amp;lt;shawn.p.huang@gmail.com&amp;gt;&lt;/small&gt;</property>
+                            <property name="label" translatable="yes">&lt;small&gt;Copyright &#xA9; 2009 Peng Huang &amp;lt;shawn.p.huang@gmail.com&amp;gt;&lt;/small&gt;</property>
                             <property name="use_markup">True</property>
+                            <property name="wrap">True</property>
                             <property name="selectable">True</property>
                           </object>
                           <packing>
@@ -1249,6 +1233,10 @@
                 <property name="label">gtk-close</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="has_focus">True</property>
+                <property name="is_focus">True</property>
+                <property name="can_default">True</property>
+                <property name="has_default">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_stock">True</property>
               </object>
