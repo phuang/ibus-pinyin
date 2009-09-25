@@ -200,25 +200,26 @@ DoublePinyinEditor::moveCursorToEnd (void)
 
     return TRUE;
 }
+
 gboolean
 DoublePinyinEditor::reset (void)
 {
-        gboolean retval = FALSE;
-        if (m_cursor != 0) {
-            m_cursor = 0;
-            retval = TRUE;
-        }
-
-        if (m_text.length () != 0) {
-            m_text.truncate (0);
-            retval = TRUE;
-        }
-
-        if (retval)
-            updatePinyin ();
-
-        return retval;
+    gboolean retval = FALSE;
+    if (m_cursor != 0) {
+        m_cursor = 0;
+        retval = TRUE;
     }
+
+    if (m_text.length () != 0) {
+        m_text.truncate (0);
+        retval = TRUE;
+    }
+
+    if (retval)
+        updatePinyin ();
+
+    return retval;
+}
 
 
 void

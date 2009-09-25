@@ -24,23 +24,7 @@ public:
     gboolean moveCursorToBegin (void);
     gboolean moveCursorToEnd (void);
 
-    gboolean reset (void) {
-        gboolean retval = FALSE;
-        if (m_cursor != 0) {
-            m_cursor = 0;
-            retval = TRUE;
-        }
-
-        if (m_text.length () != 0) {
-            m_text.truncate (0);
-            retval = TRUE;
-        }
-
-        if (retval)
-            updatePinyin ();
-
-        return retval;
-    }
+    gboolean reset (void);
 
 private:
     void updatePinyin (void);

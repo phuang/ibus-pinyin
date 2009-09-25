@@ -20,7 +20,9 @@ public:
 
     gboolean processKeyEvent (guint keyval, guint keycode, guint modifiers);
     void focusIn (void);
-    void focusOut (void) {}
+    void focusOut (void) {
+        reset ();
+    }
 
     void reset (gboolean need_update = TRUE) {
         m_pinyin_editor->reset ();
