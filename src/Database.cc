@@ -23,19 +23,13 @@ namespace PY {
 Database::Database (void)
     : m_db (NULL),
       m_sql (1024),
-      m_buffer (1024),
-      m_conditions (32),
-      m_strings (32)
+      m_buffer (1024)
 {
     init ();
 }
 
 Database::~Database (void)
 {
-    for (guint i = 0; i < m_strings.length (); i++) {
-        delete m_strings[i];
-    }
-
     if (m_db) {
         sqlite3_close (m_db);
         m_db = NULL;
@@ -206,68 +200,6 @@ Database::query (const PinyinArray &pinyin,
 
 
 
-inline static void
-_conditions_append_vprintf (Array<String *> &array,
-                            gint             begin,
-                            gint             end,
-                            const gchar     *fmt,
-                            va_list          args)
-{
-    gchar str[64];
-    g_vsnprintf (str, sizeof(str), fmt, args);
-
-    for (gint i = begin; i < end; i++) {
-        (*array[i]) << str;
-    }
-}
-
-inline static void
-_conditions_append_printf (Array<String *> &array,
-                           gint             begin,
-                           gint             end,
-                           const gchar     *fmt,
-                           ...)
-{
-    va_list args;
-    va_start (args, fmt);
-    _conditions_append_vprintf (array, begin, end, fmt, args);
-    va_end (args);
-}
-
-#define CONDITION_INIT_SIZE (256)
-
-inline void
-Database::conditionsDouble (void)
-{
-    gint i, len;
-
-    len = m_conditions.length ();
-
-    for (i = 0; i < len; i++) {
-        String *new_str;
-        new_str = string (len + i);
-        *new_str = *m_conditions[i];
-        m_conditions << new_str;
-    }
-}
-
-inline void
-Database::conditionsTriple (void)
-{
-    gint i, len;
-
-    len = m_conditions.length ();
-
-    for (i = 0; i < len; i++) {
-        String *new_str;
-        new_str = string ((i << 1) + len);
-        *new_str = *m_conditions[i];
-        m_conditions << new_str;
-        new_str = string ((i << 1) + len + 1);
-        *new_str = *m_conditions[i];
-        m_conditions << new_str;
-    }
-}
 
 inline static gboolean
 pinyin_option_check_sheng (guint option, gint id, gint fid)
@@ -351,8 +283,7 @@ Database::query (const PinyinArray &pinyin,
         return -1;
 
     /* prepare sql */
-    m_conditions.setSize (1);
-    m_conditions[0] = this->string (0);
+    m_conditions.reset ();
 
     for (guint i = 0; i < pinyin_len; i++) {
         const Pinyin *p;
@@ -363,88 +294,72 @@ Database::query (const PinyinArray &pinyin,
         fs2 = pinyin_option_check_sheng (option, p->sheng_id, p->fsheng_id_2);
 
         if (G_LIKELY (i > 0))
-            _conditions_append_printf (m_conditions,
-                                       0, m_conditions.length (),
+            m_conditions.appendPrintf (0, m_conditions.length (),
                                        " AND ");
 
         if (fs1 || fs2) {
             if (G_LIKELY (i < DB_INDEX_SIZE)) {
                 if (fs1 && fs2 == 0) {
-                    conditionsDouble ();
-                    _conditions_append_printf (m_conditions,
-                                               0, m_conditions.length ()  >> 1,
+                    m_conditions._double ();
+                    m_conditions.appendPrintf (0, m_conditions.length ()  >> 1,
                                                "s%d=%d", i, p->sheng_id);
-                    _conditions_append_printf (m_conditions,
-                                               m_conditions.length () >> 1, m_conditions.length (),
+                    m_conditions.appendPrintf (m_conditions.length () >> 1, m_conditions.length (),
                                                "s%d=%d", i, p->fsheng_id);
                 }
                 else if (fs1 == 0 && fs2) {
-                    conditionsDouble ();
-                    _conditions_append_printf (m_conditions,
-                                               0, m_conditions.length ()  >> 1,
+                    m_conditions._double ();
+                    m_conditions.appendPrintf (0, m_conditions.length ()  >> 1,
                                                "s%d=%d", i, p->sheng_id);
-                    _conditions_append_printf (m_conditions,
-                                               m_conditions.length () >> 1, m_conditions.length (),
+                    m_conditions.appendPrintf (m_conditions.length () >> 1, m_conditions.length (),
                                                "s%d=%d", i, p->fsheng_id_2);
                 }
                 else {
                     gint len = m_conditions.length ();
-                    conditionsTriple ();
-                    _conditions_append_printf (m_conditions,
-                                               0, len,
+                    m_conditions.triple ();
+                    m_conditions.appendPrintf (0, len,
                                                "s%d=%d", i, p->sheng_id);
-                    _conditions_append_printf (m_conditions,
-                                               len, len << 1,
+                    m_conditions.appendPrintf (len, len << 1,
                                                "s%d=%d", i, p->fsheng_id);
-                    _conditions_append_printf (m_conditions,
-                                               len << 1, m_conditions.length (),
+                    m_conditions.appendPrintf (len << 1, m_conditions.length (),
                                                "s%d=%d", i, p->fsheng_id_2);
                 }
             }
             else {
                 if (fs1 && fs2 == 0) {
-                    _conditions_append_printf (m_conditions,
-                                               0, m_conditions.length (),
+                    m_conditions.appendPrintf (0, m_conditions.length (),
                                                "s%d IN (%d,%d)", i, p->sheng_id, p->fsheng_id);
                 }
                 else if (fs1 == 0 && fs2) {
-                    _conditions_append_printf (m_conditions,
-                                               0, m_conditions.length (),
+                    m_conditions.appendPrintf (0, m_conditions.length (),
                                                "s%d IN (%d,%d)", i, p->sheng_id, p->fsheng_id_2);
                 }
                 else {
-                    _conditions_append_printf (m_conditions,
-                                               0, m_conditions.length (),
+                    m_conditions.appendPrintf (0, m_conditions.length (),
                                                "s%d IN (%d,%d,%d)", i, p->sheng_id, p->fsheng_id, p->fsheng_id_2);
                 }
             }
         }
         else {
-            _conditions_append_printf (m_conditions,
-                                       0, m_conditions.length (),
+            m_conditions.appendPrintf (0, m_conditions.length (),
                                        "s%d=%d", i, p->sheng_id);
         }
 
         if (p->yun_id != PINYIN_ID_ZERO) {
             if (pinyin_option_check_yun (option, p->yun_id, p->fyun_id)) {
                 if (G_LIKELY (i < DB_INDEX_SIZE)) {
-                    conditionsDouble ();
-                    _conditions_append_printf (m_conditions,
-                                               0, m_conditions.length ()  >> 1,
+                    m_conditions._double ();
+                    m_conditions.appendPrintf (0, m_conditions.length ()  >> 1,
                                                " AND y%d=%d", i, p->yun_id);
-                    _conditions_append_printf (m_conditions,
-                                               m_conditions.length () >> 1, m_conditions.length (),
+                    m_conditions.appendPrintf (m_conditions.length () >> 1, m_conditions.length (),
                                                " and y%d=%d", i, p->fyun_id);
                 }
                 else {
-                    _conditions_append_printf (m_conditions,
-                                               0, m_conditions.length (),
+                    m_conditions.appendPrintf (0, m_conditions.length (),
                                                " AND y%d IN (%d,%d)", i, p->yun_id, p->fyun_id);
                 }
             }
             else {
-                _conditions_append_printf (m_conditions,
-                                           0, m_conditions.length (),
+                m_conditions.appendPrintf (0, m_conditions.length (),
                                            " AND y%d=%d", i, p->yun_id);
             }
         }
@@ -458,7 +373,6 @@ Database::query (const PinyinArray &pinyin,
         else
             m_buffer << "  OR (" << (*m_conditions[i]) << ")\n";
     }
-    m_conditions.removeAll ();
 
     m_sql.printf ("SELECT * FROM ("
                   "SELECT 0 AS user_freq, * FROM main.py_phrase_%d WHERE %s UNION ALL "
