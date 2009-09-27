@@ -58,14 +58,14 @@ private:
     String *newString (void) {
         String *newstr;
         if (m_length < Array<String *>::length ()) {
-            newstr = get (m_length);
+            newstr = get (m_length++);
             newstr->truncate (0);
         }
         else {
             newstr = new String (256);
             append (newstr);
+            m_length ++;
         }
-        m_length ++;
         return newstr;
     }
 private:
