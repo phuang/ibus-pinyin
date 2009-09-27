@@ -2,6 +2,7 @@
 #define __PY_STRING_H_
 #include <glib.h>
 #include <stdarg.h>
+#include "WideString.h"
 
 namespace PY {
 
@@ -17,6 +18,11 @@ public:
 
     String (gsize init_size = 0) {
         m_string = g_string_sized_new (init_size);
+    }
+
+    String (const WideString &wstr) {
+        m_string = g_string_sized_new (wstr.length() * 6);
+        assign (wstr);
     }
 
     ~String (void) {
@@ -44,6 +50,11 @@ public:
         return assign ((const gchar *) str);
     }
 
+    String & assign (const WideString &wstr) {
+        truncate (0);
+        return append (wstr);
+    }
+
     String & insert (gint pos, gchar ch) {
         g_string_insert_c (m_string, pos, ch);
         return *this;
@@ -51,6 +62,13 @@ public:
 
     String & append (const gchar *str) {
         g_string_append (m_string, str);
+        return *this;
+    }
+
+    String & append (const WideString &wstr) {
+        for (guint i = 0; i < wstr.length (); i++) {
+            appendUnichar (wstr[i]);
+        }
         return *this;
     }
 
@@ -102,6 +120,10 @@ public:
         return assign (str);
     }
 
+    String & operator = (const WideString &wstr) {
+        return assign (wstr);
+    }
+
     String & operator += (const gchar *str) {
         return append (str);
     }
@@ -112,6 +134,10 @@ public:
 
     String & operator << (const String &str) {
         return append ((const gchar *) str);
+    }
+
+    String & operator << (const WideString &wstr) {
+        return append (wstr);
     }
 
     String & operator << (gint d) {

@@ -7,7 +7,7 @@ template<typename T>
 class Array {
 public:
     Array (guint init_size = 0) {
-        m_array = g_array_sized_new (FALSE, FALSE, sizeof (T), init_size);
+        m_array = g_array_sized_new (TRUE, FALSE, sizeof (T), init_size);
     }
 
     ~Array () {
@@ -48,6 +48,16 @@ public:
     Array<T> & append (const Array<T> & a) {
         for (guint i = 0; i < a.length (); i++)
             append (a[i]);
+        return *this;
+    }
+
+    Array<T> & insert (guint i, const T & v) {
+        g_array_insert_val (m_array, i, v);
+        return *this;
+    }
+    
+    Array<T> & remove (guint i, guint len) {
+        g_array_remove_range (m_array, i, len);
         return *this;
     }
 

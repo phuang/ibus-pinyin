@@ -11,6 +11,7 @@
 #include "Config.h"
 #include "Text.h"
 #include "Util.h"
+#include "WideString.h"
 
 #define _(text) (dgettext (GETTEXT_PACKAGE, text))
 
@@ -600,7 +601,7 @@ PinyinEngine::updatePreeditText (void)
 
     StaticText preedit_text (m_buffer);
     preedit_text.appendAttribute (IBUS_ATTR_TYPE_UNDERLINE, IBUS_ATTR_UNDERLINE_SINGLE, 0, -1);
-    ibus_engine_update_preedit_text (m_engine, preedit_text, m_buffer.length (), TRUE);
+    ibus_engine_update_preedit_text (m_engine, preedit_text, m_buffer.utf8Length (), TRUE);
 }
 
 void
