@@ -118,6 +118,7 @@ private:
     gboolean m_double_quote;
 
     guint    m_prev_pressed_key;
+    gunichar m_prev_commited_char;
 
 };
 

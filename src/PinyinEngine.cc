@@ -29,7 +29,8 @@ PinyinEngine::PinyinEngine (IBusEngine *engine)
       m_mode_simp (Config::initSimpChinese ()),
       m_quote (TRUE),
       m_double_quote (TRUE),
-      m_prev_pressed_key (0)
+      m_prev_pressed_key (0),
+      m_prev_commited_char (0)
 {
     /* */
     if (Config::doublePinyin ())
@@ -252,7 +253,11 @@ PinyinEngine::processPunct (guint keyval, guint keycode, guint modifiers)
     if (m_mode_full_punct) {
         switch (keyval) {
         case '.':
-            commit ("。"); break;
+            if (m_prev_commited_char >= '0' && m_prev_commited_char <= '9')
+                commit (keyval);
+            else
+                commit ("。");
+            break;
         case '\\':
             commit ("、"); break;
         case '^':
@@ -701,18 +706,21 @@ PinyinEngine::commit (gchar ch)
 {
     gchar str[2] = {ch, 0};
     ibus_engine_commit_text (m_engine, StaticText (str));
+    m_prev_commited_char = ch;
 }
 
 inline void
 PinyinEngine::commit (gunichar ch)
 {
     ibus_engine_commit_text (m_engine, Text (ch));
+    m_prev_commited_char = ch;
 }
 
 inline void
 PinyinEngine::commit (const gchar *str)
 {
     ibus_engine_commit_text (m_engine, StaticText (str));
+    m_prev_commited_char = 0;
 }
 
 inline void
