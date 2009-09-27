@@ -20,7 +20,7 @@ public:
     }
     ~Conditions (void) {
         for (guint i = 0; i < Array<String *>::length (); i++) {
-            delete Array<String *>::operator[] (i);
+            delete get (i);
         }
     }
     guint length (void) { return m_length; }
@@ -31,21 +31,21 @@ public:
     void _double (void) {
         for (guint i = m_length - 1; i >= 0; i--) {
             String *str = newString ();
-            *str = *Array<String *>::operator [] (i);
+            *str = *get (i);
         }
     }
     void triple (void) {
         for (guint i = m_length - 1; i >= 0; i--) {
             String *str1 = newString ();
             String *str2 = newString ();
-            *str1 = *str2 = *Array<String *>::operator [] (i);
+            *str1 = *str2 = *get (i);
         }
     }
     void appendVPrintf (gint begin, gint end, const gchar *fmt, va_list args) {
         gchar str[64];
         g_vsnprintf (str, sizeof(str), fmt, args);
         for (gint i = begin; i < end; i++) {
-            (* operator [] (i)) << str;
+            (*get (i)) << str;
         }
     }
     void appendPrintf (gint begin, gint end, const gchar *fmt, ...) {
@@ -58,12 +58,12 @@ private:
     String *newString (void) {
         String *newstr;
         if (m_length < Array<String *>::length ()) {
-            newstr = Array<String *>::operator [] (m_length);
+            newstr = get (m_length);
             newstr->truncate (0);
         }
         else {
             newstr = new String (256);
-            Array<String *>::operator << (newstr);
+            append (newstr);
         }
         m_length ++;
         return newstr;
