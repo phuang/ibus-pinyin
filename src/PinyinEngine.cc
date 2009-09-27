@@ -744,9 +744,9 @@ PinyinEngine::commit (void)
     else {
         m_buffer << p;
     }
-    commit ((const gchar *)m_buffer);
     m_phrase_editor.commit ();
     reset ();
+    commit ((const gchar *)m_buffer);
 }
 
 inline gboolean
