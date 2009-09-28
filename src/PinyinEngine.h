@@ -80,7 +80,9 @@ private:
     void showSetupDialog (void);
 
     gboolean selectCandidate (guint i);
+    gboolean selectCandidateInPage (guint i);
     gboolean resetCandidate (guint i);
+    gboolean resetCandidateInPage (guint i);
     void updatePreeditText (void);
     void updateAuxiliaryText (void);
     void updateLookupTable (void);

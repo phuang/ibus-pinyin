@@ -168,9 +168,9 @@ PinyinEngine::processNumber (guint keyval, guint keycode, guint modifiers)
         i = keyval - IBUS_1;
 
     if (modifiers == 0)
-        selectCandidate (i);
+        selectCandidateInPage (i);
     else if ((modifiers & ~ IBUS_LOCK_MASK) == IBUS_CONTROL_MASK)
-        resetCandidate (i);
+        resetCandidateInPage (i);
     return TRUE;
 }
 
@@ -206,7 +206,7 @@ PinyinEngine::processPunct (guint keyval, guint keycode, guint modifiers)
     if (G_UNLIKELY (!isEmpty ())) {
         switch (keyval) {
         case IBUS_space:
-            commit ();
+            selectCandidate (m_lookup_table.cursorPos ());
             return TRUE;
         case IBUS_apostrophe:
             return processPinyin (keyval, keycode, modifiers);
@@ -301,13 +301,13 @@ PinyinEngine::processOthers (guint keyval, guint keycode, guint modifiers)
     case IBUS_Shift_L:
         if (Config::shiftSelectCandidate () &&
             m_mode_chinese) {
-            selectCandidate (1);
+            selectCandidateInPage (1);
         }
         break;
     case IBUS_Shift_R:
         if (Config::shiftSelectCandidate () &&
             m_mode_chinese) {
-            selectCandidate (2);
+            selectCandidateInPage (2);
         }
         break;
     case IBUS_Return:
@@ -760,10 +760,6 @@ PinyinEngine::commit (void)
 inline gboolean
 PinyinEngine::selectCandidate (guint i)
 {
-    guint page_size = m_lookup_table.pageSize ();
-    guint cursor_pos = m_lookup_table.cursorPos ();
-    i += (cursor_pos / page_size) * page_size;
-
     if (m_phrase_editor.selectCandidate (i)) {
         if (G_UNLIKELY (m_phrase_editor.cursor () == m_pinyin_editor->pinyin ().length ())) {
             commit ();
@@ -778,18 +774,34 @@ PinyinEngine::selectCandidate (guint i)
 }
 
 inline gboolean
-PinyinEngine::resetCandidate (guint i)
+PinyinEngine::selectCandidateInPage (guint i)
 {
     guint page_size = m_lookup_table.pageSize ();
     guint cursor_pos = m_lookup_table.cursorPos ();
     i += (cursor_pos / page_size) * page_size;
 
+    return selectCandidate (i);
+}
+
+inline gboolean
+PinyinEngine::resetCandidate (guint i)
+{
     if (m_phrase_editor.resetCandidate (i)) {
         updatePreeditText ();
         updateAuxiliaryText ();
         updateLookupTable ();
     }
     return TRUE;
+}
+
+inline gboolean
+PinyinEngine::resetCandidateInPage (guint i)
+{
+    guint page_size = m_lookup_table.pageSize ();
+    guint cursor_pos = m_lookup_table.cursorPos ();
+    i += (cursor_pos / page_size) * page_size;
+
+    return resetCandidate (i);
 }
 
 };
