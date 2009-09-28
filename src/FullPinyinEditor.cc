@@ -188,11 +188,11 @@ FullPinyinEditor::updatePinyin (void)
         m_pinyin_len = 0;
     }
     else {
-        m_pinyin_len = m_parser.parse (m_text,
-                                       m_cursor,
-                                       Config::option (),
-                                       m_pinyin,
-                                       MAX_PHRASE_LEN);
+        m_pinyin_len = m_parser.parse (m_text,              // text
+                                       m_cursor,            // text length
+                                       Config::option (),   // option
+                                       m_pinyin,            // result
+                                       MAX_PHRASE_LEN);     // max result length
     }
 }
 
