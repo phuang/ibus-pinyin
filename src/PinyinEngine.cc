@@ -675,7 +675,7 @@ PinyinEngine::updateAuxiliaryText (void)
 
     for (guint i = m_phrase_editor.cursor (); i < m_pinyin_editor->pinyin().length (); ++i) {
         if (G_LIKELY (i != m_phrase_editor.cursor ()))
-            m_buffer << '\'';
+            m_buffer << ' ';
         const Pinyin *p = m_pinyin_editor->pinyin()[i];
         m_buffer << p->sheng;
         m_buffer << p->yun;
