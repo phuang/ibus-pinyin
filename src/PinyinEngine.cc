@@ -659,7 +659,7 @@ PinyinEngine::updatePreeditTextInTypingMode (void)
                 candidate_begin, candidate_begin + candidate_length);
     }
     // ibus_engine_update_preedit_text (m_engine, preedit_text, m_buffer.utf8Length (), TRUE);
-    ibus_engine_update_preedit_text (m_engine, preedit_text, 0, TRUE);
+    ibus_engine_update_preedit_text (m_engine, preedit_text, candidate_begin, TRUE);
 }
 
 void
@@ -677,16 +677,13 @@ PinyinEngine::updatePreeditTextInEditingMode (void)
 
     /* add highlight candidate */
     const PinyinArray & pinyin = m_phrase_editor.pinyin ();
-    guint candidate_begin = 0;
+    guint candidate_begin = m_buffer.utf8Length ();
     guint candidate_length = 0;
     guint candidate_pinyin_end = 0;
     if (m_phrase_editor.candidates ().length () > 0) {
         const Phrase & candidate = m_phrase_editor.candidate (m_lookup_table.cursorPos ());
-        candidate_begin = m_buffer.utf8Length ();
         candidate_length = candidate.len;
 
-        if (m_buffer)
-            m_buffer << ' ';
         m_buffer << pinyin[candidate_begin]->sheng << pinyin[candidate_begin]->yun;
 
         for (guint i = 1; i < candidate_length; i++) {
@@ -722,7 +719,7 @@ PinyinEngine::updatePreeditTextInEditingMode (void)
                 candidate_begin, candidate_pinyin_end);
     }
     // ibus_engine_update_preedit_text (m_engine, preedit_text, m_buffer.utf8Length (), TRUE);
-    ibus_engine_update_preedit_text (m_engine, preedit_text, 0, TRUE);
+    ibus_engine_update_preedit_text (m_engine, preedit_text, candidate_begin, TRUE);
 }
 
 void
@@ -736,9 +733,10 @@ PinyinEngine::updateAuxiliaryText (void)
         return;
     }
 
-    guint cursor_pos;
+    // guint cursor_pos;
 
     m_buffer.truncate (0);
+#if 0
     if (G_UNLIKELY (m_phrase_editor.selectedString ())) {
         if (G_LIKELY (m_mode_simp))
             m_buffer << m_phrase_editor.selectedString ();
@@ -748,6 +746,7 @@ PinyinEngine::updateAuxiliaryText (void)
 
     if (m_buffer)
         m_buffer << ' ';
+#endif
 
     for (guint i = m_phrase_editor.cursor (); i < m_pinyin_editor->pinyin().length (); ++i) {
         if (G_LIKELY (i != m_phrase_editor.cursor ()))
@@ -759,14 +758,14 @@ PinyinEngine::updateAuxiliaryText (void)
 
     if (G_UNLIKELY (m_pinyin_editor->pinyinLength () == m_pinyin_editor->cursor ())) {
         /* aux = pinyin + non-pinyin */
-        cursor_pos =  m_buffer.utf8Length ();
+        // cursor_pos =  m_buffer.utf8Length ();
         m_buffer << '|' << m_pinyin_editor->textAfterPinyin ();
     }
     else {
         /* aux = pinyin + non-pinyin before cursor + non-pinyin after cursor */
         m_buffer.append (m_pinyin_editor->textAfterPinyin (),
                      m_pinyin_editor->cursor () - m_pinyin_editor->pinyinLength ());
-        cursor_pos =  m_buffer.utf8Length ();
+        // cursor_pos =  m_buffer.utf8Length ();
         m_buffer  << '|' << m_pinyin_editor->textAfterCursor ();
     }
 
