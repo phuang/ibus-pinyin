@@ -15,6 +15,13 @@ public:
     
     const String & text (void) const { return m_text; }
     const gchar * textAfterPinyin (void) const { return (const gchar *)m_text + m_pinyin_len; }
+    const gchar * textAfterPinyin (guint i) const {
+        g_assert (i <= m_pinyin.length ());
+        if ( G_UNLIKELY (i == 0))
+            return m_text;
+        i--;
+        return (const gchar *)m_text + m_pinyin[i].begin + m_pinyin[i].len;
+    }
     const gchar * textAfterCursor (void) const { return (const gchar *)m_text + m_cursor; }
     guint cursor (void) const { return m_cursor; }
     gboolean isEmpty (void) const { return m_text.isEmpty (); }

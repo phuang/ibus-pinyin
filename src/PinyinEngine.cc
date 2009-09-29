@@ -208,7 +208,10 @@ PinyinEngine::processPunct (guint keyval, guint keycode, guint modifiers)
     if (G_UNLIKELY (!isEmpty ())) {
         switch (keyval) {
         case IBUS_space:
-            selectCandidate (m_lookup_table.cursorPos ());
+            if (G_UNLIKELY (m_phrase_editor.cursor () == m_pinyin_editor->pinyin ().length ()))
+                commit ();
+            else
+                selectCandidate (m_lookup_table.cursorPos ());
             return TRUE;
         case IBUS_apostrophe:
             return processPinyin (keyval, keycode, modifiers);
@@ -313,15 +316,21 @@ PinyinEngine::processOthers (guint keyval, guint keycode, guint modifiers)
         }
         break;
     case IBUS_Return:
+        m_buffer.truncate (0);
+        if (G_LIKELY (m_mode_simp))
+            m_buffer << m_phrase_editor.selectedString ();
+        else
+            SimpTradConverter::simpToTrad (m_phrase_editor.selectedString (), m_buffer);
         if (G_UNLIKELY (m_mode_full)) {
-            m_buffer.truncate (0);
-            for (const gchar *p = m_pinyin_editor->text (); *p != 0; p++) {
+            const gchar *p = m_pinyin_editor->textAfterPinyin (m_buffer.utf8Length ());
+            for (; *p != 0; p++) {
                 m_buffer.appendUnichar (HalfFullConverter::toFull (*p));
             }
             commit (m_buffer);
         }
         else {
-            commit (m_pinyin_editor->text ());
+            m_buffer << m_pinyin_editor->textAfterPinyin (m_buffer.utf8Length ());
+            commit (m_buffer);
         }
         m_pinyin_editor->reset ();
         _update = TRUE;
@@ -620,9 +629,8 @@ PinyinEngine::updatePreeditText (void)
     /* add rest text */
     const PinyinArray & pinyin = m_phrase_editor.pinyin ();
     if (candidate_begin + candidate_length < pinyin.length ())
-        m_buffer <<
-            ((const gchar *) m_pinyin_editor->text ()) +
-              pinyin[candidate_begin + candidate_length].begin;
+        m_buffer << ((const gchar *) m_pinyin_editor->textAfterPinyin (
+                                                candidate_begin + candidate_length));
     else
         m_buffer << ((const gchar *) m_pinyin_editor->textAfterPinyin ());
 
@@ -640,7 +648,8 @@ PinyinEngine::updateAuxiliaryText (void)
 {
 
     /* clear pinyin array */
-    if (G_UNLIKELY (isEmpty ())) {
+    if (G_UNLIKELY (isEmpty () ||
+        m_phrase_editor.cursor () == m_pinyin_editor->pinyin ().length ())) {
         ibus_engine_hide_auxiliary_text (m_engine);
         return;
     }
@@ -787,7 +796,8 @@ inline gboolean
 PinyinEngine::selectCandidate (guint i)
 {
     if (m_phrase_editor.selectCandidate (i)) {
-        if (G_UNLIKELY (m_phrase_editor.cursor () == m_pinyin_editor->pinyin ().length ())) {
+        if (G_UNLIKELY (m_phrase_editor.cursor () == m_pinyin_editor->pinyin ().length () &&
+                        *m_pinyin_editor->textAfterPinyin () == '\0')) {
             commit ();
         }
         else {
