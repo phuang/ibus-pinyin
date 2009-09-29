@@ -625,11 +625,10 @@ PinyinEngine::updatePreeditTextInTypingMode (void)
     }
 
     /* add highlight candidate */
-    guint candidate_begin = 0;
+    guint candidate_begin = m_buffer.utf8Length ();
     guint candidate_length = 0;
     if (m_phrase_editor.candidates ().length () > 0) {
         const Phrase & candidate = m_phrase_editor.candidate (m_lookup_table.cursorPos ());
-        candidate_begin = m_buffer.utf8Length ();
         candidate_length = candidate.len;
         if (G_LIKELY (m_mode_simp)) {
             m_buffer << candidate;
