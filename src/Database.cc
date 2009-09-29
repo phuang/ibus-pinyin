@@ -458,12 +458,7 @@ Database::commit (const PhraseArray  &phrases)
 
     m_sql = "BEGIN TRANSACTION;\n";
     for (guint i = 0; i < phrases.length (); i++) {
-        strcat (phrase.phrase, phrases[i].phrase);
-        for (guint j = 0; j < phrases[i].len; j++) {
-            phrase.pinyin_id[phrase.len + j][0] = phrases[i].pinyin_id[j][0];
-            phrase.pinyin_id[phrase.len + j][1] = phrases[i].pinyin_id[j][1];
-        }
-        phrase.len += phrases[i].len;
+        phrase += phrases[i];
         phraseSql (phrases[i], m_sql);
     }
     if (phrases.length () > 1)
