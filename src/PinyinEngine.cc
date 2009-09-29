@@ -208,10 +208,12 @@ PinyinEngine::processPunct (guint keyval, guint keycode, guint modifiers)
     if (G_UNLIKELY (!isEmpty ())) {
         switch (keyval) {
         case IBUS_space:
-            if (G_UNLIKELY (m_phrase_editor.cursor () == m_pinyin_editor->pinyin ().length ()))
-                commit ();
-            else
+            if (m_phrase_editor.pinyinExistsAfterCursor ()) {
                 selectCandidate (m_lookup_table.cursorPos ());
+            }
+            else {
+                commit ();
+            }
             return TRUE;
         case IBUS_apostrophe:
             return processPinyin (keyval, keycode, modifiers);
@@ -855,17 +857,17 @@ PinyinEngine::commit (void)
 
     m_buffer.truncate (0);
     if (G_LIKELY (m_mode_simp)) {
-        m_buffer << m_phrase_editor.selectedString () << m_phrase_editor.candidate (0);
+        m_buffer << m_phrase_editor.selectedString ();
     }
     else {
         SimpTradConverter::simpToTrad (m_phrase_editor.selectedString (), m_buffer);
-        SimpTradConverter::simpToTrad (m_phrase_editor.candidate (0), m_buffer);
     }
 
     const gchar *p = m_pinyin_editor->textAfterPinyin ();
     if (G_UNLIKELY (m_mode_full)) {
-        while (*p != 0)
+        while (*p != '\0') {
             m_buffer.appendUnichar (HalfFullConverter::toFull (*p++));
+        }
     }
     else {
         m_buffer << p;
@@ -879,15 +881,15 @@ inline gboolean
 PinyinEngine::selectCandidate (guint i)
 {
     if (m_phrase_editor.selectCandidate (i)) {
-        if (G_UNLIKELY (m_phrase_editor.cursor () == m_pinyin_editor->pinyin ().length () &&
-                        *m_pinyin_editor->textAfterPinyin () == '\0')) {
+        if ((!m_phrase_editor.pinyinExistsAfterCursor ()) &&
+            *m_pinyin_editor->textAfterPinyin () == '\0') {
             commit ();
         }
-        else {
+        else
             updateUI ();
-        }
+        return TRUE;
     }
-    return TRUE;
+    return FALSE;
 }
 
 inline gboolean

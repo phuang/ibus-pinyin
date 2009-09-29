@@ -15,6 +15,9 @@ public:
     const PinyinArray & pinyin (void) const { return m_pinyin; }
     const PhraseArray & candidates (void) const { return m_candidates; }
     guint cursor (void) const { return m_cursor; }
+    gboolean pinyinExistsAfterCursor (void) const {
+        return m_pinyin.length () > m_cursor;
+    }
 
     const Phrase & candidate (guint i) const {
         return m_candidates[i];
