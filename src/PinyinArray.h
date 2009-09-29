@@ -24,6 +24,14 @@ struct PinyinSegment {
     const Pinyin * operator-> (void) const {
         return pinyin;
     }
+
+    gboolean operator == (const PinyinSegment & p) const {
+        return (pinyin == p.pinyin) && (begin == p.begin) && (len == p.len);
+    }
+
+    gboolean operator == (const Pinyin *p) const {
+        return pinyin == p;
+    }
 };
 
 class PinyinArray: public Array<PinyinSegment> {

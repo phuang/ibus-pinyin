@@ -7,7 +7,7 @@ template<typename T>
 class Array {
 public:
     Array (guint init_size = 0) {
-        m_array = g_array_sized_new (TRUE, FALSE, sizeof (T), init_size);
+        m_array = g_array_sized_new (FALSE, FALSE, sizeof (T), init_size);
     }
 
     ~Array () {

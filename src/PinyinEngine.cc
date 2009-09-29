@@ -616,14 +616,18 @@ PinyinEngine::updatePreeditText (void)
     }
 
     /* add highlight candidate */
-    const Phrase & candidate = m_phrase_editor.candidate (m_lookup_table.cursorPos ());
-    guint candidate_begin = m_buffer.utf8Length ();
-    guint candidate_length = candidate.len;
-    if (G_LIKELY (m_mode_simp)) {
-        m_buffer << candidate;
-    }
-    else {
-        SimpTradConverter::simpToTrad (candidate, m_buffer);
+    guint candidate_begin = 0;
+    guint candidate_length = 0;
+    if (m_phrase_editor.candidates ().length () > 0) {
+        const Phrase & candidate = m_phrase_editor.candidate (m_lookup_table.cursorPos ());
+        candidate_begin = m_buffer.utf8Length ();
+        candidate_length = candidate.len;
+        if (G_LIKELY (m_mode_simp)) {
+            m_buffer << candidate;
+        }
+        else {
+            SimpTradConverter::simpToTrad (candidate, m_buffer);
+        }
     }
 
     /* add rest text */
@@ -637,11 +641,14 @@ PinyinEngine::updatePreeditText (void)
     StaticText preedit_text (m_buffer);
     /* underline */
     preedit_text.appendAttribute (IBUS_ATTR_TYPE_UNDERLINE, IBUS_ATTR_UNDERLINE_SINGLE, 0, -1);
+
     /* candidate */
-    preedit_text.appendAttribute (IBUS_ATTR_TYPE_FOREGROUND, 0x00000000,
-            candidate_begin, candidate_begin + candidate_length);
-    preedit_text.appendAttribute (IBUS_ATTR_TYPE_BACKGROUND, 0x00c8c8f0,
-            candidate_begin, candidate_begin + candidate_length);
+    if (candidate_length != 0) {
+        preedit_text.appendAttribute (IBUS_ATTR_TYPE_FOREGROUND, 0x00000000,
+                candidate_begin, candidate_begin + candidate_length);
+        preedit_text.appendAttribute (IBUS_ATTR_TYPE_BACKGROUND, 0x00c8c8f0,
+                candidate_begin, candidate_begin + candidate_length);
+    }
     ibus_engine_update_preedit_text (m_engine, preedit_text, m_buffer.utf8Length (), TRUE);
 }
 
