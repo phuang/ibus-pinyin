@@ -658,7 +658,8 @@ PinyinEngine::updatePreeditTextInTypingMode (void)
         preedit_text.appendAttribute (IBUS_ATTR_TYPE_BACKGROUND, 0x00c8c8f0,
                 candidate_begin, candidate_begin + candidate_length);
     }
-    ibus_engine_update_preedit_text (m_engine, preedit_text, m_buffer.utf8Length (), TRUE);
+    // ibus_engine_update_preedit_text (m_engine, preedit_text, m_buffer.utf8Length (), TRUE);
+    ibus_engine_update_preedit_text (m_engine, preedit_text, 0, TRUE);
 }
 
 void
@@ -686,10 +687,10 @@ PinyinEngine::updatePreeditTextInEditingMode (void)
 
         if (m_buffer)
             m_buffer << ' ';
-        m_buffer << pinyin[0]->sheng << pinyin[0]->yun;
+        m_buffer << pinyin[candidate_begin]->sheng << pinyin[candidate_begin]->yun;
 
         for (guint i = 1; i < candidate_length; i++) {
-            m_buffer << ' ' << pinyin[i]->sheng << pinyin[i]->yun;
+            m_buffer << ' ' << pinyin[candidate_begin + i]->sheng << pinyin[candidate_begin + i]->yun;
         }
         candidate_pinyin_end = m_buffer.utf8Length ();
     }
@@ -720,7 +721,8 @@ PinyinEngine::updatePreeditTextInEditingMode (void)
         preedit_text.appendAttribute (IBUS_ATTR_TYPE_BACKGROUND, 0x00c8c8f0,
                 candidate_begin, candidate_pinyin_end);
     }
-    ibus_engine_update_preedit_text (m_engine, preedit_text, m_buffer.utf8Length (), TRUE);
+    // ibus_engine_update_preedit_text (m_engine, preedit_text, m_buffer.utf8Length (), TRUE);
+    ibus_engine_update_preedit_text (m_engine, preedit_text, 0, TRUE);
 }
 
 void
@@ -743,6 +745,9 @@ PinyinEngine::updateAuxiliaryText (void)
         else
             SimpTradConverter::simpToTrad (m_phrase_editor.selectedString (), m_buffer);
     }
+
+    if (m_buffer)
+        m_buffer << ' ';
 
     for (guint i = m_phrase_editor.cursor (); i < m_pinyin_editor->pinyin().length (); ++i) {
         if (G_LIKELY (i != m_phrase_editor.cursor ()))
