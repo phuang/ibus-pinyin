@@ -638,6 +638,8 @@ PinyinEngine::updatePreeditText (void)
     /* underline */
     preedit_text.appendAttribute (IBUS_ATTR_TYPE_UNDERLINE, IBUS_ATTR_UNDERLINE_SINGLE, 0, -1);
     /* candidate */
+    preedit_text.appendAttribute (IBUS_ATTR_TYPE_FOREGROUND, 0x00000000,
+            candidate_begin, candidate_begin + candidate_length);
     preedit_text.appendAttribute (IBUS_ATTR_TYPE_BACKGROUND, 0x00c8c8f0,
             candidate_begin, candidate_begin + candidate_length);
     ibus_engine_update_preedit_text (m_engine, preedit_text, m_buffer.utf8Length (), TRUE);
