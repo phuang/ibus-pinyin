@@ -61,7 +61,7 @@ DoublePinyinEditor::insert (gint ch)
     const Pinyin *pinyin = isPinyin (m_text[m_cursor - 2], ch);
     if (pinyin == NULL)
         return TRUE;
-    m_pinyin << pinyin;
+    m_pinyin.append (pinyin, m_pinyin_len, 2);
     m_pinyin_len += 2;
     return TRUE;
 }
@@ -237,7 +237,7 @@ DoublePinyinEditor::updatePinyin (void)
         const Pinyin *pinyin = isPinyin (m_text[i], m_text[i + 1]);
         if (pinyin == NULL)
             break;
-        m_pinyin << pinyin;
+        m_pinyin.append (pinyin, m_pinyin_len, 2);
         m_pinyin_len += 2;
     }
 }

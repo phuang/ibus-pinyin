@@ -109,7 +109,7 @@ public:
         return length () != 0;
     }
 
-private:
+protected:
     GArray *m_array;
 };
 

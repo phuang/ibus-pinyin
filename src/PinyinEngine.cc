@@ -590,7 +590,7 @@ PinyinEngine::propertyActivate (const gchar *prop_name, guint prop_state)
 void
 PinyinEngine::updatePreeditText (void)
 {
-    /* preedit text = selected phrases + highlight candidate + reset pinyin + non-pinyin text */
+    /* preedit text = selected phrases + highlight candidate + rest text */
     if (G_UNLIKELY (m_phrase_editor.isEmpty () && m_pinyin_editor->isEmpty ())) {
         ibus_engine_hide_preedit_text (m_engine);
         return;
@@ -604,34 +604,34 @@ PinyinEngine::updatePreeditText (void)
             m_buffer << m_phrase_editor.selectedString ();
         else
             SimpTradConverter::simpToTrad (m_phrase_editor.selectedString (), m_buffer);
-        m_buffer << ' ';
     }
 
     /* add highlight candidate */
+    const Phrase & candidate = m_phrase_editor.candidate (m_lookup_table.cursorPos ());
+    guint candidate_begin = m_buffer.utf8Length ();
+    guint candidate_length = candidate.len;
     if (G_LIKELY (m_mode_simp)) {
-        m_buffer << m_phrase_editor.candidate (m_lookup_table.cursorPos ());
+        m_buffer << candidate;
     }
     else {
-        SimpTradConverter::simpToTrad (m_phrase_editor.candidate (m_lookup_table.cursorPos ()),
-                                        m_buffer);
+        SimpTradConverter::simpToTrad (candidate, m_buffer);
     }
 
-    /* add reset pinyin */
+    /* add rest text */
     const PinyinArray & pinyin = m_phrase_editor.pinyin ();
-    guint i =  m_buffer.utf8Length ();
-    if (i < pinyin.length ()) {
-        m_buffer << ' ' << pinyin[i]->sheng << pinyin[i]->yun;
-        i ++;
-    }
-    for (; i < pinyin.length (); i++) {
-        m_buffer << '\'' << pinyin[i]->sheng << pinyin[i]->yun;
-    }
-
-    /* add text after pinyin (non-pinyin) */
-    m_buffer << ' ' << m_pinyin_editor->textAfterPinyin ();
+    if (candidate_begin + candidate_length < pinyin.length ())
+        m_buffer <<
+            ((const gchar *) m_pinyin_editor->text ()) +
+              pinyin[candidate_begin + candidate_length].begin;
+    else
+        m_buffer << ((const gchar *) m_pinyin_editor->textAfterPinyin ());
 
     StaticText preedit_text (m_buffer);
+    /* underline */
     preedit_text.appendAttribute (IBUS_ATTR_TYPE_UNDERLINE, IBUS_ATTR_UNDERLINE_SINGLE, 0, -1);
+    /* candidate */
+    preedit_text.appendAttribute (IBUS_ATTR_TYPE_BACKGROUND, 0x00c8c8f0,
+            candidate_begin, candidate_begin + candidate_length);
     ibus_engine_update_preedit_text (m_engine, preedit_text, m_buffer.utf8Length (), TRUE);
 }
 
