@@ -588,19 +588,19 @@ PinyinEngine::updatePreeditText (void)
     }
 
     m_buffer.truncate (0);
-    if (G_UNLIKELY (m_phrase_editor.string1 ())) {
+    if (G_UNLIKELY (m_phrase_editor.selectedString ())) {
         if (G_LIKELY (m_mode_simp))
-            m_buffer << m_phrase_editor.string1 ();
+            m_buffer << m_phrase_editor.selectedString ();
         else
-            SimpTradConverter::simpToTrad (m_phrase_editor.string1 (), m_buffer);
+            SimpTradConverter::simpToTrad (m_phrase_editor.selectedString (), m_buffer);
         m_buffer << ' ';
     }
 
     if (G_LIKELY (m_mode_simp)) {
-        m_buffer << m_phrase_editor.string2 ();
+        m_buffer << m_phrase_editor.candidate (0);
     }
     else {
-        SimpTradConverter::simpToTrad (m_phrase_editor.string2 (), m_buffer);
+        SimpTradConverter::simpToTrad (m_phrase_editor.candidate (0), m_buffer);
     }
     m_buffer << m_pinyin_editor->textAfterPinyin ();
 
@@ -622,11 +622,11 @@ PinyinEngine::updateAuxiliaryText (void)
     guint cursor_pos;
 
     m_buffer.truncate (0);
-    if (G_UNLIKELY (m_phrase_editor.string1 ())) {
+    if (G_UNLIKELY (m_phrase_editor.selectedString ())) {
         if (G_LIKELY (m_mode_simp))
-            m_buffer << m_phrase_editor.string1 ();
+            m_buffer << m_phrase_editor.selectedString ();
         else
-            SimpTradConverter::simpToTrad (m_phrase_editor.string1 (), m_buffer);
+            SimpTradConverter::simpToTrad (m_phrase_editor.selectedString (), m_buffer);
     }
 
     for (guint i = m_phrase_editor.cursor (); i < m_pinyin_editor->pinyin().length (); ++i) {
@@ -664,7 +664,7 @@ PinyinEngine::updateLookupTable (void)
     m_lookup_table.clear ();
     m_lookup_table.setPageSize (Config::pageSize ());
 
-    guint candidate_nr = m_phrase_editor.candidateNumber ();
+    guint candidate_nr = m_phrase_editor.candidates ().length ();
 
     if (G_UNLIKELY (candidate_nr == 0)) {
         ibus_engine_hide_lookup_table (m_engine);
@@ -674,7 +674,7 @@ PinyinEngine::updateLookupTable (void)
     if (G_LIKELY (m_mode_simp)) {
         for (guint i = 0; i < candidate_nr; i++) {
             StaticText text (m_phrase_editor.candidate (i));
-            if (m_phrase_editor.candidateInUserPhease (i))
+            if (m_phrase_editor.candidateIsUserPhease (i))
                 text.appendAttribute (IBUS_ATTR_TYPE_FOREGROUND, 0x000000ef, 0, -1);
             m_lookup_table.appendCandidate (text);
         }
@@ -684,7 +684,7 @@ PinyinEngine::updateLookupTable (void)
             m_buffer.truncate (0);
             SimpTradConverter::simpToTrad (m_phrase_editor.candidate (i), m_buffer);
             Text text (m_buffer);
-            if (m_phrase_editor.candidateInUserPhease (i))
+            if (m_phrase_editor.candidateIsUserPhease (i))
                 text.appendAttribute (IBUS_ATTR_TYPE_FOREGROUND, 0x000000ef, 0, -1);
             m_lookup_table.appendCandidate (text);
         }
@@ -737,11 +737,11 @@ PinyinEngine::commit (void)
 
     m_buffer.truncate (0);
     if (G_LIKELY (m_mode_simp)) {
-        m_buffer << m_phrase_editor.string1 () << m_phrase_editor.string2 ();
+        m_buffer << m_phrase_editor.selectedString () << m_phrase_editor.candidate (0);
     }
     else {
-        SimpTradConverter::simpToTrad (m_phrase_editor.string1 (), m_buffer);
-        SimpTradConverter::simpToTrad (m_phrase_editor.string2 (), m_buffer);
+        SimpTradConverter::simpToTrad (m_phrase_editor.selectedString (), m_buffer);
+        SimpTradConverter::simpToTrad (m_phrase_editor.candidate (0), m_buffer);
     }
 
     const gchar *p = m_pinyin_editor->textAfterPinyin ();

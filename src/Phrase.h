@@ -23,6 +23,10 @@ struct _Phrase {
         len = 0;
     }
 
+    gboolean isEmpty (void) const {
+        return len == 0;
+    }
+
     Phrase & operator += (const Phrase & a) {
         g_assert (len + a.len <= MAX_PHRASE_LEN);
         strncat (phrase, a.phrase, sizeof (phrase));
@@ -34,9 +38,10 @@ struct _Phrase {
         return *this;
     }
 
-    gboolean isEmpty (void) const {
-        return len == 0;
+    operator const gchar * (void) const {
+        return phrase;
     }
+
 };
 
 };

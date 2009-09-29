@@ -121,15 +121,6 @@ struct _Pinyin {
 #define MAX_UTF8_LEN 6
 #define MAX_PHRASE_LEN 16
 
-typedef struct _Phrase Phrase;
-struct _Phrase {
-    gchar phrase[(MAX_PHRASE_LEN + 1) * MAX_UTF8_LEN];
-    guint  freq;
-    guint  user_freq;
-    guint  pinyin_id[MAX_PHRASE_LEN][2];
-    guint  len;
-};
-
 };
 
 #endif
