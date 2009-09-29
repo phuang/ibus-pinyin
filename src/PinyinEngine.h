@@ -84,6 +84,8 @@ private:
     gboolean resetCandidate (guint i);
     gboolean resetCandidateInPage (guint i);
     void updatePreeditText (void);
+    void updatePreeditTextInEditingMode (void);
+    void updatePreeditTextInTypingMode (void);
     void updateAuxiliaryText (void);
     void updateLookupTable (void);
     void updatePhraseEditor (void);
