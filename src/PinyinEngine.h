@@ -26,7 +26,8 @@ public:
 
     void reset (gboolean need_update = TRUE) {
         m_pinyin_editor->reset ();
-        update (need_update);
+        m_phrase_editor.reset ();
+        updateUI (need_update);
     }
 
     void resetQuote (void) {
@@ -43,16 +44,15 @@ public:
 
     void propertyActivate (const gchar *prop_name, guint prop_state);
 
-    void update (gboolean now = TRUE) {
+    void updateUI (gboolean now = TRUE) {
         if (G_UNLIKELY (now || m_need_update >= 4)) {
-            updatePhraseEditor ();
             updateLookupTable ();
             updateAuxiliaryText ();
             updatePreeditText ();
             m_need_update = 0;
         } else {
             if (m_need_update == 0) {
-                g_idle_add ((GSourceFunc) delayUpdateHandler, this);
+                g_idle_add ((GSourceFunc) delayUpdateUIHandler, this);
             }
             m_need_update ++;
         }
@@ -88,9 +88,9 @@ private:
     void updateLookupTable (void);
     void updatePhraseEditor (void);
 
-    static gboolean delayUpdateHandler (PinyinEngine *pinyin) {
+    static gboolean delayUpdateUIHandler (PinyinEngine *pinyin) {
         if (pinyin->m_need_update > 0)
-            pinyin->update (TRUE);
+            pinyin->updateUI (TRUE);
         return FALSE;
     }
 
