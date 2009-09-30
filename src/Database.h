@@ -29,13 +29,13 @@ public:
         newString ();
     }
     void _double (void) {
-        for (guint i = m_length - 1; i >= 0; i--) {
+        for (gint i = m_length - 1; i >= 0; i--) {
             String *str = newString ();
             *str = *get (i);
         }
     }
     void triple (void) {
-        for (guint i = m_length - 1; i >= 0; i--) {
+        for (gint i = m_length - 1; i >= 0; i--) {
             String *str1 = newString ();
             String *str2 = newString ();
             *str1 = *str2 = *get (i);
