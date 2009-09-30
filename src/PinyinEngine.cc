@@ -177,6 +177,32 @@ PinyinEngine::processNumber (guint keyval, guint keycode, guint modifiers)
 }
 
 inline gboolean
+PinyinEngine::processSpace (guint keyval, guint keycode, guint modifiers)
+{
+    if (CMSHM_FILTER (modifiers) != 0)
+        return FALSE;
+
+    if (G_UNLIKELY (keyval == IBUS_space && (modifiers & IBUS_SHIFT_MASK))) {
+        toggleModeFull ();
+        return TRUE;
+    }
+
+    /* Chinese mode */
+    if (G_UNLIKELY (m_mode_chinese && !isEmpty ())) {
+        if (m_phrase_editor.pinyinExistsAfterCursor ()) {
+            selectCandidate (m_lookup_table.cursorPos ());
+        }
+        else {
+            commit ();
+        }
+    }
+    else {
+        commit (m_mode_full ? "　" : " ");
+    }
+    return TRUE;
+}
+
+inline gboolean
 PinyinEngine::processPunct (guint keyval, guint keycode, guint modifiers)
 {
     guint cmshm_modifiers = CMSHM_FILTER (modifiers);
@@ -190,11 +216,6 @@ PinyinEngine::processPunct (guint keyval, guint keycode, guint modifiers)
     if (cmshm_modifiers != 0)
         return FALSE;
 
-    if (G_UNLIKELY (keyval == IBUS_space && (modifiers & IBUS_SHIFT_MASK))) {
-        toggleModeFull ();
-        return TRUE;
-    }
-
     /* English mode */
     if (G_UNLIKELY (!m_mode_chinese)) {
         if (G_UNLIKELY (m_mode_full))
@@ -207,14 +228,6 @@ PinyinEngine::processPunct (guint keyval, guint keycode, guint modifiers)
     /* Chinese mode */
     if (G_UNLIKELY (!isEmpty ())) {
         switch (keyval) {
-        case IBUS_space:
-            if (m_phrase_editor.pinyinExistsAfterCursor ()) {
-                selectCandidate (m_lookup_table.cursorPos ());
-            }
-            else {
-                commit ();
-            }
-            return TRUE;
         case IBUS_apostrophe:
             return processPinyin (keyval, keycode, modifiers);
         case IBUS_comma:
@@ -446,11 +459,15 @@ PinyinEngine::processKeyEvent (guint keyval, guint keycode, guint modifiers)
         retval = processNumber (keyval, keycode, modifiers);
         break;
     /* punct */
-    case IBUS_space ... IBUS_slash:
+    case IBUS_exclam ... IBUS_slash:
     case IBUS_colon ... IBUS_at:
     case IBUS_bracketleft ... IBUS_quoteleft:
     case IBUS_braceleft ... IBUS_asciitilde:
         retval = processPunct (keyval, keycode, modifiers);
+        break;
+    /* space */
+    case IBUS_space:
+        retval = processSpace (keyval, keycode, modifiers);
         break;
     /* others */
     case IBUS_Shift_L:
