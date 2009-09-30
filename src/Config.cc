@@ -74,6 +74,8 @@ static const struct {
     { StaticString ("FuzzyPinyin_ENG_EN"),    PINYIN_FUZZY_ENG_EN,    FALSE },
     { StaticString ("FuzzyPinyin_IN_ING"),    PINYIN_FUZZY_IN_ING,    FALSE },
     { StaticString ("FuzzyPinyin_ING_IN"),    PINYIN_FUZZY_ING_IN,    FALSE },
+    { StaticString ("FuzzyPinyin_IAN_IANG"),  PINYIN_FUZZY_IAN_IANG,  FALSE },
+    { StaticString ("FuzzyPinyin_IANG_IAN"),  PINYIN_FUZZY_IANG_IAN,  FALSE },
     { StaticString ("FuzzyPinyin_UAN_UANG"),  PINYIN_FUZZY_UAN_UANG,  FALSE },
     { StaticString ("FuzzyPinyin_UANG_UAN"),  PINYIN_FUZZY_UANG_UAN,  FALSE },
 };

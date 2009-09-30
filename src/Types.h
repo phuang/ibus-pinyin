@@ -74,13 +74,7 @@ namespace PY {
 #define PINYIN_CORRECT_UEI_TO_UI    (1 << 4)
 #define PINYIN_CORRECT_UEN_TO_UN    (1 << 5)
 #define PINYIN_CORRECT_VE_TO_UE     (1 << 6)
-#define PINYIN_CORRECT_ALL          \
-    ( PINYIN_CORRECT_GN_TO_NG |     \
-      PINYIN_CORRECT_MG_TO_NG |     \
-      PINYIN_CORRECT_IOU_TO_IU |    \
-      PINYIN_CORRECT_UEI_TO_UI |    \
-      PINYIN_CORRECT_UEN_TO_UN |    \
-      PINYIN_CORRECT_VE_TO_UE)
+#define PINYIN_CORRECT_ALL          (0x0000007e)
 
 #define PINYIN_FUZZY_C_CH           (1 << 7)
 #define PINYIN_FUZZY_CH_C           (1 << 8)
@@ -107,31 +101,7 @@ namespace PY {
 #define PINYIN_FUZZY_IANG_IAN       (1 << 28)
 #define PINYIN_FUZZY_UAN_UANG       (1 << 29)
 #define PINYIN_FUZZY_UANG_UAN       (1 << 30)
-#define PINYIN_FUZZY_ALL        \
-    ( PINYIN_FUZZY_C_CH |       \
-      PINYIN_FUZZY_CH_C |       \
-      PINYIN_FUZZY_Z_ZH |       \
-      PINYIN_FUZZY_ZH_Z |       \
-      PINYIN_FUZZY_S_SH |       \
-      PINYIN_FUZZY_SH_S |       \
-      PINYIN_FUZZY_L_N |        \
-      PINYIN_FUZZY_N_L |        \
-      PINYIN_FUZZY_F_H |        \
-      PINYIN_FUZZY_H_F |        \
-      PINYIN_FUZZY_L_R |        \
-      PINYIN_FUZZY_R_L |        \
-      PINYIN_FUZZY_K_G |        \
-      PINYIN_FUZZY_G_K |        \
-      PINYIN_FUZZY_AN_ANG |     \
-      PINYIN_FUZZY_ANG_AN |     \
-      PINYIN_FUZZY_EN_ENG |     \
-      PINYIN_FUZZY_ENG_EN |     \
-      PINYIN_FUZZY_IN_ING |     \
-      PINYIN_FUZZY_ING_IN |     \
-      PINYIN_FUZZY_IAN_IANG |   \
-      PINYIN_FUZZY_IANG_IAN |   \
-      PINYIN_FUZZY_UAN_UANG |   \
-      PINYIN_FUZZY_UANG_UAN )
+#define PINYIN_FUZZY_ALL            (0x7fffff80)
 
 typedef struct _Pinyin Pinyin;
 struct _Pinyin {
