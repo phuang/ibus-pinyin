@@ -23,6 +23,7 @@ SUBDIRS = \
 	icons \
 	$(NULL)
 
+if IBUS_BUILD_PINYIN_DATABASE
 main_db_DATA = \
 	db/main.db \
 	db/COPYING \
@@ -58,3 +59,5 @@ CLEANFILES = \
 DISTCLEANFILES = \
 	$(DBTAR) \
 	$(NULL)
+endif
+

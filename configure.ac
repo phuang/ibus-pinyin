@@ -79,6 +79,14 @@ AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE,"$GETTEXT_PACKAGE", [Define to the read-only 
 AM_GNU_GETTEXT([external])
 AM_GNU_GETTEXT_VERSION(0.16.1)
 
+# --enable-build-db
+AC_ARG_ENABLE(pinyin-database,
+    AS_HELP_STRING([--disable-pinyin-database],
+        [Do not build pinyin database]),
+    [enable_pinyin_database=$enableval],
+    [enable_pinyin_database=yes]
+)
+AM_CONDITIONAL(IBUS_BUILD_PINYIN_DATABASE, [test x"$enable_pinyin_database" = x"yes" ])
 
 # OUTPUT files
 AC_CONFIG_FILES([ po/Makefile.in
@@ -94,3 +102,11 @@ m4/Makefile
 ])
 
 AC_OUTPUT
+
+AC_MSG_RESULT([
+Build options:
+    Version                 $VERSION
+    Install prefix          $prefix
+    Build pinyin database   $enable_pinyin_database
+])
+
