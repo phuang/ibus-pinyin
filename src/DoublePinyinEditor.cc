@@ -37,7 +37,7 @@ DoublePinyinEditor::isPinyin (gchar i, gchar j)
         return NULL;
 
     pinyin = m_parser.isPinyin (sheng, yun[0], Config::option () & PINYIN_FUZZY_ALL);
-    if (pinyin == NULL && yun[1] != PINYIN_ID_ZERO)
+    if (pinyin == NULL && yun[1] != PINYIN_ID_VOID)
         pinyin = m_parser.isPinyin (sheng, yun[1], Config::option () & PINYIN_FUZZY_ALL);
     return pinyin;
 }
@@ -49,8 +49,8 @@ DoublePinyinEditor::insert (gint ch)
     if (G_UNLIKELY (m_text.length () >= MAX_PINYIN_LEN))
         return FALSE;
 
-    gint i = char_to_id (ch);
-    if (i < 0)
+    gint id = char_to_id (ch);
+    if (id < 0)
         return FALSE;
 
     m_text.insert (m_cursor++, ch);

@@ -202,14 +202,33 @@ py_id_cmp (const void *p1, const void *p2)
     return ((id[0] - py->sheng_id) << 16) + (id[1] - py->yun_id);
 }
 
+static const gchar *id_map[] = {
+    "", "b", "c", "ch",
+    "d", "f", "g", "h",
+    "j", "k", "l", "m",
+    "n", "p", "q", "r",
+    "s", "sh", "t", "w",
+    "x", "y", "z", "zh",
+    "a", "ai", "an", "ang", "ao",
+    "e", "ei", "en", "eng", "er",
+    "i", "ia", "ian", "iang", "iao",
+    "ie", "in", "ing", "iong", "iu",
+    "o", "ong", "ou",
+    "u", "ua", "uai", "uan", "uang",
+    "ue", "ui", "un", "uo", "v"
+};
+
 const Pinyin *
 PinyinParser::isPinyin (gint sheng, gint yun, guint option)
 {
     const Pinyin *result;
-    gint buf[2] = {sheng, yun};
+    gchar buf[8];
+
+    strcpy (buf, id_map[sheng]);
+    strcat (buf, id_map[yun]);
 
     result = (const Pinyin *) bsearch (buf, pinyin_table, PINYIN_TABLE_NR,
-                                            sizeof (Pinyin), py_id_cmp);
+                                            sizeof (Pinyin), py_cmp);
     if (result != NULL && result->flags != 0 && (result->flags & option) == 0)
         return NULL;
     return result;
