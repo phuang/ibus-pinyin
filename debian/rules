@@ -1,0 +1,116 @@
+#!/usr/bin/make -f
+# -*- makefile -*-
+# Sample debian/rules that uses debhelper.
+# This file was originally written by Joey Hess and Craig Small.
+# As a special exception, when this file is copied by dh-make into a
+# dh-make output file, you may use that output file without restriction.
+# This special exception was added by Craig Small in version 0.37 of dh-make.
+
+# Uncomment this to turn on verbose mode.
+#export DH_VERBOSE=1
+
+DIST=$(shell lsb_release -i -s)
+
+ifeq "$(DIST)" "Ubuntu"
+	DEB_DH_BUILDDEB_ARGS := -- -Zlzma
+else
+	DEB_DH_BUILDDEB_ARGS := -- -Zbzip2
+endif
+
+DEBIAN_VERSION = $(shell dpkg-parsechangelog | egrep '^Version: ' | sed s/"Version: "//)
+UPSTREAM_VERSION = $(shell echo $(DEBIAN_VERSION) | sed s/+.-.*//)
+
+# These are used for cross-compiling and for saving the configure script
+# from having to guess our platform (since we know it already)
+DEB_HOST_GNU_TYPE   ?= $(shell dpkg-architecture -qDEB_HOST_GNU_TYPE)
+DEB_BUILD_GNU_TYPE  ?= $(shell dpkg-architecture -qDEB_BUILD_GNU_TYPE)
+ifneq ($(DEB_HOST_GNU_TYPE),$(DEB_BUILD_GNU_TYPE))
+CROSS= --build $(DEB_BUILD_GNU_TYPE) --host $(DEB_HOST_GNU_TYPE)
+else
+CROSS= --build $(DEB_BUILD_GNU_TYPE)
+endif
+
+
+
+config.status: configure
+	dh_testdir
+ifneq "$(wildcard /usr/share/misc/config.sub)" ""
+	cp -f /usr/share/misc/config.sub config.sub
+endif
+ifneq "$(wildcard /usr/share/misc/config.guess)" ""
+	cp -f /usr/share/misc/config.guess config.guess
+endif
+	dh_auto_configure
+
+build: build-stamp
+
+build-stamp:  config.status 
+	dh_testdir
+	cp /usr/share/pinyin-database/pinyin-database-1.2.99.tar.bz2 data/
+	$(MAKE)
+	touch $@
+
+clean:
+	dh_testdir
+	dh_testroot
+	rm -f build-stamp install-stamp
+
+	# Add here commands to clean up after the build process.
+	[ ! -f Makefile ] || $(MAKE) distclean
+	rm -f config.sub config.guess
+	rm -rf data/db
+
+	dh_clean 
+
+install: install-stamp
+install-stamp: build
+	dh_testdir
+	dh_testroot
+	dh_prep  
+	dh_installdirs
+
+	$(MAKE) DESTDIR=$(CURDIR)/debian/ibus-pinyin install
+	rm -f $(CURDIR)/debian/ibus-pinyin/usr/share/ibus-pinyin/db/COPYING
+	mkdir -p $(CURDIR)/debian/ibus-pinyin-data/usr/share/ibus-pinyin/
+	mv $(CURDIR)/debian/ibus-pinyin/usr/share/ibus-pinyin/db $(CURDIR)/debian/ibus-pinyin-data/usr/share/ibus-pinyin/
+	touch $@
+
+# Build architecture-independent files here.
+binary-arch: install
+	dh_testdir -a
+	dh_testroot -a
+	dh_installchangelogs -a
+	dh_installdocs -a
+	dh_installexamples -a
+	dh_installman -a
+	dh_pysupport -a
+	dh_lintian -a
+	dh_link -a
+	dh_strip -a
+	dh_compress -a
+	dh_fixperms -a
+	dh_installdeb -a
+	dh_shlibdeps -a
+	dh_gencontrol -a
+	dh_md5sums -a
+	dh_builddeb -a
+
+binary-indep: install
+	dh_testdir -i
+	dh_testroot -i
+	dh_installchangelogs -i
+	dh_installdocs -i
+	dh_installexamples -i
+	dh_installman -i
+	dh_pysupport -i
+	dh_lintian -i
+	dh_link -i
+	dh_compress -i
+	dh_fixperms -i
+	dh_installdeb -i
+	dh_gencontrol -i
+	dh_md5sums -i
+	dh_builddeb -i $(DEB_DH_BUILDDEB_ARGS)
+
+binary: binary-indep binary-arch
+.PHONY: build clean binary-indep binary-arch binary install

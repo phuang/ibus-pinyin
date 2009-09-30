@@ -1,0 +1,52 @@
+ibus-pinyin (1.2.99.20090929-1~ppa2) karmic; urgency=low
+
+  * new upstream release.
+  * debian/watch: updated. 
+  * debian/control: 
+    - build depends on pinyin-database and lsb-release.
+    - add ibus-pinyin-data package.
+  * debian/rules: updated. 
+  * debian/README.Debian: no longer needed. 
+
+ -- LI Daobing <lidaobing@debian.org>  Tue, 29 Sep 2009 23:00:34 +0800
+
+ibus-pinyin (1.2.99.20090923+1-1) unstable; urgency=low
+
+  * new upstream release.
+  * debian/rules: update build script. 
+  * debian/control: 
+    - change arch from all to any. 
+    - remove Build-Depends-Indep, update Build-Depends
+    - update Depends 
+
+ -- LI Daobing <lidaobing@debian.org>  Wed, 23 Sep 2009 20:12:19 +0800
+
+ibus-pinyin (1.2.0.20090915+1-1) unstable; urgency=low
+
+  * new upstream release.
+  * debian/control:
+    - bump standards version to 3.8.3.
+    - update Vcs-* fields. 
+
+ -- LI Daobing <lidaobing@debian.org>  Tue, 15 Sep 2009 20:09:45 +0800
+
+ibus-pinyin (1.2.0.20090617+1-1) unstable; urgency=low
+
+  * new upstream release.
+  * debian/control:
+    - depends: ibus >= 1.2
+    - bump standards version to 3.8.2
+
+ -- LI Daobing <lidaobing@debian.org>  Sat, 20 Jun 2009 23:40:41 +0800
+
+ibus-pinyin (1.1.0.20090612+1-1) unstable; urgency=low
+
+  * new upstream release.
+
+ -- LI Daobing <lidaobing@debian.org>  Sat, 13 Jun 2009 15:37:23 +0800
+
+ibus-pinyin (1.1.0.20090303+1-0ubuntu1) karmic; urgency=low
+
+  * initial release (LP: #318806)
+
+ -- LI Daobing <lidaobing@debian.org>  Fri, 01 May 2009 16:44:56 +0800
