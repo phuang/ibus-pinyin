@@ -324,12 +324,14 @@ PinyinEngine::processOthers (guint keyval, guint keycode, guint modifiers)
             selectCandidateInPage (1);
         }
         break;
+
     case IBUS_Shift_R:
         if (Config::shiftSelectCandidate () &&
             m_mode_chinese) {
             selectCandidateInPage (2);
         }
         break;
+
     case IBUS_Return:
         m_buffer.truncate (0);
         if (G_LIKELY (m_mode_simp))
@@ -470,8 +472,6 @@ PinyinEngine::processKeyEvent (guint keyval, guint keycode, guint modifiers)
         retval = processSpace (keyval, keycode, modifiers);
         break;
     /* others */
-    case IBUS_Shift_L:
-    case IBUS_Shift_R:
     default:
         retval = processOthers (keyval, keycode, modifiers);
         break;
