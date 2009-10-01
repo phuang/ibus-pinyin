@@ -73,6 +73,13 @@ Database::init (void)
         goto _failed;
     }
 
+    /* Using memory for temp store */
+    if (sqlite3_exec (m_db, "PRAGMA temp_store=MEMORY;", NULL, NULL, &errmsg) != SQLITE_OK) {
+        g_debug ("%s", errmsg);
+        sqlite3_free (errmsg);
+        goto _failed;
+    }
+
     /* Using EXCLUSIVE locking mode on main database
      * for better performance */
     if (sqlite3_exec (m_db, "PRAGMA main.locking_mode=EXCLUSIVE;", NULL, NULL, &errmsg) != SQLITE_OK) {
@@ -81,13 +88,7 @@ Database::init (void)
         goto _failed;
     }
 
-    /* Using memory for temp store */
-    if (sqlite3_exec (m_db, "PRAGMA temp_store=MEMORY;", NULL, NULL, &errmsg) != SQLITE_OK) {
-        g_debug ("%s", errmsg);
-        sqlite3_free (errmsg);
-        goto _failed;
-    }
-
+    /* Attach user database */
     userdb = g_build_path (G_DIR_SEPARATOR_S, g_get_home_dir (), ".ibus", "pinyin", NULL);
     g_mkdir_with_parents (userdb, 0750);
     g_free (userdb);
@@ -103,6 +104,8 @@ Database::init (void)
         if (!initUserDatabase (":memory:"))
             goto _failed;
     }
+
+    /* prefetch some tables */
     prefetch ();
 
     return TRUE;
