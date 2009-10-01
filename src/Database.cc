@@ -43,7 +43,9 @@ Database::init (void)
     gchar *userdb;
     gboolean retval;
 
+#if (SQLITE_VERSION_NUMBER >= 3006000)
     sqlite3_initialize ();
+#endif
 
     if (sqlite3_open_v2 (PKGDATADIR"/db/main.db", &m_db,
             SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE, NULL) != SQLITE_OK) {
