@@ -82,7 +82,7 @@ AM_GNU_GETTEXT_VERSION(0.16.1)
 # --enable-build-db
 AC_ARG_ENABLE(pinyin-database,
     AS_HELP_STRING([--disable-pinyin-database],
-        [Do not build pinyin database]),
+        [do not build pinyin database]),
     [enable_pinyin_database=$enableval],
     [enable_pinyin_database=yes]
 )
