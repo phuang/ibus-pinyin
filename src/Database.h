@@ -99,6 +99,7 @@ private:
     void prefetch (void);
     void phraseSql (const Phrase & p, String & sql);
     void phraseWhereSql (const Phrase & p, String & sql);
+    gboolean executeSQL (const gchar *sql);
 
 private:
 private:

@@ -36,11 +36,21 @@ Database::~Database (void)
     }
 }
 
+inline gboolean
+Database::executeSQL (const gchar *sql)
+{
+    gchar *errmsg;
+    if (sqlite3_exec (m_db, m_sql, NULL, NULL, &errmsg) != SQLITE_OK) {
+        g_debug ("%s", errmsg);
+        sqlite3_free (errmsg);
+        return FALSE;
+    }
+    return TRUE;
+}
+
 gboolean
 Database::init (void)
 {
-    gchar *errmsg;
-    gchar *userdb;
     gboolean retval;
 
 #if (SQLITE_VERSION_NUMBER >= 3006000)
@@ -54,53 +64,37 @@ Database::init (void)
             goto _failed;
     }
 
+    m_sql.truncate (0);
+
 #if 0
     /* Set synchronous=OFF, write user database will become much faster.
      * It will cause user database corrupted,
      * if the operatering system crashes or computer loses power.
      * */
-    if (sqlite3_exec (m_db, "PRAGMA synchronous=OFF;", NULL, NULL, &errmsg) != SQLITE_OK) {
-        g_debug ("%s", errmsg);
-        sqlite3_free (errmsg);
-        goto _failed;
-    }
+    m_sql << "PRAGMA synchronous=OFF;\n";
 #endif
 
     /* Set the cache size for better performance */
-    if (sqlite3_exec (m_db, "PRAGMA cache_size=" DB_CACHE_SIZE ";", NULL, NULL, &errmsg) != SQLITE_OK) {
-        g_debug ("%s", errmsg);
-        sqlite3_free (errmsg);
-        goto _failed;
-    }
+    m_sql << "PRAGMA cache_size=" DB_CACHE_SIZE ";\n";
 
     /* Using memory for temp store */
-    if (sqlite3_exec (m_db, "PRAGMA temp_store=MEMORY;", NULL, NULL, &errmsg) != SQLITE_OK) {
-        g_debug ("%s", errmsg);
-        sqlite3_free (errmsg);
-        goto _failed;
-    }
+    m_sql << "PRAGMA temp_store=MEMORY;\n";
 
     /* Using EXCLUSIVE locking mode on main database
      * for better performance */
-    if (sqlite3_exec (m_db, "PRAGMA main.locking_mode=EXCLUSIVE;", NULL, NULL, &errmsg) != SQLITE_OK) {
-        g_debug ("%s", errmsg);
-        sqlite3_free (errmsg);
+    m_sql << "PRAGMA main.locking_mode=EXCLUSIVE;\n";
+    if (!executeSQL (m_sql))
         goto _failed;
-    }
 
     /* Attach user database */
-    userdb = g_build_path (G_DIR_SEPARATOR_S, g_get_home_dir (), ".ibus", "pinyin", NULL);
-    g_mkdir_with_parents (userdb, 0750);
-    g_free (userdb);
-
-    userdb = g_build_path (G_DIR_SEPARATOR_S, g_get_home_dir (), ".ibus", "pinyin", "user-1.3.db", NULL);
-    retval = initUserDatabase (userdb);
+    m_buffer = g_get_home_dir ();
+    m_buffer << G_DIR_SEPARATOR_S << ".ibus"
+             << G_DIR_SEPARATOR_S << "pinyin";
+    g_mkdir_with_parents (m_buffer, 0750);
+    m_buffer << G_DIR_SEPARATOR_S << "user-1.3.db";
+    retval = initUserDatabase (m_buffer);
     if (!retval) {
-        g_warning ("can not open user database %s", userdb);
-    }
-    g_free (userdb);
-
-    if (!retval) {
+        g_warning ("can not open user database %s", (const gchar *)m_buffer);
         if (!initUserDatabase (":memory:"))
             goto _failed;
     }
@@ -121,14 +115,9 @@ _failed:
 gboolean
 Database::initUserDatabase (const gchar *userdb)
 {
-    gchar *errmsg;
-
     m_sql.printf ("ATTACH DATABASE \"%s\" AS userdb;", userdb);
-    if (sqlite3_exec (m_db, m_sql, NULL, NULL, &errmsg) != SQLITE_OK) {
-        g_debug ("%s", errmsg);
-        sqlite3_free (errmsg);
+    if (!executeSQL (m_sql))
         return FALSE;
-    }
 
     m_sql = "BEGIN TRANSACTION;\n";
     /* create desc table*/
@@ -162,42 +151,31 @@ Database::initUserDatabase (const gchar *userdb)
     }
     m_sql << "COMMIT;\n";
 
-    if (sqlite3_exec (m_db, m_sql, NULL, NULL, &errmsg) != SQLITE_OK) {
-        g_debug ("%s", errmsg);
-        sqlite3_free (errmsg);
+    if (!executeSQL (m_sql))
         goto _failed;
-    }
 
     m_sql  = "UPDATE userdb.desc SET value=datetime() WHERE name='attach-time';\n";
 
-    if (sqlite3_exec (m_db, m_sql, NULL, NULL, &errmsg) != SQLITE_OK) {
-        g_debug ("%s", errmsg);
-        sqlite3_free (errmsg);
+    if (!executeSQL (m_sql))
         goto _failed;
-    }
+
     return TRUE;
 
 _failed:
     m_sql = "DETACH DATABASE userdb;\n";
-    if (sqlite3_exec (m_db, m_sql, NULL, NULL, &errmsg) != SQLITE_OK) {
-        g_debug ("%s", errmsg);
-        sqlite3_free (errmsg);
-    }
+    executeSQL (m_sql);
     return FALSE;
 }
 
 void
 Database::prefetch (void)
 {
+    m_sql.truncate (0);
     for (guint i = 0; i < DB_PREFETCH_LEN; i++) {
         gchar *errmsg;
-        m_sql = "SELECT * FROM py_phrase_";
-        m_sql << i;
-        if (sqlite3_exec (m_db, m_sql, NULL, NULL, &errmsg) != SQLITE_OK) {
-            g_debug ("%s", errmsg);
-            sqlite3_free (errmsg);
-        }
+        m_sql << "SELECT * FROM py_phrase_" << i << ";\n";
     }
+    executeSQL (m_sql);
 }
 
 gint
@@ -490,7 +468,6 @@ Database::phraseSql (const Phrase & p, String & sql)
 void
 Database::commit (const PhraseArray  &phrases)
 {
-    gchar *errmsg;
     Phrase phrase = {""};
 
     m_sql = "BEGIN TRANSACTION;\n";
@@ -502,28 +479,19 @@ Database::commit (const PhraseArray  &phrases)
         phraseSql (phrase, m_sql);
     m_sql << "COMMIT;";
 
-    if (sqlite3_exec (m_db, m_sql, NULL, NULL, &errmsg) != SQLITE_OK) {
-        g_debug ("%s", errmsg);
-        g_debug ("m_sql = %s", (const gchar *)m_sql);
-        sqlite3_free (errmsg);
-    }
+    executeSQL (m_sql);
 }
 
 void
 Database::remove (const Phrase & phrase)
 {
-    gchar *errmsg;
     m_sql = "BEGIN TRANSACTION;\n";
     m_sql << "DELETE FROM userdb.py_phrase_" << phrase.len - 1;
     phraseWhereSql (phrase, m_sql);
     m_sql << ";\n";
     m_sql << "COMMIT;\n";
 
-    if (sqlite3_exec (m_db, m_sql, NULL, NULL, &errmsg) != SQLITE_OK) {
-        g_debug ("%s", errmsg);
-        sqlite3_free (errmsg);
-    }
-
+    executeSQL (m_sql);
 }
 
 };
