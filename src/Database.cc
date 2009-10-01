@@ -53,8 +53,36 @@ Database::init (void)
                 SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE, NULL) != SQLITE_OK)
             goto _failed;
     }
-    
-    if (sqlite3_exec (m_db, "PRAGMA cache_size=" DB_CACHE_SIZE, NULL, NULL, &errmsg) != SQLITE_OK) {
+
+#if 0
+    /* Set synchronous=OFF, write user database will become much faster.
+     * It will cause user database corrupted,
+     * if the operatering system crashes or computer loses power.
+     * */
+    if (sqlite3_exec (m_db, "PRAGMA synchronous=OFF;", NULL, NULL, &errmsg) != SQLITE_OK) {
+        g_debug ("%s", errmsg);
+        sqlite3_free (errmsg);
+        goto _failed;
+    }
+#endif
+
+    /* Set the cache size for better performance */
+    if (sqlite3_exec (m_db, "PRAGMA cache_size=" DB_CACHE_SIZE ";", NULL, NULL, &errmsg) != SQLITE_OK) {
+        g_debug ("%s", errmsg);
+        sqlite3_free (errmsg);
+        goto _failed;
+    }
+
+    /* Using EXCLUSIVE locking mode on main database
+     * for better performance */
+    if (sqlite3_exec (m_db, "PRAGMA main.locking_mode=EXCLUSIVE;", NULL, NULL, &errmsg) != SQLITE_OK) {
+        g_debug ("%s", errmsg);
+        sqlite3_free (errmsg);
+        goto _failed;
+    }
+
+    /* Using memory for temp store */
+    if (sqlite3_exec (m_db, "PRAGMA temp_store=MEMORY;", NULL, NULL, &errmsg) != SQLITE_OK) {
         g_debug ("%s", errmsg);
         sqlite3_free (errmsg);
         goto _failed;
@@ -63,16 +91,18 @@ Database::init (void)
     userdb = g_build_path (G_DIR_SEPARATOR_S, g_get_home_dir (), ".ibus", "pinyin", NULL);
     g_mkdir_with_parents (userdb, 0750);
     g_free (userdb);
+
     userdb = g_build_path (G_DIR_SEPARATOR_S, g_get_home_dir (), ".ibus", "pinyin", "user-1.3.db", NULL);
     retval = initUserDatabase (userdb);
     if (!retval) {
-        g_free (userdb);
         g_warning ("can not open user database %s", userdb);
-        if (!initUserDatabase (":memory:"))
-            goto _failed;
     }
     g_free (userdb);
 
+    if (!retval) {
+        if (!initUserDatabase (":memory:"))
+            goto _failed;
+    }
     prefetch ();
 
     return TRUE;
