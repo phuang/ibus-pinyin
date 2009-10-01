@@ -23,7 +23,7 @@ is_pinyin (const gchar *p,
            gint         len,
            guint        option)
 {
-    gchar buf[7];
+    gchar buf[8];
     const Pinyin *result;
 
     if (G_UNLIKELY (len > 6))
@@ -224,8 +224,8 @@ PinyinParser::isPinyin (gint sheng, gint yun, guint option)
     const Pinyin *result;
     gchar buf[8];
 
-    strcpy (buf, id_map[sheng]);
-    strcat (buf, id_map[yun]);
+    g_strlcpy (buf, id_map[sheng], sizeof (buf));
+    g_strlcat (buf, id_map[yun], sizeof (buf));
 
     result = (const Pinyin *) bsearch (buf, pinyin_table, PINYIN_TABLE_NR,
                                             sizeof (Pinyin), py_cmp);

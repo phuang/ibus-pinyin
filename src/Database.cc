@@ -403,7 +403,9 @@ Database::query (const PinyinArray &pinyin,
         result.setSize (result.length () + 1);
         Phrase &p = result[result.length() - 1];
 
-        strcpy (p.phrase, (gchar *) sqlite3_column_text (stmt, DB_COLUMN_PHRASE));
+        g_strlcpy (p.phrase,
+                   (gchar *) sqlite3_column_text (stmt, DB_COLUMN_PHRASE),
+                   sizeof (p.phrase));
         p.freq = sqlite3_column_int (stmt, DB_COLUMN_FREQ);
         p.user_freq = sqlite3_column_int (stmt, DB_COLUMN_USER_FREQ);
         p.len = pinyin_len;
