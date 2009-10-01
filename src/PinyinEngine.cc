@@ -164,10 +164,20 @@ PinyinEngine::processNumber (guint keyval, guint keycode, guint modifiers)
 
     /* Chinese mode, if has candidates */
     guint i;
-    if (G_UNLIKELY (keyval == IBUS_0))
+    switch (keyval) {
+    case IBUS_0:
+    case IBUS_KP_0:
         i = 10;
-    else
+        break;
+    case IBUS_1 ... IBUS_9:
         i = keyval - IBUS_1;
+        break;
+    case IBUS_KP_1 ... IBUS_KP_9:
+        i = keyval - IBUS_KP_1;
+        break;
+    default:
+        g_assert_not_reached ();
+    }
 
     if (modifiers == 0)
         selectCandidateInPage (i);
@@ -315,6 +325,9 @@ PinyinEngine::processOthers (guint keyval, guint keycode, guint modifiers)
     if (G_UNLIKELY (isEmpty ()))
         return FALSE;
 
+    /* ignore numlock */
+    modifiers &= ~IBUS_MOD2_MASK;
+
     /* process some cursor control keys */
     gboolean _update = FALSE;
     switch (keyval) {
@@ -333,6 +346,7 @@ PinyinEngine::processOthers (guint keyval, guint keycode, guint modifiers)
         break;
 
     case IBUS_Return:
+    case IBUS_KP_Enter:
         m_buffer.truncate (0);
         if (G_LIKELY (m_mode_simp))
             m_buffer << m_phrase_editor.selectedString ();
@@ -361,6 +375,7 @@ PinyinEngine::processOthers (guint keyval, guint keycode, guint modifiers)
         break;
 
     case IBUS_Delete:
+    case IBUS_KP_Delete:
         if (G_LIKELY (modifiers == 0))
             _update = m_pinyin_editor->removeCharAfter ();
         else if (G_LIKELY (modifiers == IBUS_CONTROL_MASK))
@@ -368,6 +383,7 @@ PinyinEngine::processOthers (guint keyval, guint keycode, guint modifiers)
         break;
 
     case IBUS_Left:
+    case IBUS_KP_Left:
         if (G_LIKELY (modifiers == 0)) {
             // move left single char
             _update = m_pinyin_editor->moveCursorLeft ();
@@ -379,6 +395,7 @@ PinyinEngine::processOthers (guint keyval, guint keycode, guint modifiers)
         break;
 
     case IBUS_Right:
+    case IBUS_KP_Right:
         if (G_LIKELY (modifiers == 0)) {
             // move right single char
             _update = m_pinyin_editor->moveCursorRight ();
@@ -390,6 +407,7 @@ PinyinEngine::processOthers (guint keyval, guint keycode, guint modifiers)
         break;
 
     case IBUS_Home:
+    case IBUS_KP_Home:
         if (G_LIKELY (modifiers == 0)) {
             // move to begin
             _update = m_pinyin_editor->moveCursorToBegin ();
@@ -397,6 +415,7 @@ PinyinEngine::processOthers (guint keyval, guint keycode, guint modifiers)
         break;
 
     case IBUS_End:
+    case IBUS_KP_End:
         if (G_LIKELY (modifiers == 0)) {
             // move to end
             _update = m_pinyin_editor->moveCursorToEnd ();
@@ -404,12 +423,16 @@ PinyinEngine::processOthers (guint keyval, guint keycode, guint modifiers)
         break;
 
     case IBUS_Up:
+    case IBUS_KP_Up:
         cursorUp (); break;
     case IBUS_Down:
+    case IBUS_KP_Down:
         cursorDown (); break;
     case IBUS_Page_Up:
+    case IBUS_KP_Page_Up:
         pageUp (); break;
     case IBUS_Page_Down:
+    case IBUS_KP_Page_Down:
         pageDown (); break;
     case IBUS_Escape:
         reset (); break;
@@ -458,6 +481,7 @@ PinyinEngine::processKeyEvent (guint keyval, guint keycode, guint modifiers)
         break;
     /* numbers */
     case IBUS_0 ... IBUS_9:
+    case IBUS_KP_0 ... IBUS_KP_9:
         retval = processNumber (keyval, keycode, modifiers);
         break;
     /* punct */
