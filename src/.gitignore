@@ -1,0 +1,7 @@
+*.o
+.deps
+pinyin.xml
+pinyin.xml.in
+PinyinParserTable.h
+SimpTradConverterTable.h
+ibus-engine-pinyin
