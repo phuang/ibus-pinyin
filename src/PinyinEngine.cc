@@ -282,40 +282,72 @@ PinyinEngine::processPunct (guint keyval, guint keycode, guint modifiers)
 
     if (m_mode_full_punct) {
         switch (keyval) {
+        case '`':
+            commit ("·"); return TRUE;
+        case '~':
+            commit ("～"); return TRUE;
+        case '!':
+            commit ("！"); return TRUE;
+        // case '@':
+        // case '#':
+        case '$':
+            commit ("￥"); return TRUE;
+        // case '%':
+        case '^':
+            commit ("……"); return TRUE;
+        // case '&':
+        // case '*':
+        case '(':
+            commit ("（"); return TRUE;
+        case ')':
+            commit ("）"); return TRUE;
+        // case '-':
+        case '_':
+            commit ("——"); return TRUE;
+        // case '=':
+        // case '+':
+        case '[':
+            commit ("【"); return TRUE;
+        case ']':
+            commit ("】"); return TRUE;
+        case '{':
+            commit ("『"); return TRUE;
+        case '}':
+            commit ("』"); return TRUE;
+        case '\\':
+            commit ("、"); return TRUE;
+        // case '|':
+        case ';':
+            commit ("；"); return TRUE;
+        case ':':
+            commit ("："); return TRUE;
+        case '\'':
+            commit (m_quote ? "‘" : "’");
+            m_quote = !m_quote;
+            return TRUE;
+        case '"':
+            commit (m_double_quote ? "“" : "”");
+            m_double_quote = !m_double_quote;
+            return TRUE;
+        case ',':
+            commit ("，"); return TRUE;
         case '.':
             if (m_prev_commited_char >= '0' && m_prev_commited_char <= '9')
                 commit (keyval);
             else
                 commit ("。");
-            break;
-        case '\\':
-            commit ("、"); break;
-        case '^':
-            commit ("……"); break;
-        case '_':
-            commit ("——"); break;
-        case '$':
-            commit ("￥"); break;
+            return TRUE;
         case '<':
-            commit ("《"); break;
+            commit ("《"); return TRUE;
         case '>':
-            commit ("》"); break;
-        case '"':
-            commit (m_double_quote ? "“" : "”");
-            m_double_quote = !m_double_quote;
-            break;
-        case '\'':
-            commit (m_quote ? "‘" : "’");
-            m_quote = !m_quote;
-            break;
-        default:
-            commit (HalfFullConverter::toFull (keyval));
-            break;
+            commit ("》"); return TRUE;
+        // case '/':
+        case '?':
+            commit ("？"); return TRUE;
         }
     }
-    else {
-        commit (keyval);
-    }
+
+    commit (m_mode_full ? HalfFullConverter::toFull (keyval) : keyval);
     return TRUE;
 }
 
