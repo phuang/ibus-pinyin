@@ -58,6 +58,12 @@ srpm: dist @PACKAGE_NAME@.spec
 			--define "_rpmdir `pwd`/rpm" \
 			--define "_specdir `pwd`" \
 			@PACKAGE_NAME@.spec
+upload: dist
+	./tools/googlecode_upload.py \
+		-s "ibus-pinyin（拼音）source code" \
+		-p ibus \
+		-l "Type-Source,OpSys-Linux,Chinese,Unstable" \
+		$(distdir).tar.gz
 
 clean-rpm:
 	$(RM) -r "`uname -i`"
