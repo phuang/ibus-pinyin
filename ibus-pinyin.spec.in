@@ -4,7 +4,7 @@ Release:    1%{?dist}
 Summary:    The Chinese Pinyin engine for IBus input platform
 License:    GPLv2+
 Group:      System Environment/Libraries
-URL:        http://code.google.com/p/ibus/
+URL:        http://code.google.com/p/ibus
 Source0:    http://ibus.googlecode.com/files/%{name}-%{version}.tar.gz
 Source1:    pinyin-database-1.2.99.tar.bz2
 
