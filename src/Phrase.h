@@ -29,7 +29,7 @@ struct _Phrase {
 
     Phrase & operator += (const Phrase & a) {
         g_assert (len + a.len <= MAX_PHRASE_LEN);
-        strncat (phrase, a.phrase, sizeof (phrase));
+        strcat (phrase, a.phrase);
         for (guint i = 0; i < a.len; i++) {
             pinyin_id[len + i][0] = a.pinyin_id[i][0];
             pinyin_id[len + i][1] = a.pinyin_id[i][1];
