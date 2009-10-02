@@ -192,7 +192,7 @@ PinyinEngine::processSpace (guint keyval, guint keycode, guint modifiers)
     if (CMSHM_FILTER (modifiers) != 0)
         return FALSE;
 
-    if (G_UNLIKELY (keyval == IBUS_space && (modifiers & IBUS_SHIFT_MASK))) {
+    if (G_UNLIKELY (modifiers & IBUS_SHIFT_MASK)) {
         toggleModeFull ();
         return TRUE;
     }
@@ -275,6 +275,10 @@ PinyinEngine::processPunct (guint keyval, guint keycode, guint modifiers)
 
         if (G_LIKELY (!Config::autoCommit ()))
             return TRUE;
+
+        if (m_phrase_editor.pinyinExistsAfterCursor ()) {
+            selectCandidate (m_lookup_table.cursorPos ());
+        }
         commit ();
     }
 
@@ -379,24 +383,7 @@ PinyinEngine::processOthers (guint keyval, guint keycode, guint modifiers)
 
     case IBUS_Return:
     case IBUS_KP_Enter:
-        m_buffer.truncate (0);
-        if (G_LIKELY (m_mode_simp))
-            m_buffer << m_phrase_editor.selectedString ();
-        else
-            SimpTradConverter::simpToTrad (m_phrase_editor.selectedString (), m_buffer);
-        if (G_UNLIKELY (m_mode_full)) {
-            const gchar *p = m_pinyin_editor->textAfterPinyin (m_buffer.utf8Length ());
-            for (; *p != 0; p++) {
-                m_buffer.appendUnichar (HalfFullConverter::toFull (*p));
-            }
-            commit (m_buffer);
-        }
-        else {
-            m_buffer << m_pinyin_editor->textAfterPinyin (m_buffer.utf8Length ());
-            commit (m_buffer);
-        }
-        m_pinyin_editor->reset ();
-        _update = TRUE;
+        commit ();
         break;
 
     case IBUS_BackSpace:
@@ -936,7 +923,7 @@ PinyinEngine::commit (void)
         SimpTradConverter::simpToTrad (m_phrase_editor.selectedString (), m_buffer);
     }
 
-    const gchar *p = m_pinyin_editor->textAfterPinyin ();
+    const gchar *p = m_pinyin_editor->textAfterPinyin (m_buffer.utf8Length ());
     if (G_UNLIKELY (m_mode_full)) {
         while (*p != '\0') {
             m_buffer.appendUnichar (HalfFullConverter::toFull (*p++));
