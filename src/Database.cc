@@ -171,10 +171,8 @@ void
 Database::prefetch (void)
 {
     m_sql.truncate (0);
-    for (guint i = 0; i < DB_PREFETCH_LEN; i++) {
-        gchar *errmsg;
+    for (guint i = 0; i < DB_PREFETCH_LEN; i++)
         m_sql << "SELECT * FROM py_phrase_" << i << ";\n";
-    }
     executeSQL (m_sql);
 }
 
