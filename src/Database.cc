@@ -149,12 +149,12 @@ Database::initUserDatabase (const gchar *userdb)
         m_sql << ",phrase);\n";
         m_sql << "CREATE INDEX IF NOT EXISTS " << "userdb.index_" << i << "_1 ON py_phrase_" << i << "(s0,s1,s2,y2);\n";
     }
-    m_sql << "COMMIT;\n";
+    m_sql << "COMMIT;";
 
     if (!executeSQL (m_sql))
         goto _failed;
 
-    m_sql  = "UPDATE userdb.desc SET value=datetime() WHERE name='attach-time';\n";
+    m_sql  = "UPDATE userdb.desc SET value=datetime() WHERE name='attach-time';";
 
     if (!executeSQL (m_sql))
         goto _failed;
@@ -162,7 +162,7 @@ Database::initUserDatabase (const gchar *userdb)
     return TRUE;
 
 _failed:
-    m_sql = "DETACH DATABASE userdb;\n";
+    m_sql = "DETACH DATABASE userdb;";
     executeSQL (m_sql);
     return FALSE;
 }
@@ -462,7 +462,7 @@ Database::phraseSql (const Phrase & p, String & sql)
         << " SET user_freq=user_freq+1";
 
     phraseWhereSql (p, sql);
-    sql << "\n;";
+    sql << ";\n";
 }
 
 void
@@ -477,7 +477,7 @@ Database::commit (const PhraseArray  &phrases)
     }
     if (phrases.length () > 1)
         phraseSql (phrase, m_sql);
-    m_sql << "COMMIT;";
+    m_sql << "COMMIT;\n";
 
     executeSQL (m_sql);
 }
