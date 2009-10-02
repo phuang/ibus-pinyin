@@ -38,7 +38,6 @@ public:
         return *this;
     }
 
-
     WideString & insert (gint pos, gunichar ch) {
         m_string.insert (pos, ch);
         return *this;
@@ -101,5 +100,6 @@ public:
 private:
     Array<gunichar> m_string;
 };
+
 };
 #endif
