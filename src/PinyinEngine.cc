@@ -158,7 +158,14 @@ PinyinEngine::processNumber (guint keyval, guint keycode, guint modifiers)
     if (G_UNLIKELY (isEmpty ())) {
         if (G_UNLIKELY (CMSHM_FILTER (modifiers) != 0))
             return FALSE;
-        commit ((gunichar) m_mode_full ? HalfFullConverter::toFull (keyval) : keyval);
+        switch (keyval) {
+        case IBUS_0 ... IBUS_9:
+            commit ((gunichar) m_mode_full ? HalfFullConverter::toFull (keyval) : keyval);
+            break;
+        case IBUS_KP_0 ... IBUS_KP_9:
+            commit ((gunichar) m_mode_full ? HalfFullConverter::toFull ('0' + keyval - IBUS_KP_0) : '0' + keyval - IBUS_KP_0);
+            break;
+        }
         return TRUE;
     }
 
