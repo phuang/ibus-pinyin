@@ -130,7 +130,8 @@ PinyinEngine::processPinyin (guint keyval, guint keycode, guint modifiers)
     if (G_UNLIKELY (CMSHM_FILTER(modifiers) != 0))
         return FALSE;
 
-    if (G_UNLIKELY (m_mode_chinese == FALSE)) {
+    if (G_UNLIKELY (m_mode_chinese == FALSE ||
+                    (isEmpty () && (keyval < IBUS_a || keyval > IBUS_z)))) {
         if (G_LIKELY (m_mode_full))
             commit (HalfFullConverter::toFull (keyval));
         else
