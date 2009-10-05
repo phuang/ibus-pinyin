@@ -193,15 +193,6 @@ PinyinParser::parse (const String   &pinyin,
     return p - (const gchar *)pinyin;
 }
 
-static int
-py_id_cmp (const void *p1, const void *p2)
-{
-    const gint *id = (const gint *) p1;
-    const Pinyin *py = (const Pinyin *) p2;
-
-    return ((id[0] - py->sheng_id) << 16) + (id[1] - py->yun_id);
-}
-
 static const gchar *id_map[] = {
     "", "b", "c", "ch",
     "d", "f", "g", "h",
