@@ -1,7 +1,8 @@
+#!/usr/bin/env python
 import sqlite3
 from pydict import *
 from id import *
-
+import sys
 
 def get_sheng_yun(pinyin):
     if pinyin == None:
