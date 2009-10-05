@@ -116,7 +116,7 @@ PINYIN_DICT = {
     "zhuan" : 406, "zhuang" : 407, "zhui" : 408, "zhun" : 409, "zhuo" : 410,
     # some weird pinyins
     #~ "eng" : 411, "chua" : 412, "fe" : 413, "fiao" : 414, "liong" : 415
-    }
+}
 
 PINYIN_LIST = PINYIN_DICT.keys ()
 
