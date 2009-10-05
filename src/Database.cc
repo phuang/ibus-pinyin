@@ -66,6 +66,8 @@ Database::init (void)
 
     guint i;
     for (i = 0; maindb[i] != NULL; i++) {
+        if (!g_file_test(maindb[i], G_FILE_TEST_IS_REGULAR))
+            continue;
         if (sqlite3_open_v2 (maindb[i], &m_db,
             SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE, NULL) == SQLITE_OK)
             break;
