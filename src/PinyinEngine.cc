@@ -122,7 +122,7 @@ PinyinEngine::~PinyinEngine (void)
     (modifiers & (CMSHM_MASK))
 
 /**
- * process ascii letter
+ * process pinyin
  */
 inline gboolean
 PinyinEngine::processPinyin (guint keyval, guint keycode, guint modifiers)
@@ -130,12 +130,8 @@ PinyinEngine::processPinyin (guint keyval, guint keycode, guint modifiers)
     if (G_UNLIKELY (CMSHM_FILTER(modifiers) != 0))
         return FALSE;
 
-    if (G_UNLIKELY (m_mode_chinese == FALSE ||
-                    (isEmpty () && (keyval < IBUS_a || keyval > IBUS_z)))) {
-        if (G_LIKELY (m_mode_full))
-            commit (HalfFullConverter::toFull (keyval));
-        else
-            commit ((gchar) keyval);
+    if (G_UNLIKELY (!m_mode_chinese)) {
+        commit (m_mode_full ? HalfFullConverter::toFull (keyval) : (gchar) keyval);
         return TRUE;
     }
 
@@ -146,6 +142,34 @@ PinyinEngine::processPinyin (guint keyval, guint keycode, guint modifiers)
     return TRUE;
 }
 
+/**
+ * process capital letters
+ */
+inline gboolean
+PinyinEngine::processCapitalLetter (guint keyval, guint keycode, guint modifiers)
+{
+    if (G_UNLIKELY (CMSHM_FILTER (modifiers) != 0))
+        return FALSE;
+
+    if (modifiers & IBUS_SHIFT_MASK)
+        return processPinyin (keyval, keycode, modifiers);
+
+    if (m_mode_chinese && ! isEmpty ()) {
+        if (!Config::autoCommit ())
+            return TRUE;
+        if (m_phrase_editor.pinyinExistsAfterCursor ()) {
+            selectCandidate (m_lookup_table.cursorPos ());
+        }
+        commit ();
+    }
+
+    commit (m_mode_full ? HalfFullConverter::toFull (keyval) : (gchar) keyval);
+    return TRUE;
+}
+
+/**
+ * process numbers
+ */
 inline gboolean
 PinyinEngine::processNumber (guint keyval, guint keycode, guint modifiers)
 {
@@ -503,8 +527,10 @@ PinyinEngine::processKeyEvent (guint keyval, guint keycode, guint modifiers)
     switch (keyval) {
     /* letters */
     case IBUS_a ... IBUS_z:
-    case IBUS_A ... IBUS_Z:
         retval = processPinyin (keyval, keycode, modifiers);
+        break;
+    case IBUS_A ... IBUS_Z:
+        retval = processCapitalLetter (keyval, keycode, modifiers);
         break;
     /* numbers */
     case IBUS_0 ... IBUS_9:
