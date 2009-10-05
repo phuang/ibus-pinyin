@@ -152,10 +152,10 @@ TESTS = \
 	$(NULL)
 
 PinyinParserTable.h:
-	$(PYTHON) $(srcdir)/scripts/genpytable.py > $@
+	$(PYTHON) $(top_srcdir)/scripts/genpytable.py > $@
 
 SimpTradConverterTable.h:
-	$(PYTHON) $(srcdir)/scripts/gensimptradtable.py > $@
+	$(PYTHON) $(top_srcdir)/scripts/gensimptradtable.py > $@
 
 pinyin.xml: pinyin.xml.in
 	( \
