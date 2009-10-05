@@ -14,7 +14,7 @@ BuildRequires:  gettext-devel
 BuildRequires:  libtool
 BuildRequires:  pkgconfig
 BuildRequires:  sqlite-devel
-BuildRequires:  libuuid-devel
+# BuildRequires:  libuuid-devel
 BuildRequires:  ibus-devel >= 1.2.0
 
 Requires(post): sqlite
@@ -24,12 +24,20 @@ Requires:   ibus >= 1.2.0
 %description
 The Chinese Pinyin input method for IBus platform.
 
+%package    open-phrase
+Summary:    The open phrase database for ibus Pinyin
+Group:      System Environment/Libraries
+Requires(post): sqlite
+
+%description open-phrase
+The open phrase database for ibus Pinyin engine.
+
 %prep
 %setup -q
-cp %{SOURCE1} data
+cp %{SOURCE1} data/db/open-phrase
 
 %build
-%configure --disable-static
+%configure --disable-static --enable-db-open-phrase
 # make -C po update-gmo
 make %{?_smp_mflags}
 
@@ -44,15 +52,27 @@ rm -rf $RPM_BUILD_ROOT
 
 %post
 cd %{_datadir}/ibus-pinyin/db
-sqlite3 main.db ".read create_index.sql"
+sqlite3 google.db ".read create_index.sql"
+
+%post open-phrase
+cd %{_datadir}/ibus-pinyin/db
+sqlite3 open-phrase.db ".read create_index.sql"
 
 %files -f %{name}.lang
 %defattr(-,root,root,-)
 %doc AUTHORS COPYING README
 %{_libexecdir}/ibus-engine-pinyin
 %{_libexecdir}/ibus-setup-pinyin
-%{_datadir}/@PACKAGE@
+%{_datadir}/@PACKAGE@/icons
+%{_datadir}/@PACKAGE@/setup
+%{_datadir}/@PACKAGE@/db/create_index.sql
+%{_datadir}/@PACKAGE@/db/google.db
+%dir %{_datadir}/@PACKAGE@
+%dir %{_datadir}/@PACKAGE@/db
 %{_datadir}/ibus/component/*
+
+%files open-phrase
+%{_datadir}/@PACKAGE@/db/open-phrase.db
 
 %changelog
 * Fri Aug 08 2008 Peng Huang <shawn.p.huang@gmail.com> - @VERSION@-1

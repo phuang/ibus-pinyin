@@ -23,7 +23,6 @@ if IBUS_BUILD_DB_OPEN_PHRASE
 db_file = open-phrase.db
 main_db_DATA = \
 	db/$(db_file) \
-	db/COPYING \
 	$(NULL)
 main_dbdir = $(pkgdatadir)/db
 

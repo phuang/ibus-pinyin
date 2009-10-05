@@ -49,7 +49,7 @@ def create_db():
             s, y = pinyin_id[s], pinyin_id[y]
             columns.append(s)
             columns.append(y)
-        values = "'%s', %d, %s" % (hanzi, l - i, ",".join(map(str,columns)))
+        values = "'%s', %d, %s" % (hanzi.encode("utf8"), l - i, ",".join(map(str,columns)))
             
         sql = insert_sql % (len(hanzi) - 1, values)
         print sql
