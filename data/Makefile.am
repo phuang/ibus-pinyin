@@ -20,10 +20,11 @@
 
 
 SUBDIRS = \
+	google \
 	icons \
 	$(NULL)
 
-if IBUS_BUILD_PINYIN_DATABASE
+if IBUS_BUILD_DB_OPEN_PHRASE
 main_db_DATA = \
 	db/main.db \
 	db/COPYING \

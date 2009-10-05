@@ -78,15 +78,18 @@ AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE,"$GETTEXT_PACKAGE", [Define to the read-only 
 
 AM_GNU_GETTEXT([external])
 AM_GNU_GETTEXT_VERSION(0.16.1)
+AC_ARG_VAR(DATABASE, AS_HELP_STRING([pinyin database google or open-phrase, the default is google]))
 
+test x"$DATABASE" != x"open-phrase" && DATABASE=google
 # --enable-build-db
-AC_ARG_ENABLE(pinyin-database,
-    AS_HELP_STRING([--disable-pinyin-database],
-        [do not build pinyin database]),
-    [enable_pinyin_database=$enableval],
-    [enable_pinyin_database=yes]
-)
-AM_CONDITIONAL(IBUS_BUILD_PINYIN_DATABASE, [test x"$enable_pinyin_database" = x"yes" ])
+# AC_ARG_ENABLE(pinyin-database,
+#     AS_HELP_STRING([--enable-pinyin-database=[google,open-phrase]],
+#         [do not build pinyin database]),
+#     [enable_pinyin_database=$enableval],
+#     [enable_pinyin_database=google]
+# )
+AM_CONDITIONAL(IBUS_BUILD_DB_GOOGLE, [test x"$DATABASE" = x"google" ])
+AM_CONDITIONAL(IBUS_BUILD_DB_OPEN_PHRASE, [test x"$DATABASE" = x"open-phrase" ])
 
 # OUTPUT files
 AC_CONFIG_FILES([ po/Makefile.in
@@ -97,6 +100,7 @@ src/pinyin.xml.in
 setup/Makefile
 setup/ibus-setup-pinyin
 data/Makefile
+data/google/Makefile
 data/icons/Makefile
 m4/Makefile
 ])
@@ -108,5 +112,6 @@ Build options:
     Version                 $VERSION
     Install prefix          $prefix
     Build pinyin database   $enable_pinyin_database
+    Pinyin datatbase        $DATABASE
 ])
 
