@@ -154,8 +154,8 @@ TESTS = \
 PinyinParserTable.h:
 	$(PYTHON) $(top_srcdir)/scripts/genpytable.py > $@
 
-SimpTradConverterTable.h:
-	$(PYTHON) $(top_srcdir)/scripts/gensimptradtable.py > $@
+SimpTradConverterTable.h: update-simptrad-table.py Unihan_Variants.txt
+	$(PYTHON) $(srcdir)/update-simptrad-table.py > $@
 
 pinyin.xml: pinyin.xml.in
 	( \
