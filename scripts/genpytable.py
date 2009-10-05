@@ -260,7 +260,7 @@ def get_all_special():
         elif p[-1] in ["e"]:
             yield p, "r", p[:-1], "er"
 
-def get_freq_sum_2(db, p1, p2):
+def get_max_freq_2(db, p1, p2):
     s1, y1 = get_sheng_yun(p1)
     s2, y2 = get_sheng_yun(p2)
 
@@ -271,7 +271,7 @@ def get_freq_sum_2(db, p1, p2):
         return r[0]
     return 0
 
-def get_freq_sum_1(db, p1):
+def get_max_freq_1(db, p1):
     s1, y1 = get_sheng_yun(p1)
 
     sql = "select max(freq), phrase from py_phrase_0 where s0 = %d and y0 = %d"
@@ -295,11 +295,11 @@ def compaired_special():
         if p3 not in pinyin_list or p4 not in pinyin_list:
             continue
 
-        a1 = get_freq_sum_2(db, p1, p2)
-        a2 = get_freq_sum_2(db, p3, p4)
+        a1 = get_max_freq_2(db, p1, p2)
+        a2 = get_max_freq_2(db, p3, p4)
         if a1 == a2:
-            a1 = get_freq_sum_1(db, p1) + get_freq_sum_1(db, p2)
-            a2 = get_freq_sum_1(db, p3) + get_freq_sum_1(db, p4)
+            a1 = get_max_freq_1(db, p1) + get_max_freq_1(db, p2)
+            a2 = get_max_freq_1(db, p3) + get_max_freq_1(db, p4)
         if a1 < a2:
             yield p1, p2, p3, p4
 
