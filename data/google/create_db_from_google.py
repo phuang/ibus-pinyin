@@ -37,10 +37,11 @@ def create_db():
 
     validate_hanzi = get_validate_hanzi()
     records = list(read_phrases(validate_hanzi))
-    records.sort(lambda a, b: 1 if a[1] - b[1] > 0 else -1)
+    records.sort(lambda a, b: -1 if a[1] - b[1] > 0 else 1)
     
     print "BEGIN;"
     insert_sql = "INSERT INTO py_phrase_%d VALUES (%s);"
+    l = len(records)
     for i, (hanzi, freq, pinyin) in enumerate(records):
         columns = []
         for py in pinyin:
@@ -48,7 +49,7 @@ def create_db():
             s, y = pinyin_id[s], pinyin_id[y]
             columns.append(s)
             columns.append(y)
-        values = "'%s', %d, %s" % (hanzi, i, ",".join(map(str,columns)))
+        values = "'%s', %d, %s" % (hanzi, l - i, ",".join(map(str,columns)))
             
         sql = insert_sql % (len(hanzi) - 1, values)
         print sql
