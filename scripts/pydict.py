@@ -1,3 +1,25 @@
+# -*- coding: utf-8 -*-
+# vim:set et sts=4 sw=4:
+#
+# ibus-pinyin - The PinYin engine for IBus
+#
+# Copyright (c) 2007-2008 Peng Huang <shawn.p.huang@gmail.com>
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2, or (at your option)
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
+N_ = lambda x : x
 PINYIN_DICT = {
     "a" : 1, "ai" : 2, "an" : 3, "ang" : 4, "ao" : 5,
     "ba" : 6, "bai" : 7, "ban" : 8, "bang" : 9, "bao" : 10,
@@ -53,7 +75,7 @@ PINYIN_DICT = {
     # "ng" : 226,
     "nong" : 227, "nou" : 228, "nu" : 229, "nuan" : 230,
     "nue" : 231, "nuo" : 232, "nv" : 233,
-    #"nve" : 234,
+    # "nve" : 234,
     "o" : 235,
     "ou" : 236, "pa" : 237, "pai" : 238, "pan" : 239, "pang" : 240,
     "pao" : 241, "pei" : 242, "pen" : 243, "peng" : 244, "pi" : 245,
@@ -94,12 +116,254 @@ PINYIN_DICT = {
     "zhuan" : 406, "zhuang" : 407, "zhui" : 408, "zhun" : 409, "zhuo" : 410,
     # some weird pinyins
     #~ "eng" : 411, "chua" : 412, "fe" : 413, "fiao" : 414, "liong" : 415
-}
+    }
+
+PINYIN_LIST = PINYIN_DICT.keys ()
+
+ID_PINYIN_DICT = {}
+for pinyin, id in PINYIN_DICT.items ():
+    ID_PINYIN_DICT[id] = pinyin
 
 SHENGMU_DICT = {
     "" : 0, "b" : 1, "p" : 2, "m" : 3, "f" : 4, "d" : 5,
     "t" : 6, "n" : 7, "l" : 8, "g" : 9, "k" : 10, "h" : 11,
     "j" : 12, "q" : 13, "x" : 14, "zh" : 15, "ch" : 16, "sh" : 17,
     "r" : 18, "z" : 19, "c" : 20, "s" : 21, "y" : 22, "w" : 23
+}
+SHENGMU_LIST = SHENGMU_DICT.keys ()
+#~ PINYIN_PARTIAL_LIST = []
+#~ for p in PINYIN_LIST:
+    #~ for i in range (2, len (p)):
+        #~ if not (p[:i] in PINYIN_LIST or p[:i] in SHENGMU_LIST or p[:i] in PINYIN_PARTIAL_LIST):
+            #~ PINYIN_PARTIAL_LIST.append (p[:i])
+#~ print PINYIN_PARTIAL_LIST
+PINYIN_PARTIAL_LIST = [
+'ro', 'zo', 'zon', 'so', 'son', 'tua', 'zua', 'no',
+'non', 'be', 'ho', 'cua', 'jio', 'jion', 'xua', 'ko',
+'kon', 'we', 'go', 'tia', 'fi', 'fia', 'fe', 'din', 'ra',
+'yon', 'do', 'don', 'ron', 'to', 'nia', 'qua', 'cho',
+'chon', 'mia', 'den', 'sho', 'nua', 'ten', 'co', 'ton',
+'pe', 'tin', 'sua', 'xio', 'xion', 'pia', 'bia', 'dua',
+'con', 'hon', 'jua', 'yua', 'zho', 'zhon', 'rua', 'lua',
+'lio', 'lion', 'qio', 'qion', 'lon', 'gon', 'len']
+
+ID_SHENGMU_DICT = {}
+
+
+for shengmu, id in SHENGMU_DICT.items ():
+    ID_SHENGMU_DICT[id] = shengmu
+
+MOHU_SHENGMU = {
+    "z"     : ("z", "zh"),
+    "zh" : ("z", "zh"),
+    "c"     : ("c", "ch"),
+    "ch" : ("c", "ch"),
+    "s"     : ("s", "sh"),
+    "sh" : ("s", "sh"),
+    "l"     : ("l", "n"),
+    "n"  : ("l", "n")
+}
+
+MOHU_YUNMU = {
+    "an"  : ("an", "ang"),
+    "ang" : ("an", "ang"),
+    "en"  : ("en", "eng"),
+    "eng" : ("en", "eng"),
+    "in"  : ("in", "ing"),
+    "ing" : ("in", "ing")
+}
+
+MSPY_SHUANGPIN_SHENGMU_DICT = {
+    "b" : "b", "c" : "c", "d" : "d", "f" : "f", "g" : "g",
+    "h" : "h", "i" : "ch","j" : "j", "k" : "k", "l" : "l",
+    "m" : "m", "n" : "n", "o" : "'", "p" : "p", "q" : "q",
+    "r" : "r", "s" : "s", "t" : "t", "u" : "sh","v" : "zh",
+    "w" : "w", "x" : "x", "y" : "y", "z" : "z"
+}
+
+MSPY_SHUANGPIN_YUNMU_DICT = {
+    "a" : ("a",),
+    "b" : ("ou",),
+    "c" : ("iao",),
+    "d" : ("uang", "iang"),
+    "e" : ("e",),
+    "f" : ("en",),
+    "g" : ("eng", "ng"),
+    "h" : ("ang",),
+    "i" : ("i",),
+    "j" : ("an",),
+    "k" : ("ao",),
+    "l" : ("ai",),
+    "m" : ("ian",),
+    "n" : ("in",),
+    "o" : ("uo", "o"),
+    "p" : ("un",),
+    "q" : ("iu",),
+    "r" : ("uan", "er"),
+    "s" : ("ong", "iong"),
+    "t" : ("ue",),
+    "u" : ("u",),
+    "v" : ("ui","ue"),
+    "w" : ("ia","ua"),
+    "x" : ("ie",),
+    "y" : ("uai", "v"),
+    "z" : ("ei",),
+    ";" : ("ing",)
+}
+
+ZRM_SHUANGPIN_SHENGMU_DICT = {
+    "b" : "b", "c" : "c", "d" : "d", "f" : "f", "g" : "g",
+    "h" : "h", "i" : "ch","j" : "j", "k" : "k", "l" : "l",
+    "m" : "m", "n" : "n", "o" : "'", "p" : "p", "q" : "q",
+    "r" : "r", "s" : "s", "t" : "t", "u" : "sh","v" : "zh",
+    "w" : "w", "x" : "x", "y" : "y", "z" : "z"
+}
+
+ZRM_SHUANGPIN_YUNMU_DICT = {
+    "a" : ("a",),
+    "b" : ("ou",),
+    "c" : ("iao",),
+    "d" : ("uang", "iang"),
+    "e" : ("e",),
+    "f" : ("en",),
+    "g" : ("eng", "ng"),
+    "h" : ("ang",),
+    "i" : ("i",),
+    "j" : ("an",),
+    "k" : ("ao",),
+    "l" : ("ai",),
+    "m" : ("ian",),
+    "n" : ("in",),
+    "o" : ("uo", "o"),
+    "p" : ("un",),
+    "q" : ("iu",),
+    "r" : ("uan", "er"),
+    "s" : ("ong", "iong"),
+    "t" : ("ue",),
+    "u" : ("u",),
+    "v" : ("ui","v"),
+    "w" : ("ia","ua"),
+    "x" : ("ie",),
+    "y" : ("uai", "ing"),
+    "z" : ("ei",),
+}
+
+ABC_SHUANGPIN_SHENGMU_DICT = {
+    "a" : "zh", "b" : "b", "c" : "c", "d" : "d", "e":"ch", "f" : "f", "g" : "g",
+    "h" : "h", "j" : "j", "k" : "k", "l" : "l",
+    "m" : "m", "n" : "n", "o" : "'", "p" : "p", "q" : "q",
+    "r" : "r", "s" : "s", "t" : "t", "v" : "sh",
+    "w" : "w", "x" : "x", "y" : "y", "z" : "z"
+}
+
+ABC_SHUANGPIN_YUNMU_DICT = {
+    "a" : ("a",),
+    "b" : ("ou",),
+    "c" : ("in","uai"),
+    "d" : ("ia", "ua"),
+    "e" : ("e",),
+    "f" : ("en",),
+    "g" : ("eng", "ng"),
+    "h" : ("ang",),
+    "i" : ("i",),
+    "j" : ("an",),
+    "k" : ("ao",),
+    "l" : ("ai",),
+    "m" : ("ue","ui"),
+    "n" : ("un",),
+    "o" : ("uo", "o"),
+    "p" : ("uan",),
+    "q" : ("ei",),
+    "r" : ("er", "iu"),
+    "s" : ("ong", "iong"),
+    "t" : ("iang","uang"),
+    "u" : ("u",),
+    "v" : ("v","ue"),
+    "w" : ("ian",),
+    "x" : ("ie",),
+    "y" : ("ing",),
+    "z" : ("iao",),
+}
+
+PYJJ_SHUANGPIN_SHENGMU_DICT = {
+    "a" : "'", "b" : "b", "c" : "c", "d" : "d", "f" : "f", "g" : "g",
+    "h" : "h", "i" : "sh","j" : "j", "k" : "k", "l" : "l",
+    "m" : "m", "n" : "n", "o" : "'", "p" : "p", "q" : "q",
+    "r" : "r", "s" : "s", "t" : "t", "u" : "ch","v" : "zh",
+    "w" : "w", "x" : "x", "y" : "y", "z" : "z"
+}
+
+PYJJ_SHUANGPIN_YUNMU_DICT = {
+    "a" : ("a",),
+    "b" : ("ia","ua"),
+    "c" : ("uan",),
+    "d" : ("ao", ),
+    "e" : ("e",),
+    "f" : ("an",),
+    "g" : ("ang",),
+    "h" : ("iang","uang"),
+    "i" : ("i",),
+    "j" : ("ian",),
+    "k" : ("iao",),
+    "l" : ("in",),
+    "m" : ("ie",),
+    "n" : ("iu",),
+    "o" : ("uo", "o"),
+    "p" : ("ou",),
+    "q" : ("er","ing"),
+    "r" : ("en", ),
+    "s" : ("ai", ),
+    "t" : ("eng", "ng"),
+    "u" : ("u",),
+    "v" : ("v","ui"),
+    "w" : ("ei",),
+    "x" : ("uai","ue"),
+    "y" : ("ong","iong"),
+    "z" : ("un",),
+}
+
+ZGPY_SHUANGPIN_SHENGMU_DICT = {
+    "a": "ch", "b" : "b", "c" : "c", "d" : "d", "f" : "f", "g" : "g",
+    "h" : "h", "i" : "sh","j" : "j", "k" : "k", "l" : "l",
+    "m" : "m", "n" : "n", "o" : "'", "p" : "p", "q" : "q",
+    "r" : "r", "s" : "s", "t" : "t", "u" : "zh",
+    "w" : "w", "x" : "x", "y" : "y", "z" : "z"
+}
+
+ZGPY_SHUANGPIN_YUNMU_DICT = {
+    "a" : ("a", ),
+    "b" : ("iao", ),
+    "d" : ("ie", ),
+    "e" : ("e", ),
+    "f" : ("ian", ),
+    "g" : ("iang", "uang"),
+    "h" : ("ong", "iong"),
+    "i" : ("i", ),
+    "j" : ("er", "iu"),
+    "k" : ("ei", ),
+    "l" : ("uan", ),
+    "m" : ("un", ),
+    "n" : ("ue", "ui"),
+    "o" : ("uo", "o"),
+    "p" : ("ai", ),
+    "q" : ("ao", ),
+    "r" : ("an", ),
+    "s" : ("ang", ),
+    "t" : ("eng", "ng"),
+    "u" : ("u", ),
+    "v" : ("v", ),
+    "w" : ("en", ),
+    "x" : ("ia", "ua"),
+    "y" : ("in", "uai"),
+    "z" : ("ou" ,),
+    ";" : ("ing", )
+}
+
+SHUANGPIN_SCHEMAS = {
+    N_("MSPY") : (MSPY_SHUANGPIN_SHENGMU_DICT, MSPY_SHUANGPIN_YUNMU_DICT),
+    N_("ZRM")  : (ZRM_SHUANGPIN_SHENGMU_DICT, ZRM_SHUANGPIN_YUNMU_DICT),
+    N_("ABC")  : (ABC_SHUANGPIN_SHENGMU_DICT, ABC_SHUANGPIN_YUNMU_DICT),
+    N_("ZGPY") : (ZGPY_SHUANGPIN_SHENGMU_DICT, ZGPY_SHUANGPIN_YUNMU_DICT),
+    N_("PYJJ") : (PYJJ_SHUANGPIN_SHENGMU_DICT, PYJJ_SHUANGPIN_YUNMU_DICT)
 }
 
