@@ -27,14 +27,6 @@ main_db_DATA = \
 	$(NULL)
 main_dbdir = $(pkgdatadir)/db
 
-install-data-hook:
-	@( \
-if test "$(NO_INDEX)" = ""; then \
-  cd $(DESTDIR)$(main_dbdir); \
-  echo "Create INDEX"; \
-  sqlite3 $(db_file) ".read create_index.sql"; \
-fi)
-
 DBVER = 1.2.99
 DBTAR = pinyin-database-$(DBVER).tar.bz2
 

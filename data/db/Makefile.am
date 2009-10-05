@@ -18,26 +18,33 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
+main_db_DATA = \
+	create_index.sql \
+	$(NULL)
+main_dbdir = $(pkgdatadir)/db
+
+EXTRA_DIST = \
+	create_index.sql \
+	$(NULL)
 
 SUBDIRS = \
 	google \
 	open-phrase \
 	$(NULL)
 
-main_db_DATA = \
-	create_index.sql \
-	$(NULL)
-main_dbdir = $(pkgdatadir)/db
 
 install-data-hook:
 	@( \
 if test "$(NO_INDEX)" = ""; then \
   cd $(DESTDIR)$(main_dbdir); \
-  echo "Create INDEX"; \
-  sqlite3 main.db ".read create_index.sql"; \
+  if test -f google.db; then \
+    echo "Create INDEX for google.db"; \
+    sqlite3 google.db ".read create_index.sql"; \
+  fi; \
+  if test -f open-phrase.db; then \
+    echo "Create INDEX for open-phrase.db"; \
+    sqlite3 open-phrase.db ".read create_index.sql"; \
+  fi; \
 fi)
 
-EXTRA_DIST = \
-	create_index.sql \
-	$(NULL)
 
