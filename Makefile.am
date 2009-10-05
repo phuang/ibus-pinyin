@@ -26,6 +26,11 @@ SUBDIRS = \
 	po \
 	$(NULL)
 
+DISTCHECK_CONFIGURE_FLAGS = \
+	--enable-google \
+	--enable-db-open-phrase \
+	$(NULL)
+
 ACLOCAL_AMFLAGS = -I m4
 
 EXTRA_DIST = \

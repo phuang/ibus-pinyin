@@ -20,7 +20,24 @@
 
 
 SUBDIRS = \
-	db \
-	icons \
+	google \
+	open-phrase \
+	$(NULL)
+
+main_db_DATA = \
+	create_index.sql \
+	$(NULL)
+main_dbdir = $(pkgdatadir)/db
+
+install-data-hook:
+	@( \
+if test "$(NO_INDEX)" = ""; then \
+  cd $(DESTDIR)$(main_dbdir); \
+  echo "Create INDEX"; \
+  sqlite3 main.db ".read create_index.sql"; \
+fi)
+
+EXTRA_DIST = \
+	create_index.sql \
 	$(NULL)
 

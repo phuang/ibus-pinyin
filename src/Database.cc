@@ -57,11 +57,23 @@ Database::init (void)
     sqlite3_initialize ();
 #endif
 
-    if (sqlite3_open_v2 (PKGDATADIR"/db/main.db", &m_db,
-            SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE, NULL) != SQLITE_OK) {
-        if (sqlite3_open_v2 ("main.db", &m_db,
-                SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE, NULL) != SQLITE_OK)
-            goto _failed;
+    static const gchar * maindb [] = {
+        PKGDATADIR"/db/open-phrase.db",
+        PKGDATADIR"/db/google.db",
+        "main.db",
+        NULL
+    };
+
+    guint i;
+    for (i = 0; maindb[i] != NULL; i++) {
+        if (sqlite3_open_v2 (maindb[i], &m_db,
+            SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE, NULL) == SQLITE_OK)
+            break;
+    }
+
+    if (maindb[i] == NULL) {
+        g_warning ("can not open main database");
+        goto _failed;
     }
 
     m_sql.truncate (0);

@@ -19,8 +19,42 @@
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 
-SUBDIRS = \
-	db \
-	icons \
+if IBUS_BUILD_DB_OPEN_PHRASE
+db_file = open-phrase.db
+main_db_DATA = \
+	db/$(db_file) \
+	db/COPYING \
 	$(NULL)
+main_dbdir = $(pkgdatadir)/db
+
+install-data-hook:
+	@( \
+if test "$(NO_INDEX)" = ""; then \
+  cd $(DESTDIR)$(main_dbdir); \
+  echo "Create INDEX"; \
+  sqlite3 $(db_file) ".read create_index.sql"; \
+fi)
+
+DBVER = 1.2.99
+DBTAR = pinyin-database-$(DBVER).tar.bz2
+
+$(DBTAR):
+	wget http://ibus.googlecode.com/files/$(DBTAR)
+
+stamp-db: $(DBTAR)
+	tar jxvfm $(DBTAR)
+	mv db/main.db db/$(db_file)
+	touch $@
+
+$(main_db_DATA): stamp-db
+
+CLEANFILES = \
+	stamp-db \
+	db/* \
+	$(NULL)
+
+DISTCLEANFILES = \
+	$(DBTAR) \
+	$(NULL)
+endif
 

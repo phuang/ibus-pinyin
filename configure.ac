@@ -78,18 +78,25 @@ AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE,"$GETTEXT_PACKAGE", [Define to the read-only 
 
 AM_GNU_GETTEXT([external])
 AM_GNU_GETTEXT_VERSION(0.16.1)
-AC_ARG_VAR(DATABASE, AS_HELP_STRING([pinyin database google or open-phrase, the default is google]))
 
-test x"$DATABASE" != x"open-phrase" && DATABASE=google
-# --enable-build-db
-# AC_ARG_ENABLE(pinyin-database,
-#     AS_HELP_STRING([--enable-pinyin-database=[google,open-phrase]],
-#         [do not build pinyin database]),
-#     [enable_pinyin_database=$enableval],
-#     [enable_pinyin_database=google]
-# )
-AM_CONDITIONAL(IBUS_BUILD_DB_GOOGLE, [test x"$DATABASE" = x"google" ])
-AM_CONDITIONAL(IBUS_BUILD_DB_OPEN_PHRASE, [test x"$DATABASE" = x"open-phrase" ])
+
+# --enable-db-google
+AC_ARG_ENABLE(db-google,
+    AS_HELP_STRING([--disable-db-google],
+        [do not build database from google android pinyin]),
+    [enable_db_google=$enableval],
+    [enable_db_google=yes]
+)
+AM_CONDITIONAL(IBUS_BUILD_DB_GOOGLE, [test x"$enable_db_google" = x"yes" ])
+
+# --enable-db-open-phrase
+AC_ARG_ENABLE(db-open-phrase,
+    AS_HELP_STRING([--enable-db-open-phrase],
+        [build open-phrase database]),
+    [enable_db_open_phrase=$enableval],
+    [enable_db_open_phrase=no]
+)
+AM_CONDITIONAL(IBUS_BUILD_DB_OPEN_PHRASE, [test x"$enable_db_open_phrase" = x"yes" ])
 
 # OUTPUT files
 AC_CONFIG_FILES([ po/Makefile.in
@@ -100,7 +107,9 @@ src/pinyin.xml.in
 setup/Makefile
 setup/ibus-setup-pinyin
 data/Makefile
-data/google/Makefile
+data/db/Makefile
+data/db/google/Makefile
+data/db/open-phrase/Makefile
 data/icons/Makefile
 m4/Makefile
 ])
@@ -109,9 +118,9 @@ AC_OUTPUT
 
 AC_MSG_RESULT([
 Build options:
-    Version                 $VERSION
-    Install prefix          $prefix
-    Build pinyin database   $enable_pinyin_database
-    Pinyin datatbase        $DATABASE
+    Version                     $VERSION
+    Install prefix              $prefix
+    Build database google       $enable_db_google
+    Build database open-phrase  $enable_db_open_phrase
 ])
 

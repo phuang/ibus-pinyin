@@ -1,1 +1,0 @@
-../../scripts/pydict.py
