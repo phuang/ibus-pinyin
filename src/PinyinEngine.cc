@@ -833,18 +833,6 @@ PinyinEngine::updateAuxiliaryText (void)
     // guint cursor_pos;
 
     m_buffer.truncate (0);
-#if 0
-    if (G_UNLIKELY (m_phrase_editor.selectedString ())) {
-        if (G_LIKELY (m_mode_simp))
-            m_buffer << m_phrase_editor.selectedString ();
-        else
-            SimpTradConverter::simpToTrad (m_phrase_editor.selectedString (), m_buffer);
-    }
-
-    if (m_buffer)
-        m_buffer << ' ';
-#endif
-
     for (guint i = m_phrase_editor.cursor (); i < m_pinyin_editor->pinyin().length (); ++i) {
         if (G_LIKELY (i != m_phrase_editor.cursor ()))
             m_buffer << ' ';
@@ -867,10 +855,6 @@ PinyinEngine::updateAuxiliaryText (void)
     }
 
     StaticText aux_text (m_buffer);
-    /*
-    aux_text.appendAttribute (IBUS_ATTR_TYPE_FOREGROUND, 0x00afafaf, len, cursor_pos);
-    aux_text.appendAttribute (IBUS_ATTR_TYPE_FOREGROUND, 0x00afafaf, cursor_pos + 1, -1);
-    */
     ibus_engine_update_auxiliary_text (m_engine, aux_text, TRUE);
 }
 
