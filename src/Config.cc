@@ -20,6 +20,7 @@ gboolean Config::m_init_chinese = TRUE;
 gboolean Config::m_init_full = FALSE;
 gboolean Config::m_init_full_punct = TRUE;
 gboolean Config::m_init_simp_chinese = TRUE;
+gboolean Config::m_trad_candidate = FALSE;
 
 static const StaticString engine_pinyin ("engine/Pinyin");
 static const StaticString correct_pinyin ("CorrectPinyin");
@@ -38,6 +39,7 @@ static const StaticString init_chinese ("InitChinese");
 static const StaticString init_full ("InitFull");
 static const StaticString init_full_punct ("InitFullPunct");
 static const StaticString init_simp_chinese ("InitSimplifiedChinese");
+static const StaticString trad_candidate ("TradCandidate");
 
 static const struct {
     StaticString name;
@@ -92,6 +94,8 @@ Config::readDefaultValues (void)
     m_init_full = read (engine_pinyin, init_full, false);
     m_init_full_punct = read (engine_pinyin, init_full_punct, true);
     m_init_simp_chinese = read (engine_pinyin, init_simp_chinese, true);
+
+    m_trad_candidate = read (engine_pinyin, trad_candidate, false);
 
     /* others */
     m_page_size = read (engine_pinyin, page_size, 5);
@@ -183,6 +187,8 @@ Config::valueChangedCallback (IBusConfig    *config,
         m_init_full_punct = normalizeGValue (value, true);
     else if (init_simp_chinese == name)
         m_init_simp_chinese = normalizeGValue (value, true);
+    else if (trad_candidate == name)
+        m_trad_candidate = normalizeGValue (value, false);
     /* lookup table page size */
     else if (page_size == name)
         m_page_size = normalizeGValue (value, 5);

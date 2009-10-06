@@ -54,6 +54,7 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
+                                    <property name="tooltip_text" translatable="yes">Use full pinyin.</property>
                                     <property name="active">True</property>
                                     <property name="draw_indicator">True</property>
                                     <property name="group">DoublePinyin</property>
@@ -68,6 +69,7 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
+                                    <property name="tooltip_text" translatable="yes">Use double pinyin.</property>
                                     <property name="draw_indicator">True</property>
                                   </object>
                                   <packing>
@@ -82,6 +84,7 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
+                                    <property name="tooltip_text" translatable="yes">Enable simple pinyin (like zh g).</property>
                                     <property name="active">True</property>
                                     <property name="draw_indicator">True</property>
                                   </object>
@@ -93,6 +96,7 @@
                                 <child>
                                   <object class="GtkHBox" id="hbox1">
                                     <property name="visible">True</property>
+                                    <property name="tooltip_text" translatable="yes">Select double pinyin schema.</property>
                                     <property name="spacing">6</property>
                                     <property name="homogeneous">True</property>
                                     <child>
@@ -145,6 +149,7 @@
                     <child>
                       <object class="GtkFrame" id="frame4">
                         <property name="visible">True</property>
+                        <property name="tooltip_text" translatable="yes">Setup the initial state of pinyin input method.</property>
                         <property name="label_xalign">0</property>
                         <property name="shadow_type">none</property>
                         <child>
@@ -157,6 +162,8 @@
                                 <property name="visible">True</property>
                                 <property name="n_rows">4</property>
                                 <property name="n_columns">3</property>
+                                <property name="column_spacing">12</property>
+                                <property name="row_spacing">6</property>
                                 <child>
                                   <object class="GtkLabel" id="label9">
                                     <property name="visible">True</property>
@@ -352,28 +359,18 @@
                             <child>
                               <object class="GtkTable" id="table3">
                                 <property name="visible">True</property>
-                                <property name="n_rows">5</property>
+                                <property name="n_rows">6</property>
                                 <property name="n_columns">2</property>
                                 <property name="column_spacing">12</property>
                                 <property name="row_spacing">6</property>
                                 <property name="homogeneous">True</property>
-                                <child>
-                                  <object class="GtkLabel" id="label16">
-                                    <property name="visible">True</property>
-                                    <property name="xalign">0</property>
-                                    <property name="label" translatable="yes">Number of candidates:</property>
-                                    <property name="use_markup">True</property>
-                                  </object>
-                                  <packing>
-                                    <property name="x_options">GTK_FILL</property>
-                                  </packing>
-                                </child>
                                 <child>
                                   <object class="GtkCheckButton" id="ShiftSelectCandidate">
                                     <property name="label" translatable="yes">Press [Shift] key to select candidate</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
+                                    <property name="tooltip_text" translatable="yes">Use left and right shift keys to select the second and thrid candidates.</property>
                                     <property name="draw_indicator">True</property>
                                   </object>
                                   <packing>
@@ -388,6 +385,7 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
+                                    <property name="tooltip_text" translatable="yes">Use [-] [=] key to page up/down the lookup table.</property>
                                     <property name="active">True</property>
                                     <property name="draw_indicator">True</property>
                                   </object>
@@ -403,6 +401,7 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
+                                    <property name="tooltip_text" translatable="yes">Use [,] [.] key to page up/down the lookup table.</property>
                                     <property name="active">True</property>
                                     <property name="draw_indicator">True</property>
                                   </object>
@@ -418,6 +417,7 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
+                                    <property name="tooltip_text" translatable="yes">Enable automatic commit phrase.</property>
                                     <property name="draw_indicator">True</property>
                                   </object>
                                   <packing>
@@ -427,17 +427,54 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkHScale" id="hscaleLookupTablePageSize">
+                                  <object class="GtkCheckButton" id="TradCandidate">
+                                    <property name="label" translatable="yes">Show candidates in traditional Chinese</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
-                                    <property name="update_policy">delayed</property>
-                                    <property name="adjustment">LookupTablePageSize</property>
-                                    <property name="digits">0</property>
-                                    <property name="value_pos">left</property>
+                                    <property name="receives_default">False</property>
+                                    <property name="tooltip_text" translatable="yes">Show candidates in traditional Chinese, if the input method is in traditional Chinese inputing mode.</property>
+                                    <property name="draw_indicator">True</property>
                                   </object>
                                   <packing>
-                                    <property name="left_attach">1</property>
                                     <property name="right_attach">2</property>
+                                    <property name="top_attach">5</property>
+                                    <property name="bottom_attach">6</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkHBox" id="hbox3">
+                                    <property name="visible">True</property>
+                                    <property name="tooltip_text" translatable="yes">Setup the number of candidates show in one page of lookup table.</property>
+                                    <property name="spacing">12</property>
+                                    <child>
+                                      <object class="GtkLabel" id="label16">
+                                        <property name="visible">True</property>
+                                        <property name="xalign">0</property>
+                                        <property name="label" translatable="yes">Number of candidates:</property>
+                                        <property name="use_markup">True</property>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="position">0</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkHScale" id="hscaleLookupTablePageSize">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="update_policy">delayed</property>
+                                        <property name="adjustment">LookupTablePageSize</property>
+                                        <property name="digits">0</property>
+                                        <property name="value_pos">left</property>
+                                      </object>
+                                      <packing>
+                                        <property name="position">1</property>
+                                      </packing>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="right_attach">2</property>
+                                    <property name="x_options">GTK_FILL</property>
                                   </packing>
                                 </child>
                               </object>
@@ -585,6 +622,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
+                            <property name="tooltip_text" translatable="yes">Enable pinyin correcting.</property>
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
                           </object>
@@ -1017,6 +1055,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
+                            <property name="tooltip_text" translatable="yes">Enable fuzzy pinyin.</property>
                             <property name="draw_indicator">True</property>
                           </object>
                         </child>

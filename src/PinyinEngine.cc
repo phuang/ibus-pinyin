@@ -887,15 +887,7 @@ PinyinEngine::updateLookupTable (void)
         return;
     }
 
-#if 1
-    for (guint i = 0; i < candidate_nr; i++) {
-        StaticText text (m_phrase_editor.candidate (i));
-        if (m_phrase_editor.candidateIsUserPhease (i))
-            text.appendAttribute (IBUS_ATTR_TYPE_FOREGROUND, 0x000000ef, 0, -1);
-        m_lookup_table.appendCandidate (text);
-    }
-#else
-    if (G_LIKELY (m_mode_simp)) {
+    if (G_LIKELY (m_phrase_editor.modeSimp () || !Config::tradCandidate)) {
         for (guint i = 0; i < candidate_nr; i++) {
             StaticText text (m_phrase_editor.candidate (i));
             if (m_phrase_editor.candidateIsUserPhease (i))
@@ -913,7 +905,6 @@ PinyinEngine::updateLookupTable (void)
             m_lookup_table.appendCandidate (text);
         }
     }
-#endif
     ibus_engine_update_lookup_table_fast (m_engine,
                                           m_lookup_table,
                                           TRUE);
