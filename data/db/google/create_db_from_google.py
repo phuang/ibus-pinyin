@@ -2,6 +2,7 @@
 import sqlite3
 from pydict import *
 from id import *
+from valid_hanzi import *
 import sys
 
 def get_sheng_yun(pinyin):
@@ -15,7 +16,19 @@ def get_sheng_yun(pinyin):
             return t, pinyin[len(t):]
     return "", pinyin
 
-def create_db():
+def read_phrases(filename):
+    buf = file(filename).read()
+    buf = unicode(buf, "utf16")
+    buf = buf.strip()
+    for l in buf.split(u'\n'):
+        hanzi, freq, flag, pinyin = l.split(u' ', 3)
+        freq = float(freq)
+        pinyin = pinyin.split()
+        if any(map(lambda c: c not in valid_hanzi, hanzi)):
+            continue
+        yield hanzi, freq, pinyin
+
+def create_db(filename):
     # con = sqlite3.connect("main.db")
     # con.execute ("PRAGMA synchronous = NORMAL;")
     # con.execute ("PRAGMA temp_store = MEMORY;")
@@ -35,8 +48,7 @@ def create_db():
         # con.execute(sql % (i, column))
         # con.commit()
 
-    validate_hanzi = get_validate_hanzi()
-    records = list(read_phrases(validate_hanzi))
+    records = list(read_phrases(filename))
     records.sort(lambda a, b: 1 if a[1] > b[1] else -1)
     records_new = []
     i = 0
@@ -64,25 +76,8 @@ def create_db():
     print "COMMIT;"
     print "VACUUM;"
 
-
-def get_validate_hanzi():
-    validate_hanzi = file("valid_utf16.txt").read().decode("utf16")
-    return set(validate_hanzi)
-
-def read_phrases(validate_hanzi):
-    buf = file("rawdict_utf16_65105_freq.txt").read()
-    buf = unicode(buf, "utf16")
-    buf = buf.strip()
-    for l in buf.split(u'\n'):
-        hanzi, freq, flag, pinyin = l.split(u' ', 3)
-        freq = float(freq)
-        pinyin = pinyin.split()
-        if any(map(lambda c: c not in validate_hanzi, hanzi)):
-            continue
-        yield hanzi, freq, pinyin
-
 def main():
-    create_db()
+    create_db(sys.argv[1])
  
 if __name__ == "__main__":
     main()

@@ -27,7 +27,7 @@ SUBDIRS = \
 	$(NULL)
 
 DISTCHECK_CONFIGURE_FLAGS = \
-	--enable-google \
+	--enable-db-google \
 	--enable-db-open-phrase \
 	$(NULL)
 

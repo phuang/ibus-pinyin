@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: http://code.google.com/p/ibus/issues/entry\n"
-"POT-Creation-Date: 2009-09-29 15:30+0800\n"
+"POT-Creation-Date: 2009-10-06 14:48+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,23 +20,23 @@ msgstr ""
 msgid "Pinyin input method"
 msgstr ""
 
-#: src/PinyinEngine.cc:48 setup/ibus-pinyin-preferences.glade:191
+#: src/PinyinEngine.cc:47 setup/ibus-pinyin-preferences.glade:191
 msgid "Chinese"
 msgstr ""
 
-#: src/PinyinEngine.cc:61
+#: src/PinyinEngine.cc:60
 msgid "Full/Half width"
 msgstr ""
 
-#: src/PinyinEngine.cc:74
+#: src/PinyinEngine.cc:73
 msgid "Full/Half width punctuation"
 msgstr ""
 
-#: src/PinyinEngine.cc:87
+#: src/PinyinEngine.cc:86
 msgid "Simplfied/Traditional Chinese"
 msgstr ""
 
-#: src/PinyinEngine.cc:97 src/PinyinEngine.cc:99
+#: src/PinyinEngine.cc:96 src/PinyinEngine.cc:98
 #: setup/ibus-pinyin-preferences.glade:8
 msgid "Pinyin preferences"
 msgstr ""

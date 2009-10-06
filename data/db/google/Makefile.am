@@ -22,11 +22,11 @@ create_scripts = \
 	create_db_from_google.py \
 	id.py \
 	pydict.py \
+	valid_hanzi.py \
 	$(NULL)
 data_files = \
 	README \
 	rawdict_utf16_65105_freq.txt \
-	valid_utf16.txt \
 	$(NULL)
 
 if IBUS_BUILD_DB_GOOGLE
@@ -38,7 +38,7 @@ endif
 
 google.db: $(google_raw_data) $(create_scripts)
 	$(RM) $@
-	$(srcdir)/create_db_from_google.py | sqlite3 $@
+	$(srcdir)/create_db_from_google.py $(srcdir)/rawdict_utf16_65105_freq.txt | sqlite3 $@
 
 EXTRA_DIST = \
 	$(data_files) \
