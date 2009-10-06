@@ -118,7 +118,6 @@ private:
     gboolean m_mode_chinese;
     gboolean m_mode_full;
     gboolean m_mode_full_punct;
-    gboolean m_mode_simp;
 
     gboolean m_quote;
     gboolean m_double_quote;

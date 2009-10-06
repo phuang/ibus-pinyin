@@ -26,7 +26,6 @@ PinyinEngine::PinyinEngine (IBusEngine *engine)
       m_mode_chinese (Config::initChinese ()),
       m_mode_full (Config::initFull ()),
       m_mode_full_punct (Config::initFullPunct ()),
-      m_mode_simp (Config::initSimpChinese ()),
       m_quote (TRUE),
       m_double_quote (TRUE),
       m_prev_pressed_key (0),
@@ -80,8 +79,8 @@ PinyinEngine::PinyinEngine (IBusEngine *engine)
 
     m_prop_simp = ibus_property_new ("mode.simp",
                                       PROP_TYPE_NORMAL,
-                                      StaticText (m_mode_simp ? "简" : "繁"),
-                                      m_mode_simp ?
+                                      StaticText (m_phrase_editor.modeSimp () ? "简" : "繁"),
+                                      m_phrase_editor.modeSimp () ?
                                         PKGDATADIR"/icons/simp-chinese.svg" :
                                         PKGDATADIR"/icons/trad-chinese.svg",
                                       StaticText (_("Simplfied/Traditional Chinese")),
@@ -561,6 +560,7 @@ PinyinEngine::processKeyEvent (guint keyval, guint keycode, guint modifiers)
 void
 PinyinEngine::focusIn (void)
 {
+    /* reset pinyin parser */
     if (Config::doublePinyin ()) {
         if (dynamic_cast <DoublePinyinEditor *> (m_pinyin_editor) == NULL)
             delete m_pinyin_editor;
@@ -652,9 +652,9 @@ PinyinEngine::toggleModeFullPunct (void)
 inline void
 PinyinEngine::toggleModeSimp (void)
 {
-    m_mode_simp = !m_mode_simp;
-    m_prop_simp.setLabel (m_mode_simp ? "简" : "繁");
-    m_prop_simp.setIcon (m_mode_simp ?
+    m_phrase_editor.setModeSimp(!m_phrase_editor.modeSimp ());
+    m_prop_simp.setLabel (m_phrase_editor.modeSimp () ? "简" : "繁");
+    m_prop_simp.setIcon (m_phrase_editor.modeSimp () ?
                             PKGDATADIR"/icons/simp-chinese.svg" :
                             PKGDATADIR"/icons/trad-chinese.svg");
     ibus_engine_update_property (m_engine, m_prop_simp);
@@ -714,23 +714,28 @@ PinyinEngine::updatePreeditTextInTypingMode (void)
 
     /* add select phrases */
     if (G_UNLIKELY (m_phrase_editor.selectedString ())) {
-        if (G_LIKELY (m_mode_simp))
-            m_buffer << m_phrase_editor.selectedString ();
-        else
-            SimpTradConverter::simpToTrad (m_phrase_editor.selectedString (), m_buffer);
+        m_buffer << m_phrase_editor.selectedString ();
     }
 
     /* add highlight candidate */
     guint candidate_begin = m_buffer.utf8Length ();
     guint candidate_length = 0;
     if (m_phrase_editor.candidates ().length () > 0) {
-        const Phrase & candidate = m_phrase_editor.candidate (m_lookup_table.cursorPos ());
-        candidate_length = candidate.len;
-        if (G_LIKELY (m_mode_simp)) {
-            m_buffer << candidate;
+        if (m_lookup_table.cursorPos () == 0 && !m_phrase_editor.modeSimp ()) {
+            const PhraseArray & phrases = m_phrase_editor.candidate0 ();
+            candidate_length = 0;
+            for (guint i = 0; i < phrases.length (); i++) {
+                candidate_length += phrases[i].len;
+                SimpTradConverter::simpToTrad (phrases[i], m_buffer);
+            }
         }
         else {
-            SimpTradConverter::simpToTrad (candidate, m_buffer);
+            const Phrase & candidate = m_phrase_editor.candidate (m_lookup_table.cursorPos ());
+            candidate_length = candidate.len;
+            if (m_phrase_editor.modeSimp ())
+                m_buffer << candidate;
+            else
+                SimpTradConverter::simpToTrad (candidate, m_buffer);
         }
     }
 
@@ -764,10 +769,7 @@ PinyinEngine::updatePreeditTextInEditingMode (void)
 
     /* add select phrases */
     if (G_UNLIKELY (m_phrase_editor.selectedString ())) {
-        if (G_LIKELY (m_mode_simp))
-            m_buffer << m_phrase_editor.selectedString ();
-        else
-            SimpTradConverter::simpToTrad (m_phrase_editor.selectedString (), m_buffer);
+        m_buffer << m_phrase_editor.selectedString ();
     }
 
     /* add highlight candidate */
@@ -893,7 +895,7 @@ PinyinEngine::updateLookupTable (void)
         m_lookup_table.appendCandidate (text);
     }
 #else
-    if (G_LIKELY (m_mode_simp || TRUE)) {
+    if (G_LIKELY (m_mode_simp)) {
         for (guint i = 0; i < candidate_nr; i++) {
             StaticText text (m_phrase_editor.candidate (i));
             if (m_phrase_editor.candidateIsUserPhease (i))
@@ -958,12 +960,7 @@ PinyinEngine::commit (void)
         return;
 
     m_buffer.truncate (0);
-    if (G_LIKELY (m_mode_simp)) {
-        m_buffer << m_phrase_editor.selectedString ();
-    }
-    else {
-        SimpTradConverter::simpToTrad (m_phrase_editor.selectedString (), m_buffer);
-    }
+    m_buffer << m_phrase_editor.selectedString ();
 
     const gchar *p = m_pinyin_editor->textAfterPinyin (m_buffer.utf8Length ());
     if (G_UNLIKELY (m_mode_full)) {

@@ -23,6 +23,10 @@ public:
         return m_candidates[i];
     }
 
+    const PhraseArray & candidate0 (void) const {
+        return m_candidate_0_phrases;
+    }
+
     gboolean candidateIsUserPhease (guint i) const {
         return m_candidates[i].user_freq > 0 && m_candidates[i].freq == 0;
     }
@@ -34,6 +38,14 @@ public:
         m_candidate_0_phrases.removeAll ();
         m_pinyin.removeAll ();
         m_cursor = 0;
+    }
+
+    gboolean modeSimp (void) const {
+        return m_mode_simp;
+    }
+
+    void setModeSimp (gboolean mode) {
+        m_mode_simp = mode;
     }
 
     void update (const PinyinArray &pinyin);
@@ -64,6 +76,7 @@ private:
     PhraseArray m_candidate_0_phrases;  // the first candidate in phrase array format
     PinyinArray m_pinyin;
     guint m_cursor;
+    gboolean m_mode_simp;
 
 private:
     static Database m_database;

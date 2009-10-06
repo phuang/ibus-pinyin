@@ -1,5 +1,6 @@
 #include "Config.h"
 #include "PhraseEditor.h"
+#include "SimpTradConverter.h"
 
 namespace PY {
 
@@ -12,7 +13,8 @@ PhraseEditor::PhraseEditor (void)
       m_selected_string (32),
       m_candidate_0_phrases (8),
       m_pinyin (16),
-      m_cursor (0)
+      m_cursor (0),
+      m_mode_simp (Config::initSimpChinese ())
 {
 }
 
@@ -66,12 +68,18 @@ PhraseEditor::selectCandidate (guint i)
 {
     if (G_LIKELY (i == 0)) {
         m_selected_phrases << m_candidate_0_phrases;
-        m_selected_string << m_candidates[0].phrase;
+        if (G_LIKELY (m_mode_simp))
+            m_selected_string << m_candidates[0].phrase;
+        else
+            SimpTradConverter::simpToTrad (m_candidates[0].phrase, m_selected_string);
         m_cursor = m_pinyin.length ();
     }
     else {
         m_selected_phrases << m_candidates[i];
-        m_selected_string << m_candidates[i].phrase;
+        if (G_LIKELY (m_mode_simp))
+            m_selected_string << m_candidates[i].phrase;
+        else
+            SimpTradConverter::simpToTrad (m_candidates[i].phrase, m_selected_string);
         m_cursor += m_candidates[i].len;
     }
 
