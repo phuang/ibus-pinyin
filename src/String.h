@@ -64,6 +64,12 @@ public:
         g_string_append (m_string, str);
         return *this;
     }
+    
+    String & append (const gunichar *wstr) {
+        for (const gunichar *p = wstr; *p != 0; p++)
+            appendUnichar (*p);
+        return *this;
+    }
 
     String & append (const WideString &wstr) {
         for (guint i = 0; i < wstr.length (); i++) {
@@ -130,6 +136,10 @@ public:
 
     String & operator << (const gchar *str) {
         return append (str);
+    }
+    
+    String & operator << (const gunichar *wstr) {
+        return append (wstr);
     }
 
     String & operator << (const String &str) {

@@ -1,32 +1,55 @@
-#!/usr/bin/evn python
+#!/usr/bin/env python
+from ZhConversion import *
+from valid_hanzi import *
 
-def str_to_unicode(s):
-    if not s.startswith("U+"):
-        raise Exception("%s is not a unicode" % s)
-    s = s[2:]
-    return unichr(int(s, 16))
+def convert(s, d, n):
+    out = u""
+    end = len(s)
+    begin = 0
+    while begin < end:
+        for i in range(min(n, end - begin), 0, -1):
+            t = s[begin:begin+i]
+            t = d.get(t, t if i == 1 else None)
+            if t:
+                break
+        out = out + t
+        begin += i
+    return out
 
-def read_unihan():
-    for line in file("Unihan_Variants.txt"):
-        if line.startswith("#"):
-            continue
-        tokens = line.decode("utf8").strip().split()
-        if u"kTraditionalVariant" not in tokens:
-            continue
-        yield str_to_unicode(tokens[0]), map(str_to_unicode, tokens[2:])
-        
-def main():
-    print "const gunichar simp_to_trad[][2] = {"
-    
-    records = list(read_unihan())
+def filter_more(records, n):
+    han = filter(lambda (k, v): len(k) <= n, records)
+    hand = dict(han)
+    hanm = filter(lambda (k, v): convert(k, hand, n) != v, records)
+    return hanm + han
+
+def get_records():
+    records = zh2Hant.items()
+
+    # remove invalid hanzi
+    records = filter(lambda (k, v): all([c in valid_hanzi for c in k]) and  all([c in valid_hanzi for c in v]), records)
+
+    # remove if length is not equal
+    records = filter(lambda (k, v): len(k) == len(v), records)
+
+    # remove if length > 4
+    records = filter(lambda (k, v): len(k) <= 6, records)
+
+    maxlen = max(map(lambda (k,v): len(k), records))
+    for i in range(1,  maxlen - 1, 1):
+        records = filter_more(records, i)
+
     records.sort()
+    return maxlen, records
+
+def main():
+
+    print "const wchar_t *simp_to_trad[][2] = {"
+    maxlen, records = get_records()
     for s, ts in records:
-        print "    { 0x%x, 0x%x },   // %s => %s" % (ord(s), ord(ts[0]), s.encode("utf8"), ts[0].encode("utf8"))
-
+        print '    { L"%s", L"%s" },' % (s.encode("utf8"), ts.encode("utf8"))
     print "};"
+    print '#define SIMP_TO_TRAD_MAX_LEN (%d)' % maxlen
     print '#define SIMP_TO_TRAD_NR (sizeof (simp_to_trad) / sizeof (simp_to_trad[0]))'
-    print
-
 
 if __name__ == "__main__":
     main()
