@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: http://code.google.com/p/ibus/issues/entry\n"
-"POT-Creation-Date: 2009-10-06 14:48+0800\n"
+"POT-Creation-Date: 2009-10-07 07:07+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,7 +20,7 @@ msgstr ""
 msgid "Pinyin input method"
 msgstr ""
 
-#: src/PinyinEngine.cc:47 setup/ibus-pinyin-preferences.glade:191
+#: src/PinyinEngine.cc:47 setup/ibus-pinyin-preferences.glade:198
 msgid "Chinese"
 msgstr ""
 
@@ -45,128 +45,187 @@ msgstr ""
 msgid "Full pinyin"
 msgstr ""
 
-#: setup/ibus-pinyin-preferences.glade:67
+#: setup/ibus-pinyin-preferences.glade:57
+msgid "Use full pinyin."
+msgstr ""
+
+#: setup/ibus-pinyin-preferences.glade:68
 msgid "Double pinyin"
 msgstr ""
 
-#: setup/ibus-pinyin-preferences.glade:81
+#: setup/ibus-pinyin-preferences.glade:72
+msgid "Use double pinyin."
+msgstr ""
+
+#: setup/ibus-pinyin-preferences.glade:83
 msgid "Simple pinyin"
 msgstr ""
 
-#: setup/ibus-pinyin-preferences.glade:102
+#: setup/ibus-pinyin-preferences.glade:87
+msgid "Enable simple pinyin (like zh g)."
+msgstr ""
+
+#: setup/ibus-pinyin-preferences.glade:99
+msgid "Select double pinyin schema."
+msgstr ""
+
+#: setup/ibus-pinyin-preferences.glade:106
 msgid "Schema:"
 msgstr ""
 
-#: setup/ibus-pinyin-preferences.glade:135
+#: setup/ibus-pinyin-preferences.glade:139
 msgid "<b>Pinyin</b>"
 msgstr ""
 
-#: setup/ibus-pinyin-preferences.glade:164
-msgid "Language:"
+#: setup/ibus-pinyin-preferences.glade:152
+msgid "Setup the initial state of pinyin input method."
 msgstr ""
 
 #: setup/ibus-pinyin-preferences.glade:171
+msgid "Language:"
+msgstr ""
+
+#: setup/ibus-pinyin-preferences.glade:178
 msgid "Half/full width:"
 msgstr ""
 
-#: setup/ibus-pinyin-preferences.glade:182
+#: setup/ibus-pinyin-preferences.glade:189
 msgid "Punctuations:"
 msgstr ""
 
-#: setup/ibus-pinyin-preferences.glade:206
+#: setup/ibus-pinyin-preferences.glade:213
 msgid "English"
 msgstr ""
 
-#: setup/ibus-pinyin-preferences.glade:219
-#: setup/ibus-pinyin-preferences.glade:251
+#: setup/ibus-pinyin-preferences.glade:226
+#: setup/ibus-pinyin-preferences.glade:258
 msgid "Full"
 msgstr ""
 
-#: setup/ibus-pinyin-preferences.glade:236
-#: setup/ibus-pinyin-preferences.glade:267
+#: setup/ibus-pinyin-preferences.glade:243
+#: setup/ibus-pinyin-preferences.glade:274
 msgid "Half"
 msgstr ""
 
-#: setup/ibus-pinyin-preferences.glade:285
+#: setup/ibus-pinyin-preferences.glade:292
 msgid "Chinese:"
 msgstr ""
 
-#: setup/ibus-pinyin-preferences.glade:294
+#: setup/ibus-pinyin-preferences.glade:301
 msgid "Simplified"
 msgstr ""
 
-#: setup/ibus-pinyin-preferences.glade:311
+#: setup/ibus-pinyin-preferences.glade:318
 msgid "Traditional"
 msgstr ""
 
-#: setup/ibus-pinyin-preferences.glade:332
+#: setup/ibus-pinyin-preferences.glade:339
 msgid "<b>Initial state</b>"
 msgstr ""
 
-#: setup/ibus-pinyin-preferences.glade:364
-msgid "Number of candidates:"
-msgstr ""
-
-#: setup/ibus-pinyin-preferences.glade:373
+#: setup/ibus-pinyin-preferences.glade:369
 msgid "Press [Shift] key to select candidate"
 msgstr ""
 
-#: setup/ibus-pinyin-preferences.glade:387
+#: setup/ibus-pinyin-preferences.glade:373
+msgid ""
+"Use left and right shift keys to select the second and thrid candidates."
+msgstr ""
+
+#: setup/ibus-pinyin-preferences.glade:384
 msgid "Press [-] [=] key to flip page"
 msgstr ""
 
-#: setup/ibus-pinyin-preferences.glade:402
+#: setup/ibus-pinyin-preferences.glade:388
+msgid "Use [-] [=] key to page up/down the lookup table."
+msgstr ""
+
+#: setup/ibus-pinyin-preferences.glade:400
 msgid "Press [,] [.] key to flip page"
 msgstr ""
 
-#: setup/ibus-pinyin-preferences.glade:417
+#: setup/ibus-pinyin-preferences.glade:404
+msgid "Use [,] [.] key to page up/down the lookup table."
+msgstr ""
+
+#: setup/ibus-pinyin-preferences.glade:416
 msgid "Auto commit phrase"
 msgstr ""
 
-#: setup/ibus-pinyin-preferences.glade:450
+#: setup/ibus-pinyin-preferences.glade:420
+msgid "Enable automatic commit phrase."
+msgstr ""
+
+#: setup/ibus-pinyin-preferences.glade:431
+msgid "Show candidates in traditional Chinese"
+msgstr ""
+
+#: setup/ibus-pinyin-preferences.glade:435
+msgid ""
+"Show candidates in traditional Chinese, if the input method is in "
+"traditional Chinese inputing mode."
+msgstr ""
+
+#: setup/ibus-pinyin-preferences.glade:447
+msgid "Setup the number of candidates show in one page of lookup table."
+msgstr ""
+
+#: setup/ibus-pinyin-preferences.glade:453
+msgid "Number of candidates:"
+msgstr ""
+
+#: setup/ibus-pinyin-preferences.glade:487
 msgid "<b>Others</b>"
 msgstr ""
 
-#: setup/ibus-pinyin-preferences.glade:467
+#: setup/ibus-pinyin-preferences.glade:504
 msgid "General"
 msgstr ""
 
-#: setup/ibus-pinyin-preferences.glade:584
-#: setup/ibus-pinyin-preferences.glade:608
+#: setup/ibus-pinyin-preferences.glade:621
+#: setup/ibus-pinyin-preferences.glade:646
 msgid "Correct pinyin"
 msgstr ""
 
-#: setup/ibus-pinyin-preferences.glade:1016
-#: setup/ibus-pinyin-preferences.glade:1039
+#: setup/ibus-pinyin-preferences.glade:625
+msgid "Enable pinyin correcting."
+msgstr ""
+
+#: setup/ibus-pinyin-preferences.glade:1054
+#: setup/ibus-pinyin-preferences.glade:1078
 msgid "Fuzzy pinyin"
 msgstr ""
 
-#: setup/ibus-pinyin-preferences.glade:1077
+#: setup/ibus-pinyin-preferences.glade:1058
+msgid "Enable fuzzy pinyin."
+msgstr ""
+
+#: setup/ibus-pinyin-preferences.glade:1116
 msgid "<big><b>IBus Pinyin 1.3.0</b></big>"
 msgstr ""
 
-#: setup/ibus-pinyin-preferences.glade:1088
+#: setup/ibus-pinyin-preferences.glade:1127
 msgid "Pinyin input method for IBus"
 msgstr ""
 
-#: setup/ibus-pinyin-preferences.glade:1098
+#: setup/ibus-pinyin-preferences.glade:1137
 msgid ""
 "<small>Copyright © 2009 Peng Huang &lt;shawn.p.huang@gmail.com&gt;</small>"
 msgstr ""
 
-#: setup/ibus-pinyin-preferences.glade:1109
+#: setup/ibus-pinyin-preferences.glade:1148
 msgid "http://ibus.googlecode.com"
 msgstr ""
 
-#: setup/ibus-pinyin-preferences.glade:1139
-#: setup/ibus-pinyin-preferences.glade:1217
+#: setup/ibus-pinyin-preferences.glade:1178
+#: setup/ibus-pinyin-preferences.glade:1256
 msgid "About"
 msgstr ""
 
-#: setup/ibus-pinyin-preferences.glade:1156
+#: setup/ibus-pinyin-preferences.glade:1195
 msgid "Half width punctuations:"
 msgstr ""
 
-#: setup/ibus-pinyin-preferences.glade:1168
+#: setup/ibus-pinyin-preferences.glade:1207
 msgid "+-*/=%"
 msgstr ""
