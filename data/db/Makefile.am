@@ -38,11 +38,11 @@ install-data-hook:
 if test "$(NO_INDEX)" = ""; then \
   cd $(DESTDIR)$(main_dbdir); \
   if test -f google.db; then \
-    echo "Create INDEX for google.db"; \
+    echo "Creating index for google.db"; \
     sqlite3 google.db ".read create_index.sql"; \
   fi; \
   if test -f open-phrase.db; then \
-    echo "Create INDEX for open-phrase.db"; \
+    echo "Creating index for open-phrase.db"; \
     sqlite3 open-phrase.db ".read create_index.sql"; \
   fi; \
 fi)
