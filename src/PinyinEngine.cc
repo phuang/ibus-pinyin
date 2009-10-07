@@ -871,7 +871,7 @@ PinyinEngine::updateLookupTable (void)
         return;
     }
 
-    if (G_LIKELY (m_phrase_editor.modeSimp () || !Config::tradCandidate)) {
+    if (G_LIKELY (m_phrase_editor.modeSimp () || !Config::tradCandidate ())) {
         for (guint i = 0; i < candidate_nr; i++) {
             StaticText text (m_phrase_editor.candidate (i));
             if (m_phrase_editor.candidateIsUserPhease (i))
