@@ -4,8 +4,8 @@
 
 namespace PY {
 
-guint Config::m_option = PINYIN_SIMPLE_PINYIN | PINYIN_CORRECT_ALL;
-guint Config::m_option_mask = PINYIN_SIMPLE_PINYIN | PINYIN_CORRECT_ALL;
+guint Config::m_option = PINYIN_INCOMPLETE_PINYIN | PINYIN_CORRECT_ALL;
+guint Config::m_option_mask = PINYIN_INCOMPLETE_PINYIN | PINYIN_CORRECT_ALL;
 
 guint Config::m_page_size = 5;
 gboolean Config::m_shift_select_candidate = FALSE;
@@ -46,7 +46,7 @@ static const struct {
     guint option;
     bool defval;
 } options [] = {
-    { StaticString ("SimplePinyin"),       PINYIN_SIMPLE_PINYIN,       TRUE },
+    { StaticString ("IncompletePinyin"), PINYIN_INCOMPLETE_PINYIN, TRUE },
     /* correct */
     { StaticString ("CorrectPinyin_GN_NG"),    PINYIN_CORRECT_GN_TO_NG,    TRUE },
     { StaticString ("CorrectPinyin_GN_NG"),    PINYIN_CORRECT_GN_TO_NG,    TRUE },

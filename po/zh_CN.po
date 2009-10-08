@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ibus-pinyin 1.2.99\n"
 "Report-Msgid-Bugs-To: http://code.google.com/p/ibus/issues/entry\n"
-"POT-Creation-Date: 2009-10-07 07:07+0800\n"
+"POT-Creation-Date: 2009-10-09 07:04+0800\n"
 "PO-Revision-Date: 2009-09-20 16:05+8\n"
 "Last-Translator: Peng Huang <shawn.p.huang@gmail.com>\n"
 "Language-Team: Peng Huang <shawn.p.huang@gmail.com>\n"
@@ -57,11 +57,11 @@ msgid "Use double pinyin."
 msgstr "使用双拼。"
 
 #: setup/ibus-pinyin-preferences.glade:83
-msgid "Simple pinyin"
+msgid "Incomplete pinyin"
 msgstr "简拼"
 
 #: setup/ibus-pinyin-preferences.glade:87
-msgid "Enable simple pinyin (like zh g)."
+msgid "Enable incomplete pinyin (like zh g)."
 msgstr "支持不完全拼音（例如：zh g）。"
 
 #: setup/ibus-pinyin-preferences.glade:99

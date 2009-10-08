@@ -79,12 +79,12 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkCheckButton" id="SimplePinyin">
-                                    <property name="label" translatable="yes">Simple pinyin</property>
+                                  <object class="GtkCheckButton" id="IncompletePinyin">
+                                    <property name="label" translatable="yes">Incomplete pinyin</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
-                                    <property name="tooltip_text" translatable="yes">Enable simple pinyin (like zh g).</property>
+                                    <property name="tooltip_text" translatable="yes">Enable incomplete pinyin (like zh g).</property>
                                     <property name="active">True</property>
                                     <property name="draw_indicator">True</property>
                                   </object>

@@ -101,7 +101,7 @@ static const Pinyin pinyin_table[] = {
         fsheng_id_2 : PINYIN_ID_ZERO,
         fyun_id_2   : PINYIN_ID_ZERO,
         len         : 1,
-        flags       : PINYIN_SIMPLE_PINYIN
+        flags       : PINYIN_INCOMPLETE_PINYIN
     },
     {  /* 8 */
         text        : "ba",
@@ -413,7 +413,7 @@ static const Pinyin pinyin_table[] = {
         fsheng_id_2 : PINYIN_ID_ZERO,
         fyun_id_2   : PINYIN_ID_ZERO,
         len         : 1,
-        flags       : PINYIN_SIMPLE_PINYIN
+        flags       : PINYIN_INCOMPLETE_PINYIN
     },
     {  /* 32 */
         text        : "ca",
@@ -582,7 +582,7 @@ static const Pinyin pinyin_table[] = {
         fsheng_id_2 : PINYIN_ID_ZERO,
         fyun_id_2   : PINYIN_ID_ZERO,
         len         : 2,
-        flags       : PINYIN_SIMPLE_PINYIN
+        flags       : PINYIN_INCOMPLETE_PINYIN
     },
     {  /* 45 */
         text        : "cha",
@@ -1141,7 +1141,7 @@ static const Pinyin pinyin_table[] = {
         fsheng_id_2 : PINYIN_ID_ZERO,
         fyun_id_2   : PINYIN_ID_ZERO,
         len         : 1,
-        flags       : PINYIN_SIMPLE_PINYIN
+        flags       : PINYIN_INCOMPLETE_PINYIN
     },
     {  /* 88 */
         text        : "da",
@@ -1687,7 +1687,7 @@ static const Pinyin pinyin_table[] = {
         fsheng_id_2 : PINYIN_ID_ZERO,
         fyun_id_2   : PINYIN_ID_ZERO,
         len         : 1,
-        flags       : PINYIN_SIMPLE_PINYIN
+        flags       : PINYIN_INCOMPLETE_PINYIN
     },
     {  /* 130 */
         text        : "fa",
@@ -2012,7 +2012,7 @@ static const Pinyin pinyin_table[] = {
         fsheng_id_2 : PINYIN_ID_ZERO,
         fyun_id_2   : PINYIN_ID_ZERO,
         len         : 1,
-        flags       : PINYIN_SIMPLE_PINYIN
+        flags       : PINYIN_INCOMPLETE_PINYIN
     },
     {  /* 155 */
         text        : "ga",
@@ -2402,7 +2402,7 @@ static const Pinyin pinyin_table[] = {
         fsheng_id_2 : PINYIN_ID_ZERO,
         fyun_id_2   : PINYIN_ID_ZERO,
         len         : 1,
-        flags       : PINYIN_SIMPLE_PINYIN
+        flags       : PINYIN_INCOMPLETE_PINYIN
     },
     {  /* 185 */
         text        : "ha",
@@ -2805,7 +2805,7 @@ static const Pinyin pinyin_table[] = {
         fsheng_id_2 : PINYIN_ID_ZERO,
         fyun_id_2   : PINYIN_ID_ZERO,
         len         : 1,
-        flags       : PINYIN_SIMPLE_PINYIN
+        flags       : PINYIN_INCOMPLETE_PINYIN
     },
     {  /* 216 */
         text        : "ji",
@@ -3130,7 +3130,7 @@ static const Pinyin pinyin_table[] = {
         fsheng_id_2 : PINYIN_ID_ZERO,
         fyun_id_2   : PINYIN_ID_ZERO,
         len         : 1,
-        flags       : PINYIN_SIMPLE_PINYIN
+        flags       : PINYIN_INCOMPLETE_PINYIN
     },
     {  /* 241 */
         text        : "ka",
@@ -3520,7 +3520,7 @@ static const Pinyin pinyin_table[] = {
         fsheng_id_2 : PINYIN_ID_R,
         fyun_id_2   : PINYIN_ID_ZERO,
         len         : 1,
-        flags       : PINYIN_SIMPLE_PINYIN
+        flags       : PINYIN_INCOMPLETE_PINYIN
     },
     {  /* 271 */
         text        : "la",
@@ -4079,7 +4079,7 @@ static const Pinyin pinyin_table[] = {
         fsheng_id_2 : PINYIN_ID_ZERO,
         fyun_id_2   : PINYIN_ID_ZERO,
         len         : 1,
-        flags       : PINYIN_SIMPLE_PINYIN
+        flags       : PINYIN_INCOMPLETE_PINYIN
     },
     {  /* 314 */
         text        : "ma",
@@ -4443,7 +4443,7 @@ static const Pinyin pinyin_table[] = {
         fsheng_id_2 : PINYIN_ID_ZERO,
         fyun_id_2   : PINYIN_ID_ZERO,
         len         : 1,
-        flags       : PINYIN_SIMPLE_PINYIN
+        flags       : PINYIN_INCOMPLETE_PINYIN
     },
     {  /* 342 */
         text        : "na",
@@ -5002,7 +5002,7 @@ static const Pinyin pinyin_table[] = {
         fsheng_id_2 : PINYIN_ID_ZERO,
         fyun_id_2   : PINYIN_ID_ZERO,
         len         : 1,
-        flags       : PINYIN_SIMPLE_PINYIN
+        flags       : PINYIN_INCOMPLETE_PINYIN
     },
     {  /* 385 */
         text        : "pa",
@@ -5327,7 +5327,7 @@ static const Pinyin pinyin_table[] = {
         fsheng_id_2 : PINYIN_ID_ZERO,
         fyun_id_2   : PINYIN_ID_ZERO,
         len         : 1,
-        flags       : PINYIN_SIMPLE_PINYIN
+        flags       : PINYIN_INCOMPLETE_PINYIN
     },
     {  /* 410 */
         text        : "qi",
@@ -5652,7 +5652,7 @@ static const Pinyin pinyin_table[] = {
         fsheng_id_2 : PINYIN_ID_ZERO,
         fyun_id_2   : PINYIN_ID_ZERO,
         len         : 1,
-        flags       : PINYIN_SIMPLE_PINYIN
+        flags       : PINYIN_INCOMPLETE_PINYIN
     },
     {  /* 435 */
         text        : "ra",
@@ -6146,7 +6146,7 @@ static const Pinyin pinyin_table[] = {
         fsheng_id_2 : PINYIN_ID_ZERO,
         fyun_id_2   : PINYIN_ID_ZERO,
         len         : 1,
-        flags       : PINYIN_SIMPLE_PINYIN
+        flags       : PINYIN_INCOMPLETE_PINYIN
     },
     {  /* 473 */
         text        : "sa",
@@ -6328,7 +6328,7 @@ static const Pinyin pinyin_table[] = {
         fsheng_id_2 : PINYIN_ID_ZERO,
         fyun_id_2   : PINYIN_ID_ZERO,
         len         : 2,
-        flags       : PINYIN_SIMPLE_PINYIN
+        flags       : PINYIN_INCOMPLETE_PINYIN
     },
     {  /* 487 */
         text        : "sha",
@@ -6900,7 +6900,7 @@ static const Pinyin pinyin_table[] = {
         fsheng_id_2 : PINYIN_ID_ZERO,
         fyun_id_2   : PINYIN_ID_ZERO,
         len         : 1,
-        flags       : PINYIN_SIMPLE_PINYIN
+        flags       : PINYIN_INCOMPLETE_PINYIN
     },
     {  /* 531 */
         text        : "ta",
@@ -7342,7 +7342,7 @@ static const Pinyin pinyin_table[] = {
         fsheng_id_2 : PINYIN_ID_ZERO,
         fyun_id_2   : PINYIN_ID_ZERO,
         len         : 1,
-        flags       : PINYIN_SIMPLE_PINYIN
+        flags       : PINYIN_INCOMPLETE_PINYIN
     },
     {  /* 565 */
         text        : "wa",
@@ -7524,7 +7524,7 @@ static const Pinyin pinyin_table[] = {
         fsheng_id_2 : PINYIN_ID_ZERO,
         fyun_id_2   : PINYIN_ID_ZERO,
         len         : 1,
-        flags       : PINYIN_SIMPLE_PINYIN
+        flags       : PINYIN_INCOMPLETE_PINYIN
     },
     {  /* 579 */
         text        : "xi",
@@ -7849,7 +7849,7 @@ static const Pinyin pinyin_table[] = {
         fsheng_id_2 : PINYIN_ID_ZERO,
         fyun_id_2   : PINYIN_ID_ZERO,
         len         : 1,
-        flags       : PINYIN_SIMPLE_PINYIN
+        flags       : PINYIN_INCOMPLETE_PINYIN
     },
     {  /* 604 */
         text        : "ya",
@@ -8174,7 +8174,7 @@ static const Pinyin pinyin_table[] = {
         fsheng_id_2 : PINYIN_ID_ZERO,
         fyun_id_2   : PINYIN_ID_ZERO,
         len         : 1,
-        flags       : PINYIN_SIMPLE_PINYIN
+        flags       : PINYIN_INCOMPLETE_PINYIN
     },
     {  /* 629 */
         text        : "za",
@@ -8356,7 +8356,7 @@ static const Pinyin pinyin_table[] = {
         fsheng_id_2 : PINYIN_ID_ZERO,
         fyun_id_2   : PINYIN_ID_ZERO,
         len         : 2,
-        flags       : PINYIN_SIMPLE_PINYIN
+        flags       : PINYIN_INCOMPLETE_PINYIN
     },
     {  /* 643 */
         text        : "zha",

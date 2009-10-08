@@ -27,7 +27,7 @@ class PreferencesDialog:
     def __init_pinyin(self):
         # pinyin
         self.__full_pinyin = self.__builder.get_object("FullPinyin")
-        self.__simple_pinyin = self.__builder.get_object("SimplePinyin")
+        self.__incomplete_pinyin = self.__builder.get_object("IncompletePinyin")
         self.__double_pinyin = self.__builder.get_object("DoublePinyin")
         self.__double_pinyin_schema = self.__builder.get_object("DoublePinyinSchema")
         self.__double_pinyin_schema_label = self.__builder.get_object("labelDoublePinyinSchema")
@@ -37,22 +37,22 @@ class PreferencesDialog:
         self.__double_pinyin_schema.set_attributes(renderer, text=0)
 
         # read value
-        self.__simple_pinyin.set_active(self.__get_value("SimplePinyin", True))
+        self.__incomplete_pinyin.set_active(self.__get_value("IncompletePinyin", True))
         self.__full_pinyin.set_active(not self.__get_value("DoublePinyin", False))
         self.__double_pinyin_schema.set_active(self.__get_value("DoublePinyinSchema", 0))
         if self.__full_pinyin.get_active():
-            self.__simple_pinyin.set_sensitive(True)
+            self.__incomplete_pinyin.set_sensitive(True)
             self.__double_pinyin_schema.set_sensitive(False)
             self.__double_pinyin_schema_label.set_sensitive(False)
         else:
-            self.__simple_pinyin.set_sensitive(False)
+            self.__incomplete_pinyin.set_sensitive(False)
             self.__double_pinyin_schema.set_sensitive(True)
             self.__double_pinyin_schema_label.set_sensitive(True)
 
         def __full_pinyin_toggled_cb(widget):
             val = widget.get_active()
             self.__set_value("DoublePinyin", not val)
-            self.__simple_pinyin.set_sensitive(val)
+            self.__incomplete_pinyin.set_sensitive(val)
 
         def __double_pinyin_toggled_cb(widget):
             val = widget.get_active()
@@ -66,7 +66,7 @@ class PreferencesDialog:
         # connect signals
         self.__full_pinyin.connect("toggled", __full_pinyin_toggled_cb)
         self.__double_pinyin.connect("toggled", __double_pinyin_toggled_cb)
-        self.__simple_pinyin.connect("toggled", self.__toggled_cb, "SimplePinyin")
+        self.__incomplete_pinyin.connect("toggled", self.__toggled_cb, "IncompletePinyin")
         self.__double_pinyin_schema.connect("changed", __double_pinyin_schema_changed_cb)
 
     def __init_init_state(self):

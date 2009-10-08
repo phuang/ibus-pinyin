@@ -37,7 +37,7 @@ FullPinyinEditor::insert (gint ch)
 
     m_text.insert (m_cursor++, ch);
 
-    if (G_UNLIKELY ((Config::option () & PINYIN_SIMPLE_PINYIN) == 0)) {
+    if (G_UNLIKELY ((Config::option () & PINYIN_INCOMPLETE_PINYIN) == 0)) {
         updatePinyin ();
     }
     else {

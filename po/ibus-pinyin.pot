@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: http://code.google.com/p/ibus/issues/entry\n"
-"POT-Creation-Date: 2009-10-07 07:07+0800\n"
+"POT-Creation-Date: 2009-10-09 07:04+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -58,11 +58,11 @@ msgid "Use double pinyin."
 msgstr ""
 
 #: setup/ibus-pinyin-preferences.glade:83
-msgid "Simple pinyin"
+msgid "Incomplete pinyin"
 msgstr ""
 
 #: setup/ibus-pinyin-preferences.glade:87
-msgid "Enable simple pinyin (like zh g)."
+msgid "Enable incomplete pinyin (like zh g)."
 msgstr ""
 
 #: setup/ibus-pinyin-preferences.glade:99
