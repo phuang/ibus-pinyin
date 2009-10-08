@@ -80,14 +80,14 @@ AM_GNU_GETTEXT([external])
 AM_GNU_GETTEXT_VERSION(0.16.1)
 
 
-# --enable-db-google
-AC_ARG_ENABLE(db-google,
-    AS_HELP_STRING([--disable-db-google],
-        [do not build database from google android pinyin]),
-    [enable_db_google=$enableval],
-    [enable_db_google=yes]
+# --enable-db-android
+AC_ARG_ENABLE(db-android,
+    AS_HELP_STRING([--disable-db-android],
+        [do not build database from pinyin in android]),
+    [enable_db_android=$enableval],
+    [enable_db_android=yes]
 )
-AM_CONDITIONAL(IBUS_BUILD_DB_GOOGLE, [test x"$enable_db_google" = x"yes" ])
+AM_CONDITIONAL(IBUS_BUILD_DB_ANDROID, [test x"$enable_db_android" = x"yes" ])
 
 # --enable-db-open-phrase
 AC_ARG_ENABLE(db-open-phrase,
@@ -108,7 +108,7 @@ setup/Makefile
 setup/ibus-setup-pinyin
 data/Makefile
 data/db/Makefile
-data/db/google/Makefile
+data/db/android/Makefile
 data/db/open-phrase/Makefile
 data/icons/Makefile
 m4/Makefile
@@ -120,7 +120,7 @@ AC_MSG_RESULT([
 Build options:
     Version                     $VERSION
     Install prefix              $prefix
-    Build database google       $enable_db_google
+    Build database android      $enable_db_android
     Build database open-phrase  $enable_db_open_phrase
 ])
 

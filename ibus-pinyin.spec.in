@@ -52,7 +52,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %post
 cd %{_datadir}/ibus-pinyin/db
-sqlite3 google.db ".read create_index.sql"
+sqlite3 android.db ".read create_index.sql"
 
 %post open-phrase
 cd %{_datadir}/ibus-pinyin/db
@@ -66,7 +66,7 @@ sqlite3 open-phrase.db ".read create_index.sql"
 %{_datadir}/@PACKAGE@/icons
 %{_datadir}/@PACKAGE@/setup
 %{_datadir}/@PACKAGE@/db/create_index.sql
-%{_datadir}/@PACKAGE@/db/google.db
+%{_datadir}/@PACKAGE@/db/android.db
 %dir %{_datadir}/@PACKAGE@
 %dir %{_datadir}/@PACKAGE@/db
 %{_datadir}/ibus/component/*

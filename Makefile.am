@@ -27,7 +27,7 @@ SUBDIRS = \
 	$(NULL)
 
 DISTCHECK_CONFIGURE_FLAGS = \
-	--enable-db-google \
+	--enable-db-android \
 	--enable-db-open-phrase \
 	$(NULL)
 

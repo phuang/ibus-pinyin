@@ -29,14 +29,14 @@ data_files = \
 	rawdict_utf16_65105_freq.txt \
 	$(NULL)
 
-if IBUS_BUILD_DB_GOOGLE
+if IBUS_BUILD_DB_ANDROID
 main_db_DATA = \
-	google.db \
+	android.db \
 	$(NULL)
 main_dbdir = $(pkgdatadir)/db
 endif
 
-google.db: $(google_raw_data) $(create_scripts)
+android.db: $(android_raw_data) $(create_scripts)
 	$(RM) $@
 	$(srcdir)/create_db.py $(srcdir)/rawdict_utf16_65105_freq.txt | sqlite3 $@
 
@@ -46,7 +46,7 @@ EXTRA_DIST = \
 	$(NULL)
 
 CLEANFILES = \
-	google.db \
+	android.db \
 	$(NULL)
 
 DISTCLEANFILES = \

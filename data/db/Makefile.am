@@ -28,7 +28,7 @@ EXTRA_DIST = \
 	$(NULL)
 
 SUBDIRS = \
-	google \
+	android \
 	open-phrase \
 	$(NULL)
 
@@ -37,9 +37,9 @@ install-data-hook:
 	@( \
 if test "$(NO_INDEX)" = ""; then \
   cd $(DESTDIR)$(main_dbdir); \
-  if test -f google.db; then \
-    echo "Creating index for google.db"; \
-    sqlite3 google.db ".read create_index.sql"; \
+  if test -f android.db; then \
+    echo "Creating index for android.db"; \
+    sqlite3 android.db ".read create_index.sql"; \
   fi; \
   if test -f open-phrase.db; then \
     echo "Creating index for open-phrase.db"; \

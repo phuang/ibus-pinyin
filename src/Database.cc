@@ -59,7 +59,7 @@ Database::init (void)
 
     static const gchar * maindb [] = {
         PKGDATADIR"/db/open-phrase.db",
-        PKGDATADIR"/db/google.db",
+        PKGDATADIR"/db/android.db",
         "main.db",
         NULL
     };
