@@ -66,6 +66,9 @@ PhraseEditor::resetCandidate (guint i)
 gboolean
 PhraseEditor::selectCandidate (guint i)
 {
+    if (G_UNLIKELY (i >= m_candidates.length ()))
+        return FALSE;
+
     if (G_LIKELY (i == 0)) {
         m_selected_phrases << m_candidate_0_phrases;
         if (G_LIKELY (m_mode_simp))
