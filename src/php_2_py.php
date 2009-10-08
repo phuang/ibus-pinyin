@@ -1,4 +1,4 @@
-<?
+<?php
 include("ZhConversion.php");
 
 echo "# -*- coding: utf-8 -*- \n";
