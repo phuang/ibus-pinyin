@@ -47,6 +47,7 @@ AC_PROG_CXX
 AM_PROG_CC_C_O
 AC_ISC_POSIX
 AC_HEADER_STDC
+IT_PROG_INTLTOOL([0.35.0])
 AM_PROG_LIBTOOL
 
 # check ibus
@@ -74,11 +75,9 @@ AM_PATH_PYTHON([2.5])
 # define GETTEXT_* variables
 GETTEXT_PACKAGE=ibus-pinyin
 AC_SUBST(GETTEXT_PACKAGE)
-AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE,"$GETTEXT_PACKAGE", [Define to the read-only architecture-independent data directory.])
+AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE,"$GETTEXT_PACKAGE", [Gettext package])
 
-AM_GNU_GETTEXT([external])
-AM_GNU_GETTEXT_VERSION(0.16.1)
-
+AM_GLIB_GNU_GETTEXT
 
 # --enable-db-android
 AC_ARG_ENABLE(db-android,
