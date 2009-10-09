@@ -1,1 +1,1 @@
-../data/db/google/valid_hanzi.py
+../data/db/android/valid_hanzi.py
