@@ -101,7 +101,7 @@ Database::init (void)
         goto _failed;
 
     /* Attach user database */
-    m_buffer = g_get_user_config_dir ();
+    m_buffer = g_get_user_cache_dir ();
     m_buffer << G_DIR_SEPARATOR_S << "ibus"
              << G_DIR_SEPARATOR_S << "pinyin";
     g_mkdir_with_parents (m_buffer, 0750);
