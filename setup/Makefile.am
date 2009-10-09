@@ -20,7 +20,7 @@
 
 setup_pinyin_PYTHON = \
 	main.py \
-	ibus-pinyin-preferences.glade \
+	ibus-pinyin-preferences.ui \
 	$(NULL)
 setup_pinyindir = $(datadir)/ibus-pinyin/setup
 
