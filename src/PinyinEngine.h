@@ -43,6 +43,7 @@ public:
     void cursorDown (void);
 
     void propertyActivate (const gchar *prop_name, guint prop_state);
+    void candidateClicked (guint index, guint button, guint state);
 
     void updateUI (gboolean now = TRUE) {
         if (G_UNLIKELY (now || m_need_update >= 4)) {

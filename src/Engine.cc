@@ -66,6 +66,11 @@ static void     ibus_pinyin_engine_property_activate
                                                 (IBusEngine             *engine,
                                                  const gchar            *prop_name,
                                                  guint                   prop_state);
+static void     ibus_pinyin_engine_candidate_clicked
+                                                (IBusEngine             *engine,
+                                                 guint                   index,
+                                                 guint                   button,
+                                                 guint                   state);
 #if 0
 static void ibus_pinyin_engine_property_show    (IBusEngine             *engine,
                                                  const gchar            *prop_name);
@@ -134,6 +139,8 @@ ibus_pinyin_engine_class_init (IBusPinyinEngineClass *klass)
     engine_class->cursor_down = ibus_pinyin_engine_cursor_down;
 
     engine_class->property_activate = ibus_pinyin_engine_property_activate;
+
+    engine_class->candidate_clicked = ibus_pinyin_engine_candidate_clicked;
 }
 
 static void
@@ -172,6 +179,16 @@ ibus_pinyin_engine_property_activate (IBusEngine    *engine,
     IBusPinyinEngine *pinyin = (IBusPinyinEngine *) engine;
     pinyin->engine->propertyActivate (prop_name, prop_state);
 }
+static void
+ibus_pinyin_engine_candidate_clicked (IBusEngine *engine,
+                                      guint       index,
+                                      guint       button,
+                                      guint       state)
+{
+    IBusPinyinEngine *pinyin = (IBusPinyinEngine *) engine;
+    pinyin->engine->candidateClicked (index, button, state);
+}
+
 #define FUNCTION(name, Name)                                        \
     static void                                                     \
     ibus_pinyin_engine_##name (IBusEngine *engine)                  \

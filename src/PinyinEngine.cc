@@ -693,6 +693,12 @@ PinyinEngine::propertyActivate (const gchar *prop_name, guint prop_state)
 }
 
 void
+PinyinEngine::candidateClicked (guint index, guint button, guint state)
+{
+   selectCandidateInPage (index);
+}
+
+void
 PinyinEngine::updatePreeditText (void)
 {
     /* preedit text = selected phrases + highlight candidate + rest text */
