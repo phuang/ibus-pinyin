@@ -94,7 +94,7 @@ PinyinEngine::PinyinEngine (IBusEngine *engine)
     m_prop_setup = ibus_property_new ("setup",
                                       PROP_TYPE_NORMAL,
                                       StaticText (_("Pinyin preferences")),
-                                      "gtk-preferences",
+                                      "ibus-setup",
                                       StaticText (_("Pinyin preferences")),
                                       TRUE,
                                       TRUE,

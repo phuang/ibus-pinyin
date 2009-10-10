@@ -56,7 +56,7 @@ start_component (void)
                                     "ibus-pinyin");
     ibus_component_add_engine (component,
                                ibus_engine_desc_new ("pinyin",
-                                                     N_("Pinyin input method"),
+                                                     N_("Pinyin"),
                                                      N_("Pinyin input method"),
                                                      "zh_CN",
                                                      "GPL",
