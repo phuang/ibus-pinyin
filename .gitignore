@@ -27,4 +27,4 @@ pinyin-database-*.tar.bz2
 rpm
 stamp-h1
 py-compile
-
+mkinstalldirs
