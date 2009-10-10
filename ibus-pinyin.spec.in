@@ -14,7 +14,7 @@ BuildRequires:  gettext-devel
 BuildRequires:  libtool
 BuildRequires:  pkgconfig
 BuildRequires:  sqlite-devel
-# BuildRequires:  libuuid-devel
+BuildRequires:  libuuid-devel
 BuildRequires:  ibus-devel >= 1.2.0
 
 Requires(post): sqlite
