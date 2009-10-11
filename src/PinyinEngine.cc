@@ -977,6 +977,9 @@ PinyinEngine::selectCandidateInPage (guint i)
 {
     guint page_size = m_lookup_table.pageSize ();
     guint cursor_pos = m_lookup_table.cursorPos ();
+
+    if (G_UNLIKELY (i >= page_size))
+        return FALSE;
     i += (cursor_pos / page_size) * page_size;
 
     return selectCandidate (i);
