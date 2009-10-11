@@ -124,6 +124,7 @@ private:
     gboolean m_double_quote;
 
     guint    m_prev_pressed_key;
+    gboolean m_prev_pressed_key_result;
     gunichar m_prev_commited_char;
 
 };

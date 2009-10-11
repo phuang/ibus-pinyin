@@ -29,6 +29,7 @@ PinyinEngine::PinyinEngine (IBusEngine *engine)
       m_quote (TRUE),
       m_double_quote (TRUE),
       m_prev_pressed_key (0),
+      m_prev_pressed_key_result (0),
       m_prev_commited_char (0)
 {
     /* */
@@ -501,7 +502,7 @@ PinyinEngine::processKeyEvent (guint keyval, guint keycode, guint modifiers)
 
     // ignore release event
     if (modifiers & IBUS_RELEASE_MASK) {
-        if (m_prev_pressed_key != keyval)
+        if (m_prev_pressed_key != keyval || m_prev_pressed_key_result != FALSE)
             return TRUE;
 
         switch (keyval) {
@@ -553,7 +554,8 @@ PinyinEngine::processKeyEvent (guint keyval, guint keycode, guint modifiers)
         break;
     }
 
-    m_prev_pressed_key = retval ? 0 : keyval;
+    m_prev_pressed_key = keyval;
+    m_prev_pressed_key_result = retval;
     return retval;
 }
 
