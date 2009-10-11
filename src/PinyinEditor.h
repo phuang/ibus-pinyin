@@ -4,6 +4,7 @@
 #include <glib.h>
 #include "String.h"
 #include "PinyinParser.h"
+#include "Regex.h"
 
 #define MAX_PINYIN_LEN 64
 
@@ -50,8 +51,8 @@ protected:
     guint       m_pinyin_len;   // pinyin length in char
 
 protected:
-    static PinyinParser m_parser; 
-
+    static PinyinParser m_parser;
+    static Regex m_regex;
 };
 
 };
