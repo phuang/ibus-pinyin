@@ -497,7 +497,7 @@ PinyinEngine::processOthers (guint keyval, guint keycode, guint modifiers)
 }
 
 inline gboolean
-PinyinEngine::processInitState (guint keyval, guint keycode, guint modifiers)
+PinyinEngine::processInitMode (guint keyval, guint keycode, guint modifiers)
 {
     gboolean retval = FALSE;
 
@@ -559,7 +559,25 @@ PinyinEngine::processInitState (guint keyval, guint keycode, guint modifiers)
 }
 
 inline gboolean
-PinyinEngine::processRawState (guint keyval, guint keycode, guint modifiers)
+PinyinEngine::processRawMode (guint keyval, guint keycode, guint modifiers)
+{
+    return TRUE;
+}
+
+inline gboolean
+PinyinEngine::processEnglishMode (guint keyval, guint keycode, guint modifiers)
+{
+    return TRUE;
+}
+
+inline gboolean
+PinyinEngine::processStrokeMode (guint keyval, guint keycode, guint modifiers)
+{
+    return TRUE;
+}
+
+inline gboolean
+PinyinEngine::processExtensionMode (guint keyval, guint keycode, guint modifiers)
 {
     return TRUE;
 }
@@ -571,10 +589,19 @@ PinyinEngine::processKeyEvent (guint keyval, guint keycode, guint modifiers)
 
     switch (m_input_mode) {
     case MODE_INIT:
-        retval = processInitState (keyval, keycode, modifiers);
+        retval = processInitMode (keyval, keycode, modifiers);
         break;
     case MODE_RAW:
-        retval = processRawState (keyval, keycode, modifiers);
+        retval = processRawMode (keyval, keycode, modifiers);
+        break;
+    case MODE_ENGLISH:
+        retval = processEnglishMode (keyval, keycode, modifiers);
+        break;
+    case MODE_STROKE:
+        retval = processStrokeMode (keyval, keycode, modifiers);
+        break;
+    case MODE_EXTENSION:
+        retval = processExtensionMode (keyval, keycode, modifiers);
         break;
     default:
         g_assert_not_reached ();

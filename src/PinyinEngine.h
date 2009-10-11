@@ -60,8 +60,11 @@ public:
     }
 
 private:
-    gboolean processInitState (guint keyval, guint keycode, guint modifiers);
-    gboolean processRawState (guint keyval, guint keycode, guint modifiers);
+    gboolean processInitMode (guint keyval, guint keycode, guint modifiers);
+    gboolean processRawMode (guint keyval, guint keycode, guint modifiers);
+    gboolean processEnglishMode (guint keyval, guint keycode, guint modifiers);
+    gboolean processStrokeMode (guint keyval, guint keycode, guint modifiers);
+    gboolean processExtensionMode (guint keyval, guint keycode, guint modifiers);
     gboolean processPinyin (guint keyval, guint keycode, guint modifiers);
     gboolean processCapitalLetter (guint keyval, guint keycode, guint modifiers);
     gboolean processNumber (guint keyval, guint keycode, guint modifiers);
