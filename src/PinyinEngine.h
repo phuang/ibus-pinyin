@@ -128,12 +128,13 @@ private:
     guint    m_prev_pressed_key;
     gboolean m_prev_pressed_key_result;
     gunichar m_prev_commited_char;
+
     enum {
-        MODE_INIT = 0,
-        MODE_RAW,
-        MODE_ENGLISH,
-        MODE_STROKE,
-        MODE_EXTENSION,
+        MODE_INIT = 0,          // init mode
+        MODE_RAW,               // raw mode
+        MODE_ENGLISH,           // press v into English input mode
+        MODE_STROKE,            // press u into stroke input mode
+        MODE_EXTENSION,         // press i into extension input mode
     } m_input_mode;
 
 };
