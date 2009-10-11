@@ -30,7 +30,8 @@ PinyinEngine::PinyinEngine (IBusEngine *engine)
       m_double_quote (TRUE),
       m_prev_pressed_key (0),
       m_prev_pressed_key_result (0),
-      m_prev_commited_char (0)
+      m_prev_commited_char (0),
+      m_input_mode (MODE_INIT)
 {
     /* */
     if (Config::doublePinyin ())
@@ -495,8 +496,8 @@ PinyinEngine::processOthers (guint keyval, guint keycode, guint modifiers)
     return TRUE;
 }
 
-gboolean
-PinyinEngine::processKeyEvent (guint keyval, guint keycode, guint modifiers)
+inline gboolean
+PinyinEngine::processInitState (guint keyval, guint keycode, guint modifiers)
 {
     gboolean retval = FALSE;
 
@@ -554,6 +555,32 @@ PinyinEngine::processKeyEvent (guint keyval, guint keycode, guint modifiers)
         break;
     }
 
+    return retval;
+}
+
+inline gboolean
+PinyinEngine::processRawState (guint keyval, guint keycode, guint modifiers)
+{
+    return TRUE;
+}
+
+gboolean
+PinyinEngine::processKeyEvent (guint keyval, guint keycode, guint modifiers)
+{
+    gboolean retval;
+
+    switch (m_input_mode) {
+    case MODE_INIT:
+        retval = processInitState (keyval, keycode, modifiers);
+        break;
+    case MODE_RAW:
+        retval = processRawState (keyval, keycode, modifiers);
+        break;
+    default:
+        g_assert_not_reached ();
+        break;
+    };
+
     m_prev_pressed_key = keyval;
     m_prev_pressed_key_result = retval;
     return retval;
@@ -574,6 +601,7 @@ PinyinEngine::focusIn (void)
         m_pinyin_editor = new FullPinyinEditor ();
     }
 
+    m_input_mode = MODE_INIT;
     resetQuote ();
     ibus_engine_register_properties (m_engine, m_props);
 }

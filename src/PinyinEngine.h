@@ -60,6 +60,8 @@ public:
     }
 
 private:
+    gboolean processInitState (guint keyval, guint keycode, guint modifiers);
+    gboolean processRawState (guint keyval, guint keycode, guint modifiers);
     gboolean processPinyin (guint keyval, guint keycode, guint modifiers);
     gboolean processCapitalLetter (guint keyval, guint keycode, guint modifiers);
     gboolean processNumber (guint keyval, guint keycode, guint modifiers);
@@ -126,6 +128,13 @@ private:
     guint    m_prev_pressed_key;
     gboolean m_prev_pressed_key_result;
     gunichar m_prev_commited_char;
+    enum {
+        MODE_INIT = 0,
+        MODE_RAW,
+        MODE_ENGLISH,
+        MODE_STROKE,
+        MODE_EXTENSION,
+    } m_input_mode;
 
 };
 
