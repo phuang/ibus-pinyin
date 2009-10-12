@@ -72,6 +72,7 @@ ibus_engine_h_sources = \
 	PinyinParser.h \
 	PinyinParserTable.h \
 	Pointer.h \
+	Regex.h \
 	Property.h \
 	SimpTradConverter.h \
 	SimpTradConverterTable.h \
