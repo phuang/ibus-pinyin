@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-10-10 06:56+0800\n"
+"POT-Creation-Date: 2009-10-13 08:32+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,27 +16,31 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../src/Main.cc:50 ../src/Main.cc:59 ../src/Main.cc:60
+#: ../src/Main.cc:50 ../src/Main.cc:60
 msgid "Pinyin input method"
 msgstr ""
 
-#: ../src/PinyinEngine.cc:47 ../setup/ibus-pinyin-preferences.ui.h:11
+#: ../src/Main.cc:59
+msgid "Pinyin"
+msgstr ""
+
+#: ../src/PinyinEngine.cc:49 ../setup/ibus-pinyin-preferences.ui.h:11
 msgid "Chinese"
 msgstr ""
 
-#: ../src/PinyinEngine.cc:60
+#: ../src/PinyinEngine.cc:62
 msgid "Full/Half width"
 msgstr ""
 
-#: ../src/PinyinEngine.cc:73
+#: ../src/PinyinEngine.cc:75
 msgid "Full/Half width punctuation"
 msgstr ""
 
-#: ../src/PinyinEngine.cc:86
+#: ../src/PinyinEngine.cc:88
 msgid "Simplfied/Traditional Chinese"
 msgstr ""
 
-#: ../src/PinyinEngine.cc:96 ../src/PinyinEngine.cc:98
+#: ../src/PinyinEngine.cc:98 ../src/PinyinEngine.cc:100
 #: ../setup/ibus-pinyin-preferences.ui.h:33
 msgid "Pinyin preferences"
 msgstr ""
