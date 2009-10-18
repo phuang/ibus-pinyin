@@ -7,6 +7,7 @@
 #include "Database.h"
 #include "FullPinyinEditor.h"
 #include "PhraseEditor.h"
+#include "RawEditor.h"
 #include "LookupTable.h"
 #include "Property.h"
 #include "Config.h"
@@ -25,8 +26,11 @@ public:
     }
 
     void reset (gboolean need_update = TRUE) {
+        resetQuote ();
+        m_input_mode = MODE_INIT;
         m_pinyin_editor->reset ();
         m_phrase_editor.reset ();
+        m_raw_editor.reset ();
         updateUI (need_update);
     }
 
@@ -92,8 +96,10 @@ private:
     gboolean resetCandidate (guint i);
     gboolean resetCandidateInPage (guint i);
     void updatePreeditText (void);
-    void updatePreeditTextInEditingMode (void);
-    void updatePreeditTextInTypingMode (void);
+    void updatePreeditTextInInitMode (void);
+    void updatePreeditTextInRawMode (void);
+    void updatePreeditTextInInitEditingMode (void);
+    void updatePreeditTextInInitTypingMode (void);
     void updateAuxiliaryText (void);
     void updateLookupTable (void);
     void updatePhraseEditor (void);
@@ -140,6 +146,7 @@ private:
         MODE_EXTENSION,         // press i into extension input mode
     } m_input_mode;
 
+    RawEditor m_raw_editor;
 };
 
 };

@@ -561,7 +561,15 @@ PinyinEngine::processInitMode (guint keyval, guint keycode, guint modifiers)
 inline gboolean
 PinyinEngine::processRawMode (guint keyval, guint keycode, guint modifiers)
 {
-    return TRUE;
+    gboolean update;
+    gboolean retval;
+
+    retval = m_raw_editor.processKeyEvent (keyval, keycode, modifiers, update);
+
+    if (update)
+        updatePreeditTextInRawMode ();
+
+    return retval;
 }
 
 inline gboolean
@@ -628,8 +636,6 @@ PinyinEngine::focusIn (void)
         m_pinyin_editor = new FullPinyinEditor ();
     }
 
-    m_input_mode = MODE_INIT;
-    resetQuote ();
     ibus_engine_register_properties (m_engine, m_props);
 }
 
@@ -758,6 +764,21 @@ PinyinEngine::candidateClicked (guint index, guint button, guint state)
 void
 PinyinEngine::updatePreeditText (void)
 {
+    switch (m_input_mode) {
+    case MODE_INIT:
+        updatePreeditTextInInitMode ();
+        break;
+    case MODE_RAW:
+        updatePreeditTextInRawMode ();
+        break;
+    default:
+        break;
+    };
+}
+
+void
+PinyinEngine::updatePreeditTextInInitMode (void)
+{
     /* preedit text = selected phrases + highlight candidate + rest text */
     if (G_UNLIKELY (m_phrase_editor.isEmpty () && m_pinyin_editor->isEmpty ())) {
         ibus_engine_hide_preedit_text (m_engine);
@@ -765,13 +786,21 @@ PinyinEngine::updatePreeditText (void)
     }
 
     if (m_pinyin_editor->cursor () == m_pinyin_editor->text ().length ())
-        updatePreeditTextInTypingMode ();
+        updatePreeditTextInInitTypingMode ();
     else
-        updatePreeditTextInEditingMode ();
+        updatePreeditTextInInitEditingMode ();
 }
 
 void
-PinyinEngine::updatePreeditTextInTypingMode (void)
+PinyinEngine::updatePreeditTextInRawMode (void)
+{
+    StaticText preedit_text (m_raw_editor);
+    preedit_text.appendAttribute (IBUS_ATTR_TYPE_UNDERLINE, IBUS_ATTR_UNDERLINE_SINGLE, 0, -1);
+    ibus_engine_update_preedit_text (m_engine, preedit_text, m_raw_editor.cursor (), TRUE);
+}
+
+void
+PinyinEngine::updatePreeditTextInInitTypingMode (void)
 {
     m_buffer.truncate (0);
 
@@ -826,7 +855,7 @@ PinyinEngine::updatePreeditTextInTypingMode (void)
 }
 
 void
-PinyinEngine::updatePreeditTextInEditingMode (void)
+PinyinEngine::updatePreeditTextInInitEditingMode (void)
 {
     m_buffer.truncate (0);
 
