@@ -52,7 +52,6 @@ protected:
 
 protected:
     static PinyinParser m_parser;
-    static Regex m_regex;
 };
 
 };

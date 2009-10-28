@@ -37,8 +37,6 @@ FullPinyinEditor::insert (gint ch)
 
     m_text.insert (m_cursor++, ch);
 
-    g_debug ("regex = %d", m_regex & m_text);
-
     if (G_UNLIKELY ((Config::option () & PINYIN_INCOMPLETE_PINYIN) == 0)) {
         updatePinyin ();
     }

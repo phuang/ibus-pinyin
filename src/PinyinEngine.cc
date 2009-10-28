@@ -561,13 +561,19 @@ PinyinEngine::processInitMode (guint keyval, guint keycode, guint modifiers)
 inline gboolean
 PinyinEngine::processRawMode (guint keyval, guint keycode, guint modifiers)
 {
-    gboolean update;
-    gboolean retval;
+    gboolean update = TRUE;
+    gboolean retval = TRUE;
 
-    retval = m_raw_editor.processKeyEvent (keyval, keycode, modifiers, update);
-
-    if (update)
-        updatePreeditTextInRawMode ();
+    switch (keyval) {
+    case IBUS_Escape:
+        reset ();
+        break;
+    default:
+        retval = m_raw_editor.processKeyEvent (keyval, keycode, modifiers, update);
+        if (update)
+            updatePreeditTextInRawMode ();
+        break;
+    }
 
     return retval;
 }

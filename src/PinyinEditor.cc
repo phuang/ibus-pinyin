@@ -7,7 +7,6 @@ namespace PY {
 
 
 PinyinParser PinyinEditor::m_parser;
-Regex PinyinEditor::m_regex ("^(www|ftp|mail|http|ftp)");
 
 PinyinEditor::PinyinEditor (void)
     : m_text (MAX_PINYIN_LEN),
