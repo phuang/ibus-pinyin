@@ -10,6 +10,11 @@ public:
         m_array = g_array_sized_new (FALSE, FALSE, sizeof (T), init_size);
     }
 
+    Array (const Array<T> &v) {
+        m_array = g_array_sized_new (FALSE, FALSE, sizeof (T), v.length ());
+        assign (v);
+    }
+
     ~Array () {
         g_array_free (m_array, TRUE);
     }
@@ -55,7 +60,7 @@ public:
         g_array_insert_val (m_array, i, v);
         return *this;
     }
-    
+
     Array<T> & remove (guint i, guint len) {
         g_array_remove_range (m_array, i, len);
         return *this;
@@ -72,11 +77,15 @@ public:
         return v;
     }
 
-    Array<T> & operator = (const Array<T> & v) {
+    Array<T> & assign (const Array<T> & v) {
         removeAll ();
         for (guint i = 0; i < v.length(); i++)
             append (v[i]);
         return *this;
+    }
+
+    Array<T> & operator = (const Array<T> & v) {
+        return assign (v);
     }
 
     gboolean operator == (const Array<T> &v) const {

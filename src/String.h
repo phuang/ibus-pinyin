@@ -20,6 +20,11 @@ public:
         m_string = g_string_sized_new (init_size);
     }
 
+    String (const String &str) {
+        m_string = g_string_sized_new (str.length () + 1);
+        assign (str);
+    }
+
     String (const WideString &wstr) {
         m_string = g_string_sized_new (wstr.length() * 6);
         assign (wstr);
@@ -64,7 +69,7 @@ public:
         g_string_append (m_string, str);
         return *this;
     }
-    
+
     String & append (const gunichar *wstr) {
         for (const gunichar *p = wstr; *p != 0; p++)
             appendUnichar (*p);
@@ -137,7 +142,7 @@ public:
     String & operator << (const gchar *str) {
         return append (str);
     }
-    
+
     String & operator << (const gunichar *wstr) {
         return append (wstr);
     }
