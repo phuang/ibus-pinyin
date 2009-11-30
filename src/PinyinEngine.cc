@@ -174,9 +174,23 @@ PinyinEngine::processCapitalLetter (guint keyval, guint keycode, guint modifiers
 inline gboolean
 PinyinEngine::processNumber (guint keyval, guint keycode, guint modifiers)
 {
+    guint ch;
+
+    switch (keyval) {
+    case IBUS_0 ... IBUS_9:
+        ch = '0' + keyval - IBUS_0;
+        break;
+    case IBUS_KP_0 ... IBUS_KP_9:
+        ch = '0' + keyval - IBUS_KP_0;
+        break;
+    default:
+        g_return_val_if_reached (FALSE);
+        break;
+    }
+
     /* English mode */
     if (G_UNLIKELY (!m_mode_chinese)) {
-        commit ((gunichar) m_mode_full ? HalfFullConverter::toFull (keyval) : keyval);
+        commit ((gunichar) m_mode_full ? HalfFullConverter::toFull (ch) : ch);
         return TRUE;
     }
 
@@ -184,14 +198,7 @@ PinyinEngine::processNumber (guint keyval, guint keycode, guint modifiers)
     if (G_UNLIKELY (isEmpty ())) {
         if (G_UNLIKELY (CMSHM_FILTER (modifiers) != 0))
             return FALSE;
-        switch (keyval) {
-        case IBUS_0 ... IBUS_9:
-            commit ((gunichar) m_mode_full ? HalfFullConverter::toFull (keyval) : keyval);
-            break;
-        case IBUS_KP_0 ... IBUS_KP_9:
-            commit ((gunichar) m_mode_full ? HalfFullConverter::toFull ('0' + keyval - IBUS_KP_0) : '0' + keyval - IBUS_KP_0);
-            break;
-        }
+        commit ((gunichar) m_mode_full ? HalfFullConverter::toFull (ch) : ch);
         return TRUE;
     }
 
@@ -209,7 +216,7 @@ PinyinEngine::processNumber (guint keyval, guint keycode, guint modifiers)
         i = keyval - IBUS_KP_1;
         break;
     default:
-        g_assert_not_reached ();
+        g_return_val_if_reached (FALSE);
     }
 
     if (modifiers == 0)
