@@ -76,11 +76,6 @@ static void ibus_pinyin_engine_property_show    (IBusEngine             *engine,
                                                  const gchar            *prop_name);
 static void ibus_pinyin_engine_property_hide    (IBusEngine             *engine,
                                                  const gchar            *prop_name);
-static void ibus_config_value_changed           (IBusConfig             *config,
-                                                 const gchar            *section,
-                                                 const gchar            *name,
-                                                 GValue                 *value,
-                                                 gpointer                user_data);
 #endif
 
 static IBusEngineClass *parent_class = NULL;
@@ -207,18 +202,6 @@ FUNCTION(page_down,   pageDown)
 FUNCTION(cursor_up,   cursorUp)
 FUNCTION(cursor_down, cursorDown)
 #undef FUNCTION
-
-
-#if 0
-static void
-ibus_config_value_changed (IBusConfig   *config,
-                           const gchar  *section,
-                           const gchar  *name,
-                           GValue       *value,
-                           gpointer      user_data)
-{
-}
-#endif
 
 };
 
