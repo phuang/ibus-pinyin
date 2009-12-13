@@ -17,7 +17,7 @@ BuildRequires:  sqlite-devel
 BuildRequires:  libuuid-devel
 BuildRequires:  ibus-devel >= 1.2.0
 
-Requires(post): sqlite
+# Requires(post): sqlite
 
 Requires:   ibus >= 1.2.0
 
@@ -43,7 +43,8 @@ make %{?_smp_mflags}
 
 %install
 rm -rf $RPM_BUILD_ROOT
-make DESTDIR=${RPM_BUILD_ROOT} NO_INDEX=true install
+# make DESTDIR=${RPM_BUILD_ROOT} NO_INDEX=true install
+make DESTDIR=${RPM_BUILD_ROOT} install
 
 %find_lang %{name}
 
@@ -51,12 +52,12 @@ make DESTDIR=${RPM_BUILD_ROOT} NO_INDEX=true install
 rm -rf $RPM_BUILD_ROOT
 
 %post
-cd %{_datadir}/ibus-pinyin/db
-sqlite3 android.db ".read create_index.sql"
+# cd %{_datadir}/ibus-pinyin/db
+# sqlite3 android.db ".read create_index.sql"
 
 %post open-phrase
-cd %{_datadir}/ibus-pinyin/db
-sqlite3 open-phrase.db ".read create_index.sql"
+# cd %{_datadir}/ibus-pinyin/db
+# sqlite3 open-phrase.db ".read create_index.sql"
 
 %files -f %{name}.lang
 %defattr(-,root,root,-)
