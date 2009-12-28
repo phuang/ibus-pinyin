@@ -21,9 +21,7 @@ namespace PY {
 #define DB_PREFETCH_LEN     (6)
 
 Database::Database (void)
-    : m_db (NULL),
-      m_sql (1024),
-      m_buffer (1024)
+    : m_db (NULL)
 {
     init ();
 }
@@ -40,8 +38,8 @@ inline gboolean
 Database::executeSQL (const gchar *sql)
 {
     gchar *errmsg;
-    if (sqlite3_exec (m_db, m_sql, NULL, NULL, &errmsg) != SQLITE_OK) {
-        g_debug ("%s", errmsg);
+    if (sqlite3_exec (m_db, sql, NULL, NULL, &errmsg) != SQLITE_OK) {
+        g_debug ("%s: %s", errmsg, sql);
         sqlite3_free (errmsg);
         return FALSE;
     }
@@ -78,7 +76,7 @@ Database::init (void)
         goto _failed;
     }
 
-    m_sql.truncate (0);
+    m_sql.erase (0);
 
 #if 0
     /* Set synchronous=OFF, write user database will become much faster.
@@ -184,7 +182,7 @@ _failed:
 void
 Database::prefetch (void)
 {
-    m_sql.truncate (0);
+    m_sql.erase (0);
     for (guint i = 0; i < DB_PREFETCH_LEN; i++)
         m_sql << "SELECT * FROM py_phrase_" << i << ";\n";
     executeSQL (m_sql);
@@ -391,12 +389,12 @@ Database::query (const PinyinArray &pinyin,
     }
 
 
-    m_buffer.truncate (0);
+    m_buffer.erase (0);
     for (guint i = 0; i < m_conditions.length (); i++) {
         if (G_UNLIKELY (i == 0))
-            m_buffer << "  (" << (*m_conditions[i]) << ")\n";
+            m_buffer << "  (" << m_conditions[i].c_str() << ")\n";
         else
-            m_buffer << "  OR (" << (*m_conditions[i]) << ")\n";
+            m_buffer << "  OR (" << m_conditions[i].c_str() << ")\n";
     }
 
     m_sql.printf ("SELECT * FROM ("
@@ -445,7 +443,7 @@ Database::query (const PinyinArray &pinyin,
 }
 
 inline void
-Database::phraseWhereSql (const Phrase & p, String & sql)
+Database::phraseWhereSql (const Phrase & p, MyString & sql)
 {
     sql << " WHERE";
     sql << " s0=" << p.pinyin_id[0][0]
@@ -459,7 +457,7 @@ Database::phraseWhereSql (const Phrase & p, String & sql)
 }
 
 inline void
-Database::phraseSql (const Phrase & p, String & sql)
+Database::phraseSql (const Phrase & p, MyString & sql)
 {
     sql << "INSERT OR IGNORE INTO userdb.py_phrase_" << p.len - 1
         << " VALUES(" << 0                  /* user_freq */

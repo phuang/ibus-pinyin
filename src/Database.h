@@ -3,49 +3,48 @@
 #define __PY_DATABASE_H__
 
 #include <sqlite3.h>
+#include <string>
+#include <vector>
+#include <sstream>
 #include "Types.h"
-#include "Array.h"
-#include "String.h"
 #include "PinyinArray.h"
 #include "PhraseArray.h"
 
 namespace PY {
 
-class Conditions : public Array<String *> {
+using namespace std;
+
+class Conditions : public vector<string> {
 public:
-    Conditions (void)
-        : Array<String *> (32),
-          m_length (0) {
+    Conditions (void) :
+        vector<string> (32),
+        m_length (0) {
         reset ();
     }
     ~Conditions (void) {
-        for (guint i = 0; i < Array<String *>::length (); i++) {
-            delete get (i);
-        }
     }
     guint length (void) { return m_length; }
     void reset (void) {
-        m_length = 0;
-        newString ();
+        m_length = 1;
+        operator[](0) = "";
     }
     void _double (void) {
         for (gint i = m_length - 1; i >= 0; i--) {
-            String *str = newString ();
-            *str = *get (i);
+            (*this)[m_length + i] = (*this)[i];
         }
+        m_length = m_length + m_length;
     }
     void triple (void) {
         for (gint i = m_length - 1; i >= 0; i--) {
-            String *str1 = newString ();
-            String *str2 = newString ();
-            *str1 = *str2 = *get (i);
+            operator[](m_length + i) = operator[]((m_length << 1) + i) = operator[](i);
         }
+        m_length = m_length + m_length + m_length;
     }
     void appendVPrintf (gint begin, gint end, const gchar *fmt, va_list args) {
         gchar str[64];
         g_vsnprintf (str, sizeof(str), fmt, args);
         for (gint i = begin; i < end; i++) {
-            (*get (i)) << str;
+            operator[](i) += str;
         }
     }
     void appendPrintf (gint begin, gint end, const gchar *fmt, ...) {
@@ -55,21 +54,64 @@ public:
         va_end (args);
     }
 private:
-    String *newString (void) {
-        String *newstr;
-        if (m_length < Array<String *>::length ()) {
-            newstr = get (m_length++);
-            newstr->truncate (0);
-        }
-        else {
-            newstr = new String (256);
-            append (newstr);
-            m_length ++;
-        }
-        return newstr;
-    }
-private:
     guint m_length;
+};
+
+class MyString : public string {
+public:
+    MyString & printf (const gchar *fmt, ...) {
+        gchar *str;
+        va_list args;
+
+        va_start (args, fmt);
+        str = g_strdup_vprintf (fmt, args);
+        va_end (args);
+
+        assign (str);
+        g_free (str);
+        return *this;
+    }
+
+    MyString & appendPrintf (const gchar *fmt, ...) {
+        gchar *str;
+        va_list args;
+
+        va_start (args, fmt);
+        str = g_strdup_vprintf (fmt, args);
+        va_end (args);
+
+        append (str);
+        g_free (str);
+
+        return *this;
+    }
+
+    MyString & operator<< (gint i) {
+        return appendPrintf ("%d", i);
+    }
+
+    MyString & operator<< (guint i) {
+        return appendPrintf ("%u", i);
+    }
+
+    MyString & operator<< (const gchar ch) {
+        append (1, ch);
+        return *this;
+    }
+
+    MyString & operator<< (const gchar * str) {
+        append (str);
+        return *this;
+    }
+
+    MyString & operator= (const gchar * str) {
+        assign (str);
+        return *this;
+    }
+
+    operator const gchar *(void) {
+        return this->c_str ();
+    }
 };
 
 class Database {
@@ -97,15 +139,15 @@ private:
     gboolean init (void);
     gboolean initUserDatabase (const gchar *userdb);
     void prefetch (void);
-    void phraseSql (const Phrase & p, String & sql);
-    void phraseWhereSql (const Phrase & p, String & sql);
+    void phraseSql (const Phrase & p, MyString & sql);
+    void phraseWhereSql (const Phrase & p, MyString & sql);
     gboolean executeSQL (const gchar *sql);
 
 private:
 private:
     sqlite3 *m_db;                  /* sqlite3 database */
-    String   m_sql;                 /* sql stmt */
-    String   m_buffer;              /* temp buffer */
+    MyString m_sql;             /* sql stmt */
+    MyString m_buffer;          /* temp buffer */
     Conditions m_conditions;        /* select conditions */
 };
 
