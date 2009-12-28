@@ -6,6 +6,7 @@
 #include <string>
 #include <vector>
 #include <sstream>
+#include "String.h"
 #include "Types.h"
 #include "PinyinArray.h"
 #include "PhraseArray.h"
@@ -57,62 +58,6 @@ private:
     guint m_length;
 };
 
-class MyString : public string {
-public:
-    MyString & printf (const gchar *fmt, ...) {
-        gchar *str;
-        va_list args;
-
-        va_start (args, fmt);
-        str = g_strdup_vprintf (fmt, args);
-        va_end (args);
-
-        assign (str);
-        g_free (str);
-        return *this;
-    }
-
-    MyString & appendPrintf (const gchar *fmt, ...) {
-        gchar *str;
-        va_list args;
-
-        va_start (args, fmt);
-        str = g_strdup_vprintf (fmt, args);
-        va_end (args);
-
-        append (str);
-        g_free (str);
-
-        return *this;
-    }
-
-    MyString & operator<< (gint i) {
-        return appendPrintf ("%d", i);
-    }
-
-    MyString & operator<< (guint i) {
-        return appendPrintf ("%u", i);
-    }
-
-    MyString & operator<< (const gchar ch) {
-        append (1, ch);
-        return *this;
-    }
-
-    MyString & operator<< (const gchar * str) {
-        append (str);
-        return *this;
-    }
-
-    MyString & operator= (const gchar * str) {
-        assign (str);
-        return *this;
-    }
-
-    operator const gchar *(void) {
-        return this->c_str ();
-    }
-};
 
 class Database {
 public:
@@ -139,16 +84,16 @@ private:
     gboolean init (void);
     gboolean initUserDatabase (const gchar *userdb);
     void prefetch (void);
-    void phraseSql (const Phrase & p, MyString & sql);
-    void phraseWhereSql (const Phrase & p, MyString & sql);
+    void phraseSql (const Phrase & p, String & sql);
+    void phraseWhereSql (const Phrase & p, String & sql);
     gboolean executeSQL (const gchar *sql);
 
 private:
 private:
-    sqlite3 *m_db;                  /* sqlite3 database */
-    MyString m_sql;             /* sql stmt */
-    MyString m_buffer;          /* temp buffer */
-    Conditions m_conditions;        /* select conditions */
+    sqlite3 *m_db;              /* sqlite3 database */
+    String m_sql;               /* sql stmt */
+    String m_buffer;            /* temp buffer */
+    Conditions m_conditions;    /* select conditions */
 };
 
 

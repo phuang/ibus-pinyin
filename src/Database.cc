@@ -443,7 +443,7 @@ Database::query (const PinyinArray &pinyin,
 }
 
 inline void
-Database::phraseWhereSql (const Phrase & p, MyString & sql)
+Database::phraseWhereSql (const Phrase & p, String & sql)
 {
     sql << " WHERE";
     sql << " s0=" << p.pinyin_id[0][0]
@@ -457,7 +457,7 @@ Database::phraseWhereSql (const Phrase & p, MyString & sql)
 }
 
 inline void
-Database::phraseSql (const Phrase & p, MyString & sql)
+Database::phraseSql (const Phrase & p, String & sql)
 {
     sql << "INSERT OR IGNORE INTO userdb.py_phrase_" << p.len - 1
         << " VALUES(" << 0                  /* user_freq */
