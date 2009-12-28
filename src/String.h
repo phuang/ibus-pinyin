@@ -10,6 +10,7 @@ namespace PY {
 class String : public std::string {
 public:
     String () : std::string () {}
+    String (const gchar *str) : std::string (str) {}
     String (gint len) : std::string () {}
     String & printf (const gchar *fmt, ...) {
         gchar *str;
@@ -76,14 +77,23 @@ public:
         return *this;
     }
 
-    String & operator<< (const gchar * str) {
+    String & operator<< (const gchar *str) {
         append (str);
         return *this;
     }
 
     String & operator << (const gunichar *wstr) {
-        for (gint i = 0; wstr[i] != 0; i++)
-            operator << (wstr[i]);
+        gchar *str;
+        GError *error;
+        str = g_ucs4_to_utf8 (wstr, -1, NULL, NULL, &error);
+        if (str == NULL) {
+            g_warning ("convert ucs4 to utf8 failed: %s", error->message);
+            g_error_free (error);
+        }
+        else {
+            append (str);
+            g_free (str);
+        }
         return *this;
     }
 
