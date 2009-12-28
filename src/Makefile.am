@@ -35,6 +35,7 @@ AM_CXXFLAGS = $(AM_CFLAGS)
 libexec_PROGRAMS = ibus-engine-pinyin
 ibus_engine_c_sources = \
 	Config.cc \
+	CustomPhrase.cc \
 	Database.cc \
 	DoublePinyinEditor.cc \
 	Engine.cc \
@@ -56,12 +57,14 @@ ibus_engine_h_sources = \
 	Array.h \
 	Bus.h \
 	Config.h \
+	CustomPhrase.h \
 	Database.h \
 	DoublePinyinEditor.h \
 	DoublePinyinTable.h \
 	Engine.h \
 	FullPinyinEditor.h \
 	HalfFullConverter.h \
+	HashTable.h \
 	LookupTable.h \
 	Phrase.h \
 	PhraseArray.h \
