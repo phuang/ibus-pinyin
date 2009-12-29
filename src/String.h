@@ -40,8 +40,10 @@ public:
     }
 
     String & appendUnichar (gunichar ch) {
-        gchar str[10];
-        g_unichar_to_utf8 (ch, str);
+        gchar str[12];
+        gint len;
+        len = g_unichar_to_utf8 (ch, str);
+        str[len] = 0;
         append (str);
         return *this;
     }
