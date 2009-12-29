@@ -421,8 +421,7 @@ Database::query (const PinyinArray &pinyin,
 
     gint row = 0;
     while (sqlite3_step (stmt) == SQLITE_ROW) {
-        result.setSize (result.length () + 1);
-        Phrase &p = result[result.length() - 1];
+        Phrase p;
 
         g_strlcpy (p.phrase,
                    (gchar *) sqlite3_column_text (stmt, DB_COLUMN_PHRASE),
@@ -435,6 +434,7 @@ Database::query (const PinyinArray &pinyin,
             p.pinyin_id[i][0] = sqlite3_column_int (stmt, (i << 1) + DB_COLUMN_S0);
             p.pinyin_id[i][1] = sqlite3_column_int (stmt, (i << 1) + DB_COLUMN_S0 + 1);
         }
+        result << p;
         row ++;
     }
 

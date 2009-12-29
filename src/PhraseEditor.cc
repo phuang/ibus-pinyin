@@ -102,7 +102,7 @@ PhraseEditor::updateCandidates (void)
         return;
 
     if (G_LIKELY (m_candidate_0_phrases.length () > 1)) {
-        m_candidates.setSize (1);
+        m_candidates.resize (1);
         m_candidates[0].reset ();
         for (guint i = 0; i < m_candidate_0_phrases.length (); i++)
             m_candidates[0] += m_candidate_0_phrases[i];

@@ -1,61 +1,44 @@
 #ifndef __PY_ARRAY_H_
 #define __PY_ARRAY_H_
 
+#include <vector>
+
 namespace PY {
 
 template<typename T>
-class Array {
+class Array : public std::vector<T> {
 public:
-    Array (guint init_size = 0) {
-        m_array = g_array_sized_new (FALSE, FALSE, sizeof (T), init_size);
-    }
-
-    Array (const Array<T> &v) {
-        m_array = g_array_sized_new (FALSE, FALSE, sizeof (T), v.length ());
-        assign (v);
+    Array (guint init_size = 0) : std::vector<T> (){
+        std::vector<T>::reserve (init_size);
     }
 
     ~Array () {
-        g_array_free (m_array, TRUE);
-    }
-
-    T & get (guint i) {
-        return g_array_index (m_array, T, i);
-    }
-
-    const T & get (guint i) const {
-        return g_array_index (m_array, T, i);
     }
 
     guint length (void) const {
-        return m_array->len;
+        return std::vector<T>::size ();
     }
 
     gboolean isEmpty (void) const {
         return length () == 0;
     }
 
-    Array<T> & setSize (guint size) {
-        g_array_set_size (m_array, size);
-        return *this;
-    }
-
     Array<T> & removeAll () {
-        setSize (0);
+        std::vector<T>::resize (0);
         return *this;
     }
 
     Array<T> & append (const T & v) {
-        g_array_append_val (m_array, v);
+        std::vector<T>::push_back (v);
         return *this;
     }
 
     Array<T> & append (const Array<T> & a) {
         for (guint i = 0; i < a.length (); i++)
-            append (a[i]);
+            append (a.at (i));
         return *this;
     }
-
+#if 0
     Array<T> & insert (guint i, const T & v) {
         g_array_insert_val (m_array, i, v);
         return *this;
@@ -65,18 +48,16 @@ public:
         g_array_remove_range (m_array, i, len);
         return *this;
     }
-
+#endif
     Array<T> & push (const T & v) {
-        append (v);
+        std::vector<T>::push_back (v);
         return *this;
     }
 
-    T & pop (void) {
-        T & v = g_array_index (m_array, T, length () - 1);
-        g_array_set_size (m_array, length () - 1);
-        return v;
+    void pop (void) {
+        std::vector<T>::pop_back ();
     }
-
+#if 0
     Array<T> & assign (const Array<T> & v) {
         removeAll ();
         for (guint i = 0; i < v.length(); i++)
@@ -98,6 +79,7 @@ public:
         return TRUE;
     }
 
+#endif
     Array<T> & operator << (const T & v) {
         return append (v);
     }
@@ -105,21 +87,18 @@ public:
     Array<T> & operator << (const Array<T> & a) {
         return append (a);
     }
-
     T & operator[] (guint i) {
-        return get (i);
+        return std::vector<T>::operator[](i);
     }
 
     const T & operator[] (guint i) const {
-        return get (i);
+        return std::vector<T>::operator[](i);
     }
 
     operator gboolean (void) const {
         return length () != 0;
     }
-
 protected:
-    GArray *m_array;
 };
 
 };
