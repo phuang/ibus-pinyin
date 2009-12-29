@@ -55,6 +55,7 @@ public:
     Array<T> & operator << (const Array<T> & a) {
         return append (a);
     }
+
     T & operator[] (guint i) {
         return std::vector<T>::operator[](i);
     }
@@ -66,7 +67,6 @@ public:
     operator gboolean (void) const {
         return length () != 0;
     }
-protected:
 };
 
 };
