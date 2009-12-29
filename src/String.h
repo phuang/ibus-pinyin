@@ -11,7 +11,7 @@ class String : public std::string {
 public:
     String () : std::string () {}
     String (const gchar *str) : std::string (str) {}
-    String (gint len) : std::string () {}
+    String (gint len) : std::string () { reserve (len); }
     String & printf (const gchar *fmt, ...) {
         gchar *str;
         va_list args;
