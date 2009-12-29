@@ -227,34 +227,3 @@ PinyinParser::isPinyin (gint sheng, gint yun, guint option)
 
 };
 
-
-#ifdef TEST
-#include <glib/gprintf.h>
-int main(int argc, char **argv)
-{
-    gint len;
-    GArray *array;
-    Pinyin **p;
-    gchar *str;
-
-    str = "qinaide";
-
-    if (argc > 1)
-        str = argv[1];
-
-    array = g_array_new (TRUE, TRUE, sizeof (Pinyin *));
-
-    len = py_parse_pinyin (str, -1, 0xffffffff, array);
-
-    if (len) {
-        p = (Pinyin **) array->data;
-        while (*p) {
-            g_printf ("%s'", (*p)->text);
-            p ++;
-        }
-    }
-    g_printf ("%s\n", str + len);
-
-    return 0;
-}
-#endif

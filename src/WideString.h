@@ -6,6 +6,7 @@
 
 namespace PY {
 
+#if 0
 class WideString {
 public:
     WideString (const gchar *init) : m_string (g_utf8_strlen (init, -1) + 1) {
@@ -100,6 +101,6 @@ public:
 private:
     Array<gunichar> m_string;
 };
-
+#endif
 };
 #endif
