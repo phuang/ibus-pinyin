@@ -38,17 +38,7 @@ public:
             append (a.at (i));
         return *this;
     }
-#if 0
-    Array<T> & insert (guint i, const T & v) {
-        g_array_insert_val (m_array, i, v);
-        return *this;
-    }
 
-    Array<T> & remove (guint i, guint len) {
-        g_array_remove_range (m_array, i, len);
-        return *this;
-    }
-#endif
     Array<T> & push (const T & v) {
         std::vector<T>::push_back (v);
         return *this;
@@ -57,29 +47,7 @@ public:
     void pop (void) {
         std::vector<T>::pop_back ();
     }
-#if 0
-    Array<T> & assign (const Array<T> & v) {
-        removeAll ();
-        for (guint i = 0; i < v.length(); i++)
-            append (v[i]);
-        return *this;
-    }
 
-    Array<T> & operator = (const Array<T> & v) {
-        return assign (v);
-    }
-
-    gboolean operator == (const Array<T> &v) const {
-        if (length () != v.length ())
-            return FALSE;
-        for (guint i = 0; i < length (); i++) {
-            if (get (i) != v[i])
-                return FALSE;
-        }
-        return TRUE;
-    }
-
-#endif
     Array<T> & operator << (const T & v) {
         return append (v);
     }
