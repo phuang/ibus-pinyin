@@ -82,7 +82,7 @@ public:
         return *this;
     }
 
-    String & operator << (const gunichar *wstr) {
+    String & operator<< (const gunichar *wstr) {
         gchar *str;
         GError *error;
         str = g_ucs4_to_utf8 (wstr, -1, NULL, NULL, &error);
