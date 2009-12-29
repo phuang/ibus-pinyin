@@ -14,12 +14,6 @@ struct PinyinSegment {
     PinyinSegment (const Pinyin *pinyin = NULL, guint begin = 0, guint len = 0)
         : pinyin (pinyin), begin (begin), len (len) {}
 
-    void set (const Pinyin *pinyin, guint begin, guint len) {
-        this->pinyin = pinyin;
-        this->begin = begin;
-        this->len = len;
-    }
-
     operator const Pinyin * (void) const {
         return pinyin;
     }

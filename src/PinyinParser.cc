@@ -136,10 +136,9 @@ PinyinParser::parse (const String   &pinyin,
 
                         if (((new_py2 != NULL) && (new_py2->len > 1 )) &&
                             (py == NULL || new_py2->len > py->len + 1)) {
-                            result[result.length () - 1].set (
-                                    new_py1,
-                                    result[result.length () - 1].begin,
-                                    new_py1->len);
+                            PinyinSegment & segment = result[result.length () - 1];
+                            segment.pinyin = new_py1;
+                            segment.len = new_py1->len;
                             py = new_py2;
                             p --;
                             break;
@@ -151,10 +150,9 @@ PinyinParser::parse (const String   &pinyin,
 
                     pp = need_resplit (prev_py, py);
                     if (pp != NULL) {
-                        result[result.length () - 1].set (
-                                pp[2],
-                                result[result.length () - 1].begin,
-                                pp[2]->len);
+                        PinyinSegment & segment = result[result.length () - 1];
+                        segment.pinyin = pp[2];
+                        segment.len = pp[2]->len;
                         py = pp[3];
                         p --;
                         break;
