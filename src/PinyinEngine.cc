@@ -190,6 +190,8 @@ PinyinEngine::processNumber (guint keyval, guint keycode, guint modifiers)
 
     /* English mode */
     if (G_UNLIKELY (!m_mode_chinese)) {
+        if (G_UNLIKELY (CMSHM_FILTER (modifiers) != 0))
+            return FALSE;
         commit ((gunichar) m_mode_full ? HalfFullConverter::toFull (ch) : ch);
         return TRUE;
     }
