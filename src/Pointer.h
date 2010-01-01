@@ -27,7 +27,7 @@ public:
             g_object_ref_sink (p);
         }
     }
-    
+
     Pointer<T> &operator = (T *p) {
         set (p);
         return *this;
@@ -38,10 +38,18 @@ public:
         return *this;
     }
 
+    const T * operator-> (void) const {
+        return m_p;
+    }
+
+    T * operator-> (void) {
+        return m_p;
+    }
+
     operator T * (void) const {
         return m_p;
     }
-    
+
     operator gboolean (void) const {
         return m_p != NULL;
     }
