@@ -21,9 +21,7 @@ namespace PY {
 #define DB_PREFETCH_LEN     (6)
 
 Database::Database (void)
-    : m_db (NULL),
-      m_sql (1024),
-      m_buffer (1024)
+    : m_db (NULL)
 {
     init ();
 }
@@ -40,8 +38,8 @@ inline gboolean
 Database::executeSQL (const gchar *sql)
 {
     gchar *errmsg;
-    if (sqlite3_exec (m_db, m_sql, NULL, NULL, &errmsg) != SQLITE_OK) {
-        g_debug ("%s", errmsg);
+    if (sqlite3_exec (m_db, sql, NULL, NULL, &errmsg) != SQLITE_OK) {
+        g_debug ("%s: %s", errmsg, sql);
         sqlite3_free (errmsg);
         return FALSE;
     }
@@ -78,7 +76,7 @@ Database::init (void)
         goto _failed;
     }
 
-    m_sql.truncate (0);
+    m_sql.erase (0);
 
 #if 0
     /* Set synchronous=OFF, write user database will become much faster.
@@ -139,7 +137,7 @@ Database::initUserDatabase (const gchar *userdb)
     m_sql << "INSERT OR IGNORE INTO userdb.desc VALUES " << "('version', '1.2.0');\n"
           << "INSERT OR IGNORE INTO userdb.desc VALUES " << "('uuid', '" << UUID () << "');\n"
           << "INSERT OR IGNORE INTO userdb.desc VALUES " << "('hostname', '" << Hostname () << "');\n"
-          << "INSERT OR IGNORE INTO userdb.desc VALUES " << "('username', '" << getenv ("USERNAME") << "');\n"
+          << "INSERT OR IGNORE INTO userdb.desc VALUES " << "('username', '" << Env ("USERNAME") << "');\n"
           << "INSERT OR IGNORE INTO userdb.desc VALUES " << "('create-time', datetime());\n"
           << "INSERT OR IGNORE INTO userdb.desc VALUES " << "('attach-time', datetime());\n";
 
@@ -184,7 +182,7 @@ _failed:
 void
 Database::prefetch (void)
 {
-    m_sql.truncate (0);
+    m_sql.erase (0);
     for (guint i = 0; i < DB_PREFETCH_LEN; i++)
         m_sql << "SELECT * FROM py_phrase_" << i << ";\n";
     executeSQL (m_sql);
@@ -391,12 +389,12 @@ Database::query (const PinyinArray &pinyin,
     }
 
 
-    m_buffer.truncate (0);
+    m_buffer.erase (0);
     for (guint i = 0; i < m_conditions.length (); i++) {
         if (G_UNLIKELY (i == 0))
-            m_buffer << "  (" << (*m_conditions[i]) << ")\n";
+            m_buffer << "  (" << m_conditions[i].c_str() << ")\n";
         else
-            m_buffer << "  OR (" << (*m_conditions[i]) << ")\n";
+            m_buffer << "  OR (" << m_conditions[i].c_str() << ")\n";
     }
 
     m_sql.printf ("SELECT * FROM ("
@@ -423,8 +421,7 @@ Database::query (const PinyinArray &pinyin,
 
     gint row = 0;
     while (sqlite3_step (stmt) == SQLITE_ROW) {
-        result.setSize (result.length () + 1);
-        Phrase &p = result[result.length() - 1];
+        Phrase p;
 
         g_strlcpy (p.phrase,
                    (gchar *) sqlite3_column_text (stmt, DB_COLUMN_PHRASE),
@@ -437,6 +434,7 @@ Database::query (const PinyinArray &pinyin,
             p.pinyin_id[i][0] = sqlite3_column_int (stmt, (i << 1) + DB_COLUMN_S0);
             p.pinyin_id[i][1] = sqlite3_column_int (stmt, (i << 1) + DB_COLUMN_S0 + 1);
         }
+        result << p;
         row ++;
     }
 

@@ -11,7 +11,6 @@
 #include "Config.h"
 #include "Text.h"
 #include "Util.h"
-#include "WideString.h"
 
 #define _(text) (dgettext (GETTEXT_PACKAGE, text))
 

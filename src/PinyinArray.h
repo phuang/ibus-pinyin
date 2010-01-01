@@ -11,11 +11,8 @@ struct PinyinSegment {
     guint begin;
     guint len;
 
-    void set (const Pinyin *pinyin, guint begin, guint len) {
-        this->pinyin = pinyin;
-        this->begin = begin;
-        this->len = len;
-    }
+    PinyinSegment (const Pinyin *pinyin = NULL, guint begin = 0, guint len = 0)
+        : pinyin (pinyin), begin (begin), len (len) {}
 
     operator const Pinyin * (void) const {
         return pinyin;
@@ -38,11 +35,7 @@ class PinyinArray: public Array<PinyinSegment> {
 public:
     PinyinArray (guint init_size) : Array<PinyinSegment> (init_size) {}
     void append (const Pinyin *pinyin, guint begin, guint len) {
-        g_array_set_size (m_array, length () + 1);
-        PinyinSegment & segment = get (length () - 1);
-        segment.pinyin = pinyin;
-        segment.begin = begin;
-        segment.len = len;
+        push_back (PinyinSegment (pinyin, begin, len));
     }
 };
 

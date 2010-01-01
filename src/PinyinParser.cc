@@ -136,10 +136,9 @@ PinyinParser::parse (const String   &pinyin,
 
                         if (((new_py2 != NULL) && (new_py2->len > 1 )) &&
                             (py == NULL || new_py2->len > py->len + 1)) {
-                            result[result.length () - 1].set (
-                                    new_py1,
-                                    result[result.length () - 1].begin,
-                                    new_py1->len);
+                            PinyinSegment & segment = result[result.length () - 1];
+                            segment.pinyin = new_py1;
+                            segment.len = new_py1->len;
                             py = new_py2;
                             p --;
                             break;
@@ -151,10 +150,9 @@ PinyinParser::parse (const String   &pinyin,
 
                     pp = need_resplit (prev_py, py);
                     if (pp != NULL) {
-                        result[result.length () - 1].set (
-                                pp[2],
-                                result[result.length () - 1].begin,
-                                pp[2]->len);
+                        PinyinSegment & segment = result[result.length () - 1];
+                        segment.pinyin = pp[2];
+                        segment.len = pp[2]->len;
                         py = pp[3];
                         p --;
                         break;
@@ -227,34 +225,3 @@ PinyinParser::isPinyin (gint sheng, gint yun, guint option)
 
 };
 
-
-#ifdef TEST
-#include <glib/gprintf.h>
-int main(int argc, char **argv)
-{
-    gint len;
-    GArray *array;
-    Pinyin **p;
-    gchar *str;
-
-    str = "qinaide";
-
-    if (argc > 1)
-        str = argv[1];
-
-    array = g_array_new (TRUE, TRUE, sizeof (Pinyin *));
-
-    len = py_parse_pinyin (str, -1, 0xffffffff, array);
-
-    if (len) {
-        p = (Pinyin **) array->data;
-        while (*p) {
-            g_printf ("%s'", (*p)->text);
-            p ++;
-        }
-    }
-    g_printf ("%s\n", str + len);
-
-    return 0;
-}
-#endif

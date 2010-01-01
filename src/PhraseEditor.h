@@ -1,6 +1,7 @@
 #ifndef __PY_PHRASE_EDITOR_H_
 #define __PY_PHRASE_EDITOR_H_
 
+#include "String.h"
 #include "Database.h"
 #include "PhraseArray.h"
 

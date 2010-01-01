@@ -3,6 +3,8 @@
 
 #include <uuid/uuid.h>
 #include <sys/utsname.h>
+#include <stdlib.h>
+#include "String.h"
 
 namespace PY {
 
@@ -37,6 +39,18 @@ class Hostname : public Uname {
 public:
     operator const gchar * (void) const {
         return hostname ();
+    }
+};
+
+class Env : public String {
+public:
+    Env (const gchar *name) {
+        gchar *str;
+        str = getenv (name);
+        assign (str != NULL ? str : "");
+    }
+    operator const gchar *(void) const {
+        return c_str();
     }
 };
 

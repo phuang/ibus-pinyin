@@ -25,7 +25,7 @@ AM_CFLAGS = \
 	@SQLITE_CFLAGS@ \
 	-DPKGDATADIR=\"$(pkgdatadir)\" \
 	$(NULL)
-AM_LDFLAGS = \
+AM_LDADD = \
 	@IBUS_LIBS@ \
 	@SQLITE_LIBS@ \
 	$(NULL)
@@ -101,7 +101,7 @@ ibus_engine_pinyin_CXXFLAGS = \
 	-DPKGDATADIR=\"$(pkgdatadir)\" \
 	-DLIBEXECDIR=\"$(libexecdir)\" \
 	$(NULL)
-ibus_engine_pinyin_LDFLAGS = \
+ibus_engine_pinyin_LDADD = \
 	@IBUS_LIBS@ \
 	@SQLITE_LIBS@ \
 	@UUID_LIBS@ \

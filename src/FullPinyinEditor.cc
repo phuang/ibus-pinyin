@@ -87,9 +87,10 @@ FullPinyinEditor::removeWordBefore (void)
         cursor = m_pinyin_len;
     }
     else {
-        const Pinyin * p = m_pinyin.pop ();
-        cursor = m_cursor - p->len;
-        m_pinyin_len -= p->len;
+        const Pinyin & p = *m_pinyin.back ();
+        cursor = m_cursor - p.len;
+        m_pinyin_len -= p.len;
+        m_pinyin.pop ();
     }
 
     m_text.erase (cursor, m_cursor - cursor);
@@ -142,9 +143,10 @@ FullPinyinEditor::moveCursorLeftByWord (void)
         return TRUE;
     }
 
-    const Pinyin * p = m_pinyin.pop ();
-    m_cursor -= p->len;
-    m_pinyin_len -= p->len;
+    const Pinyin & p = *m_pinyin.back ();
+    m_cursor -= p.len;
+    m_pinyin_len -= p.len;
+    m_pinyin.pop ();
 
     return TRUE;
 }
