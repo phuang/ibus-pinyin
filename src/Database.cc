@@ -95,9 +95,9 @@ Database::init (void)
     /* Set journal mode */
     m_sql << "PRAGMA journal_mode=PERSIST;\n";
 
-    /* Using EXCLUSIVE locking mode on main database
+    /* Using EXCLUSIVE locking mode on databases
      * for better performance */
-    m_sql << "PRAGMA main.locking_mode=EXCLUSIVE;\n";
+    m_sql << "PRAGMA locking_mode=EXCLUSIVE;\n";
     if (!executeSQL (m_sql))
         goto _failed;
 
@@ -109,7 +109,7 @@ Database::init (void)
     m_buffer << G_DIR_SEPARATOR_S << "user-1.3.db";
     retval = initUserDatabase (m_buffer);
     if (!retval) {
-        g_warning ("can not open user database %s", (const gchar *)m_buffer);
+        g_warning ("Can not open user database %s", (const gchar *)m_buffer);
         if (!initUserDatabase (":memory:"))
             goto _failed;
     }
