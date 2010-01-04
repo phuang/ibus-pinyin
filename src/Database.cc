@@ -92,6 +92,12 @@ Database::init (void)
     /* Using memory for temp store */
     m_sql << "PRAGMA temp_store=MEMORY;\n";
 
+    /* Set journal mode */
+    m_sql << "PRAGMA journal_mode=TRUNCATE;\n";
+
+    /* Set the sync mode */
+    m_sql << "PRAGMA synchronous=NORMAL;\n";
+
     /* Using EXCLUSIVE locking mode on main database
      * for better performance */
     m_sql << "PRAGMA main.locking_mode=EXCLUSIVE;\n";
