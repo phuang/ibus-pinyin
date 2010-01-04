@@ -89,7 +89,6 @@ private:
     gboolean executeSQL (const gchar *sql);
 
 private:
-private:
     sqlite3 *m_db;              /* sqlite3 database */
     String m_sql;               /* sql stmt */
     String m_buffer;            /* temp buffer */
