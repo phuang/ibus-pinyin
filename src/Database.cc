@@ -93,7 +93,7 @@ Database::init (void)
     m_sql << "PRAGMA temp_store=MEMORY;\n";
 
     /* Set journal mode */
-    m_sql << "PRAGMA journal_mode=TRUNCATE;\n";
+    m_sql << "PRAGMA journal_mode=PERSIST;\n";
 
     /* Using EXCLUSIVE locking mode on main database
      * for better performance */
