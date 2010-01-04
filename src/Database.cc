@@ -78,12 +78,12 @@ Database::init (void)
 
     m_sql.erase (0);
 
-#if 0
+#if 1
     /* Set synchronous=OFF, write user database will become much faster.
-     * It will cause user database corrupted,
-     * if the operatering system crashes or computer loses power.
+     * It will cause user database corrupted, if the operatering system
+     * crashes or computer loses power.
      * */
-    m_sql << "PRAGMA synchronous=OFF;\n";
+    m_sql << "PRAGMA synchronous=NORMAL;\n";
 #endif
 
     /* Set the cache size for better performance */
@@ -94,9 +94,6 @@ Database::init (void)
 
     /* Set journal mode */
     m_sql << "PRAGMA journal_mode=TRUNCATE;\n";
-
-    /* Set the sync mode */
-    m_sql << "PRAGMA synchronous=NORMAL;\n";
 
     /* Using EXCLUSIVE locking mode on main database
      * for better performance */
