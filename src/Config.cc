@@ -55,6 +55,7 @@ static const struct {
     { StaticString ("CorrectPinyin_UEI_UI"),   PINYIN_CORRECT_UEI_TO_UI,   TRUE },
     { StaticString ("CorrectPinyin_UEN_UN"),   PINYIN_CORRECT_UEN_TO_UN,   TRUE },
     { StaticString ("CorrectPinyin_VE_UE"),    PINYIN_CORRECT_VE_TO_UE,    TRUE },
+    { StaticString ("CorrectPinyin_UE_UE"),    PINYIN_CORRECT_UE_TO_VE,    TRUE },
     /* fuzzy pinyin */
     { StaticString ("FuzzyPinyin_C_CH"),      PINYIN_FUZZY_C_CH,  FALSE },
     { StaticString ("FuzzyPinyin_CH_C"),      PINYIN_FUZZY_CH_C,  FALSE },
@@ -117,7 +118,7 @@ Config::readDefaultValues (void)
         m_option_mask &= ~PINYIN_FUZZY_ALL;
 
     /* read values */
-    for (guint i = 0;i < sizeof (options) / sizeof (options[0]); i++) {
+    for (guint i = 0; i < G_N_ELEMENTS (options); i++) {
         if (read (engine_pinyin, options[i].name, options[i].defval))
             m_option |= options[i].option;
         else
@@ -215,7 +216,7 @@ Config::valueChangedCallback (IBusConfig    *config,
             m_option_mask &= ~PINYIN_FUZZY_ALL;
     }
     else {
-        for (guint i = 0;i < sizeof (options) / sizeof (options[0]); i++) {
+        for (guint i = 0; i < G_N_ELEMENTS (options); i++) {
             if (G_LIKELY (options[i].name != name))
                 continue;
             if (normalizeGValue (value, options[i].defval))

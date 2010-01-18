@@ -3980,15 +3980,15 @@ static const Pinyin pinyin_table[] = {
     {  /* 306 */
         text        : "lue",
         sheng       : "l",
-        yun         : "ue",
+        yun         : "ve",
         sheng_id    : PINYIN_ID_L,
-        yun_id      : PINYIN_ID_UE,
+        yun_id      : PINYIN_ID_VE,
         fsheng_id   : PINYIN_ID_N,
         fyun_id     : PINYIN_ID_ZERO,
         fsheng_id_2 : PINYIN_ID_R,
         fyun_id_2   : PINYIN_ID_ZERO,
         len         : 3,
-        flags       : 0
+        flags       : PINYIN_CORRECT_UE_TO_VE
     },
     {  /* 307 */
         text        : "luen",
@@ -4058,15 +4058,15 @@ static const Pinyin pinyin_table[] = {
     {  /* 312 */
         text        : "lve",
         sheng       : "l",
-        yun         : "ue",
+        yun         : "ve",
         sheng_id    : PINYIN_ID_L,
-        yun_id      : PINYIN_ID_UE,
+        yun_id      : PINYIN_ID_VE,
         fsheng_id   : PINYIN_ID_N,
         fyun_id     : PINYIN_ID_ZERO,
         fsheng_id_2 : PINYIN_ID_R,
         fyun_id_2   : PINYIN_ID_ZERO,
         len         : 3,
-        flags       : PINYIN_CORRECT_VE_TO_UE
+        flags       : 0
     },
     {  /* 313 */
         text        : "m",
@@ -4903,15 +4903,15 @@ static const Pinyin pinyin_table[] = {
     {  /* 377 */
         text        : "nue",
         sheng       : "n",
-        yun         : "ue",
+        yun         : "ve",
         sheng_id    : PINYIN_ID_N,
-        yun_id      : PINYIN_ID_UE,
+        yun_id      : PINYIN_ID_VE,
         fsheng_id   : PINYIN_ID_L,
         fyun_id     : PINYIN_ID_ZERO,
         fsheng_id_2 : PINYIN_ID_ZERO,
         fyun_id_2   : PINYIN_ID_ZERO,
         len         : 3,
-        flags       : 0
+        flags       : PINYIN_CORRECT_UE_TO_VE
     },
     {  /* 378 */
         text        : "nun",
@@ -4955,15 +4955,15 @@ static const Pinyin pinyin_table[] = {
     {  /* 381 */
         text        : "nve",
         sheng       : "n",
-        yun         : "ue",
+        yun         : "ve",
         sheng_id    : PINYIN_ID_N,
-        yun_id      : PINYIN_ID_UE,
+        yun_id      : PINYIN_ID_VE,
         fsheng_id   : PINYIN_ID_L,
         fyun_id     : PINYIN_ID_ZERO,
         fsheng_id_2 : PINYIN_ID_ZERO,
         fyun_id_2   : PINYIN_ID_ZERO,
         len         : 3,
-        flags       : PINYIN_CORRECT_VE_TO_UE
+        flags       : 0
     },
     {  /* 382 */
         text        : "o",
@@ -6045,19 +6045,6 @@ static const Pinyin pinyin_table[] = {
         flags       : PINYIN_FUZZY_UANG_UAN
     },
     {  /* 465 */
-        text        : "rue",
-        sheng       : "r",
-        yun         : "ue",
-        sheng_id    : PINYIN_ID_R,
-        yun_id      : PINYIN_ID_UE,
-        fsheng_id   : PINYIN_ID_L,
-        fyun_id     : PINYIN_ID_ZERO,
-        fsheng_id_2 : PINYIN_ID_ZERO,
-        fyun_id_2   : PINYIN_ID_ZERO,
-        len         : 3,
-        flags       : PINYIN_FUZZY_R_L
-    },
-    {  /* 466 */
         text        : "ruei",
         sheng       : "r",
         yun         : "ui",
@@ -6070,7 +6057,7 @@ static const Pinyin pinyin_table[] = {
         len         : 4,
         flags       : PINYIN_CORRECT_UEI_TO_UI
     },
-    {  /* 467 */
+    {  /* 466 */
         text        : "ruen",
         sheng       : "r",
         yun         : "un",
@@ -6083,7 +6070,7 @@ static const Pinyin pinyin_table[] = {
         len         : 4,
         flags       : PINYIN_CORRECT_UEN_TO_UN
     },
-    {  /* 468 */
+    {  /* 467 */
         text        : "rui",
         sheng       : "r",
         yun         : "ui",
@@ -6096,7 +6083,7 @@ static const Pinyin pinyin_table[] = {
         len         : 3,
         flags       : 0
     },
-    {  /* 469 */
+    {  /* 468 */
         text        : "run",
         sheng       : "r",
         yun         : "un",
@@ -6109,7 +6096,7 @@ static const Pinyin pinyin_table[] = {
         len         : 3,
         flags       : 0
     },
-    {  /* 470 */
+    {  /* 469 */
         text        : "ruo",
         sheng       : "r",
         yun         : "uo",
@@ -6122,7 +6109,7 @@ static const Pinyin pinyin_table[] = {
         len         : 3,
         flags       : 0
     },
-    {  /* 471 */
+    {  /* 470 */
         text        : "rv",
         sheng       : "r",
         yun         : "v",
@@ -6133,6 +6120,19 @@ static const Pinyin pinyin_table[] = {
         fsheng_id_2 : PINYIN_ID_ZERO,
         fyun_id_2   : PINYIN_ID_ZERO,
         len         : 2,
+        flags       : PINYIN_FUZZY_R_L
+    },
+    {  /* 471 */
+        text        : "rve",
+        sheng       : "r",
+        yun         : "ve",
+        sheng_id    : PINYIN_ID_R,
+        yun_id      : PINYIN_ID_VE,
+        fsheng_id   : PINYIN_ID_L,
+        fyun_id     : PINYIN_ID_ZERO,
+        fsheng_id_2 : PINYIN_ID_ZERO,
+        fyun_id_2   : PINYIN_ID_ZERO,
+        len         : 3,
         flags       : PINYIN_FUZZY_R_L
     },
     {  /* 472 */
@@ -9248,13 +9248,13 @@ static const Pinyin *special_table[][4] = {
     { &pinyin_table[295],  &pinyin_table[6],    &pinyin_table[294],  &pinyin_table[161],  }, /* ling ao => lin gao */
     { &pinyin_table[295],  &pinyin_table[125],  &pinyin_table[294],  &pinyin_table[162],  }, /* ling e => lin ge */
     { &pinyin_table[295],  &pinyin_table[126],  &pinyin_table[294],  &pinyin_table[164],  }, /* ling ei => lin gei */
-    { &pinyin_table[306],  &pinyin_table[434],  &pinyin_table[303],  &pinyin_table[128],  }, /* lue r => lu er */
     { &pinyin_table[309],  &pinyin_table[0],    &pinyin_table[303],  &pinyin_table[342],  }, /* lun a => lu na */
     { &pinyin_table[309],  &pinyin_table[4],    &pinyin_table[303],  &pinyin_table[346],  }, /* lun an => lu nan */
     { &pinyin_table[309],  &pinyin_table[5],    &pinyin_table[303],  &pinyin_table[347],  }, /* lun ang => lu nang */
     { &pinyin_table[309],  &pinyin_table[6],    &pinyin_table[303],  &pinyin_table[348],  }, /* lun ao => lu nao */
     { &pinyin_table[309],  &pinyin_table[125],  &pinyin_table[303],  &pinyin_table[349],  }, /* lun e => lu ne */
     { &pinyin_table[309],  &pinyin_table[126],  &pinyin_table[303],  &pinyin_table[351],  }, /* lun ei => lu nei */
+    { &pinyin_table[312],  &pinyin_table[434],  &pinyin_table[311],  &pinyin_table[128],  }, /* lve r => lv er */
     { &pinyin_table[318],  &pinyin_table[0],    &pinyin_table[314],  &pinyin_table[342],  }, /* man a => ma na */
     { &pinyin_table[318],  &pinyin_table[4],    &pinyin_table[314],  &pinyin_table[346],  }, /* man an => ma nan */
     { &pinyin_table[318],  &pinyin_table[5],    &pinyin_table[314],  &pinyin_table[347],  }, /* man ang => ma nang */
@@ -9334,7 +9334,7 @@ static const Pinyin *special_table[][4] = {
     { &pinyin_table[366],  &pinyin_table[126],  &pinyin_table[365],  &pinyin_table[164],  }, /* ning ei => nin gei */
     { &pinyin_table[366],  &pinyin_table[127],  &pinyin_table[365],  &pinyin_table[166],  }, /* ning en => nin gen */
     { &pinyin_table[366],  &pinyin_table[383],  &pinyin_table[365],  &pinyin_table[171],  }, /* ning ou => nin gou */
-    { &pinyin_table[377],  &pinyin_table[434],  &pinyin_table[374],  &pinyin_table[128],  }, /* nue r => nu er */
+    { &pinyin_table[381],  &pinyin_table[434],  &pinyin_table[380],  &pinyin_table[128],  }, /* nve r => nv er */
     { &pinyin_table[389],  &pinyin_table[0],    &pinyin_table[385],  &pinyin_table[342],  }, /* pan a => pa na */
     { &pinyin_table[389],  &pinyin_table[4],    &pinyin_table[385],  &pinyin_table[346],  }, /* pan an => pa nan */
     { &pinyin_table[389],  &pinyin_table[6],    &pinyin_table[385],  &pinyin_table[348],  }, /* pan ao => pa nao */
@@ -9398,14 +9398,14 @@ static const Pinyin *special_table[][4] = {
     { &pinyin_table[447],  &pinyin_table[126],  &pinyin_table[446],  &pinyin_table[164],  }, /* reng ei => ren gei */
     { &pinyin_table[447],  &pinyin_table[127],  &pinyin_table[446],  &pinyin_table[166],  }, /* reng en => ren gen */
     { &pinyin_table[447],  &pinyin_table[383],  &pinyin_table[446],  &pinyin_table[171],  }, /* reng ou => ren gou */
-    { &pinyin_table[469],  &pinyin_table[0],    &pinyin_table[462],  &pinyin_table[342],  }, /* run a => ru na */
-    { &pinyin_table[469],  &pinyin_table[2],    &pinyin_table[462],  &pinyin_table[344],  }, /* run ai => ru nai */
-    { &pinyin_table[469],  &pinyin_table[4],    &pinyin_table[462],  &pinyin_table[346],  }, /* run an => ru nan */
-    { &pinyin_table[469],  &pinyin_table[5],    &pinyin_table[462],  &pinyin_table[347],  }, /* run ang => ru nang */
-    { &pinyin_table[469],  &pinyin_table[6],    &pinyin_table[462],  &pinyin_table[348],  }, /* run ao => ru nao */
-    { &pinyin_table[469],  &pinyin_table[125],  &pinyin_table[462],  &pinyin_table[349],  }, /* run e => ru ne */
-    { &pinyin_table[469],  &pinyin_table[126],  &pinyin_table[462],  &pinyin_table[351],  }, /* run ei => ru nei */
-    { &pinyin_table[469],  &pinyin_table[127],  &pinyin_table[462],  &pinyin_table[353],  }, /* run en => ru nen */
+    { &pinyin_table[468],  &pinyin_table[0],    &pinyin_table[462],  &pinyin_table[342],  }, /* run a => ru na */
+    { &pinyin_table[468],  &pinyin_table[2],    &pinyin_table[462],  &pinyin_table[344],  }, /* run ai => ru nai */
+    { &pinyin_table[468],  &pinyin_table[4],    &pinyin_table[462],  &pinyin_table[346],  }, /* run an => ru nan */
+    { &pinyin_table[468],  &pinyin_table[5],    &pinyin_table[462],  &pinyin_table[347],  }, /* run ang => ru nang */
+    { &pinyin_table[468],  &pinyin_table[6],    &pinyin_table[462],  &pinyin_table[348],  }, /* run ao => ru nao */
+    { &pinyin_table[468],  &pinyin_table[125],  &pinyin_table[462],  &pinyin_table[349],  }, /* run e => ru ne */
+    { &pinyin_table[468],  &pinyin_table[126],  &pinyin_table[462],  &pinyin_table[351],  }, /* run ei => ru nei */
+    { &pinyin_table[468],  &pinyin_table[127],  &pinyin_table[462],  &pinyin_table[353],  }, /* run en => ru nen */
     { &pinyin_table[477],  &pinyin_table[125],  &pinyin_table[473],  &pinyin_table[349],  }, /* san e => sa ne */
     { &pinyin_table[477],  &pinyin_table[126],  &pinyin_table[473],  &pinyin_table[351],  }, /* san ei => sa nei */
     { &pinyin_table[478],  &pinyin_table[0],    &pinyin_table[477],  &pinyin_table[155],  }, /* sang a => san ga */

@@ -21,7 +21,8 @@ auto_correct = [
     ("iu", "iou"),
     ("ui", "uei"),
     ("un", "uen"),
-    ("ue", "ve")]
+    ("ue", "ve"),
+    ("ve", "ue")]
 
 fuzzy_shengmu = [
     ("c", "ch"),
@@ -104,7 +105,7 @@ def get_pinyin():
         yield p, s, y, len(p), []
 
     for s in shengmu_list:
-        yield s, s, "", len(s), ["PINYIN_SIMPLE_PINYIN"]
+        yield s, s, "", len(s), ["PINYIN_INCOMPLETE_PINYIN"]
 
     for c, w in auto_correct:
         flag = "PINYIN_CORRECT_%s_TO_%s" % (w.upper(), c.upper())
