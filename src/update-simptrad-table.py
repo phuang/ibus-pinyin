@@ -49,7 +49,6 @@ def main():
         print '    { L"%s", L"%s" },' % (s.encode("utf8"), ts.encode("utf8"))
     print "};"
     print '#define SIMP_TO_TRAD_MAX_LEN (%d)' % maxlen
-    print '#define SIMP_TO_TRAD_NR (sizeof (simp_to_trad) / sizeof (simp_to_trad[0]))'
 
 if __name__ == "__main__":
     main()

@@ -7561,4 +7561,3 @@ const wchar_t *simp_to_trad[][2] = {
     { L"龟", L"龜" },
 };
 #define SIMP_TO_TRAD_MAX_LEN (6)
-#define SIMP_TO_TRAD_NR (sizeof (simp_to_trad) / sizeof (simp_to_trad[0]))

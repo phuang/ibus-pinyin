@@ -38,7 +38,7 @@ SimpTradConverter::simpToTrad (const gchar *in, String &out)
         for (; i > 0; i--) {
             buf[i] = 0;
             result = (const gunichar **) bsearch (buf, simp_to_trad,
-                                            SIMP_TO_TRAD_NR, sizeof (simp_to_trad[0]),
+                                            G_N_ELEMENTS (simp_to_trad), sizeof (simp_to_trad[0]),
                                             _cmp);
             if (G_UNLIKELY (result != NULL))
                 break;
