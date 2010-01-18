@@ -1964,11 +1964,11 @@ static const Pinyin pinyin_table[] = {
     },
     {  /* 151 */
         text        : "fuei",
-        sheng       : "h",
+        sheng       : "f",
         yun         : "ui",
-        sheng_id    : PINYIN_ID_H,
+        sheng_id    : PINYIN_ID_F,
         yun_id      : PINYIN_ID_UI,
-        fsheng_id   : PINYIN_ID_F,
+        fsheng_id   : PINYIN_ID_H,
         fyun_id     : PINYIN_ID_ZERO,
         fsheng_id_2 : PINYIN_ID_ZERO,
         fyun_id_2   : PINYIN_ID_ZERO,
@@ -1977,11 +1977,11 @@ static const Pinyin pinyin_table[] = {
     },
     {  /* 152 */
         text        : "fuen",
-        sheng       : "h",
+        sheng       : "f",
         yun         : "un",
-        sheng_id    : PINYIN_ID_H,
+        sheng_id    : PINYIN_ID_F,
         yun_id      : PINYIN_ID_UN,
-        fsheng_id   : PINYIN_ID_F,
+        fsheng_id   : PINYIN_ID_H,
         fyun_id     : PINYIN_ID_ZERO,
         fsheng_id_2 : PINYIN_ID_ZERO,
         fyun_id_2   : PINYIN_ID_ZERO,
@@ -4018,13 +4018,13 @@ static const Pinyin pinyin_table[] = {
     },
     {  /* 309 */
         text        : "luei",
-        sheng       : "r",
+        sheng       : "l",
         yun         : "ui",
-        sheng_id    : PINYIN_ID_R,
+        sheng_id    : PINYIN_ID_L,
         yun_id      : PINYIN_ID_UI,
-        fsheng_id   : PINYIN_ID_L,
+        fsheng_id   : PINYIN_ID_N,
         fyun_id     : PINYIN_ID_ZERO,
-        fsheng_id_2 : PINYIN_ID_ZERO,
+        fsheng_id_2 : PINYIN_ID_R,
         fyun_id_2   : PINYIN_ID_ZERO,
         len         : 4,
         flags       : PINYIN_FUZZY_L_R | PINYIN_CORRECT_UEI_TO_UI
@@ -4954,13 +4954,13 @@ static const Pinyin pinyin_table[] = {
     },
     {  /* 381 */
         text        : "nuen",
-        sheng       : "l",
+        sheng       : "n",
         yun         : "un",
-        sheng_id    : PINYIN_ID_L,
+        sheng_id    : PINYIN_ID_N,
         yun_id      : PINYIN_ID_UN,
-        fsheng_id   : PINYIN_ID_N,
+        fsheng_id   : PINYIN_ID_L,
         fyun_id     : PINYIN_ID_ZERO,
-        fsheng_id_2 : PINYIN_ID_R,
+        fsheng_id_2 : PINYIN_ID_ZERO,
         fyun_id_2   : PINYIN_ID_ZERO,
         len         : 4,
         flags       : PINYIN_FUZZY_N_L | PINYIN_CORRECT_UEN_TO_UN
@@ -5981,13 +5981,13 @@ static const Pinyin pinyin_table[] = {
     },
     {  /* 460 */
         text        : "riou",
-        sheng       : "l",
+        sheng       : "r",
         yun         : "iu",
-        sheng_id    : PINYIN_ID_L,
+        sheng_id    : PINYIN_ID_R,
         yun_id      : PINYIN_ID_IU,
-        fsheng_id   : PINYIN_ID_N,
+        fsheng_id   : PINYIN_ID_L,
         fyun_id     : PINYIN_ID_ZERO,
-        fsheng_id_2 : PINYIN_ID_R,
+        fsheng_id_2 : PINYIN_ID_ZERO,
         fyun_id_2   : PINYIN_ID_ZERO,
         len         : 4,
         flags       : PINYIN_FUZZY_R_L | PINYIN_CORRECT_IOU_TO_IU
@@ -6111,13 +6111,13 @@ static const Pinyin pinyin_table[] = {
     },
     {  /* 470 */
         text        : "rue",
-        sheng       : "l",
+        sheng       : "r",
         yun         : "ve",
-        sheng_id    : PINYIN_ID_L,
+        sheng_id    : PINYIN_ID_R,
         yun_id      : PINYIN_ID_VE,
-        fsheng_id   : PINYIN_ID_N,
+        fsheng_id   : PINYIN_ID_L,
         fyun_id     : PINYIN_ID_ZERO,
-        fsheng_id_2 : PINYIN_ID_R,
+        fsheng_id_2 : PINYIN_ID_ZERO,
         fyun_id_2   : PINYIN_ID_ZERO,
         len         : 3,
         flags       : PINYIN_FUZZY_R_L | PINYIN_CORRECT_UE_TO_VE
@@ -9023,7 +9023,6 @@ static const Pinyin pinyin_table[] = {
     },
 };
 
-#define PINYIN_TABLE_NR (sizeof (pinyin_table) / sizeof (pinyin_table[0]))
 static const Pinyin *special_table[][4] = {
     { &pinyin_table[4],    &pinyin_table[0],    &pinyin_table[0],    &pinyin_table[345],  }, /* an a => a na */
     { &pinyin_table[4],    &pinyin_table[6],    &pinyin_table[0],    &pinyin_table[351],  }, /* an ao => a nao */
@@ -9697,5 +9696,4 @@ static const Pinyin *special_table[][4] = {
     { &pinyin_table[692],  &pinyin_table[126],  &pinyin_table[684],  &pinyin_table[354],  }, /* zun ei => zu nei */
     { &pinyin_table[692],  &pinyin_table[127],  &pinyin_table[684],  &pinyin_table[356],  }, /* zun en => zu nen */
 };
-#define SPECIAL_TABLE_NR (sizeof (special_table) / sizeof (special_table[0]))
 

@@ -52,7 +52,7 @@ is_pinyin (const gchar *p,
     if (G_LIKELY (len > 0)) {
         strncpy (buf, p, len);
         buf[len] = 0;
-        result = (const Pinyin *) bsearch (buf, pinyin_table, PINYIN_TABLE_NR,
+        result = (const Pinyin *) bsearch (buf, pinyin_table, G_N_ELEMENTS (pinyin_table),
                                             sizeof (Pinyin), py_cmp);
         if (check_flags (result, option))
             return result;
@@ -65,7 +65,7 @@ is_pinyin (const gchar *p,
 
     for (; len > 0; len --) {
         buf[len] = 0;
-        result = (const Pinyin *) bsearch (buf, pinyin_table, PINYIN_TABLE_NR,
+        result = (const Pinyin *) bsearch (buf, pinyin_table, G_N_ELEMENTS (pinyin_table),
                                             sizeof (Pinyin), py_cmp);
         if (G_UNLIKELY (check_flags (result, option))) {
             return result;
@@ -91,7 +91,7 @@ need_resplit(const Pinyin *p1,
 {
     const Pinyin * pys[] = {p1, p2};
 
-    return (const Pinyin **) bsearch (pys, special_table, SPECIAL_TABLE_NR,
+    return (const Pinyin **) bsearch (pys, special_table, G_N_ELEMENTS (special_table),
                                         sizeof (special_table[0]), sp_cmp);
 }
 
@@ -229,7 +229,7 @@ PinyinParser::isPinyin (gint sheng, gint yun, guint option)
     g_strlcpy (buf, id_map[sheng], sizeof (buf));
     g_strlcat (buf, id_map[yun], sizeof (buf));
 
-    result = (const Pinyin *) bsearch (buf, pinyin_table, PINYIN_TABLE_NR,
+    result = (const Pinyin *) bsearch (buf, pinyin_table, G_N_ELEMENTS (pinyin_table),
                                             sizeof (Pinyin), py_cmp);
     if (check_flags (result, option))
         return result;

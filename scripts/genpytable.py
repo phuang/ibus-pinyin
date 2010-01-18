@@ -126,7 +126,7 @@ def get_pinyin():
                s2 + w not in pinyin_list and \
                s2 + c in pinyin_list:
                 flag_correct = "PINYIN_CORRECT_%s_TO_%s" % (w.upper(), c.upper())
-                yield s1 + w, s2, c, len(s2) + len(w), ["%s | %s" % (flag, flag_correct)]
+                yield s1 + w, s1, c, len(s2) + len(w), ["%s | %s" % (flag, flag_correct)]
 
             # if s2 + y not in pinyin_list and s1 + y in pinyin_list:
             #     yield s2 + y, s2, y, len (s2) + len(y), [flag]
@@ -253,7 +253,6 @@ def gen_tables():
 
     print '};'
     print
-    print '#define PINYIN_TABLE_NR (sizeof (pinyin_table) / sizeof (pinyin_table[0]))'
 
     return pinyins
 
@@ -325,7 +324,6 @@ def gen_full_pinyin_table(pinyins):
     for p in full_pinyin:
         print "    &pinyin_table[%d],    // %s" % (_dict[p], p[0])
     print '};'
-    print '#define FULL_PINYIN_TABLE_NR (sizeof (full_pinyin_table) / sizeof (full_pinyin_table[0]))'
     print
 
 
@@ -342,7 +340,6 @@ def gen_special_table(pinyins):
 
         print '    { %s %s %s %s },' % tuple(ids), "/* %s %s => %s %s */" % r
     print '};'
-    print '#define SPECIAL_TABLE_NR (sizeof (special_table) / sizeof (special_table[0]))'
     print
 
 
