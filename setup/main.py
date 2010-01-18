@@ -137,6 +137,7 @@ class PreferencesDialog:
             ("CorrectPinyin_IOU_IU", True),
             ("CorrectPinyin_UEI_UI", True),
             ("CorrectPinyin_UEN_UN", True),
+            ("CorrectPinyin_UE_VE", True),
             ("CorrectPinyin_VE_UE", True),
         ]
 
