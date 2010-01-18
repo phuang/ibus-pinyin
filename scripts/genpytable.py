@@ -120,6 +120,14 @@ def get_pinyin():
         for y in  yunmu_list:
             if s1 + y not in pinyin_list and s2 + y in pinyin_list:
                 yield s1 + y, s1, y, len(s1) + len(y),  [flag]
+        for c, w in auto_correct:
+            if s1 + w not in pinyin_list and \
+               s1 + c not in pinyin_list and \
+               s2 + w not in pinyin_list and \
+               s2 + c in pinyin_list:
+                flag_correct = "PINYIN_CORRECT_%s_TO_%s" % (w.upper(), c.upper())
+                yield s1 + w, s2, c, len(s2) + len(w), ["%s | %s" % (flag, flag_correct)]
+
             # if s2 + y not in pinyin_list and s1 + y in pinyin_list:
             #     yield s2 + y, s2, y, len (s2) + len(y), [flag]
 

@@ -8,6 +8,23 @@ namespace PY {
 
 #include "PinyinParserTable.h"
 
+static gboolean
+check_flags (const Pinyin *pinyin, guint option)
+{
+    if (pinyin == NULL)
+        return FALSE;
+
+    if (pinyin->flags != 0) {
+        guint flags;
+        flags = pinyin->flags & option;
+        if (flags == 0)
+            return FALSE;
+        if ((flags != pinyin->flags) && ((pinyin->flags & PINYIN_CORRECT_ALL) != 0))
+            return FALSE;
+    }
+    return TRUE;
+}
+
 static int
 py_cmp (const void *p1, const void *p2)
 {
@@ -37,11 +54,7 @@ is_pinyin (const gchar *p,
         buf[len] = 0;
         result = (const Pinyin *) bsearch (buf, pinyin_table, PINYIN_TABLE_NR,
                                             sizeof (Pinyin), py_cmp);
-        if (G_UNLIKELY (result == NULL))
-            return NULL;
-        if (G_LIKELY (result->flags == 0))
-            return result;
-        if(G_LIKELY (result->flags & option))
+        if (check_flags (result, option))
             return result;
         return NULL;
     }
@@ -54,7 +67,7 @@ is_pinyin (const gchar *p,
         buf[len] = 0;
         result = (const Pinyin *) bsearch (buf, pinyin_table, PINYIN_TABLE_NR,
                                             sizeof (Pinyin), py_cmp);
-        if (G_UNLIKELY (result && ((result->flags == 0) || (result->flags & option)))) {
+        if (G_UNLIKELY (check_flags (result, option))) {
             return result;
         }
     }
@@ -218,9 +231,9 @@ PinyinParser::isPinyin (gint sheng, gint yun, guint option)
 
     result = (const Pinyin *) bsearch (buf, pinyin_table, PINYIN_TABLE_NR,
                                             sizeof (Pinyin), py_cmp);
-    if (result != NULL && result->flags != 0 && (result->flags & option) == 0)
-        return NULL;
-    return result;
+    if (check_flags (result, option))
+        return result;
+    return NULL;
 }
 
 };
