@@ -42,6 +42,12 @@ start_component (void)
 
     ibus_init ();
     Bus bus;
+
+    if (!bus.isConnected ()) {
+        g_warning ("Can not connect to ibus");
+        exit (0);
+    }
+
     Config config (bus);
 
     g_signal_connect (bus, "disconnected", G_CALLBACK (ibus_disconnected_cb), NULL);

@@ -11,6 +11,10 @@ public:
     Bus (void) {
         set (ibus_bus_new ());
     }
+
+    bool isConnected (void) {
+        return ibus_bus_is_connected (*this);
+    }
 };
 
 };
