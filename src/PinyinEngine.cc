@@ -208,7 +208,7 @@ PinyinEngine::processNumber (guint keyval, guint keycode, guint modifiers)
     switch (keyval) {
     case IBUS_0:
     case IBUS_KP_0:
-        i = 10;
+        i = 9;
         break;
     case IBUS_1 ... IBUS_9:
         i = keyval - IBUS_1;
