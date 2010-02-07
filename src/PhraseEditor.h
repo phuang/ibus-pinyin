@@ -4,13 +4,14 @@
 #include "String.h"
 #include "Database.h"
 #include "PhraseArray.h"
+#include "PinyinProperties.h"
 
 namespace PY {
 
 class PhraseEditor {
 public:
-    PhraseEditor(void);
-    ~PhraseEditor(void);
+    PhraseEditor (PinyinProperties & props);
+    ~PhraseEditor (void);
 
     const String & selectedString (void) const { return m_selected_string; }
     const PinyinArray & pinyin (void) const { return m_pinyin; }
@@ -41,15 +42,7 @@ public:
         m_cursor = 0;
     }
 
-    gboolean modeSimp (void) const {
-        return m_mode_simp;
-    }
-
-    void setModeSimp (gboolean mode) {
-        m_mode_simp = mode;
-    }
-
-    void update (const PinyinArray &pinyin);
+    gboolean update (const PinyinArray &pinyin);
     gboolean selectCandidate (guint i);
     gboolean resetCandidate (guint i);
     void commit (void) {
@@ -77,7 +70,7 @@ private:
     PhraseArray m_candidate_0_phrases;  // the first candidate in phrase array format
     PinyinArray m_pinyin;
     guint m_cursor;
-    gboolean m_mode_simp;
+    PinyinProperties & m_props;
 
 private:
     static Database m_database;

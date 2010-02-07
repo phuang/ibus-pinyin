@@ -65,6 +65,11 @@ PKG_CHECK_MODULES(UUID, [
     uuid
 ])
 
+# check uuid
+PKG_CHECK_MODULES(SIGC, [
+    sigc++-2.0
+])
+
 # check env
 AC_PATH_PROG(ENV, env)
 AC_SUBST(ENV)

@@ -33,7 +33,7 @@ struct PinyinSegment {
 
 class PinyinArray: public Array<PinyinSegment> {
 public:
-    PinyinArray (guint init_size) : Array<PinyinSegment> (init_size) {}
+    PinyinArray (guint init_size = 0) : Array<PinyinSegment> (init_size) {}
     void append (const Pinyin *pinyin, guint begin, guint len) {
         push_back (PinyinSegment (pinyin, begin, len));
     }
