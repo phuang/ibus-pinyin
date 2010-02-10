@@ -33,7 +33,6 @@ public:
         for (gint i = 0; i < MODE_LAST; i++) {
             m_editors[i]->reset ();
         }
-        updateUI (need_update);
     }
 
     void resetQuote (void) {
@@ -51,53 +50,18 @@ public:
     gboolean propertyActivate (const gchar *prop_name, guint prop_state);
     void candidateClicked (guint index, guint button, guint state);
 
-    void updateUI (gboolean now = TRUE) {
-    #if 0
-        if (G_UNLIKELY (now || m_need_update >= 4)) {
-            updateLookupTable ();
-            updateAuxiliaryText ();
-            updatePreeditText ();
-            m_need_update = 0;
-        } else {
-            if (m_need_update == 0) {
-                g_idle_add ((GSourceFunc) delayUpdateUIHandler, this);
-            }
-            m_need_update ++;
-        }
-    #endif
-    }
-
 private:
     gboolean processPunct (guint keyval, guint keycode, guint modifiers);
-#if 0
-    gboolean processPinyin (guint keyval, guint keycode, guint modifiers);
-    gboolean processCapitalLetter (guint keyval, guint keycode, guint modifiers);
-    gboolean processNumber (guint keyval, guint keycode, guint modifiers);
-    gboolean processSpace (guint keyval, guint keycode, guint modifiers);
-    gboolean processOthers (guint keyval, guint keycode, guint modifiers);
-#endif
 
 private:
-    // gboolean isEmpty (void) { return m_pinyin_editor->isEmpty (); }
-
     void commit (void);
     void commit (gchar ch);
     void commit (gunichar ch);
     void commit (const gchar *str);
     void commit (const String &str);
 
-    void toggleModeChinese (void);
-    void toggleModeFull (void);
-    void toggleModeFullPunct (void);
-    void toggleModeSimp (void);
     void showSetupDialog (void);
 
-
-    static gboolean delayUpdateUIHandler (PinyinEngine *pinyin) {
-        if (pinyin->m_need_update > 0)
-            pinyin->updateUI (TRUE);
-        return FALSE;
-    }
 
     void connectEditorSignals (Editor *editor);
 
