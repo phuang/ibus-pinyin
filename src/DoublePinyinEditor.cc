@@ -241,6 +241,36 @@ DoublePinyinEditor::updatePinyin (void)
     }
 }
 
+#define CMSHM_MASK              \
+        (IBUS_CONTROL_MASK |    \
+         IBUS_MOD1_MASK |       \
+         IBUS_SUPER_MASK |      \
+         IBUS_HYPER_MASK |      \
+         IBUS_META_MASK)
+
+#define CMSHM_FILTER(modifiers)  \
+    (modifiers & (CMSHM_MASK))
+
+gboolean
+DoublePinyinEditor::processKeyEvent (guint keyval, guint keycode, guint modifiers)
+{
+    if (modifiers & IBUS_RELEASE_MASK) {
+        return m_text.isEmpty () ? FALSE : TRUE;
+    }
+
+    /* handle ';' key */
+    if (G_UNLIKELY (keyval == IBUS_semicolon)) {
+        if ((modifiers & IBUS_RELEASE_MASK) == 0) {
+            if (CMSHM_FILTER (modifiers) == 0) {
+                if (insert (keyval))
+                    return TRUE;
+            }
+        }
+    }
+
+    return PinyinEditor::processKeyEvent (keyval, keycode, modifiers);
+}
+
 };
 
 

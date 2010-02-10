@@ -216,11 +216,4 @@ FullPinyinEditor::updatePinyin (void)
     updatePhraseEditor ();
 }
 
-#if 0
-gboolean
-FullPinyinEditor::processKeyEvent (guint keyval, guint keycode, guint modifiers)
-{
-}
-#endif
-
 };
