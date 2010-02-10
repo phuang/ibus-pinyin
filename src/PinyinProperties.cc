@@ -3,6 +3,8 @@
 
 namespace PY {
 
+#define _(text) (dgettext (GETTEXT_PACKAGE, text))
+
 PinyinProperties::PinyinProperties (void)
     : m_mode_chinese (Config::initChinese ()),
       m_mode_full (Config::initFull ()),

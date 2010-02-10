@@ -8,8 +8,6 @@
 #include "Property.h"
 #include "Config.h"
 
-#define _(text) (dgettext (GETTEXT_PACKAGE, text))
-
 namespace PY {
 
 class PinyinProperties {
