@@ -376,7 +376,7 @@ PinyinEditor::updateAuxiliaryText (void)
 {
     /* clear pinyin array */
     if (G_UNLIKELY (m_text.isEmpty () ||
-        m_cursor == m_pinyin.length ())) {
+        m_phrase_editor.cursor () == m_pinyin.length ())) {
         hideAuxiliaryText ();
         return;
     }
