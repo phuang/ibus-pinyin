@@ -480,6 +480,12 @@ PinyinEditor::cursorDown (void)
 }
 
 void
+PinyinEditor::candidateClicked (guint index, guint button, guint state)
+{
+   selectCandidateInPage (index);
+}
+
+void
 PinyinEditor::update (void)
 {
     updatePreeditText ();

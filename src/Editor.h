@@ -21,6 +21,7 @@ public:
     virtual void cursorDown (void);
     virtual void update (void);
     virtual void reset (void);
+    virtual void candidateClicked (guint index, guint button, guint state);
 
     /* signals */
     sigc::signal <void, Text &> signalCommitText (void) { return m_signal_commit_text; }

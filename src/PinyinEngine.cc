@@ -291,9 +291,7 @@ PinyinEngine::propertyActivate (const gchar *prop_name, guint prop_state)
 void
 PinyinEngine::candidateClicked (guint index, guint button, guint state)
 {
-#if 0
-   selectCandidateInPage (index);
-#endif
+    m_editors[m_input_mode]->candidateClicked (index, button, state);
 }
 
 inline void

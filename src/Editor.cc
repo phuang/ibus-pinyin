@@ -120,6 +120,11 @@ Editor::cursorDown (void)
 }
 
 void
+Editor::candidateClicked (guint index, guint button, guint state)
+{
+}
+
+void
 Editor::update (void)
 {
     if (m_text) {
