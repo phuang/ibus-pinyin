@@ -95,6 +95,48 @@ PinyinEditor::processSpace (guint keyval, guint keycode, guint modifiers)
 inline gboolean
 PinyinEditor::processPunct (guint keyval, guint keycode, guint modifiers)
 {
+    if (m_text.isEmpty ())
+        return FALSE;
+
+    if (CMSHM_FILTER (modifiers) != 0)
+        return TRUE;
+
+    switch (keyval) {
+    case IBUS_apostrophe:
+        insert (keyval);
+        return TRUE;
+    case IBUS_comma:
+        if (Config::commaPeriodPage ()) {
+            pageUp ();
+            return TRUE;
+        }
+        break;
+    case IBUS_minus:
+        if (Config::minusEqualPage ()) {
+            pageUp ();
+            return TRUE;
+        }
+        break;
+    case IBUS_period:
+        if (Config::commaPeriodPage ()) {
+            pageDown ();
+            return TRUE;
+        }
+        break;
+    case IBUS_equal:
+        if (Config::minusEqualPage ()) {
+            pageDown ();
+            return TRUE;
+        }
+        break;
+    }
+
+    if (Config::autoCommit ()) {
+        if (m_phrase_editor.pinyinExistsAfterCursor ()) {
+            selectCandidate (m_lookup_table.cursorPos ());
+        }
+        commit ();
+    }
     return TRUE;
 }
 
@@ -231,6 +273,11 @@ PinyinEditor::processKeyEvent (guint keyval, guint keycode, guint modifiers)
     case IBUS_0 ... IBUS_9:
     case IBUS_KP_0 ... IBUS_KP_9:
         return processNumber (keyval, keycode, modifiers);
+    case IBUS_exclam ... IBUS_slash:
+    case IBUS_colon ... IBUS_at:
+    case IBUS_bracketleft ... IBUS_quoteleft:
+    case IBUS_braceleft ... IBUS_asciitilde:
+        return processPunct (keyval, keycode, modifiers);
     /* space */
     case IBUS_space:
         return processSpace (keyval, keycode, modifiers);
