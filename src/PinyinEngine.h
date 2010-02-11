@@ -5,13 +5,12 @@
 #include <ibus.h>
 #include "Pointer.h"
 #include "Database.h"
-#include "FullPinyinEditor.h"
-#include "PhraseEditor.h"
 #include "RawEditor.h"
 #include "LookupTable.h"
 #include "Property.h"
 #include "Config.h"
 #include "Editor.h"
+#include "FallbackEditor.h"
 #include "PinyinProperties.h"
 
 namespace PY {
@@ -28,17 +27,13 @@ public:
     }
 
     void reset (gboolean need_update = TRUE) {
-        resetQuote ();
         m_input_mode = MODE_INIT;
         for (gint i = 0; i < MODE_LAST; i++) {
             m_editors[i]->reset ();
         }
+        m_fallback_editor.reset ();
     }
 
-    void resetQuote (void) {
-        m_quote = TRUE;
-        m_double_quote = TRUE;
-    }
 
     void enable (void) {}
     void disable (void) {}
@@ -89,12 +84,9 @@ private:
     LookupTable m_lookup_table;
     PinyinProperties m_props;
 
-    gboolean m_quote;
-    gboolean m_double_quote;
 
     guint    m_prev_pressed_key;
     gboolean m_prev_pressed_key_result;
-    gunichar m_prev_commited_char;
 
     enum {
         MODE_INIT = 0,          // init mode
@@ -106,6 +98,7 @@ private:
     } m_input_mode;
 
     Editor *m_editors[MODE_LAST];
+    FallbackEditor m_fallback_editor;
 };
 
 };

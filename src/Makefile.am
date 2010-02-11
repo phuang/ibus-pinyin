@@ -40,6 +40,7 @@ ibus_engine_c_sources = \
 	DoublePinyinEditor.cc \
 	Editor.cc \
 	Engine.cc \
+	FallbackEditor.cc \
 	FullPinyinEditor.cc \
 	HalfFullConverter.cc \
 	Main.cc \
@@ -65,6 +66,7 @@ ibus_engine_h_sources = \
 	DoublePinyinTable.h \
 	Editor.h \
 	Engine.h \
+	FallbackEditor.h \
 	FullPinyinEditor.h \
 	HalfFullConverter.h \
 	HashTable.h \

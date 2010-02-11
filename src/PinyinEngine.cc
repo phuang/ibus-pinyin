@@ -20,12 +20,10 @@ namespace PY {
 PinyinEngine::PinyinEngine (IBusEngine *engine)
     : m_engine (engine),
       m_need_update (0),
-      m_quote (TRUE),
-      m_double_quote (TRUE),
       m_prev_pressed_key (0),
       m_prev_pressed_key_result (0),
-      m_prev_commited_char (0),
-      m_input_mode (MODE_INIT)
+      m_input_mode (MODE_INIT),
+      m_fallback_editor (m_props)
 {
     gint i;
     /* create editors */
@@ -43,6 +41,8 @@ PinyinEngine::PinyinEngine (IBusEngine *engine)
     for (i = MODE_INIT; i < MODE_LAST; i++) {
         connectEditorSignals (m_editors[i]);
     }
+
+    connectEditorSignals (&m_fallback_editor);
 }
 
 /* destructor */
@@ -51,111 +51,6 @@ PinyinEngine::~PinyinEngine (void)
     for (gint i = 0; i < MODE_LAST; i++) {
         delete m_editors[i];
     }
-}
-
-#define CMSHM_MASK              \
-        (IBUS_CONTROL_MASK |    \
-         IBUS_MOD1_MASK |       \
-         IBUS_SUPER_MASK |      \
-         IBUS_HYPER_MASK |      \
-         IBUS_META_MASK)
-
-#define CMSHM_FILTER(modifiers)  \
-    (modifiers & (CMSHM_MASK))
-
-inline gboolean
-PinyinEngine::processPunct (guint keyval, guint keycode, guint modifiers)
-{
-    guint cmshm_modifiers = CMSHM_FILTER (modifiers);
-
-    if (G_UNLIKELY (keyval == IBUS_period && cmshm_modifiers == IBUS_CONTROL_MASK)) {
-        m_props.toggleModeFullPunct ();
-        return TRUE;
-    }
-
-    /* check ctrl, alt, hyper, supper masks */
-    if (cmshm_modifiers != 0)
-        return FALSE;
-
-    /* English mode */
-    if (G_UNLIKELY (!m_props.modeChinese ())) {
-        if (G_UNLIKELY (m_props.modeFull ()))
-            commit (HalfFullConverter::toFull (keyval));
-        else
-            commit (keyval);
-        return TRUE;
-    }
-    else {
-        /* Chinese mode */
-        if (m_props.modeFullPunct ()) {
-            switch (keyval) {
-            case '`':
-                commit ("·"); return TRUE;
-            case '~':
-                commit ("～"); return TRUE;
-            case '!':
-                commit ("！"); return TRUE;
-            // case '@':
-            // case '#':
-            case '$':
-                commit ("￥"); return TRUE;
-            // case '%':
-            case '^':
-                commit ("……"); return TRUE;
-            // case '&':
-            // case '*':
-            case '(':
-                commit ("（"); return TRUE;
-            case ')':
-                commit ("）"); return TRUE;
-            // case '-':
-            case '_':
-                commit ("——"); return TRUE;
-            // case '=':
-            // case '+':
-            case '[':
-                commit ("【"); return TRUE;
-            case ']':
-                commit ("】"); return TRUE;
-            case '{':
-                commit ("『"); return TRUE;
-            case '}':
-                commit ("』"); return TRUE;
-            case '\\':
-                commit ("、"); return TRUE;
-            // case '|':
-            case ';':
-                commit ("；"); return TRUE;
-            case ':':
-                commit ("："); return TRUE;
-            case '\'':
-                commit (m_quote ? "‘" : "’");
-                m_quote = !m_quote;
-                return TRUE;
-            case '"':
-                commit (m_double_quote ? "“" : "”");
-                m_double_quote = !m_double_quote;
-                return TRUE;
-            case ',':
-                commit ("，"); return TRUE;
-            case '.':
-                if (m_prev_commited_char >= '0' && m_prev_commited_char <= '9')
-                    commit (keyval);
-                else
-                    commit ("。");
-                return TRUE;
-            case '<':
-                commit ("《"); return TRUE;
-            case '>':
-                commit ("》"); return TRUE;
-            // case '/':
-            case '?':
-                commit ("？"); return TRUE;
-            }
-        }
-        commit (m_props.modeFull () ? HalfFullConverter::toFull (keyval) : keyval);
-    }
-    return TRUE;
 }
 
 gboolean
@@ -180,43 +75,7 @@ PinyinEngine::processKeyEvent (guint keyval, guint keycode, guint modifiers)
                 return TRUE;
             }
         }
-        modifiers &= (IBUS_SHIFT_MASK |
-                      IBUS_CONTROL_MASK |
-                      IBUS_MOD1_MASK |
-                      IBUS_SUPER_MASK |
-                      IBUS_HYPER_MASK |
-                      IBUS_META_MASK);
-
-        switch (keyval) {
-            /* letters */
-            case IBUS_a ... IBUS_z:
-            case IBUS_A ... IBUS_Z:
-            /* numbers */
-            case IBUS_0 ... IBUS_9:
-            case IBUS_KP_0 ... IBUS_KP_9:
-                if (modifiers == 0) {
-                    commit (m_props.modeFull () ? HalfFullConverter::toFull (keyval) : (gchar) keyval);
-                    retval = TRUE;
-                }
-                break;
-            /* punct */
-            case IBUS_exclam ... IBUS_slash:
-            case IBUS_colon ... IBUS_at:
-            case IBUS_bracketleft ... IBUS_quoteleft:
-            case IBUS_braceleft ... IBUS_asciitilde:
-                retval = processPunct (keyval, keycode, modifiers);
-                break;
-            /* space */
-            case IBUS_space:
-                if (modifiers == 0) {
-                    commit (m_props.modeFull () ? "　" : " ");
-                    retval = TRUE;
-                }
-                break;
-            /* others */
-            default:
-                break;
-        }
+        retval = m_fallback_editor.processKeyEvent (keyval, keycode, modifiers);
     }
 
     m_prev_pressed_key = keyval;
@@ -292,34 +151,6 @@ void
 PinyinEngine::candidateClicked (guint index, guint button, guint state)
 {
     m_editors[m_input_mode]->candidateClicked (index, button, state);
-}
-
-inline void
-PinyinEngine::commit (gchar ch)
-{
-    gchar str[2] = {ch, 0};
-    ibus_engine_commit_text (m_engine, StaticText (str));
-    m_prev_commited_char = ch;
-}
-
-inline void
-PinyinEngine::commit (gunichar ch)
-{
-    ibus_engine_commit_text (m_engine, Text (ch));
-    m_prev_commited_char = ch;
-}
-
-inline void
-PinyinEngine::commit (const gchar *str)
-{
-    ibus_engine_commit_text (m_engine, StaticText (str));
-    m_prev_commited_char = 0;
-}
-
-inline void
-PinyinEngine::commit (const String &str)
-{
-    commit ((const gchar *)str);
 }
 
 void
