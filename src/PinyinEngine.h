@@ -49,15 +49,7 @@ private:
     gboolean processPunct (guint keyval, guint keycode, guint modifiers);
 
 private:
-    void commit (void);
-    void commit (gchar ch);
-    void commit (gunichar ch);
-    void commit (const gchar *str);
-    void commit (const String &str);
-
     void showSetupDialog (void);
-
-
     void connectEditorSignals (Editor *editor);
 
 private:

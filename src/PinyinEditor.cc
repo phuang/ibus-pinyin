@@ -302,7 +302,7 @@ PinyinEditor::updatePreeditText (void)
         updatePreeditTextInEditingMode ();
 }
 
-void
+inline void
 PinyinEditor::updatePreeditTextInTypingMode (void)
 {
     m_buffer.truncate (0);
@@ -357,7 +357,7 @@ PinyinEditor::updatePreeditTextInTypingMode (void)
     Editor::updatePreeditText (preedit_text, candidate_begin, TRUE);
 }
 
-void
+inline void
 PinyinEditor::updatePreeditTextInEditingMode (void)
 {
     m_buffer.truncate (0);
