@@ -254,17 +254,11 @@ DoublePinyinEditor::updatePinyin (void)
 gboolean
 DoublePinyinEditor::processKeyEvent (guint keyval, guint keycode, guint modifiers)
 {
-    if (modifiers & IBUS_RELEASE_MASK) {
-        return m_text.isEmpty () ? FALSE : TRUE;
-    }
-
     /* handle ';' key */
     if (G_UNLIKELY (keyval == IBUS_semicolon)) {
-        if ((modifiers & IBUS_RELEASE_MASK) == 0) {
-            if (CMSHM_FILTER (modifiers) == 0) {
-                if (insert (keyval))
-                    return TRUE;
-            }
+        if (CMSHM_FILTER (modifiers) == 0) {
+            if (insert (keyval))
+                return TRUE;
         }
     }
 

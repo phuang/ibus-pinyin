@@ -21,7 +21,6 @@ PinyinEngine::PinyinEngine (IBusEngine *engine)
     : m_engine (engine),
       m_need_update (0),
       m_prev_pressed_key (0),
-      m_prev_pressed_key_result (0),
       m_input_mode (MODE_INIT),
       m_fallback_editor (m_props)
 {
@@ -58,28 +57,23 @@ PinyinEngine::processKeyEvent (guint keyval, guint keycode, guint modifiers)
 {
     gboolean retval;
 
-    retval = m_editors[m_input_mode]->processKeyEvent (keyval, keycode, modifiers);
-
-    if (retval == FALSE) {
-        // ignore release event
-        if (modifiers & IBUS_RELEASE_MASK) {
-            if (m_prev_pressed_key != keyval || m_prev_pressed_key_result != FALSE)
-                return TRUE;
-
-            switch (keyval) {
-            case IBUS_Shift_L:
-            case IBUS_Shift_R:
+    if (modifiers & IBUS_RELEASE_MASK) {
+        if (m_prev_pressed_key == keyval) {
+            if (keyval == IBUS_Shift_L || keyval == IBUS_Shift_R) {
                 m_props.toggleModeChinese ();
-                return TRUE;
-            default:
-                return TRUE;
             }
         }
-        retval = m_fallback_editor.processKeyEvent (keyval, keycode, modifiers);
+        m_prev_pressed_key = 0;
+        return TRUE;
     }
 
-    m_prev_pressed_key = keyval;
-    m_prev_pressed_key_result = retval;
+
+    retval =
+        m_editors[m_input_mode]->processKeyEvent (keyval, keycode, modifiers) ||
+        m_fallback_editor.processKeyEvent (keyval, keycode, modifiers);
+
+    m_prev_pressed_key = retval ? 0 : keyval;
+
     return retval;
 }
 

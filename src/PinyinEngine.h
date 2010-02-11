@@ -86,7 +86,6 @@ private:
 
 
     guint    m_prev_pressed_key;
-    gboolean m_prev_pressed_key_result;
 
     enum {
         MODE_INIT = 0,          // init mode

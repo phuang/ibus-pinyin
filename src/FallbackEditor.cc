@@ -112,10 +112,7 @@ gboolean
 FallbackEditor::processKeyEvent (guint keyval, guint keycode, guint modifiers)
 {
     gboolean retval = FALSE;
-    // ignore release event
-    if (modifiers & IBUS_RELEASE_MASK) {
-        return TRUE;
-    }
+
     modifiers &= (IBUS_SHIFT_MASK |
                   IBUS_CONTROL_MASK |
                   IBUS_MOD1_MASK |

@@ -216,10 +216,6 @@ PinyinEditor::processKeyEvent (guint keyval, guint keycode, guint modifiers)
 {
     gboolean result = FALSE;
 
-    if (modifiers & IBUS_RELEASE_MASK) {
-        return m_text.isEmpty () ? FALSE : TRUE;
-    }
-
     modifiers &= (IBUS_SHIFT_MASK |
                   IBUS_CONTROL_MASK |
                   IBUS_MOD1_MASK |
