@@ -136,6 +136,7 @@ PinyinEditor::processPunct (guint keyval, guint keycode, guint modifiers)
             selectCandidate (m_lookup_table.cursorPos ());
         }
         commit ();
+        return FALSE;
     }
     return TRUE;
 }
