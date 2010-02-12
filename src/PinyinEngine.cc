@@ -67,10 +67,10 @@ PinyinEngine::processKeyEvent (guint keyval, guint keycode, guint modifiers)
         return TRUE;
     }
 
+    retval = m_props.modeChinese () && m_editors[m_input_mode]->processKeyEvent (keyval, keycode, modifiers);
 
-    retval =
-        m_editors[m_input_mode]->processKeyEvent (keyval, keycode, modifiers) ||
-        m_fallback_editor.processKeyEvent (keyval, keycode, modifiers);
+    if (G_UNLIKELY (!retval))
+        retval = m_fallback_editor.processKeyEvent (keyval, keycode, modifiers);
 
     m_prev_pressed_key = retval ? 0 : keyval;
 
