@@ -3,6 +3,8 @@
 #include <ibus.h>
 #include <string.h>
 #include <libintl.h>
+#include "RawEditor.h"
+#include "ExtEditor.h"
 #include "FullPinyinEditor.h"
 #include "DoublePinyinEditor.h"
 #include "PinyinEngine.h"
@@ -31,9 +33,7 @@ PinyinEngine::PinyinEngine (IBusEngine *engine)
     else
         m_editors[MODE_INIT] = new FullPinyinEditor (m_props);
 
-    for (i = MODE_RAW; i < MODE_LAST; i++) {
-        m_editors[i] = new RawEditor (m_props);
-    }
+    m_editors[MODE_EXTENSION] = new ExtEditor (m_props);
 
     m_props.signalUpdateProperty ().connect (sigc::mem_fun (*this, &PinyinEngine::slotUpdateProperty));
 

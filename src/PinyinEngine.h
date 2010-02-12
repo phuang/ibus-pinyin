@@ -5,7 +5,6 @@
 #include <ibus.h>
 #include "Pointer.h"
 #include "Database.h"
-#include "RawEditor.h"
 #include "LookupTable.h"
 #include "Property.h"
 #include "Config.h"
@@ -81,9 +80,11 @@ private:
 
     enum {
         MODE_INIT = 0,          // init mode
+    #if 0
         MODE_RAW,               // raw mode
         MODE_ENGLISH,           // press v into English input mode
         MODE_STROKE,            // press u into stroke input mode
+    #endif
         MODE_EXTENSION,         // press i into extension input mode
         MODE_LAST,
     } m_input_mode;

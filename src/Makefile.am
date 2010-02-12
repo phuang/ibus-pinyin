@@ -66,6 +66,7 @@ ibus_engine_h_sources = \
 	DoublePinyinTable.h \
 	Editor.h \
 	Engine.h \
+	ExtEditor.h \
 	FallbackEditor.h \
 	FullPinyinEditor.h \
 	HalfFullConverter.h \
