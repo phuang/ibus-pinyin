@@ -76,7 +76,7 @@ PinyinEngine::processKeyEvent (guint keyval, guint keycode, guint modifiers)
     if (G_UNLIKELY (!retval))
         retval = m_fallback_editor.processKeyEvent (keyval, keycode, modifiers);
 
-    /* store handled key event */
+    /* store ignored key event by editors */
     m_prev_pressed_key = retval ? 0 : keyval;
 
     return retval;
