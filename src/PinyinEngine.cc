@@ -57,7 +57,11 @@ PinyinEngine::processKeyEvent (guint keyval, guint keycode, guint modifiers)
 {
     gboolean retval;
 
+    /* check Shift + Release hotkey,
+     * and then ignore other Release key event */
     if (modifiers & IBUS_RELEASE_MASK) {
+        /* press and release keyval are same,
+         * and no other key event between the press and release ket event*/
         if (m_prev_pressed_key == keyval) {
             if (keyval == IBUS_Shift_L || keyval == IBUS_Shift_R) {
                 m_props.toggleModeChinese ();
@@ -72,6 +76,7 @@ PinyinEngine::processKeyEvent (guint keyval, guint keycode, guint modifiers)
     if (G_UNLIKELY (!retval))
         retval = m_fallback_editor.processKeyEvent (keyval, keycode, modifiers);
 
+    /* store handled key event */
     m_prev_pressed_key = retval ? 0 : keyval;
 
     return retval;
