@@ -40,6 +40,7 @@ ibus_engine_c_sources = \
 	DoublePinyinEditor.cc \
 	Editor.cc \
 	Engine.cc \
+	ExtEditor.cc \
 	FallbackEditor.cc \
 	FullPinyinEditor.cc \
 	HalfFullConverter.cc \
