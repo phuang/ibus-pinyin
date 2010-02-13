@@ -85,7 +85,7 @@ PinyinEngine::processKeyEvent (guint keyval, guint keycode, guint modifiers)
 void
 PinyinEngine::focusIn (void)
 {
-    /* reset pinyin parser */
+    /* reset pinyin editor */
     if (Config::doublePinyin ()) {
         if (dynamic_cast <DoublePinyinEditor *> (m_editors[MODE_INIT]) == NULL)
             delete m_editors[MODE_INIT];
