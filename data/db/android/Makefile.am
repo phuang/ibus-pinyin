@@ -26,7 +26,7 @@ create_scripts = \
 	$(NULL)
 data_files = \
 	README \
-	rawdict_utf16_65105_freq.txt \
+	rawdict_utf16_65105_freq.sql \
 	$(NULL)
 
 if IBUS_BUILD_DB_ANDROID
@@ -38,7 +38,7 @@ endif
 
 android.db: $(android_raw_data) $(create_scripts)
 	$(RM) $@
-	$(srcdir)/create_db.py $(srcdir)/rawdict_utf16_65105_freq.txt | sqlite3 $@
+	cat $(srcdir)/rawdict_utf16_65105_freq.sql | sqlite3 $@
 
 EXTRA_DIST = \
 	$(data_files) \

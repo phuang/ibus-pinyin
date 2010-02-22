@@ -1,0 +1,14 @@
+Local Modification:
+
+- data/db/android/rawdict_utf16_65105_freq.sql
+
+Added. We have to re-generate this file on host OS (i.e. Ubuntu) every time when we merge the upstream changes by:
+
+% cd data/db/android/
+% ./create_db.py rawdict_utf16_65105_freq.txt > data/db/android/rawdict_utf16_65105_freq.sql
+
+- data/db/android/Makefile.am
+
+Modified "android.db:" rule so that the create_db.py, which depends on too many python modules such as python-sqlite, script is never used on build-time.
+We use the pre-processed file, rawdict_utf16_65105_freq.sql, instead.
+
