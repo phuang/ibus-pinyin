@@ -140,7 +140,32 @@ FallbackEditor::processKeyEvent (guint keyval, guint keycode, guint modifiers)
         case IBUS_braceleft ... IBUS_asciitilde:
             retval = processPunct (keyval, keycode, modifiers);
             break;
+        case IBUS_KP_Equal:
+            retval = processPunct ('=', keycode, modifiers);
+            break;
+        case IBUS_KP_Multiply:
+            retval = processPunct ('*', keycode, modifiers);
+            break;
+        case IBUS_KP_Add:
+            retval = processPunct ('+', keycode, modifiers);
+            break;
+        #if 0
+        case IBUS_KP_Separator:
+            retval = processPunct (IBUS_separator, keycode, modifiers);
+            break;
+        #endif
+        case IBUS_KP_Subtract:
+            retval = processPunct ('-', keycode, modifiers);
+            break;
+        case IBUS_KP_Decimal:
+            retval = processPunct ('.', keycode, modifiers);
+            break;
+        case IBUS_KP_Divide:
+            retval = processPunct ('/', keycode, modifiers);
+            break;
         /* space */
+        case IBUS_KP_Space:
+            keyval = IBUS_space;
         case IBUS_space:
             if (modifiers == 0) {
                 commit (m_props.modeFull () ? "　" : " ");
