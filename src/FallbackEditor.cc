@@ -125,8 +125,9 @@ FallbackEditor::processKeyEvent (guint keyval, guint keycode, guint modifiers)
         case IBUS_a ... IBUS_z:
         case IBUS_A ... IBUS_Z:
         /* numbers */
-        case IBUS_0 ... IBUS_9:
         case IBUS_KP_0 ... IBUS_KP_9:
+            keyval = keyval + IBUS_0 - IBUS_KP_0;
+        case IBUS_0 ... IBUS_9:
             if (modifiers == 0) {
                 commit (m_props.modeFull () ? HalfFullConverter::toFull (keyval) : (gchar) keyval);
                 retval = TRUE;
