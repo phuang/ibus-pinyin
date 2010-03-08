@@ -181,6 +181,7 @@ pinyin.xml: pinyin.xml.in
 	) > $@
 
 test: ibus-engine-pinyin
+	$(ENV) G_DEBUG=fatal_warnings \
 	$(builddir)/ibus-engine-pinyin
 
 ZhConversion.php:
