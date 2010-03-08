@@ -121,15 +121,15 @@ FallbackEditor::processKeyEvent (guint keyval, guint keycode, guint modifiers)
                   IBUS_META_MASK);
 
     switch (keyval) {
+        /* numbers */
+        case IBUS_KP_0 ... IBUS_KP_9:
+            keyval = keyval - IBUS_KP_0 + IBUS_0;
+        case IBUS_0 ... IBUS_9:
         /* letters */
         case IBUS_a ... IBUS_z:
         case IBUS_A ... IBUS_Z:
-        /* numbers */
-        case IBUS_KP_0 ... IBUS_KP_9:
-            keyval = keyval + IBUS_0 - IBUS_KP_0;
-        case IBUS_0 ... IBUS_9:
             if (modifiers == 0) {
-                commit (m_props.modeFull () ? HalfFullConverter::toFull (keyval) : (gchar) keyval);
+                commit (m_props.modeFull () ? HalfFullConverter::toFull (keyval) : keyval);
                 retval = TRUE;
             }
             break;
