@@ -66,17 +66,16 @@ HalfFullConverter::m_table[][3] = {
     { 0xFFE9, 0x2190, 4 },
     { 0xFFED, 0x25A0, 1 },
     { 0xFFEE, 0x25CB, 1 },
-    { 0, 0, 0 },
 };
 
 gunichar
 HalfFullConverter::toFull (gunichar ch)
 {
-    for (guint i = 0; m_table[i][0] != 0; i++) {
+    for (guint i = 0; i < G_N_ELEMENTS (m_table); i++) {
         if (G_UNLIKELY (ch < m_table[i][0]))
             return ch;
         if (G_UNLIKELY (ch < m_table[i][0] + m_table[i][2]))
-            return ch + m_table[i][1] - m_table[i][0];
+            return ch - m_table[i][0] + m_table[i][1];
     }
     return ch;
 }
@@ -84,12 +83,12 @@ HalfFullConverter::toFull (gunichar ch)
 gunichar
 HalfFullConverter::toHalf (gunichar ch)
 {
-    for (guint i = 0; m_table[i][0] != 0; i++) {
+    for (guint i = 0; i < G_N_ELEMENTS (m_table); i++) {
         if (G_LIKELY (ch < m_table[i][1]))
             continue;
         if (G_LIKELY (ch >= m_table[i][1] + m_table[i][2]))
             continue;
-        return ch + m_table[i][0] + m_table[i][1];
+        return ch - m_table[i][1] + m_table[i][0];
     }
     return ch;
 }
