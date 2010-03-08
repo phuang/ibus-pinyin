@@ -21,7 +21,6 @@ namespace PY {
 /* constructor */
 PinyinEngine::PinyinEngine (IBusEngine *engine)
     : m_engine (engine),
-      m_need_update (0),
       m_prev_pressed_key (0),
       m_input_mode (MODE_INIT),
       m_fallback_editor (m_props)

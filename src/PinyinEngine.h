@@ -67,12 +67,6 @@ private:
 
 private:
     Pointer<IBusEngine>  m_engine;      // engine pointer
-
-    String m_buffer;                    // string buffer
-
-    gint m_need_update;                 // need update preedit, aux, or lookup table
-
-    LookupTable m_lookup_table;
     PinyinProperties m_props;
 
 
