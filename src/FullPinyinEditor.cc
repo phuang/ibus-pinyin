@@ -3,12 +3,16 @@
 
 namespace PY {
 
-
-FullPinyinEditor::FullPinyinEditor (void)
+FullPinyinEditor::FullPinyinEditor (PinyinProperties & props)
+    : PinyinEditor (props)
 {
 }
 
-gboolean
+FullPinyinEditor::~FullPinyinEditor (void)
+{
+}
+
+void
 FullPinyinEditor::reset (void)
 {
     gboolean retval = FALSE;
@@ -22,10 +26,10 @@ FullPinyinEditor::reset (void)
         retval = TRUE;
     }
 
-    if (retval)
+    if (retval) {
         updatePinyin ();
-
-    return retval;
+        update ();
+    }
 }
 
 gboolean
@@ -47,6 +51,7 @@ FullPinyinEditor::insert (gint ch)
             updatePinyin ();
         }
     }
+    update ();
     return TRUE;
 }
 
@@ -60,6 +65,7 @@ FullPinyinEditor::removeCharBefore (void)
     m_text.erase (m_cursor, 1);
 
     updatePinyin ();
+    update ();
 
     return TRUE;
 }
@@ -71,6 +77,7 @@ FullPinyinEditor::removeCharAfter (void)
         return FALSE;
 
     m_text.erase (m_cursor, 1);
+    update ();
 
     return TRUE;
 }
@@ -95,6 +102,8 @@ FullPinyinEditor::removeWordBefore (void)
 
     m_text.erase (cursor, m_cursor - cursor);
     m_cursor = cursor;
+    updatePhraseEditor ();
+    update ();
     return TRUE;
 }
 
@@ -105,6 +114,7 @@ FullPinyinEditor::removeWordAfter (void)
         return FALSE;
 
     m_text.erase (m_cursor, -1);
+    update ();
     return TRUE;
 }
 
@@ -116,7 +126,7 @@ FullPinyinEditor::moveCursorLeft (void)
 
     m_cursor --;
     updatePinyin ();
-
+    update ();
     return TRUE;
 }
 
@@ -128,6 +138,7 @@ FullPinyinEditor::moveCursorRight (void)
 
     m_cursor ++;
     updatePinyin ();
+    update ();
 
     return TRUE;
 }
@@ -147,6 +158,8 @@ FullPinyinEditor::moveCursorLeftByWord (void)
     m_cursor -= p.len;
     m_pinyin_len -= p.len;
     m_pinyin.pop ();
+    updatePhraseEditor ();
+    update ();
 
     return TRUE;
 }
@@ -166,6 +179,8 @@ FullPinyinEditor::moveCursorToBegin (void)
     m_cursor = 0;
     m_pinyin.removeAll ();
     m_pinyin_len = 0;
+    updatePhraseEditor ();
+    update ();
 
     return TRUE;
 }
@@ -178,6 +193,7 @@ FullPinyinEditor::moveCursorToEnd (void)
 
     m_cursor = m_text.length ();
     updatePinyin  ();
+    update ();
 
     return TRUE;
 }
@@ -196,8 +212,8 @@ FullPinyinEditor::updatePinyin (void)
                                        m_pinyin,            // result
                                        MAX_PHRASE_LEN);     // max result length
     }
+
+    updatePhraseEditor ();
 }
 
 };
-
-

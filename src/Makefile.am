@@ -20,17 +20,17 @@
 
 # @MAINTAINER_MODE_FALSE@skip_gentable=test -f $@ ||
 
-AM_CFLAGS = \
-	@IBUS_CFLAGS@ \
-	@SQLITE_CFLAGS@ \
-	-DPKGDATADIR=\"$(pkgdatadir)\" \
-	$(NULL)
-AM_LDADD = \
-	@IBUS_LIBS@ \
-	@SQLITE_LIBS@ \
-	$(NULL)
-
-AM_CXXFLAGS = $(AM_CFLAGS)
+# AM_CFLAGS = \
+# 	@IBUS_CFLAGS@ \
+# 	@SQLITE_CFLAGS@ \
+# 	-DPKGDATADIR=\"$(pkgdatadir)\" \
+# 	$(NULL)
+# AM_CXXFLAGS = $(AM_CFLAGS)
+# AM_LDADD = \
+# 	@IBUS_LIBS@ \
+# 	@SQLITE_LIBS@ \
+# 	$(NULL)
+# 
 
 libexec_PROGRAMS = ibus-engine-pinyin
 ibus_engine_c_sources = \
@@ -38,7 +38,10 @@ ibus_engine_c_sources = \
 	CustomPhrase.cc \
 	Database.cc \
 	DoublePinyinEditor.cc \
+	Editor.cc \
 	Engine.cc \
+	ExtEditor.cc \
+	FallbackEditor.cc \
 	FullPinyinEditor.cc \
 	HalfFullConverter.cc \
 	Main.cc \
@@ -46,6 +49,7 @@ ibus_engine_c_sources = \
 	PinyinEditor.cc \
 	PinyinEngine.cc \
 	PinyinParser.cc \
+	PinyinProperties.cc \
 	SimpTradConverter.cc \
 	SpecialTable.cc \
 	$(NULL)
@@ -61,7 +65,10 @@ ibus_engine_h_sources = \
 	Database.h \
 	DoublePinyinEditor.h \
 	DoublePinyinTable.h \
+	Editor.h \
 	Engine.h \
+	ExtEditor.h \
+	FallbackEditor.h \
 	FullPinyinEditor.h \
 	HalfFullConverter.h \
 	HashTable.h \
@@ -74,6 +81,7 @@ ibus_engine_h_sources = \
 	PinyinEngine.h \
 	PinyinParser.h \
 	PinyinParserTable.h \
+	PinyinProperties.h \
 	Pointer.h \
 	RawEditor.h \
 	Regex.h \
@@ -97,6 +105,7 @@ ibus_engine_pinyin_CXXFLAGS = \
 	@IBUS_CFLAGS@ \
 	@SQLITE_CFLAGS@ \
 	@UUID_CFLAGS@ \
+	@SIGC_CFLAGS@ \
 	-DGETTEXT_PACKAGE=\"@GETTEXT_PACKAGE@\" \
 	-DPKGDATADIR=\"$(pkgdatadir)\" \
 	-DLIBEXECDIR=\"$(libexecdir)\" \
@@ -105,6 +114,7 @@ ibus_engine_pinyin_LDADD = \
 	@IBUS_LIBS@ \
 	@SQLITE_LIBS@ \
 	@UUID_LIBS@ \
+	@SIGC_LIBS@ \
 	$(NULL)
 
 BUILT_SOURCES = \
@@ -171,6 +181,7 @@ pinyin.xml: pinyin.xml.in
 	) > $@
 
 test: ibus-engine-pinyin
+	$(ENV) G_DEBUG=fatal_warnings \
 	$(builddir)/ibus-engine-pinyin
 
 ZhConversion.php:

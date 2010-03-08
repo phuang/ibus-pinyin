@@ -4,17 +4,16 @@
 
 namespace PY {
 
-/* init static members */
 Database PhraseEditor::m_database;
 
-PhraseEditor::PhraseEditor (void)
+PhraseEditor::PhraseEditor (PinyinProperties & props)
     : m_candidates (32),
       m_selected_phrases (8),
       m_selected_string (32),
       m_candidate_0_phrases (8),
       m_pinyin (16),
       m_cursor (0),
-      m_mode_simp (Config::initSimpChinese ())
+      m_props (props)
 {
 }
 
@@ -22,12 +21,12 @@ PhraseEditor::~PhraseEditor (void)
 {
 }
 
-void
+gboolean
 PhraseEditor::update (const PinyinArray &pinyin)
 {
     /* the length of pinyin must not bigger than MAX_PHRASE_LEN */
     g_assert (pinyin.length () <= MAX_PHRASE_LEN);
-
+#if 0
     gboolean diff = FALSE;
 
     if (m_cursor > pinyin.length ()) {
@@ -42,16 +41,19 @@ PhraseEditor::update (const PinyinArray &pinyin)
         }
     }
 
-    m_pinyin = pinyin;
-
-    if (diff) {
-        /* FIXME, should not remove all phrases1 */
-        m_selected_phrases.removeAll ();
-        m_selected_string.truncate (0);
-        m_cursor = 0;
+    if (diff == FALSE){
+        return FALSE;
     }
+#endif
 
+    m_pinyin = pinyin;
+    m_cursor = 0;
+
+    /* FIXME, should not remove all phrases1 */
+    m_selected_phrases.removeAll ();
+    m_selected_string.truncate (0);
     updateCandidates ();
+    return TRUE;
 }
 
 gboolean
@@ -71,7 +73,7 @@ PhraseEditor::selectCandidate (guint i)
 
     if (G_LIKELY (i == 0)) {
         m_selected_phrases << m_candidate_0_phrases;
-        if (G_LIKELY (m_mode_simp))
+        if (G_LIKELY (m_props.modeSimp ()))
             m_selected_string << m_candidates[0].phrase;
         else
             SimpTradConverter::simpToTrad (m_candidates[0].phrase, m_selected_string);
@@ -79,7 +81,7 @@ PhraseEditor::selectCandidate (guint i)
     }
     else {
         m_selected_phrases << m_candidates[i];
-        if (G_LIKELY (m_mode_simp))
+        if (G_LIKELY (m_props.modeSimp ()))
             m_selected_string << m_candidates[i].phrase;
         else
             SimpTradConverter::simpToTrad (m_candidates[i].phrase, m_selected_string);

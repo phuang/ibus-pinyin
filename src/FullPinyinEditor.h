@@ -8,8 +8,17 @@ namespace PY {
 class FullPinyinEditor : public PinyinEditor {
 
 public:
-    FullPinyinEditor (void);
+    FullPinyinEditor (PinyinProperties & props);
+    ~FullPinyinEditor (void);
 
+public:
+    /* virtual functions */
+#if 0
+    virtual gboolean processKeyEvent (guint keyval, guint keycode, guint modifiers);
+#endif
+    virtual void reset (void);
+
+protected:
     gboolean insert (gint ch);
 
     gboolean removeCharBefore (void);
@@ -23,8 +32,6 @@ public:
     gboolean moveCursorRightByWord (void);
     gboolean moveCursorToBegin (void);
     gboolean moveCursorToEnd (void);
-
-    gboolean reset (void);
 
 private:
     void updatePinyin (void);

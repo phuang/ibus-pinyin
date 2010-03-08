@@ -3,6 +3,7 @@
 
 #include <ibus.h>
 #include "Pointer.h"
+#include "String.h"
 
 namespace PY {
 

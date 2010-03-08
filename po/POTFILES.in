@@ -1,11 +1,17 @@
 src/Config.cc
+src/CustomPhrase.cc
 src/Database.cc
+src/DoublePinyinEditor.cc
+src/Editor.cc
 src/Engine.cc
+src/FullPinyinEditor.cc
 src/HalfFullConverter.cc
 src/Main.cc
 src/PhraseEditor.cc
 src/PinyinEditor.cc
 src/PinyinEngine.cc
 src/PinyinParser.cc
+src/PinyinProperties.cc
+src/SimpTradConverter.cc
 src/SpecialTable.cc
 [type: gettext/glade]setup/ibus-pinyin-preferences.ui

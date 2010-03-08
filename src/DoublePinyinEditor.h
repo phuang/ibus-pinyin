@@ -8,7 +8,7 @@ namespace PY {
 class DoublePinyinEditor : public PinyinEditor {
 
 public:
-    DoublePinyinEditor (void);
+    DoublePinyinEditor (PinyinProperties & props);
 
     gboolean insert (gint ch);
 
@@ -24,7 +24,10 @@ public:
     gboolean moveCursorToBegin (void);
     gboolean moveCursorToEnd (void);
 
-    gboolean reset (void);
+    /* override virtual functions */
+    gboolean processKeyEvent (guint keyval, guint keycode, guint modifiers);
+    void reset (void);
+
 private:
     void updatePinyin (void);
     const Pinyin *isPinyin (gchar i, gchar j);

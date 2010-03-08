@@ -5,12 +5,12 @@
 #include <ibus.h>
 #include "Pointer.h"
 #include "Database.h"
-#include "FullPinyinEditor.h"
-#include "PhraseEditor.h"
-#include "RawEditor.h"
 #include "LookupTable.h"
 #include "Property.h"
 #include "Config.h"
+#include "Editor.h"
+#include "FallbackEditor.h"
+#include "PinyinProperties.h"
 
 namespace PY {
 
@@ -26,18 +26,13 @@ public:
     }
 
     void reset (gboolean need_update = TRUE) {
-        resetQuote ();
         m_input_mode = MODE_INIT;
-        m_pinyin_editor->reset ();
-        m_phrase_editor.reset ();
-        m_raw_editor.reset ();
-        updateUI (need_update);
+        for (gint i = 0; i < MODE_LAST; i++) {
+            m_editors[i]->reset ();
+        }
+        m_fallback_editor.reset ();
     }
 
-    void resetQuote (void) {
-        m_quote = TRUE;
-        m_double_quote = TRUE;
-    }
 
     void enable (void) {}
     void disable (void) {}
@@ -46,107 +41,50 @@ public:
     void cursorUp (void);
     void cursorDown (void);
 
-    void propertyActivate (const gchar *prop_name, guint prop_state);
+    gboolean propertyActivate (const gchar *prop_name, guint prop_state);
     void candidateClicked (guint index, guint button, guint state);
 
-    void updateUI (gboolean now = TRUE) {
-        if (G_UNLIKELY (now || m_need_update >= 4)) {
-            updateLookupTable ();
-            updateAuxiliaryText ();
-            updatePreeditText ();
-            m_need_update = 0;
-        } else {
-            if (m_need_update == 0) {
-                g_idle_add ((GSourceFunc) delayUpdateUIHandler, this);
-            }
-            m_need_update ++;
-        }
-    }
-
 private:
-    gboolean processInitMode (guint keyval, guint keycode, guint modifiers);
-    gboolean processRawMode (guint keyval, guint keycode, guint modifiers);
-    gboolean processEnglishMode (guint keyval, guint keycode, guint modifiers);
-    gboolean processStrokeMode (guint keyval, guint keycode, guint modifiers);
-    gboolean processExtensionMode (guint keyval, guint keycode, guint modifiers);
-    gboolean processPinyin (guint keyval, guint keycode, guint modifiers);
-    gboolean processCapitalLetter (guint keyval, guint keycode, guint modifiers);
-    gboolean processNumber (guint keyval, guint keycode, guint modifiers);
     gboolean processPunct (guint keyval, guint keycode, guint modifiers);
-    gboolean processSpace (guint keyval, guint keycode, guint modifiers);
-    gboolean processOthers (guint keyval, guint keycode, guint modifiers);
 
 private:
-    gboolean isEmpty (void) { return m_pinyin_editor->isEmpty (); }
-
-    void commit (void);
-    void commit (gchar ch);
-    void commit (gunichar ch);
-    void commit (const gchar *str);
-    void commit (const String &str);
-
-    void toggleModeChinese (void);
-    void toggleModeFull (void);
-    void toggleModeFullPunct (void);
-    void toggleModeSimp (void);
     void showSetupDialog (void);
+    void connectEditorSignals (Editor *editor);
 
-    gboolean selectCandidate (guint i);
-    gboolean selectCandidateInPage (guint i);
-    gboolean resetCandidate (guint i);
-    gboolean resetCandidateInPage (guint i);
-    void updatePreeditText (void);
-    void updatePreeditTextInInitMode (void);
-    void updatePreeditTextInRawMode (void);
-    void updatePreeditTextInInitEditingMode (void);
-    void updatePreeditTextInInitTypingMode (void);
-    void updateAuxiliaryText (void);
-    void updateLookupTable (void);
-    void updatePhraseEditor (void);
-
-    static gboolean delayUpdateUIHandler (PinyinEngine *pinyin) {
-        if (pinyin->m_need_update > 0)
-            pinyin->updateUI (TRUE);
-        return FALSE;
-    }
+private:
+    void slotCommitText (Text & text);
+    void slotUpdatePreeditText (Text & text, guint cursor, gboolean visible);
+    void slotShowPreeditText (void);
+    void slotHidePreeditText (void);
+    void slotUpdateAuxiliaryText (Text & text, gboolean visible);
+    void slotShowAuxiliaryText (void);
+    void slotHideAuxiliaryText (void);
+    void slotUpdateLookupTable (LookupTable &table, gboolean visible);
+    void slotUpdateLookupTableFast (LookupTable &table, gboolean visible);
+    void slotShowLookupTable (void);
+    void slotHideLookupTable (void);
+    void slotUpdateProperty (Property & prop);
 
 private:
     Pointer<IBusEngine>  m_engine;      // engine pointer
+    PinyinProperties m_props;
 
-    PinyinEditor *m_pinyin_editor;      // pinyin editor
-    PhraseEditor m_phrase_editor;       // phrase editor
-    String m_buffer;                    // string buffer
-
-    gint m_need_update;                 // need update preedit, aux, or lookup table
-
-    LookupTable m_lookup_table;
-    Property    m_prop_chinese;
-    Property    m_prop_full;
-    Property    m_prop_full_punct;
-    Property    m_prop_simp;
-    Property    m_prop_setup;
-    PropList    m_props;
-
-    gboolean m_mode_chinese;
-    gboolean m_mode_full;
-    gboolean m_mode_full_punct;
-
-    gboolean m_quote;
-    gboolean m_double_quote;
 
     guint    m_prev_pressed_key;
-    gboolean m_prev_pressed_key_result;
-    gunichar m_prev_commited_char;
 
     enum {
         MODE_INIT = 0,          // init mode
+    #if 0
         MODE_RAW,               // raw mode
         MODE_ENGLISH,           // press v into English input mode
         MODE_STROKE,            // press u into stroke input mode
+    #endif
         MODE_EXTENSION,         // press i into extension input mode
+        MODE_LAST,
     } m_input_mode;
 
-    RawEditor m_raw_editor;
+    Editor *m_editors[MODE_LAST];
+    FallbackEditor m_fallback_editor;
 };
 
 };
