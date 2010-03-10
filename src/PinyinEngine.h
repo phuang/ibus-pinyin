@@ -74,8 +74,8 @@ private:
 
     enum {
         MODE_INIT = 0,          // init mode
-    #if 0
         MODE_RAW,               // raw mode
+    #if 0
         MODE_ENGLISH,           // press v into English input mode
         MODE_STROKE,            // press u into stroke input mode
     #endif

@@ -181,8 +181,11 @@ pinyin.xml: pinyin.xml.in
 	) > $@
 
 test: ibus-engine-pinyin
-	$(ENV) G_DEBUG=fatal_warnings \
 	$(builddir)/ibus-engine-pinyin
+
+# test: ibus-engine-pinyin
+# 	$(ENV) G_DEBUG=fatal_warnings \
+# 	$(builddir)/ibus-engine-pinyin
 
 ZhConversion.php:
 	wget 'http://svn.wikimedia.org/viewvc/mediawiki/trunk/phase3/includes/ZhConversion.php?view=co&content-type=text%2Fplain' \

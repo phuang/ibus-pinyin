@@ -23,6 +23,12 @@ public:
     virtual void reset (void);
     virtual void candidateClicked (guint index, guint button, guint state);
 
+    const String & text (void) const { return m_text; }
+    void setText (const String & text, guint cursor) {
+        m_text = text;
+        m_cursor = cursor;
+    }
+
     /* signals */
     sigc::signal <void, Text &> signalCommitText (void) { return m_signal_commit_text; }
     sigc::signal <void, Text &, guint, gboolean> signalUpdatePreeditText (void) { return m_signal_update_preedit_text; }

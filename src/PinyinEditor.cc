@@ -70,7 +70,7 @@ PinyinEditor::processNumber (guint keyval, guint keycode, guint modifiers)
     }
     if (modifiers == 0)
         selectCandidateInPage (i);
-    else if ((modifiers & ~ IBUS_LOCK_MASK) == IBUS_CONTROL_MASK)
+    else if ((modifiers & ~IBUS_LOCK_MASK) == IBUS_CONTROL_MASK)
         resetCandidateInPage (i);
     return TRUE;
 }

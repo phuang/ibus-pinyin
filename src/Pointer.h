@@ -23,7 +23,9 @@ public:
 
         m_p = p;
         if (p) {
-            // g_debug ("%s, floating = %d",G_OBJECT_TYPE_NAME (p), g_object_is_floating (p));
+	#if 0
+            g_debug ("%s, floating = %d",G_OBJECT_TYPE_NAME (p), g_object_is_floating (p));
+	#endif
             g_object_ref_sink (p);
         }
     }

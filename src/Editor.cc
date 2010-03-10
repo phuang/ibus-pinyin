@@ -16,8 +16,7 @@ Editor::~Editor (void)
 gboolean
 Editor::processKeyEvent (guint keyval, guint keycode, guint modifiers)
 {
-    modifiers &= (IBUS_SHIFT_MASK |
-                  IBUS_CONTROL_MASK |
+    modifiers &= (IBUS_CONTROL_MASK |
                   IBUS_MOD1_MASK |
                   IBUS_SUPER_MASK |
                   IBUS_HYPER_MASK |
@@ -68,6 +67,7 @@ Editor::processKeyEvent (guint keyval, guint keycode, guint modifiers)
             update ();
         }
         return TRUE;
+    case IBUS_space:
     case IBUS_Return:
     case IBUS_KP_Enter:
         {
@@ -80,7 +80,6 @@ Editor::processKeyEvent (guint keyval, guint keycode, guint modifiers)
         reset ();
         return TRUE;
     default:
-        g_debug ("Unknown keyval %d", keyval);
         return TRUE;
     }
 }

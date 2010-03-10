@@ -32,6 +32,7 @@ PinyinEngine::PinyinEngine (IBusEngine *engine)
     else
         m_editors[MODE_INIT] = new FullPinyinEditor (m_props);
 
+    m_editors[MODE_RAW] = new RawEditor (m_props);
     m_editors[MODE_EXTENSION] = new ExtEditor (m_props);
 
     m_props.signalUpdateProperty ().connect (sigc::mem_fun (*this, &PinyinEngine::slotUpdateProperty));
@@ -51,10 +52,18 @@ PinyinEngine::~PinyinEngine (void)
     }
 }
 
+
+#define CASHM_MASK       \
+    (IBUS_CONTROL_MASK | \
+    IBUS_MOD1_MASK |     \
+    IBUS_SUPER_MASK |    \
+    IBUS_HYPER_MASK |    \
+    IBUS_META_MASK)
+
 gboolean
 PinyinEngine::processKeyEvent (guint keyval, guint keycode, guint modifiers)
 {
-    gboolean retval;
+    gboolean retval = FALSE;
 
     /* check Shift + Release hotkey,
      * and then ignore other Release key event */
@@ -66,17 +75,48 @@ PinyinEngine::processKeyEvent (guint keyval, guint keycode, guint modifiers)
                 m_props.toggleModeChinese ();
             }
         }
-        m_prev_pressed_key = 0;
         return TRUE;
     }
 
-    retval = m_props.modeChinese () && m_editors[m_input_mode]->processKeyEvent (keyval, keycode, modifiers);
+    if (m_props.modeChinese ()) {
+        if (m_input_mode == MODE_INIT &&
+            ((modifiers & CASHM_MASK) == 0)) {
+            const String & text = m_editors[MODE_INIT]->text ();
+            if (text.isEmpty ()) {
+            #if 0
+                if (keyval == IBUS_i) {
+                    m_input_mode = MODE_EXTENSION;
+                }
+            #endif
+            }
+            else {
+                if (m_prev_pressed_key != IBUS_period) {
+                    if ((keyval == IBUS_at || keyval == IBUS_colon)) {
+                        m_input_mode = MODE_RAW;
+                        m_editors[MODE_RAW]->setText (text, text.length ());
+                        m_editors[MODE_INIT]->reset ();
+                    }
+                }
+                else {
+                    if ((keyval >= IBUS_a && keyval <= IBUS_z) ||
+                        (keyval >= IBUS_A && keyval <= IBUS_Z)) {
+                        String tmp = text;
+                        tmp += ".";
+                        m_input_mode = MODE_RAW;
+                        m_editors[MODE_RAW]->setText (tmp, tmp.length ());
+                        m_editors[MODE_INIT]->reset ();
+                    }
+                }
+            }
+        }
+        retval = m_editors[m_input_mode]->processKeyEvent (keyval, keycode, modifiers);
+    }
 
     if (G_UNLIKELY (!retval))
         retval = m_fallback_editor.processKeyEvent (keyval, keycode, modifiers);
 
     /* store ignored key event by editors */
-    m_prev_pressed_key = retval ? 0 : keyval;
+    m_prev_pressed_key = keyval;
 
     return retval;
 }
@@ -155,6 +195,8 @@ void
 PinyinEngine::slotCommitText (Text & text)
 {
     ibus_engine_commit_text (m_engine, text);
+    if (m_input_mode != MODE_INIT)
+        m_input_mode = MODE_INIT;
 }
 
 void
