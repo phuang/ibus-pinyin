@@ -95,7 +95,8 @@ DoublePinyinEditor::insert (gint ch)
 
     do {
         if (m_cursor == m_pinyin_len + 2) {
-            if ((pinyin = isPinyin (_id (m_text[m_cursor - 2]), id)) == NULL) {
+            if (m_pinyin.length () == MAX_PHRASE_LEN ||
+                (pinyin = isPinyin (_id (m_text[m_cursor - 2]), id)) == NULL) {
                 updatePreeditText ();
                 updateAuxiliaryText ();
                 return TRUE;
@@ -117,7 +118,8 @@ DoublePinyinEditor::insert (gint ch)
                     }
                 }
             }
-            if ((pinyin = isPinyin (id)) == NULL) {
+            if (m_pinyin.length () == MAX_PHRASE_LEN ||
+                (pinyin = isPinyin (id)) == NULL) {
                 updatePreeditText ();
                 updateAuxiliaryText ();
                 return TRUE;
@@ -275,7 +277,8 @@ DoublePinyinEditor::moveCursorRight (void)
     do {
         const Pinyin *pinyin = NULL;
         if (m_cursor == m_pinyin_len + 2) {
-            if ((pinyin = isPinyin (_id (m_text[m_cursor - 2]),
+            if (m_pinyin.length () == MAX_PHRASE_LEN ||
+                (pinyin = isPinyin (_id (m_text[m_cursor - 2]),
                                     _id (m_text[m_cursor - 1]))) == NULL) {
                 updatePreeditText ();
                 updateAuxiliaryText ();
@@ -299,7 +302,8 @@ DoublePinyinEditor::moveCursorRight (void)
                     }
                 }
             }
-            if ((pinyin = isPinyin (_id (m_text[m_cursor - 1]))) == NULL) {
+            if (m_pinyin.length () == MAX_PHRASE_LEN ||
+                (pinyin = isPinyin (_id (m_text[m_cursor - 1]))) == NULL) {
                 updatePreeditText ();
                 updateAuxiliaryText ();
                 return TRUE;
@@ -423,7 +427,7 @@ DoublePinyinEditor::updatePinyin (void)
     m_pinyin.removeAll ();
     m_pinyin_len = 0;
 
-    while (m_pinyin_len < m_cursor) {
+    while (m_pinyin_len < m_cursor && m_pinyin.length () < MAX_PHRASE_LEN) {
         const Pinyin *pinyin = NULL;
 
         if (m_pinyin_len == m_cursor - 1) {
