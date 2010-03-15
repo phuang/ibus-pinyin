@@ -50,7 +50,7 @@ static int ime_get_last_commit(lua_State* L){
 
 static int ime_get_version(lua_State* L){
   /* TODO: replace this with C macros. */
-  lua_pushstring(L, "ibus-pinyin 1.2.99");
+  lua_pushliteral(L, "ibus-pinyin 1.2.99");
   return 1;
 }
 
