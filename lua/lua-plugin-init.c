@@ -39,7 +39,9 @@ int lua_plugin_init(lua_State *L){
 
 int lua_plugin_fini(lua_State *L){
   lua_close(L);
-} 
+  
+  return 0;
+}
 
 static int ime_get_last_commit(lua_State* L){
   /*TODO: not implemented. */
