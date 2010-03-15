@@ -41,11 +41,11 @@ class PreferencesDialog:
         self.__full_pinyin.set_active(not self.__get_value("DoublePinyin", False))
         self.__double_pinyin_schema.set_active(self.__get_value("DoublePinyinSchema", 0))
         if self.__full_pinyin.get_active():
-            self.__incomplete_pinyin.set_sensitive(True)
+            # self.__incomplete_pinyin.set_sensitive(True)
             self.__double_pinyin_schema.set_sensitive(False)
             self.__double_pinyin_schema_label.set_sensitive(False)
         else:
-            self.__incomplete_pinyin.set_sensitive(False)
+            # self.__incomplete_pinyin.set_sensitive(False)
             self.__double_pinyin_schema.set_sensitive(True)
             self.__double_pinyin_schema_label.set_sensitive(True)
 
@@ -64,7 +64,7 @@ class PreferencesDialog:
             self.__set_value("DoublePinyinSchema", widget.get_active())
 
         # connect signals
-        self.__full_pinyin.connect("toggled", __full_pinyin_toggled_cb)
+        # self.__full_pinyin.connect("toggled", __full_pinyin_toggled_cb)
         self.__double_pinyin.connect("toggled", __double_pinyin_toggled_cb)
         self.__incomplete_pinyin.connect("toggled", self.__toggled_cb, "IncompletePinyin")
         self.__double_pinyin_schema.connect("changed", __double_pinyin_schema_changed_cb)
