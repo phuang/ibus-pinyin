@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 #include <glib.h>
 
 #include "lua.h"
@@ -53,6 +54,71 @@ static int ime_get_version(lua_State* L){
   return 1;
 }
 
+static gboolean ime_is_white_space(const char c){
+  const char * white_space = " \t\n\r\v\f";
+  int i;
+  size_t len = strlen(white_space);
+  
+  for ( i = 0; i < len; ++i){
+    if ( white_space[i] == c )
+      return TRUE;
+  }
+  return FALSE;
+}
+
+static int ime_trim_string_left(lua_State* L){
+  size_t l; int start, end;
+  const char * s = luaL_checklstring(L, 1, &l);
+  if (NULL == s){
+    lua_pushliteral(L, "");
+    return 1;
+  }
+  start = 0; end = strlen(s);
+  while( ime_is_white_space(s[start])){
+    start++;
+  }
+
+  lua_pushlstring(L, s + start, end - start);
+  return 1;
+}
+
+static int ime_trim_string_right(lua_State* L){
+  size_t l; int start, end;
+  const char * s = luaL_checklstring(L, 1, &l);
+  if ( NULL == s){
+    lua_pushliteral(L, "");
+    return 1;
+  }
+  start = 0; end = strlen(s);
+  while( ime_is_white_space(s[end - 1])){
+    end--;
+  }
+  lua_pushlstring(L, s + start, end -start);
+  return 1;
+}
+
+static int ime_trim_string(lua_State* L){
+  size_t l; int start, end;
+  const char * s = luaL_checklstring(L, 1, &l);
+  if ( NULL == s){
+    lua_pushliteral(L, "");
+    return 1;
+  }
+  start = 0; end = strlen(s);
+  while( ime_is_white_space(s[start])){
+    start++;
+  }
+  while( ime_is_white_space(s[end - 1])){
+    end--;
+  }
+  if (start >= end ){
+    lua_pushliteral(L, "");
+    return 1;
+  }
+  lua_pushlstring(L, s + start, end -start);
+  return 1;
+}
+
 
 static const luaL_Reg imelib[] = {
   {"get_last_commit", ime_get_last_commit},
@@ -64,10 +130,10 @@ static const luaL_Reg imelib[] = {
   /* Note: the register_trigger function is dropped for ibus-pinyin. */
   {"register_trigger", ime_register_trigger},
   {"split_string", ime_split_string},
+#endif
   {"trim_string_left", ime_trim_string_left},
   {"trim_string_right", ime_trim_string_right},
   {"trim_string", ime_trim_string},
-#endif
   {NULL, NULL}
 };
 
