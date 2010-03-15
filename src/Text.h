@@ -9,6 +9,7 @@ namespace PY {
 
 class Text : public Pointer<IBusText> {
 public:
+    Text () : Pointer<IBusText> () {}
     Text (IBusText *text)
         : Pointer<IBusText> (text) {}
     Text (const gchar *str)
@@ -22,6 +23,11 @@ public:
 
     void appendAttribute (guint type, guint value, guint start, guint end) {
         ibus_text_append_attribute (*this, type, value, start, end);
+    }
+
+    Text & operator= (IBusText *p) {
+        set (p);
+        return *this;
     }
 };
 

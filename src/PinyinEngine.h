@@ -31,6 +31,7 @@ public:
             m_editors[i]->reset ();
         }
         m_fallback_editor.reset ();
+        m_last_commit_text = NULL;
     }
 
 
@@ -85,6 +86,7 @@ private:
 
     Editor *m_editors[MODE_LAST];
     FallbackEditor m_fallback_editor;
+    Text m_last_commit_text;
 };
 
 };
