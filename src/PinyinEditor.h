@@ -24,9 +24,6 @@ public:
     virtual void cursorDown (void);
     virtual void update (void);
     virtual void candidateClicked (guint index, guint button, guint state);
-#if 0
-    virtual void reset (void);
-#endif
 protected:
 
     gboolean processPinyin (guint keyval, guint keycode, guint modifiers);
