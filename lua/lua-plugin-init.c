@@ -57,7 +57,7 @@ static int ime_get_version(lua_State* L){
 }
 
 static gboolean ime_is_white_space(const char c){
-  const char * white_space = " \t\n\r\v\f";
+  static const char * const white_space = " \t\n\r\v\f";
   int i;
   size_t len = strlen(white_space);
   
@@ -69,7 +69,7 @@ static gboolean ime_is_white_space(const char c){
 }
 
 #define IME_TRIM_PRECHECK                       \
-  if (NULL == s){                               \
+  if (NULL == s || '\0' == s[0]){               \
   lua_pushliteral(L, "");                       \
   return 1;                                     \
   }
