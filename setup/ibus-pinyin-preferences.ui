@@ -6,6 +6,7 @@
     <property name="width_request">400</property>
     <property name="border_width">5</property>
     <property name="title" translatable="yes">Pinyin preferences</property>
+    <property name="window_position">center-always</property>
     <property name="icon_name">gtk-preferences</property>
     <property name="type_hint">normal</property>
     <property name="has_separator">False</property>
