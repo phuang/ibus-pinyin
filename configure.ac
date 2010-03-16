@@ -110,6 +110,7 @@ src/Makefile
 src/pinyin.xml.in
 setup/Makefile
 setup/ibus-setup-pinyin
+setup/version.py
 data/Makefile
 data/db/Makefile
 data/db/android/Makefile

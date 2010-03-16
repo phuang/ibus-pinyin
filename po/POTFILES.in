@@ -14,4 +14,5 @@ src/PinyinParser.cc
 src/PinyinProperties.cc
 src/SimpTradConverter.cc
 src/SpecialTable.cc
+setup/main.py
 [type: gettext/glade]setup/ibus-pinyin-preferences.ui

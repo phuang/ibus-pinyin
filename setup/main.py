@@ -2,7 +2,10 @@ import gtk
 import ibus
 import locale
 import os
+import version
 import gettext
+
+_ = lambda a : gettext.dgettext("ibus-pinyin", a)
 
 class PreferencesDialog:
     def __init__(self):
@@ -31,6 +34,8 @@ class PreferencesDialog:
         self.__double_pinyin = self.__builder.get_object("DoublePinyin")
         self.__double_pinyin_schema = self.__builder.get_object("DoublePinyinSchema")
         self.__double_pinyin_schema_label = self.__builder.get_object("labelDoublePinyinSchema")
+        self.__name_version = self.__builder.get_object("NameVersion")
+        self.__name_version.set_markup(_("<big><b>IBus Pinyin %s</b></big>") % version.get_version())
 
         renderer = gtk.CellRendererText()
         self.__double_pinyin_schema.pack_start(renderer)

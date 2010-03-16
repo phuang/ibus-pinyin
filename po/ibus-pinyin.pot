@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-02-10 14:25+0800\n"
+"POT-Creation-Date: 2010-03-16 10:12+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -24,7 +24,7 @@ msgstr ""
 msgid "Pinyin"
 msgstr ""
 
-#: ../src/PinyinProperties.cc:21 ../setup/ibus-pinyin-preferences.ui.h:11
+#: ../src/PinyinProperties.cc:21 ../setup/ibus-pinyin-preferences.ui.h:12
 msgid "Chinese"
 msgstr ""
 
@@ -41,8 +41,13 @@ msgid "Simplfied/Traditional Chinese"
 msgstr ""
 
 #: ../src/PinyinProperties.cc:69 ../src/PinyinProperties.cc:71
-#: ../setup/ibus-pinyin-preferences.ui.h:33
+#: ../setup/ibus-pinyin-preferences.ui.h:34
 msgid "Pinyin preferences"
+msgstr ""
+
+#: ../setup/main.py:38 ../setup/ibus-pinyin-preferences.ui.h:7
+#, no-c-format, python-format
+msgid "<big><b>IBus Pinyin %s</b></big>"
 msgstr ""
 
 #: ../setup/ibus-pinyin-preferences.ui.h:2
@@ -62,191 +67,187 @@ msgstr ""
 msgid "<b>Pinyin</b>"
 msgstr ""
 
-#: ../setup/ibus-pinyin-preferences.ui.h:6
-msgid "<big><b>IBus Pinyin 1.3.0</b></big>"
-msgstr ""
-
-#: ../setup/ibus-pinyin-preferences.ui.h:7
+#: ../setup/ibus-pinyin-preferences.ui.h:8
 msgid ""
 "<small>Copyright &#xA9; 2009 Peng Huang &lt;shawn.p.huang@gmail.com&gt;</"
 "small>"
 msgstr ""
 
-#: ../setup/ibus-pinyin-preferences.ui.h:8
+#: ../setup/ibus-pinyin-preferences.ui.h:9
 msgid "ABC"
 msgstr ""
 
-#: ../setup/ibus-pinyin-preferences.ui.h:9
+#: ../setup/ibus-pinyin-preferences.ui.h:10
 msgid "About"
 msgstr ""
 
-#: ../setup/ibus-pinyin-preferences.ui.h:10
+#: ../setup/ibus-pinyin-preferences.ui.h:11
 msgid "Auto commit phrase"
 msgstr ""
 
-#: ../setup/ibus-pinyin-preferences.ui.h:12
+#: ../setup/ibus-pinyin-preferences.ui.h:13
 msgid "Chinese:"
 msgstr ""
 
-#: ../setup/ibus-pinyin-preferences.ui.h:13
+#: ../setup/ibus-pinyin-preferences.ui.h:14
 msgid "Correct pinyin"
 msgstr ""
 
-#: ../setup/ibus-pinyin-preferences.ui.h:14
+#: ../setup/ibus-pinyin-preferences.ui.h:15
 msgid "Double pinyin"
 msgstr ""
 
-#: ../setup/ibus-pinyin-preferences.ui.h:15
+#: ../setup/ibus-pinyin-preferences.ui.h:16
 msgid "Enable automatic commit phrase."
 msgstr ""
 
-#: ../setup/ibus-pinyin-preferences.ui.h:16
+#: ../setup/ibus-pinyin-preferences.ui.h:17
 msgid "Enable fuzzy pinyin."
 msgstr ""
 
-#: ../setup/ibus-pinyin-preferences.ui.h:17
+#: ../setup/ibus-pinyin-preferences.ui.h:18
 msgid "Enable incomplete pinyin (like zh g)."
 msgstr ""
 
-#: ../setup/ibus-pinyin-preferences.ui.h:18
+#: ../setup/ibus-pinyin-preferences.ui.h:19
 msgid "Enable pinyin correcting."
 msgstr ""
 
-#: ../setup/ibus-pinyin-preferences.ui.h:19
+#: ../setup/ibus-pinyin-preferences.ui.h:20
 msgid "English"
 msgstr ""
 
-#: ../setup/ibus-pinyin-preferences.ui.h:20
+#: ../setup/ibus-pinyin-preferences.ui.h:21
 msgid "Full"
 msgstr ""
 
-#: ../setup/ibus-pinyin-preferences.ui.h:21
+#: ../setup/ibus-pinyin-preferences.ui.h:22
 msgid "Full pinyin"
 msgstr ""
 
-#: ../setup/ibus-pinyin-preferences.ui.h:22
+#: ../setup/ibus-pinyin-preferences.ui.h:23
 msgid "Fuzzy pinyin"
 msgstr ""
 
-#: ../setup/ibus-pinyin-preferences.ui.h:23
+#: ../setup/ibus-pinyin-preferences.ui.h:24
 msgid "General"
 msgstr ""
 
-#: ../setup/ibus-pinyin-preferences.ui.h:24
+#: ../setup/ibus-pinyin-preferences.ui.h:25
 msgid "Half"
 msgstr ""
 
-#: ../setup/ibus-pinyin-preferences.ui.h:25
+#: ../setup/ibus-pinyin-preferences.ui.h:26
 msgid "Half width punctuations:"
 msgstr ""
 
-#: ../setup/ibus-pinyin-preferences.ui.h:26
+#: ../setup/ibus-pinyin-preferences.ui.h:27
 msgid "Half/full width:"
 msgstr ""
 
-#: ../setup/ibus-pinyin-preferences.ui.h:27
+#: ../setup/ibus-pinyin-preferences.ui.h:28
 msgid "Incomplete pinyin"
 msgstr ""
 
-#: ../setup/ibus-pinyin-preferences.ui.h:28
+#: ../setup/ibus-pinyin-preferences.ui.h:29
 msgid "Language:"
 msgstr ""
 
-#: ../setup/ibus-pinyin-preferences.ui.h:29
+#: ../setup/ibus-pinyin-preferences.ui.h:30
 msgid "MSPY"
 msgstr ""
 
-#: ../setup/ibus-pinyin-preferences.ui.h:30
+#: ../setup/ibus-pinyin-preferences.ui.h:31
 msgid "Number of candidates:"
 msgstr ""
 
-#: ../setup/ibus-pinyin-preferences.ui.h:31
+#: ../setup/ibus-pinyin-preferences.ui.h:32
 msgid "PYJJ"
 msgstr ""
 
-#: ../setup/ibus-pinyin-preferences.ui.h:32
+#: ../setup/ibus-pinyin-preferences.ui.h:33
 msgid "Pinyin input method for IBus"
 msgstr ""
 
-#: ../setup/ibus-pinyin-preferences.ui.h:34
+#: ../setup/ibus-pinyin-preferences.ui.h:35
 msgid "Press [,] [.] key to flip page"
 msgstr ""
 
-#: ../setup/ibus-pinyin-preferences.ui.h:35
+#: ../setup/ibus-pinyin-preferences.ui.h:36
 msgid "Press [-] [=] key to flip page"
 msgstr ""
 
-#: ../setup/ibus-pinyin-preferences.ui.h:36
+#: ../setup/ibus-pinyin-preferences.ui.h:37
 msgid "Press [Shift] key to select candidate"
 msgstr ""
 
-#: ../setup/ibus-pinyin-preferences.ui.h:37
+#: ../setup/ibus-pinyin-preferences.ui.h:38
 msgid "Punctuations:"
 msgstr ""
 
-#: ../setup/ibus-pinyin-preferences.ui.h:38
+#: ../setup/ibus-pinyin-preferences.ui.h:39
 msgid "Schema:"
 msgstr ""
 
-#: ../setup/ibus-pinyin-preferences.ui.h:39
+#: ../setup/ibus-pinyin-preferences.ui.h:40
 msgid "Select double pinyin schema."
 msgstr ""
 
-#: ../setup/ibus-pinyin-preferences.ui.h:40
+#: ../setup/ibus-pinyin-preferences.ui.h:41
 msgid "Setup the initial state of pinyin input method."
 msgstr ""
 
-#: ../setup/ibus-pinyin-preferences.ui.h:41
+#: ../setup/ibus-pinyin-preferences.ui.h:42
 msgid "Setup the number of candidates show in one page of lookup table."
 msgstr ""
 
-#: ../setup/ibus-pinyin-preferences.ui.h:42
+#: ../setup/ibus-pinyin-preferences.ui.h:43
 msgid "Show candidates in traditional Chinese"
 msgstr ""
 
-#: ../setup/ibus-pinyin-preferences.ui.h:43
+#: ../setup/ibus-pinyin-preferences.ui.h:44
 msgid ""
 "Show candidates in traditional Chinese, if the input method is in "
 "traditional Chinese inputing mode."
 msgstr ""
 
-#: ../setup/ibus-pinyin-preferences.ui.h:44
+#: ../setup/ibus-pinyin-preferences.ui.h:45
 msgid "Simplified"
 msgstr ""
 
-#: ../setup/ibus-pinyin-preferences.ui.h:45
+#: ../setup/ibus-pinyin-preferences.ui.h:46
 msgid "Traditional"
 msgstr ""
 
-#: ../setup/ibus-pinyin-preferences.ui.h:46
+#: ../setup/ibus-pinyin-preferences.ui.h:47
 msgid "Use [,] [.] key to page up/down the lookup table."
 msgstr ""
 
-#: ../setup/ibus-pinyin-preferences.ui.h:47
+#: ../setup/ibus-pinyin-preferences.ui.h:48
 msgid "Use [-] [=] key to page up/down the lookup table."
 msgstr ""
 
-#: ../setup/ibus-pinyin-preferences.ui.h:48
+#: ../setup/ibus-pinyin-preferences.ui.h:49
 msgid "Use double pinyin."
 msgstr ""
 
-#: ../setup/ibus-pinyin-preferences.ui.h:49
+#: ../setup/ibus-pinyin-preferences.ui.h:50
 msgid "Use full pinyin."
 msgstr ""
 
-#: ../setup/ibus-pinyin-preferences.ui.h:50
+#: ../setup/ibus-pinyin-preferences.ui.h:51
 msgid ""
 "Use left and right shift keys to select the second and thrid candidates."
 msgstr ""
 
-#: ../setup/ibus-pinyin-preferences.ui.h:51
+#: ../setup/ibus-pinyin-preferences.ui.h:52
 msgid "ZGPY"
 msgstr ""
 
-#: ../setup/ibus-pinyin-preferences.ui.h:52
+#: ../setup/ibus-pinyin-preferences.ui.h:53
 msgid "ZRM"
 msgstr ""
 
-#: ../setup/ibus-pinyin-preferences.ui.h:53
+#: ../setup/ibus-pinyin-preferences.ui.h:54
 msgid "http://ibus.googlecode.com"
 msgstr ""

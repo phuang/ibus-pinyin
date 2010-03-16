@@ -1124,9 +1124,9 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkLabel" id="label13">
+                          <object class="GtkLabel" id="NameVersion">
                             <property name="visible">True</property>
-                            <property name="label" translatable="yes">&lt;big&gt;&lt;b&gt;IBus Pinyin 1.3.0&lt;/b&gt;&lt;/big&gt;</property>
+                            <property name="label" translatable="yes">&lt;big&gt;&lt;b&gt;IBus Pinyin %s&lt;/b&gt;&lt;/big&gt;</property>
                             <property name="use_markup">True</property>
                             <property name="selectable">True</property>
                           </object>
