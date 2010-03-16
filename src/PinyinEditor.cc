@@ -441,7 +441,8 @@ PinyinEditor::updateAuxiliaryText (void)
         m_buffer << '|' << textAfterPinyin ();
     }
     else {
-        /* aux = pinyin + non-pinyin before cursor + non-pinyin after cursor */
+        /* aux = pinyin + ' ' + non-pinyin before cursor + non-pinyin after cursor */
+        m_buffer << ' ';
         m_buffer.append (textAfterPinyin (),
                      m_cursor - m_pinyin_len);
         // cursor_pos =  m_buffer.utf8Length ();
