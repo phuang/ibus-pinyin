@@ -141,7 +141,7 @@ DoublePinyinEditor::removeCharBefore (void)
 
     const Pinyin *pinyin = m_pinyin.back ();
     m_pinyin.pop ();
-    if ((pinyin->flags & PINYIN_INCOMPLETE_PINYIN) != 0) {
+    if (pinyin->flags & PINYIN_INCOMPLETE_PINYIN) {
         m_pinyin_len = m_cursor;
     }
     else {
@@ -188,15 +188,15 @@ DoublePinyinEditor::removeWordBefore (void)
     const Pinyin *pinyin = m_pinyin.back ();
     m_pinyin.pop ();
 
-    if ((pinyin->flags & PINYIN_INCOMPLETE_PINYIN) == 0) {
-        m_text.erase (m_cursor - 2, 2);
-        m_cursor -= 2;
-        m_pinyin_len -= 2;
-    }
-    else {
+    if (pinyin->flags & PINYIN_INCOMPLETE_PINYIN) {
         m_text.erase (m_cursor - 1, 1);
         m_cursor -= 1;
         m_pinyin_len -= 1;
+    }
+    else {
+        m_text.erase (m_cursor - 2, 2);
+        m_cursor -= 2;
+        m_pinyin_len -= 2;
     }
 
     updatePhraseEditor ();
@@ -278,7 +278,7 @@ DoublePinyinEditor::moveCursorRight (void)
         if (m_cursor == m_pinyin_len + 1) {
             if (!m_pinyin.isEmpty ()) {
                 pinyin = m_pinyin.back ();
-                if ((pinyin->flags & PINYIN_INCOMPLETE_PINYIN) != 0) {
+                if (pinyin->flags & PINYIN_INCOMPLETE_PINYIN) {
                     /* prev pinyin is incomplete */
                     if ((pinyin = isPinyin (m_text[m_cursor - 2], m_text[m_cursor -1])) != NULL) {
                         m_pinyin.pop ();
