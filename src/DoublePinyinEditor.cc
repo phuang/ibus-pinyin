@@ -223,13 +223,16 @@ DoublePinyinEditor::moveCursorLeft (void)
         return FALSE;
     m_cursor --;
 
-    if (m_cursor >= m_pinyin_len)
+    if (m_cursor >= m_pinyin_len) {
+        updatePreeditText ();
+        updateAuxiliaryText ();
         return TRUE;
+    }
 
     const Pinyin *pinyin = m_pinyin.back ();
     m_pinyin.pop ();
 
-    if ((pinyin->flags & PINYIN_INCOMPLETE_PINYIN) != 0) {
+    if (pinyin->flags & PINYIN_INCOMPLETE_PINYIN) {
         m_pinyin_len -= 1;
     }
     else {
