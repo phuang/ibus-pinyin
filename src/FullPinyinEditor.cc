@@ -37,7 +37,7 @@ FullPinyinEditor::insert (gint ch)
 {
     /* is full */
     if (G_UNLIKELY (m_text.length () >= MAX_PINYIN_LEN))
-        return FALSE;
+        return TRUE;
 
     m_text.insert (m_cursor++, ch);
 

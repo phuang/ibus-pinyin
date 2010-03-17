@@ -73,7 +73,7 @@ DoublePinyinEditor::insert (gint ch)
     gint id;
     /* is full */
     if (G_UNLIKELY (m_text.length () >= MAX_PINYIN_LEN))
-        return FALSE;
+        return TRUE;
 
     id = _id (ch);
     if (id == -1) {
