@@ -39,8 +39,7 @@ PinyinEditor::processPinyin (guint keyval, guint keycode, guint modifiers)
     if (G_UNLIKELY (CMSHM_FILTER(modifiers) != 0))
         return m_text ? TRUE : FALSE;
 
-    insert (keyval);
-    return TRUE;
+    return insert (keyval);
 }
 
 /**
@@ -103,8 +102,7 @@ PinyinEditor::processPunct (guint keyval, guint keycode, guint modifiers)
 
     switch (keyval) {
     case IBUS_apostrophe:
-        insert (keyval);
-        return TRUE;
+        return insert (keyval);
     case IBUS_comma:
         if (Config::commaPeriodPage ()) {
             pageUp ();

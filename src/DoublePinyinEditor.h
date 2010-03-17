@@ -30,8 +30,8 @@ public:
 
 private:
     void updatePinyin (void);
-    const Pinyin *isPinyin (gchar i, gchar j);
-    const Pinyin *isPinyin (gchar i);
+    const Pinyin *isPinyin (gint i, gint j);
+    const Pinyin *isPinyin (gint i);
 
 };
 
