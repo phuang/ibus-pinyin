@@ -5,28 +5,17 @@ namespace PY {
 
 #include "DoublePinyinTable.h"
 
-DoublePinyinEditor::DoublePinyinEditor (PinyinProperties & props)
-    : PinyinEditor (props)
-{
-}
-
-static inline gint
-_id (gint ch)
-{
-    switch (ch) {
-    case IBUS_a ... IBUS_z:
-        return ch - IBUS_a;
-    case IBUS_semicolon:
-        return 26;
-    default:
-        return -1;
-    }
-}
-
+#define ID(c) \
+    (c == IBUS_semicolon ? 26 : ((c >= IBUS_a && c <= IBUS_z) ? c - IBUS_a : -1))
 #define ID_TO_SHENG(id) \
     double_pinyin_map[Config::doublePinyinSchema ()].sheng[id]
 #define ID_TO_YUNS(id) \
     double_pinyin_map[Config::doublePinyinSchema ()].yun[id]
+
+DoublePinyinEditor::DoublePinyinEditor (PinyinProperties & props)
+    : PinyinEditor (props)
+{
+}
 
 inline const Pinyin *
 DoublePinyinEditor::isPinyin (gint i)
@@ -77,7 +66,7 @@ DoublePinyinEditor::insert (gint ch)
     if (G_UNLIKELY (m_text.length () >= MAX_PINYIN_LEN))
         return TRUE;
 
-    id = _id (ch);
+    id = ID (ch);
     if (id == -1) {
         /* it is not availidate ch */
         return FALSE;
@@ -101,7 +90,7 @@ DoublePinyinEditor::insert (gint ch)
     do {
         if (m_cursor == m_pinyin_len + 1) {
             if (m_pinyin.length () == MAX_PHRASE_LEN ||
-                (pinyin = isPinyin (_id (m_text[m_cursor - 1]), id)) == NULL) {
+                (pinyin = isPinyin (ID (m_text[m_cursor - 1]), id)) == NULL) {
                 if (!IS_ALPHA (ch))
                     return TRUE;
                 m_text.insert (m_cursor++, ch);
@@ -119,7 +108,7 @@ DoublePinyinEditor::insert (gint ch)
                 pinyin = m_pinyin.back ();
                 if (pinyin->flags & PINYIN_INCOMPLETE_PINYIN) {
                     /* prev pinyin is incomplete */
-                    if ((pinyin = isPinyin (_id (m_text[m_cursor - 1]), id)) != NULL) {
+                    if ((pinyin = isPinyin (ID (m_text[m_cursor - 1]), id)) != NULL) {
                         m_pinyin.pop ();
                         m_pinyin.append (pinyin, m_pinyin_len - 1, 2);
                         m_text.insert (m_cursor++, ch);
@@ -170,7 +159,7 @@ DoublePinyinEditor::removeCharBefore (void)
         m_pinyin_len = m_cursor;
     }
     else {
-        if ((pinyin = isPinyin (_id (m_text[m_cursor - 1]))) != NULL) {
+        if ((pinyin = isPinyin (ID (m_text[m_cursor - 1]))) != NULL) {
             m_pinyin.append (pinyin, m_cursor - 1, 1);
             m_pinyin_len = m_cursor;
         }
@@ -261,7 +250,7 @@ DoublePinyinEditor::moveCursorLeft (void)
         m_pinyin_len -= 1;
     }
     else {
-        if ((pinyin = isPinyin (_id (m_text[m_cursor - 1]))) != NULL) {
+        if ((pinyin = isPinyin (ID (m_text[m_cursor - 1]))) != NULL) {
             m_pinyin.append (pinyin, m_cursor - 1, 1);
             m_pinyin_len = m_cursor;
         }
@@ -292,8 +281,8 @@ DoublePinyinEditor::moveCursorRight (void)
         const Pinyin *pinyin = NULL;
         if (m_cursor == m_pinyin_len + 2) {
             if (m_pinyin.length () == MAX_PHRASE_LEN ||
-                (pinyin = isPinyin (_id (m_text[m_cursor - 2]),
-                                    _id (m_text[m_cursor - 1]))) == NULL) {
+                (pinyin = isPinyin (ID (m_text[m_cursor - 2]),
+                                    ID (m_text[m_cursor - 1]))) == NULL) {
                 updatePreeditText ();
                 updateAuxiliaryText ();
                 return TRUE;
@@ -307,8 +296,8 @@ DoublePinyinEditor::moveCursorRight (void)
                 pinyin = m_pinyin.back ();
                 if (pinyin->flags & PINYIN_INCOMPLETE_PINYIN) {
                     /* prev pinyin is incomplete */
-                    if ((pinyin = isPinyin (_id (m_text[m_cursor - 2]),
-                                            _id (m_text[m_cursor -1]))) != NULL) {
+                    if ((pinyin = isPinyin (ID (m_text[m_cursor - 2]),
+                                            ID (m_text[m_cursor -1]))) != NULL) {
                         m_pinyin.pop ();
                         m_pinyin.append (pinyin, m_pinyin_len - 1, 2);
                         m_pinyin_len = m_cursor;
@@ -317,7 +306,7 @@ DoublePinyinEditor::moveCursorRight (void)
                 }
             }
             if (m_pinyin.length () == MAX_PHRASE_LEN ||
-                (pinyin = isPinyin (_id (m_text[m_cursor - 1]))) == NULL) {
+                (pinyin = isPinyin (ID (m_text[m_cursor - 1]))) == NULL) {
                 updatePreeditText ();
                 updateAuxiliaryText ();
                 return TRUE;
@@ -445,12 +434,12 @@ DoublePinyinEditor::updatePinyin (void)
         const Pinyin *pinyin = NULL;
 
         if (m_pinyin_len == m_cursor - 1) {
-            pinyin = isPinyin (_id (m_text[m_pinyin_len]));
+            pinyin = isPinyin (ID (m_text[m_pinyin_len]));
         }
         else {
             pinyin = isPinyin (m_text[m_pinyin_len], m_text[m_pinyin_len + 1]);
             if (pinyin == NULL)
-                pinyin =  isPinyin ( _id (m_text[m_pinyin_len]));
+                pinyin =  isPinyin (ID (m_text[m_pinyin_len]));
         }
         if (pinyin == NULL)
             break;
