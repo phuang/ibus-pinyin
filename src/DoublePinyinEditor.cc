@@ -443,9 +443,9 @@ DoublePinyinEditor::updatePinyin (void)
             pinyin = isPinyin (ID (m_text[m_pinyin_len]));
         }
         else {
-            pinyin = isPinyin (m_text[m_pinyin_len], m_text[m_pinyin_len + 1]);
+            pinyin = isPinyin (ID (m_text[m_pinyin_len]), ID (m_text[m_pinyin_len + 1]));
             if (pinyin == NULL)
-                pinyin =  isPinyin (ID (m_text[m_pinyin_len]));
+                pinyin = isPinyin (ID (m_text[m_pinyin_len]));
         }
         if (pinyin == NULL)
             break;
