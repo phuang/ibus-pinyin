@@ -86,7 +86,7 @@ DoublePinyinEditor::insert (gint ch)
 
     if (m_cursor > m_pinyin_len + 1) {
         if (!IS_ALPHA (ch))
-            return TRUE;
+            return FALSE;
         m_text.insert (m_cursor++, ch);
         updatePreeditText ();
         updateAuxiliaryText ();
@@ -98,7 +98,7 @@ DoublePinyinEditor::insert (gint ch)
             if (m_pinyin.length () == MAX_PHRASE_LEN ||
                 (pinyin = isPinyin (ID (m_text[m_cursor - 1]), id)) == NULL) {
                 if (!IS_ALPHA (ch))
-                    return TRUE;
+                    return FALSE;
                 m_text.insert (m_cursor++, ch);
                 updatePreeditText ();
                 updateAuxiliaryText ();
@@ -126,7 +126,7 @@ DoublePinyinEditor::insert (gint ch)
             if (m_pinyin.length () == MAX_PHRASE_LEN ||
                 (pinyin = isPinyin (id)) == NULL) {
                 if (!IS_ALPHA (ch))
-                    return TRUE;
+                    return FALSE;
                 m_text.insert (m_cursor++, ch);
                 updatePreeditText ();
                 updateAuxiliaryText ();
