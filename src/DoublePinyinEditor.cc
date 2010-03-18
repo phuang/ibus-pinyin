@@ -5,8 +5,14 @@ namespace PY {
 
 #include "DoublePinyinTable.h"
 
+/*
+ * c in 'a' ... 'z' => id = c - 'a'
+ * c == ';'         => id = 26
+ * else             => id = -1
+ */
 #define ID(c) \
-    (c == IBUS_semicolon ? 26 : ((c >= IBUS_a && c <= IBUS_z) ? c - IBUS_a : -1))
+    ((c >= IBUS_a && c <= IBUS_z) ? c - IBUS_a : (c == IBUS_semicolon ? 26 : -1))
+
 #define ID_TO_SHENG(id) \
     double_pinyin_map[Config::doublePinyinSchema ()].sheng[id]
 #define ID_TO_YUNS(id) \
