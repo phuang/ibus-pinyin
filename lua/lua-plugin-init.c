@@ -87,10 +87,10 @@ static int ime_push_string(lua_State* L, const char * s,
 
 static int ime_trim_string_left(lua_State* L){
   size_t l; int start, end;
-  const char * s = luaL_checklstring(L, 1, &l);
+  const char * s = lua_tolstring(L, 1, &l);
 
   IME_TRIM_PRECHECK;
-  start = 0; end = strlen(s);
+  start = 0; end = l;
   while( ime_is_white_space(s[start])){
     start++;
   }
@@ -100,11 +100,11 @@ static int ime_trim_string_left(lua_State* L){
 
 static int ime_trim_string_right(lua_State* L){
   size_t l; int start, end;
-  const char * s = luaL_checklstring(L, 1, &l);
+  const char * s = lua_tolstring(L, 1, &l);
 
   IME_TRIM_PRECHECK;
-  start = 0; end = strlen(s);
-  while( ime_is_white_space(s[end - 1])){
+  start = 0; end = l;
+  while( ime_is_white_space(s[end - 1]) && end > 0){
     end--;
   }
 
@@ -113,14 +113,14 @@ static int ime_trim_string_right(lua_State* L){
 
 static int ime_trim_string(lua_State* L){
   size_t l; int start, end;
-  const char * s = luaL_checklstring(L, 1, &l);
+  const char * s = lua_tolstring(L, 1, &l);
 
   IME_TRIM_PRECHECK;
-  start = 0; end = strlen(s);
+  start = 0; end = l;
   while( ime_is_white_space(s[start])){
     start++;
   }
-  while( ime_is_white_space(s[end - 1])){
+  while( ime_is_white_space(s[end - 1]) && end > 0){
     end--;
   }
 
