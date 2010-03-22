@@ -18,13 +18,13 @@ namespace PY {
 #define ID_TO_YUNS(id) \
     double_pinyin_map[Config::doublePinyinSchema ()].yun[id]
 
+#define IS_ALPHA(c) \
+        ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'))
+
 DoublePinyinEditor::DoublePinyinEditor (PinyinProperties & props)
     : PinyinEditor (props)
 {
 }
-
-#define IS_ALPHA(c) \
-        ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'))
 
 gboolean
 DoublePinyinEditor::insert (gint ch)
@@ -323,7 +323,7 @@ DoublePinyinEditor::updatePinyin (gboolean all)
                 m_pinyin_len += 1;
             }
         }
-        while (m_pinyin_len < m_cursor) {
+        while (m_pinyin_len < m_cursor && m_pinyin.length () < MAX_PHRASE_LEN) {
             const Pinyin *pinyin = NULL;
             if (m_pinyin_len == m_cursor - 1) {
                 pinyin = isPinyin (ID (m_text[m_pinyin_len]));
