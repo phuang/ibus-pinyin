@@ -2,6 +2,8 @@
 #include "PhraseEditor.h"
 #include "SimpTradConverter.h"
 
+#define REVERSE_FIRST_CANDIDATE
+
 namespace PY {
 
 Database PhraseEditor::m_database;
@@ -106,7 +108,11 @@ PhraseEditor::updateCandidates (void)
     if (G_LIKELY (m_candidate_0_phrases.length () > 1)) {
         m_candidates.resize (1);
         m_candidates[0].reset ();
-        for (guint i = 0; i < m_candidate_0_phrases.length (); i++)
+#ifndef REVERSE_FIRST_CANDIDATE
+        for (gint i = 0; i < m_candidate_0_phrases.length (); i++)
+#else
+        for (gint i = m_candidate_0_phrases.length () - 1; i >= 0; i--)
+#endif
             m_candidates[0] += m_candidate_0_phrases[i];
     }
     guint len = m_pinyin.length () - m_cursor;
@@ -136,6 +142,7 @@ PhraseEditor::updateTheFirstCandidate (void)
     end = m_pinyin.length ();
 
     while (begin != end) {
+#ifndef REVERSE_FIRST_CANDIDATE
         for (guint i = end; i > begin; i--) {
             retval = m_database.query (m_pinyin,
                                        begin,
@@ -148,6 +155,20 @@ PhraseEditor::updateTheFirstCandidate (void)
                 break;
             }
         }
+#else
+        for (guint i = begin; i < end; i++) {
+            retval = m_database.query (m_pinyin,
+                                       i,
+                                       end - i,
+                                       1,
+                                       Config::option (),
+                                       m_candidate_0_phrases);
+            if (G_LIKELY (retval > 0)) {
+                end = i;
+                break;
+            }
+        }
+#endif
         if (retval <= 0)
             g_debug ("%s", m_pinyin[begin]->text);
         g_assert (retval > 0);
