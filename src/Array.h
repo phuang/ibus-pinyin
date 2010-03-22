@@ -45,6 +45,7 @@ public:
     }
 
     void pop (void) {
+        g_assert (!isEmpty ());
         std::vector<T>::pop_back ();
     }
 
@@ -57,10 +58,12 @@ public:
     }
 
     T & operator[] (guint i) {
+        g_assert (i < length ());
         return std::vector<T>::operator[](i);
     }
 
     const T & operator[] (guint i) const {
+        g_assert (i < length ());
         return std::vector<T>::operator[](i);
     }
 

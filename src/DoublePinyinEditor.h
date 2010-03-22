@@ -29,7 +29,7 @@ public:
     void reset (void);
 
 private:
-    void updatePinyin (void);
+    gboolean updatePinyin (gboolean all);
     const Pinyin *isPinyin (gint i, gint j);
     const Pinyin *isPinyin (gint i);
 
