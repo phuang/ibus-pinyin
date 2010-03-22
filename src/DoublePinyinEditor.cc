@@ -23,43 +23,6 @@ DoublePinyinEditor::DoublePinyinEditor (PinyinProperties & props)
 {
 }
 
-inline const Pinyin *
-DoublePinyinEditor::isPinyin (gint i)
-{
-    if ((Config::option () & PINYIN_INCOMPLETE_PINYIN) == 0) {
-        return NULL;
-    }
-
-    gint sheng = ID_TO_SHENG (i);
-
-    if (sheng == PINYIN_ID_VOID) {
-        return NULL;
-    }
-
-    return m_parser.isPinyin (sheng, 0, PINYIN_INCOMPLETE_PINYIN);
-}
-
-inline const Pinyin *
-DoublePinyinEditor::isPinyin (gint i, gint j)
-{
-    const Pinyin *pinyin = NULL;
-    gint sheng = ID_TO_SHENG (i);
-    const gint *yun = ID_TO_YUNS (j);
-
-    if (sheng == PINYIN_ID_VOID || yun[0] == PINYIN_ID_VOID)
-        return pinyin;
-
-    if (sheng == PINYIN_ID_ZERO && yun[0] == PINYIN_ID_ZERO)
-        return pinyin;
-
-    pinyin = m_parser.isPinyin (sheng, yun[0],
-                        Config::option () & PINYIN_FUZZY_ALL);
-    if (pinyin == NULL && yun[1] != PINYIN_ID_VOID)
-        pinyin = m_parser.isPinyin (sheng, yun[1],
-                        Config::option () & PINYIN_FUZZY_ALL);
-    return pinyin;
-}
-
 #define IS_ALPHA(c) \
         ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'))
 
@@ -288,7 +251,44 @@ DoublePinyinEditor::reset (void)
     }
 }
 
-gboolean
+inline const Pinyin *
+DoublePinyinEditor::isPinyin (gint i)
+{
+    if ((Config::option () & PINYIN_INCOMPLETE_PINYIN) == 0) {
+        return NULL;
+    }
+
+    gint sheng = ID_TO_SHENG (i);
+
+    if (sheng == PINYIN_ID_VOID) {
+        return NULL;
+    }
+
+    return m_parser.isPinyin (sheng, 0, PINYIN_INCOMPLETE_PINYIN);
+}
+
+inline const Pinyin *
+DoublePinyinEditor::isPinyin (gint i, gint j)
+{
+    const Pinyin *pinyin = NULL;
+    gint sheng = ID_TO_SHENG (i);
+    const gint *yun = ID_TO_YUNS (j);
+
+    if (sheng == PINYIN_ID_VOID || yun[0] == PINYIN_ID_VOID)
+        return pinyin;
+
+    if (sheng == PINYIN_ID_ZERO && yun[0] == PINYIN_ID_ZERO)
+        return pinyin;
+
+    pinyin = m_parser.isPinyin (sheng, yun[0],
+                        Config::option () & PINYIN_FUZZY_ALL);
+    if (pinyin == NULL && yun[1] != PINYIN_ID_VOID)
+        pinyin = m_parser.isPinyin (sheng, yun[1],
+                        Config::option () & PINYIN_FUZZY_ALL);
+    return pinyin;
+}
+
+inline gboolean
 DoublePinyinEditor::updatePinyin (gboolean all)
 {
     gboolean retval = FALSE;
