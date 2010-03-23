@@ -14,9 +14,17 @@ namespace PY {
     ((c >= IBUS_a && c <= IBUS_z) ? c - IBUS_a : (c == IBUS_semicolon ? 26 : -1))
 
 #define ID_TO_SHENG(id) \
-    double_pinyin_map[Config::doublePinyinSchema ()].sheng[id]
+    (double_pinyin_map[Config::doublePinyinSchema ()].sheng[id])
+
+#if 0
+#define ID_TO_SHENG(id) \
+    (double_pinyin_map[Config::doublePinyinSchema ()].sheng[id] != PINYIN_ID_VOID ? \
+        double_pinyin_map[Config::doublePinyinSchema ()].sheng[id] : \
+        ((id == ID ('a') || id == ID ('e') || id == ID ('o')) ? PINYIN_ID_ZERO : PINYIN_ID_VOID))
+#endif
+
 #define ID_TO_YUNS(id) \
-    double_pinyin_map[Config::doublePinyinSchema ()].yun[id]
+    (double_pinyin_map[Config::doublePinyinSchema ()].yun[id])
 
 #define IS_ALPHA(c) \
         ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'))
