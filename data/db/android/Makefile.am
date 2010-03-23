@@ -37,7 +37,8 @@ main_dbdir = $(pkgdatadir)/db
 endif
 
 android.db: $(android_raw_data) $(create_scripts)
-	$(RM) $@
+	$(AM_V_GEN) \
+	$(RM) $@; \
 	$(srcdir)/create_db.py $(srcdir)/rawdict_utf16_65105_freq.txt | sqlite3 $@
 
 EXTRA_DIST = \

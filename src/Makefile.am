@@ -173,6 +173,7 @@ SimpTradConverterTable.h:
 	$(PYTHON) $(srcdir)/update-simptrad-table.py > $@
 
 pinyin.xml: pinyin.xml.in
+	$(AM_V_GEN) \
 	( \
 		libexecdir=${libexecdir}; \
 		pkgdatadir=${pkgdatadir}; \
