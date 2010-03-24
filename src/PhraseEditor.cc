@@ -2,7 +2,7 @@
 #include "PhraseEditor.h"
 #include "SimpTradConverter.h"
 
-#define REVERSE_FIRST_CANDIDATE
+// #define CONFIG_REVERSE_FIRST_CANDIDATE
 
 namespace PY {
 
@@ -108,7 +108,7 @@ PhraseEditor::updateCandidates (void)
     if (G_LIKELY (m_candidate_0_phrases.length () > 1)) {
         m_candidates.resize (1);
         m_candidates[0].reset ();
-#ifndef REVERSE_FIRST_CANDIDATE
+#ifndef CONFIG_REVERSE_FIRST_CANDIDATE
         for (gint i = 0; i < m_candidate_0_phrases.length (); i++)
 #else
         for (gint i = m_candidate_0_phrases.length () - 1; i >= 0; i--)
@@ -142,7 +142,7 @@ PhraseEditor::updateTheFirstCandidate (void)
     end = m_pinyin.length ();
 
     while (begin != end) {
-#ifndef REVERSE_FIRST_CANDIDATE
+#ifndef CONFIG_REVERSE_FIRST_CANDIDATE
         for (guint i = end; i > begin; i--) {
             retval = m_database.query (m_pinyin,
                                        begin,
