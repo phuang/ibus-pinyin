@@ -56,6 +56,44 @@ static int ime_get_version(lua_State* L){
   return 1;
 }
 
+static int ime_join_string(lua_State* L){
+  luaL_Buffer buf;
+  size_t arr_len; size_t i;
+  const char * sep;
+  const char * str;
+
+  if ( !lua_istable(L, 1) )
+    return 0;
+
+  sep = lua_tolstring(L, 2, NULL); 
+
+  luaL_buffinit(L, &buf);
+  arr_len = lua_objlen(L, 1);
+  for ( i = 1; i < arr_len; ++i){
+    lua_pushinteger(L, i);
+    lua_gettable(L, 1);
+    str = lua_tolstring(L, 3, NULL);
+    luaL_addstring(&buf, str);
+    lua_pop(L, 1);
+    luaL_addstring(&buf, sep);
+  }
+
+  /* add tail of string list */
+  lua_pushinteger(L, i);
+  lua_gettable(L, 1);
+  str = lua_tolstring(L, 3, NULL);
+  luaL_addstring(&buf, str);
+  lua_pop(L, 1);
+  luaL_pushresult(&buf);
+
+  return 1;
+}
+
+static int ime_split_string(lua_State * L){
+  
+  return 1;
+}
+
 static gboolean ime_is_white_space(const char c){
   static const char * const white_space = " \t\n\r\v\f";
   int i;
@@ -82,6 +120,7 @@ static int ime_push_string(lua_State* L, const char * s,
     return 1;
   }
   lua_pushlstring(L, s + start, end -start);
+  lua_remove(L, 1);
   return 1; 
 }
 
@@ -131,14 +170,14 @@ static int ime_trim_string(lua_State* L){
 static const luaL_Reg imelib[] = {
   {"get_last_commit", ime_get_last_commit},
   {"get_version", ime_get_version},
+  {"join_string", ime_join_string},
 #if 0
-  {"join_string"}, ime_join_string},
   {"parse_mapping", ime_parse_mapping},
   {"register_command", ime_register_command},
   /* Note: the register_trigger function is dropped for ibus-pinyin. */
   {"register_trigger", ime_register_trigger},
-  {"split_string", ime_split_string},
 #endif
+  {"split_string", ime_split_string},
   {"trim_string_left", ime_trim_string_left},
   {"trim_string_right", ime_trim_string_right},
   {"trim_string", ime_trim_string},
