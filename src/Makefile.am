@@ -138,6 +138,7 @@ EXTRA_DIST = \
 
 CLEANFILES = \
 	pinyin.xml \
+	ZhConversion.* \
 	$(NULL)
 
 check_PROGRAMS =
