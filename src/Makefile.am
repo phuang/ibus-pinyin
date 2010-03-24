@@ -194,8 +194,7 @@ test: ibus-engine-pinyin
 # 	$(builddir)/ibus-engine-pinyin
 
 ZhConversion.php:
-	wget 'http://svn.wikimedia.org/viewvc/mediawiki/trunk/phase3/includes/ZhConversion.php?view=co&content-type=text%2Fplain' \
-		-O $@
+	svn cat http://svn.wikimedia.org/svnroot/mediawiki/trunk/phase3/includes/ZhConversion.php > $@
 
 ZhConversion.py: ZhConversion.php
 	php php_2_py.php > $@
