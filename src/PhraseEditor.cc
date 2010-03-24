@@ -28,25 +28,6 @@ PhraseEditor::update (const PinyinArray &pinyin)
 {
     /* the length of pinyin must not bigger than MAX_PHRASE_LEN */
     g_assert (pinyin.length () <= MAX_PHRASE_LEN);
-#if 0
-    gboolean diff = FALSE;
-
-    if (m_cursor > pinyin.length ()) {
-        diff = TRUE;
-    }
-    else {
-        for (gint i = m_cursor - 1; i >= 0; i--) {
-            if (m_pinyin[i] != pinyin[i]) {
-                diff = TRUE;
-                break;
-            }
-        }
-    }
-
-    if (diff == FALSE){
-        return FALSE;
-    }
-#endif
 
     m_pinyin = pinyin;
     m_cursor = 0;
