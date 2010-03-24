@@ -24,6 +24,8 @@ public:
     virtual void cursorDown (void);
     virtual void update (void);
     virtual void candidateClicked (guint index, guint button, guint state);
+    virtual void updateAuxiliaryTextBefore (String &buffer);
+    virtual void updateAuxiliaryTextAfter (String &buffer);
 protected:
 
     gboolean processPinyin (guint keyval, guint keycode, guint modifiers);

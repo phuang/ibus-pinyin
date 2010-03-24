@@ -350,6 +350,16 @@ DoublePinyinEditor::updatePinyin (gboolean all)
     }
 }
 
+void
+DoublePinyinEditor::updateAuxiliaryTextAfter (String &buffer)
+{
+    buffer << "\n[ ";
+    buffer.append (m_text, m_cursor);
+    buffer << "|";
+    buffer.append (m_text.c_str () + m_cursor);
+    buffer << " ]";
+}
+
 #define CMSHM_MASK              \
         (IBUS_CONTROL_MASK |    \
          IBUS_MOD1_MASK |       \

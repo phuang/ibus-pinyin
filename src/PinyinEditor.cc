@@ -423,8 +423,12 @@ PinyinEditor::updateAuxiliaryText (void)
         return;
     }
 
+
     // guint cursor_pos;
     m_buffer.truncate (0);
+
+    updateAuxiliaryTextBefore (m_buffer);
+
     for (guint i = m_phrase_editor.cursor (); i < m_pinyin.length (); ++i) {
         if (G_LIKELY (i != m_phrase_editor.cursor ()))
             m_buffer << ' ';
@@ -446,6 +450,8 @@ PinyinEditor::updateAuxiliaryText (void)
         // cursor_pos =  m_buffer.utf8Length ();
         m_buffer  << '|' << textAfterCursor ();
     }
+
+    updateAuxiliaryTextAfter (m_buffer);
 
     StaticText aux_text (m_buffer);
     Editor::updateAuxiliaryText (aux_text, TRUE);
@@ -526,6 +532,16 @@ void
 PinyinEditor::candidateClicked (guint index, guint button, guint state)
 {
    selectCandidateInPage (index);
+}
+
+void
+PinyinEditor::updateAuxiliaryTextBefore (String &buffer)
+{
+}
+
+void
+PinyinEditor::updateAuxiliaryTextAfter (String &buffer)
+{
 }
 
 void

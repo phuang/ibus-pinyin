@@ -27,6 +27,7 @@ public:
     /* override virtual functions */
     gboolean processKeyEvent (guint keyval, guint keycode, guint modifiers);
     void reset (void);
+    void updateAuxiliaryTextAfter (String &buffer);
 
 private:
     gboolean updatePinyin (gboolean all);
