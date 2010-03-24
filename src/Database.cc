@@ -60,19 +60,20 @@ Database::init (void)
         PKGDATADIR"/db/open-phrase.db",
         PKGDATADIR"/db/android.db",
         "main.db",
-        NULL
     };
 
     guint i;
-    for (i = 0; maindb[i] != NULL; i++) {
+    for (i = 0; i < G_N_ELEMENTS (maindb); i++) {
         if (!g_file_test(maindb[i], G_FILE_TEST_IS_REGULAR))
             continue;
         if (sqlite3_open_v2 (maindb[i], &m_db,
-            SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE, NULL) == SQLITE_OK)
+            SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE, NULL) == SQLITE_OK) {
+            g_message ("Use database %s", maindb[i]);
             break;
+        }
     }
 
-    if (maindb[i] == NULL) {
+    if (i == G_N_ELEMENTS (maindb)) {
         g_warning ("can not open main database");
         goto _failed;
     }
