@@ -17,6 +17,7 @@ public:
     }
 
     static guint option (void) { return m_option & m_option_mask; }
+    static guint orientation (void) { return m_orientation; }
     static guint pageSize (void) { return m_page_size; }
     static gboolean shiftSelectCandidate (void) { return m_shift_select_candidate; }
     static gboolean minusEqualPage (void) { return m_minus_equal_page; }
@@ -47,6 +48,7 @@ private:
     static guint m_option;
     static guint m_option_mask;
 
+    static gint m_orientation;
     static guint m_page_size;
     static gboolean m_shift_select_candidate;
     static gboolean m_minus_equal_page;

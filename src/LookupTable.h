@@ -16,6 +16,7 @@ public:
         : Pointer <IBusLookupTable> (ibus_lookup_table_new (page_size, cursor_pos, cursor_visible, round)) { }
 
     guint pageSize (void) { return ibus_lookup_table_get_page_size (*this); }
+    guint orientation (void) { return ibus_lookup_table_get_orientation (*this); }
     guint cursorPos (void) { return ibus_lookup_table_get_cursor_pos (*this); }
 
     gboolean pageUp (void) { return ibus_lookup_table_page_up (*this); }
@@ -24,6 +25,7 @@ public:
     gboolean cursorDown (void) { return ibus_lookup_table_cursor_down (*this); }
 
     void setPageSize (guint size) { ibus_lookup_table_set_page_size (*this, size); }
+    void setOrientation (gint orientation) { ibus_lookup_table_set_orientation (*this, orientation); }
     void clear (void) { ibus_lookup_table_clear (*this); }
 
     void appendCandidate (IBusText *text) {

@@ -355,11 +355,22 @@ DoublePinyinEditor::updatePinyin (gboolean all)
 void
 DoublePinyinEditor::updateAuxiliaryTextAfter (String &buffer)
 {
-    buffer << "\n[ ";
-    buffer.append (m_text, m_cursor);
-    buffer << "|";
-    buffer.append (m_text.c_str () + m_cursor);
-    buffer << " ]";
+    if (G_LIKELY (Config::orientation () == IBUS_ORIENTATION_HORIZONTAL)) {
+        buffer << "        [ ";
+    }
+    else {
+        buffer << "\n[ ";
+    }
+    
+    if (G_LIKELY (m_cursor == m_text.length ())) {
+        m_buffer << m_text << " ]";
+    }
+    else {
+        buffer.append (m_text, m_cursor);
+        buffer << " ";
+        buffer.append (m_text.c_str () + m_cursor);
+        buffer << " ]";
+    }
 }
 
 #define CMSHM_MASK              \

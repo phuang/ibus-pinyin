@@ -360,14 +360,14 @@
                             <child>
                               <object class="GtkTable" id="table3">
                                 <property name="visible">True</property>
-                                <property name="n_rows">6</property>
+                                <property name="n_rows">5</property>
                                 <property name="n_columns">2</property>
                                 <property name="column_spacing">12</property>
                                 <property name="row_spacing">6</property>
                                 <property name="homogeneous">True</property>
                                 <child>
                                   <object class="GtkCheckButton" id="ShiftSelectCandidate">
-                                    <property name="label" translatable="yes">Press [Shift] key to select candidate</property>
+                                    <property name="label" translatable="yes">[Shift] select candidate</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
@@ -375,14 +375,13 @@
                                     <property name="draw_indicator">True</property>
                                   </object>
                                   <packing>
-                                    <property name="right_attach">2</property>
-                                    <property name="top_attach">1</property>
-                                    <property name="bottom_attach">2</property>
+                                    <property name="top_attach">2</property>
+                                    <property name="bottom_attach">3</property>
                                   </packing>
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="MinusEqualPage">
-                                    <property name="label" translatable="yes">Press [-] [=] key to flip page</property>
+                                    <property name="label" translatable="yes">[-] [=] flip page</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
@@ -391,6 +390,7 @@
                                     <property name="draw_indicator">True</property>
                                   </object>
                                   <packing>
+                                    <property name="left_attach">1</property>
                                     <property name="right_attach">2</property>
                                     <property name="top_attach">2</property>
                                     <property name="bottom_attach">3</property>
@@ -398,7 +398,7 @@
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="CommaPeriodPage">
-                                    <property name="label" translatable="yes">Press [,] [.] key to flip page</property>
+                                    <property name="label" translatable="yes">[,] [.] flip page</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
@@ -407,14 +407,13 @@
                                     <property name="draw_indicator">True</property>
                                   </object>
                                   <packing>
-                                    <property name="right_attach">2</property>
                                     <property name="top_attach">3</property>
                                     <property name="bottom_attach">4</property>
                                   </packing>
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="AutoCommit">
-                                    <property name="label" translatable="yes">Auto commit phrase</property>
+                                    <property name="label" translatable="yes">Auto commit</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
@@ -422,9 +421,10 @@
                                     <property name="draw_indicator">True</property>
                                   </object>
                                   <packing>
+                                    <property name="left_attach">1</property>
                                     <property name="right_attach">2</property>
-                                    <property name="top_attach">4</property>
-                                    <property name="bottom_attach">5</property>
+                                    <property name="top_attach">3</property>
+                                    <property name="bottom_attach">4</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -438,44 +438,56 @@
                                   </object>
                                   <packing>
                                     <property name="right_attach">2</property>
-                                    <property name="top_attach">5</property>
-                                    <property name="bottom_attach">6</property>
+                                    <property name="top_attach">4</property>
+                                    <property name="bottom_attach">5</property>
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkHBox" id="hbox3">
+                                  <object class="GtkComboBox" id="LookupTableOrientation">
                                     <property name="visible">True</property>
-                                    <property name="tooltip_text" translatable="yes">Setup the number of candidates show in one page of lookup table.</property>
-                                    <property name="spacing">12</property>
-                                    <child>
-                                      <object class="GtkLabel" id="label16">
-                                        <property name="visible">True</property>
-                                        <property name="xalign">0</property>
-                                        <property name="label" translatable="yes">Number of candidates:</property>
-                                        <property name="use_markup">True</property>
-                                      </object>
-                                      <packing>
-                                        <property name="expand">False</property>
-                                        <property name="position">0</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="GtkHScale" id="hscaleLookupTablePageSize">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">True</property>
-                                        <property name="update_policy">delayed</property>
-                                        <property name="adjustment">LookupTablePageSize</property>
-                                        <property name="digits">0</property>
-                                        <property name="value_pos">left</property>
-                                      </object>
-                                      <packing>
-                                        <property name="position">1</property>
-                                      </packing>
-                                    </child>
+                                    <property name="model">liststoreLookupTableOrientation</property>
+                                    <property name="button_sensitivity">on</property>
                                   </object>
                                   <packing>
+                                    <property name="left_attach">1</property>
                                     <property name="right_attach">2</property>
-                                    <property name="x_options">GTK_FILL</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel" id="label4">
+                                    <property name="visible">True</property>
+                                    <property name="xalign">0</property>
+                                    <property name="label" translatable="yes">Orientation of candidates:</property>
+                                    <property name="use_markup">True</property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkHScale" id="hscaleLookupTablePageSize">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="tooltip_text" translatable="yes">Setup the number of candidates show in one page of lookup table.</property>
+                                    <property name="update_policy">delayed</property>
+                                    <property name="adjustment">LookupTablePageSize</property>
+                                    <property name="digits">0</property>
+                                    <property name="value_pos">left</property>
+                                  </object>
+                                  <packing>
+                                    <property name="left_attach">1</property>
+                                    <property name="right_attach">2</property>
+                                    <property name="top_attach">1</property>
+                                    <property name="bottom_attach">2</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel" id="label16">
+                                    <property name="visible">True</property>
+                                    <property name="xalign">0</property>
+                                    <property name="label" translatable="yes">Number of candidates:</property>
+                                    <property name="use_markup">True</property>
+                                  </object>
+                                  <packing>
+                                    <property name="top_attach">1</property>
+                                    <property name="bottom_attach">2</property>
                                   </packing>
                                 </child>
                               </object>
@@ -1344,5 +1356,19 @@
     <property name="step_increment">1</property>
     <property name="page_increment">1</property>
     <property name="page_size">1</property>
+  </object>
+  <object class="GtkListStore" id="liststoreLookupTableOrientation">
+    <columns>
+      <!-- column-name orientation -->
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0" translatable="yes">Horizontal</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Vertical</col>
+      </row>
+    </data>
   </object>
 </interface>

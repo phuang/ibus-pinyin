@@ -7,6 +7,7 @@ namespace PY {
 guint Config::m_option = PINYIN_INCOMPLETE_PINYIN | PINYIN_CORRECT_ALL;
 guint Config::m_option_mask = PINYIN_INCOMPLETE_PINYIN | PINYIN_CORRECT_ALL;
 
+gint Config::m_orientation = IBUS_ORIENTATION_HORIZONTAL;
 guint Config::m_page_size = 5;
 gboolean Config::m_shift_select_candidate = FALSE;
 gboolean Config::m_minus_equal_page = TRUE;
@@ -26,6 +27,7 @@ static const StaticString engine_pinyin ("engine/Pinyin");
 static const StaticString correct_pinyin ("CorrectPinyin");
 static const StaticString fuzzy_pinyin ("FuzzyPinyin");
 
+static const StaticString orientation ("LookupTableOrientation");
 static const StaticString page_size ("LookupTablePageSize");
 static const StaticString shift_select_candidate ("ShiftSelectCandidate");
 static const StaticString minus_equal_page ("MinusEqualPage");
@@ -99,7 +101,17 @@ Config::readDefaultValues (void)
     m_trad_candidate = read (engine_pinyin, trad_candidate, false);
 
     /* others */
+    m_orientation = read (engine_pinyin, PY::orientation, 0);
+    if (m_orientation != IBUS_ORIENTATION_VERTICAL &&
+        m_orientation != IBUS_ORIENTATION_HORIZONTAL) {
+        m_orientation = IBUS_ORIENTATION_HORIZONTAL;
+        g_warn_if_reached ();
+    }
     m_page_size = read (engine_pinyin, page_size, 5);
+    if (m_page_size > 10) {
+        m_page_size = 5;
+        g_warn_if_reached ();
+    }
     m_shift_select_candidate = read (engine_pinyin, shift_select_candidate, false);
     m_minus_equal_page = read (engine_pinyin, minus_equal_page, true);
     m_comma_period_page = read (engine_pinyin, comma_period_page, true);
@@ -191,8 +203,21 @@ Config::valueChangedCallback (IBusConfig    *config,
     else if (trad_candidate == name)
         m_trad_candidate = normalizeGValue (value, false);
     /* lookup table page size */
-    else if (page_size == name)
+    else if (PY::orientation == name) {
+        m_orientation = normalizeGValue (value, 0);
+        if (m_orientation != IBUS_ORIENTATION_VERTICAL &&
+            m_orientation != IBUS_ORIENTATION_HORIZONTAL) {
+            m_orientation = IBUS_ORIENTATION_HORIZONTAL;
+            g_warn_if_reached ();
+        }
+    }
+    else if (page_size == name) {
         m_page_size = normalizeGValue (value, 5);
+        if (m_page_size > 10) {
+            m_page_size = 5;
+            g_warn_if_reached ();
+        }
+    }
     else if (shift_select_candidate == name)
         m_shift_select_candidate = normalizeGValue (value, false);
     else if (minus_equal_page == name)

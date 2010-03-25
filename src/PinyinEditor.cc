@@ -462,6 +462,7 @@ PinyinEditor::updateLookupTable (void)
 {
     m_lookup_table.clear ();
     m_lookup_table.setPageSize (Config::pageSize ());
+    m_lookup_table.setOrientation (Config::orientation ());
 
     guint candidate_nr = m_phrase_editor.candidates ().length ();
 
