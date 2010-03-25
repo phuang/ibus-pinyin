@@ -111,8 +111,10 @@ DoublePinyinEditor::removeWordBefore (void)
         updateAuxiliaryText ();
     }
     else {
-        m_cursor = m_pinyin_len = m_pinyin.back ().begin;
+        m_pinyin_len = m_pinyin.back ().begin;
         m_pinyin.pop ();
+        m_text.erase (m_pinyin_len, m_cursor - m_pinyin_len);
+        m_cursor = m_pinyin_len;
         updatePhraseEditor ();
         update ();
     }
@@ -126,7 +128,7 @@ DoublePinyinEditor::removeWordAfter (void)
     if (G_UNLIKELY (m_cursor == m_text.length ()))
         return FALSE;
 
-    m_text.erase (m_cursor, -1);
+    m_text.erase (m_cursor);
     updatePreeditText ();
     updateAuxiliaryText ();
     return TRUE;
