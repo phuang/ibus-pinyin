@@ -34,6 +34,7 @@ class PreferencesDialog:
         self.__double_pinyin = self.__builder.get_object("DoublePinyin")
         self.__double_pinyin_schema = self.__builder.get_object("DoublePinyinSchema")
         self.__double_pinyin_schema_label = self.__builder.get_object("labelDoublePinyinSchema")
+        self.__double_pinyin_show_raw = self.__builder.get_object("DoublePinyinShowRaw")
         self.__name_version = self.__builder.get_object("NameVersion")
         self.__name_version.set_markup(_("<big><b>IBus Pinyin %s</b></big>") % version.get_version())
 
@@ -45,14 +46,17 @@ class PreferencesDialog:
         self.__incomplete_pinyin.set_active(self.__get_value("IncompletePinyin", True))
         self.__full_pinyin.set_active(not self.__get_value("DoublePinyin", False))
         self.__double_pinyin_schema.set_active(self.__get_value("DoublePinyinSchema", 0))
+        self.__double_pinyin_show_raw.set_active(self.__get_value("DoublePinyinShowRaw", False))
         if self.__full_pinyin.get_active():
             # self.__incomplete_pinyin.set_sensitive(True)
             self.__double_pinyin_schema.set_sensitive(False)
             self.__double_pinyin_schema_label.set_sensitive(False)
+            self.__double_pinyin_show_raw.set_sensitive(False)
         else:
             # self.__incomplete_pinyin.set_sensitive(False)
             self.__double_pinyin_schema.set_sensitive(True)
             self.__double_pinyin_schema_label.set_sensitive(True)
+            self.__double_pinyin_show_raw.set_sensitive(True)
 
         def __full_pinyin_toggled_cb(widget):
             val = widget.get_active()
@@ -64,6 +68,7 @@ class PreferencesDialog:
             self.__set_value("DoublePinyin", val)
             self.__double_pinyin_schema.set_sensitive(val)
             self.__double_pinyin_schema_label.set_sensitive(val)
+            self.__double_pinyin_show_raw.set_sensitive(val)
 
         def __double_pinyin_schema_changed_cb(widget):
             self.__set_value("DoublePinyinSchema", widget.get_active())
@@ -73,6 +78,7 @@ class PreferencesDialog:
         self.__double_pinyin.connect("toggled", __double_pinyin_toggled_cb)
         self.__incomplete_pinyin.connect("toggled", self.__toggled_cb, "IncompletePinyin")
         self.__double_pinyin_schema.connect("changed", __double_pinyin_schema_changed_cb)
+        self.__double_pinyin_show_raw.connect("toggled", self.__toggled_cb, "DoublePinyinShowRaw")
 
     def __init_init_state(self):
         # init state

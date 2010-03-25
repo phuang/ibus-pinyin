@@ -25,6 +25,7 @@ public:
     static gboolean autoCommit (void) { return m_auto_commit; }
     static gboolean doublePinyin (void) { return m_double_pinyin; }
     static gint doublePinyinSchema (void) { return m_double_pinyin_schema; }
+    static gboolean doublePinyinShowRaw (void) { return m_double_pinyin_show_raw; }
     static gboolean initChinese (void) { return m_init_chinese; }
     static gboolean initFull (void) { return m_init_full; }
     static gboolean initFullPunct (void) { return m_init_full_punct; }
@@ -57,6 +58,7 @@ private:
 
     static gboolean m_double_pinyin;
     static gint m_double_pinyin_schema;
+    static gboolean m_double_pinyin_show_raw;
 
     static gboolean m_init_chinese;
     static gboolean m_init_full;

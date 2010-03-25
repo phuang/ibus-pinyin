@@ -16,6 +16,7 @@ gboolean Config::m_auto_commit = FALSE;
 
 gboolean Config::m_double_pinyin = FALSE;
 gint Config::m_double_pinyin_schema = 0;
+gboolean Config::m_double_pinyin_show_raw = FALSE;
 
 gboolean Config::m_init_chinese = TRUE;
 gboolean Config::m_init_full = FALSE;
@@ -36,6 +37,7 @@ static const StaticString auto_commit ("AutoCommit");
 
 static const StaticString double_pinyin ("DoublePinyin");
 static const StaticString double_pinyin_schema ("DoublePinyinSchema");
+static const StaticString double_pinyin_show_raw ("DoublePinyinShowRaw");
 
 static const StaticString init_chinese ("InitChinese");
 static const StaticString init_full ("InitFull");
@@ -91,6 +93,11 @@ Config::readDefaultValues (void)
     /* double pinyin */
     m_double_pinyin = read (engine_pinyin, double_pinyin, false);
     m_double_pinyin_schema = read (engine_pinyin, double_pinyin_schema, 0);
+    if (m_double_pinyin_schema >= 5) {
+        m_double_pinyin_schema = 0;
+        g_warn_if_reached ();
+    }
+    m_double_pinyin_show_raw = read (engine_pinyin, double_pinyin_show_raw, false);
 
     /* init states */
     m_init_chinese = read (engine_pinyin, init_chinese, true);
@@ -189,8 +196,15 @@ Config::valueChangedCallback (IBusConfig    *config,
     /* double pinyin */
     if (double_pinyin == name)
         m_double_pinyin = normalizeGValue (value, false);
-    else if (double_pinyin_schema == name)
+    else if (double_pinyin_schema == name) {
         m_double_pinyin_schema = normalizeGValue (value, 0);
+        if (m_double_pinyin_schema >= 5) {
+            m_double_pinyin_schema = 0;
+            g_warn_if_reached ();
+        }
+    }
+    else if (double_pinyin_show_raw == name)
+        m_double_pinyin_show_raw = normalizeGValue (value, false);
     /* init states */
     else if (init_chinese == name)
         m_init_chinese = normalizeGValue (value, true);

@@ -355,6 +355,9 @@ DoublePinyinEditor::updatePinyin (gboolean all)
 void
 DoublePinyinEditor::updateAuxiliaryTextAfter (String &buffer)
 {
+    if (G_LIKELY (!Config::doublePinyinShowRaw ()))
+        return;
+
     if (G_LIKELY (Config::orientation () == IBUS_ORIENTATION_HORIZONTAL)) {
         buffer << "        [ ";
     }

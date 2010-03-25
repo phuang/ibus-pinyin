@@ -97,7 +97,6 @@
                                 <child>
                                   <object class="GtkHBox" id="hbox1">
                                     <property name="visible">True</property>
-                                    <property name="tooltip_text" translatable="yes">Select double pinyin schema.</property>
                                     <property name="spacing">6</property>
                                     <property name="homogeneous">True</property>
                                     <child>
@@ -115,6 +114,7 @@
                                       <object class="GtkComboBox" id="DoublePinyinSchema">
                                         <property name="visible">True</property>
                                         <property name="sensitive">False</property>
+                                        <property name="tooltip_text" translatable="yes">Select double pinyin schema.</property>
                                         <property name="model">liststoreDoublePinyin</property>
                                         <property name="button_sensitivity">on</property>
                                       </object>
@@ -360,7 +360,7 @@
                             <child>
                               <object class="GtkTable" id="table3">
                                 <property name="visible">True</property>
-                                <property name="n_rows">5</property>
+                                <property name="n_rows">6</property>
                                 <property name="n_columns">2</property>
                                 <property name="column_spacing">12</property>
                                 <property name="row_spacing">6</property>
@@ -488,6 +488,21 @@
                                   <packing>
                                     <property name="top_attach">1</property>
                                     <property name="bottom_attach">2</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkCheckButton" id="DoublePinyinShowRaw">
+                                    <property name="label" translatable="yes">Show raw input of Double Pinyin</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="receives_default">False</property>
+                                    <property name="tooltip_text" translatable="yes">Show raw input of Double Pinyin</property>
+                                    <property name="draw_indicator">True</property>
+                                  </object>
+                                  <packing>
+                                    <property name="right_attach">2</property>
+                                    <property name="top_attach">5</property>
+                                    <property name="bottom_attach">6</property>
                                   </packing>
                                 </child>
                               </object>
