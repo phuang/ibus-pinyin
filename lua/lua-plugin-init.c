@@ -58,7 +58,7 @@ static int ime_get_version(lua_State* L){
 
 static int ime_join_string(lua_State* L){
   luaL_Buffer buf;
-  size_t arr_len; size_t i;
+  size_t vec_len; size_t i;
   const char * sep;
   const char * str;
 
@@ -68,8 +68,8 @@ static int ime_join_string(lua_State* L){
   sep = lua_tolstring(L, 2, NULL); 
 
   luaL_buffinit(L, &buf);
-  arr_len = lua_objlen(L, 1);
-  for ( i = 1; i < arr_len; ++i){
+  vec_len = lua_objlen(L, 1);
+  for ( i = 1; i < vec_len; ++i){
     lua_pushinteger(L, i);
     lua_gettable(L, 1);
     str = lua_tolstring(L, 3, NULL);
@@ -90,7 +90,24 @@ static int ime_join_string(lua_State* L){
 }
 
 static int ime_split_string(lua_State * L){
-  
+  gchar ** str_vec;
+  guint str_vec_len = 0;
+  const char * sep;
+  const char * str = lua_tolstring(L, 1, NULL);
+  sep = lua_tolstring(L, 2, NULL);
+  str_vec == g_strsplit(str, sep, 0);
+
+  str_vec_len = g_strv_length(str_vec);
+  lua_createtable(L, str_vec_len, 0);
+  for ( int i = 0; i < str_vec_len; ++i){
+    lua_pushinteger(L, i + 1);
+    lua_pushstring(L, str_vec[i]);
+    lua_settable(L, 3);
+  }
+
+  g_strfreev(str_vec);
+  lua_remove(L, 2); /* remove sep from stack */
+  lua_remove(L, 1); /* remove str from stack */
   return 1;
 }
 
@@ -121,7 +138,7 @@ static int ime_push_string(lua_State* L, const char * s,
   }
   lua_pushlstring(L, s + start, end -start);
   lua_remove(L, 1);
-  return 1; 
+  return 1;
 }
 
 static int ime_trim_string_left(lua_State* L){
