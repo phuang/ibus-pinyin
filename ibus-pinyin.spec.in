@@ -16,6 +16,7 @@ BuildRequires:  libtool
 BuildRequires:  pkgconfig
 BuildRequires:  sqlite-devel
 BuildRequires:  libuuid-devel
+BuildRequires:  libsigc++20-devel
 BuildRequires:  ibus-devel >= 1.2.0
 
 # Requires(post): sqlite

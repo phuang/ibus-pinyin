@@ -369,7 +369,7 @@ DoublePinyinEditor::updateAuxiliaryTextAfter (String &buffer)
         m_buffer << m_text << " ]";
     }
     else {
-        buffer.append (m_text, m_cursor);
+        buffer.append (m_text.c_str (), m_cursor);
         buffer << " ";
         buffer.append (m_text.c_str () + m_cursor);
         buffer << " ]";
