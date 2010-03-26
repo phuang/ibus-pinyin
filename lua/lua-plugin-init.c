@@ -91,15 +91,17 @@ static int ime_join_string(lua_State* L){
 
 static int ime_split_string(lua_State * L){
   gchar ** str_vec;
-  guint str_vec_len = 0;
+  guint str_vec_len = 0; int i;
   const char * sep;
   const char * str = lua_tolstring(L, 1, NULL);
+  
   sep = lua_tolstring(L, 2, NULL);
-  str_vec == g_strsplit(str, sep, 0);
+
+  str_vec = g_strsplit(str, sep, 0);
 
   str_vec_len = g_strv_length(str_vec);
   lua_createtable(L, str_vec_len, 0);
-  for ( int i = 0; i < str_vec_len; ++i){
+  for ( i = 0; i < str_vec_len; ++i){
     lua_pushinteger(L, i + 1);
     lua_pushstring(L, str_vec[i]);
     lua_settable(L, 3);
