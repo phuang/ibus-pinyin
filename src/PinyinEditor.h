@@ -84,8 +84,8 @@ protected:
     PinyinArray m_pinyin;       // pinyin array
     guint       m_pinyin_len;   // pinyin length in char
     String      m_buffer;       // temp buffer
-    PhraseEditor m_phrase_editor;
     LookupTable m_lookup_table;
+    PhraseEditor m_phrase_editor;
 
 protected:
     static PinyinParser m_parser;

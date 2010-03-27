@@ -11,12 +11,12 @@ namespace PY {
 PinyinParser PinyinEditor::m_parser;
 
 PinyinEditor::PinyinEditor (PinyinProperties & props)
-    : m_pinyin (MAX_PHRASE_LEN),
+    : Editor (props),
+      m_pinyin (MAX_PHRASE_LEN),
       m_pinyin_len (0),
       m_buffer (64),
       m_lookup_table (Config::pageSize ()),
-      m_phrase_editor (props),
-      Editor (props)
+      m_phrase_editor (props)
 {
 }
 
@@ -153,7 +153,6 @@ PinyinEditor::processOthers (guint keyval, guint keycode, guint modifiers)
 
 
     /* process some cursor control keys */
-    gboolean _update = FALSE;
     if (modifiers == 0) {
         switch (keyval) {
         case IBUS_Shift_L:
@@ -255,8 +254,6 @@ PinyinEditor::processOthers (guint keyval, guint keycode, guint modifiers)
 gboolean
 PinyinEditor::processKeyEvent (guint keyval, guint keycode, guint modifiers)
 {
-    gboolean result = FALSE;
-
     modifiers &= (IBUS_SHIFT_MASK |
                   IBUS_CONTROL_MASK |
                   IBUS_MOD1_MASK |

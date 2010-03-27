@@ -90,9 +90,9 @@ PhraseEditor::updateCandidates (void)
         m_candidates.resize (1);
         m_candidates[0].reset ();
 #ifndef CONFIG_REVERSE_FIRST_CANDIDATE
-        for (gint i = 0; i < m_candidate_0_phrases.length (); i++)
+        for (guint i = 0; i < m_candidate_0_phrases.length (); i++)
 #else
-        for (gint i = m_candidate_0_phrases.length () - 1; i >= 0; i--)
+        for (guint i = m_candidate_0_phrases.length () - 1; i >= 0; i--)
 #endif
             m_candidates[0] += m_candidate_0_phrases[i];
     }

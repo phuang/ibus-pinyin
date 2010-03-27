@@ -29,7 +29,6 @@ DoublePinyinEditor::DoublePinyinEditor (PinyinProperties & props)
 gboolean
 DoublePinyinEditor::insert (gint ch)
 {
-    const Pinyin *pinyin;
     gint id;
     /* is full */
     if (G_UNLIKELY (m_text.length () >= MAX_PINYIN_LEN))
@@ -315,7 +314,7 @@ DoublePinyinEditor::updatePinyin (gboolean all)
     }
 
     if (m_pinyin_len < m_cursor) {
-        gint len = m_pinyin_len;
+        guint len = m_pinyin_len;
         if (m_pinyin.isEmpty () == FALSE &&
             m_pinyin.back ()->flags & PINYIN_INCOMPLETE_PINYIN) {
             const Pinyin *pinyin = isPinyin (ID (m_text[m_pinyin_len -1]),ID (m_text[m_pinyin_len]));
@@ -350,6 +349,7 @@ DoublePinyinEditor::updatePinyin (gboolean all)
             return retval;
         return TRUE;
     }
+    return retval;
 }
 
 void
