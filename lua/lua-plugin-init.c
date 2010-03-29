@@ -65,10 +65,17 @@ static int ime_join_string(lua_State* L){
   if ( !lua_istable(L, 1) )
     return 0;
 
-  sep = lua_tolstring(L, 2, NULL); 
+  sep = lua_tolstring(L, 2, NULL);
+  vec_len = lua_objlen(L, 1);
+
+  if ( 0 == vec_len ){
+    lua_pop(L, 2);
+    lua_pushliteral(L, "");
+    return 1;
+  }
 
   luaL_buffinit(L, &buf);
-  vec_len = lua_objlen(L, 1);
+
   for ( i = 1; i < vec_len; ++i){
     lua_pushinteger(L, i);
     lua_gettable(L, 1);
@@ -84,6 +91,8 @@ static int ime_join_string(lua_State* L){
   str = lua_tolstring(L, 3, NULL);
   luaL_addstring(&buf, str);
   lua_pop(L, 1);
+  /* remove the args. */
+  lua_pop(L, 2);
   luaL_pushresult(&buf);
 
   return 1;

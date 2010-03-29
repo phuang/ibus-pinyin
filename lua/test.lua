@@ -13,3 +13,8 @@ for i,v in ipairs(tab) do print(i, v) end
 
 tab = ime.split_string("aa..bb..cc", "..");
 print(ime.join_string(tab, ", "));
+
+print(ime.join_string(nil, ".."));
+print(ime.join_string({}, ".."));
+
+print("test finished...");
