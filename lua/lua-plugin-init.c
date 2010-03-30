@@ -98,6 +98,71 @@ static int ime_join_string(lua_State* L){
   return 1;
 }
 
+static int ime_parse_mapping(lua_State * L){
+  const char * src_string, * line_sep, * key_value_sep, * values_sep;
+  int m, n;
+  gchar** lines = NULL; size_t lines_no = 0; const char * line;
+  gchar** key_value = NULL; const char * key = NULL;
+  gchar** values = NULL; size_t values_no = 0; const char * value = NULL;
+
+  src_string = lua_tolstring(L, 1, NULL);
+  if ( NULL == src_string || '\0' == src_string[0])
+    goto failed;
+  line_sep = lua_tolstring(L, 2, NULL);
+  if ( NULL == line_sep || '\0' == line_sep[0])
+    goto failed;
+  key_value_sep = lua_tolstring(L, 3, NULL);
+  if ( NULL == key_value_sep || '\0' == key_value_sep[0])
+    goto failed;
+  values_sep = lua_tolstring(L, 4, NULL);
+  if ( NULL == values_sep || '\0' == values_sep[0])
+    goto failed;
+  
+  lines = g_strsplit(src_string, line_sep, 0);
+  lines_no = g_strv_length(lines);
+  lua_createtable(L, 0, lines_no);
+  for( m = 0; m < lines_no; ++m){
+    line = lines[m];
+    if ( NULL == line || '\0' == line[0])
+      continue;
+    key_value = g_strsplit(line, key_value_sep, 2);
+    key = key_value[0]; /* value = key_value[1]; */
+    if ( NULL == key || '\0' == key[0])
+      continue;
+    {
+      values = g_strsplit(key_value[1], values_sep, 0);
+      values_no = g_strv_length(values);
+      lua_createtable(L, values_no, 0);
+      for ( n = 0; n < values_no; ++n){
+        value = values[n];
+        if ( NULL == value || '\0' == value[0] )
+          continue;
+        lua_pushinteger(L, n + 1);
+        lua_pushstring(L, value);
+        lua_settable(L, 6);
+      }
+      g_strfreev(values);
+    }
+
+    lua_pushstring(L, key);
+    lua_insert(L, 6);
+    lua_settable(L, 5);
+    g_strfreev(key_value);
+  }
+
+  g_strfreev(lines);
+  /*remove args */
+  lua_remove(L, 4);
+  lua_remove(L, 3);
+  lua_remove(L, 2);
+  lua_remove(L, 1);
+  return 1;
+
+failed:
+  lua_createtable(L, 0, 0);
+  return 1;
+}
+
 static int ime_split_string(lua_State * L){
   gchar ** str_vec;
   guint str_vec_len = 0; int i;
@@ -199,8 +264,8 @@ static const luaL_Reg imelib[] = {
   {"get_last_commit", ime_get_last_commit},
   {"get_version", ime_get_version},
   {"join_string", ime_join_string},
-#if 0
   {"parse_mapping", ime_parse_mapping},
+#if 0
   {"register_command", ime_register_command},
   /* Note: the register_trigger function is dropped for ibus-pinyin. */
   {"register_trigger", ime_register_trigger},
