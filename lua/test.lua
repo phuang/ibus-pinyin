@@ -24,5 +24,12 @@ c 从,穿,出
 ]]
 
 _MAPPING = ime.parse_mapping(_MAPPING_TABLE, "\n", " ", ",")
+for k,v in pairs(_MAPPING) do 
+  print(k, ":")
+  for i, m in ipairs(v) do
+    print(i, m)
+  end
+end
+
 
 print("test finished...");
