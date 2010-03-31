@@ -110,6 +110,10 @@ PinyinEngine::processKeyEvent (guint keyval, guint keycode, guint modifiers)
             }
         }
         retval = m_editors[m_input_mode]->processKeyEvent (keyval, keycode, modifiers);
+        if (G_UNLIKELY (retval &&
+                        m_input_mode != MODE_INIT &&
+                        m_editors[m_input_mode]->text ().isEmpty ()))
+            m_input_mode = MODE_INIT;
     }
 
     if (G_UNLIKELY (!retval))
