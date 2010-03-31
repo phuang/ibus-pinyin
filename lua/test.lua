@@ -11,6 +11,9 @@ for i,v in ipairs(tab) do print(i, v) end
 tab = ime.split_string(nil, nil);
 for i,v in ipairs(tab) do print(i, v) end
 
+tab = ime.split_string("aa..bb..cc", nil);
+for i,v in ipairs(tab) do print(i, v) end
+
 tab = ime.split_string("aa..bb..cc", "..");
 print(ime.join_string(tab, ", "));
 

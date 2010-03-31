@@ -168,12 +168,22 @@ static int ime_split_string(lua_State * L){
   guint str_vec_len = 0; int i;
   const char * sep;
   const char * str = lua_tolstring(L, 1, NULL);
+
+  if ( NULL == str || '\0' == str[0]){
+    lua_newtable(L);
+    return 1;
+  }
   
   sep = lua_tolstring(L, 2, NULL);
 
-  str_vec = g_strsplit(str, sep, 0);
+  if ( NULL == sep || '\0' == sep[0]){
+    lua_newtable(L);
+    return 1;
+  }
 
+  str_vec = g_strsplit(str, sep, 0);
   str_vec_len = g_strv_length(str_vec);
+
   lua_createtable(L, str_vec_len, 0);
   for ( i = 0; i < str_vec_len; ++i){
     lua_pushinteger(L, i + 1);
