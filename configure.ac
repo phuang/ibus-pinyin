@@ -106,6 +106,11 @@ BOOST_FIND_HEADER([boost/signals2.hpp])
 #     sigc++-2.0
 # ])
 
+# check lua
+PKG_CHECK_MODULES(LUA, [
+    lua
+])
+
 # check env
 AC_PATH_PROG(ENV, env)
 AC_SUBST(ENV)
@@ -142,6 +147,7 @@ AM_CONDITIONAL(IBUS_BUILD_DB_OPEN_PHRASE, [test x"$enable_db_open_phrase" = x"ye
 AC_CONFIG_FILES([ po/Makefile.in
 Makefile
 ibus-pinyin.spec
+lua/Makefile
 src/Makefile
 src/pinyin.xml.in
 setup/Makefile
