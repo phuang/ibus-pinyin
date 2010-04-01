@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <glib.h>
 
 #include "lua.h"
 #include "lualib.h"
