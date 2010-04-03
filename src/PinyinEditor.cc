@@ -545,9 +545,9 @@ PinyinEditor::updateAuxiliaryTextAfter (String &buffer)
 void
 PinyinEditor::update (void)
 {
+    updateLookupTable ();
     updatePreeditText ();
     updateAuxiliaryText ();
-    updateLookupTable ();
 }
 
 void
