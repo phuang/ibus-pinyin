@@ -30,7 +30,8 @@ public:
     }
 
     gboolean candidateIsUserPhease (guint i) const {
-        return m_candidates[i].user_freq > 0 && m_candidates[i].freq == 0;
+        const Phrase & phrase = m_candidates[i];
+        return phrase.len > 1 && phrase.user_freq > 0 && phrase.freq == 0;
     }
 
     void reset (void) {
