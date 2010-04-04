@@ -18,6 +18,7 @@ public:
     guint pageSize (void) { return ibus_lookup_table_get_page_size (*this); }
     guint orientation (void) { return ibus_lookup_table_get_orientation (*this); }
     guint cursorPos (void) { return ibus_lookup_table_get_cursor_pos (*this); }
+    guint size (void) { return ibus_lookup_table_get_number_of_candidates (*this); }
 
     gboolean pageUp (void) { return ibus_lookup_table_page_up (*this); }
     gboolean pageDown (void) { return ibus_lookup_table_page_down (*this); }

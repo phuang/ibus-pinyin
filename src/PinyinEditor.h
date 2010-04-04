@@ -40,6 +40,7 @@ protected:
     void updatePreeditTextInEditingMode (void);
     void updateAuxiliaryText (void);
     void updateLookupTable (void);
+    gboolean fillLookupTableByPage (void);
 
     void updatePhraseEditor (void);
 

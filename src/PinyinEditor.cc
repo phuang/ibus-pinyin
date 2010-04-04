@@ -501,15 +501,26 @@ PinyinEditor::updateLookupTable (void)
     m_lookup_table.setPageSize (Config::pageSize ());
     m_lookup_table.setOrientation (Config::orientation ());
 
+    if (fillLookupTableByPage ()) {
+        Editor::updateLookupTable (m_lookup_table, TRUE);
+    }
+    else {
+        hideLookupTable ();
+    }
+}
+
+inline gboolean
+PinyinEditor::fillLookupTableByPage (void)
+{
     guint candidate_nr = m_phrase_editor.candidates ().length ();
 
-    if (G_UNLIKELY (candidate_nr == 0)) {
-        hideLookupTable ();
-        return;
+    if (candidate_nr == m_lookup_table.size ()) {
+        return FALSE;
     }
 
+    guint end = min (candidate_nr, m_lookup_table.size () + Config::pageSize ());
     if (G_LIKELY (m_props.modeSimp () || !Config::tradCandidate ())) {
-        for (guint i = 0; i < candidate_nr; i++) {
+        for (guint i = m_lookup_table.size (); i < end; i++ ) {
             StaticText text (m_phrase_editor.candidate (i));
             if (m_phrase_editor.candidateIsUserPhease (i))
                 text.appendAttribute (IBUS_ATTR_TYPE_FOREGROUND, 0x000000ef, 0, -1);
@@ -517,7 +528,7 @@ PinyinEditor::updateLookupTable (void)
         }
     }
     else {
-        for (guint i = 0; i < candidate_nr; i++) {
+        for (guint i = m_lookup_table.size (); i < end; i++ ) {
             m_buffer.truncate (0);
             SimpTradConverter::simpToTrad (m_phrase_editor.candidate (i), m_buffer);
             Text text (m_buffer);
@@ -527,7 +538,7 @@ PinyinEditor::updateLookupTable (void)
         }
     }
 
-    updateLookupTableFast (m_lookup_table, TRUE);
+    return TRUE;
 }
 
 void
@@ -542,7 +553,8 @@ PinyinEditor::pageUp (void)
 void
 PinyinEditor::pageDown (void)
 {
-    if (m_lookup_table.pageDown ()) {
+    if ((m_lookup_table.pageDown ()) ||
+        (fillLookupTableByPage () && m_lookup_table.pageDown ())) {
         updateLookupTableFast (m_lookup_table, TRUE);
         updatePreeditText ();
     }
@@ -560,6 +572,11 @@ PinyinEditor::cursorUp (void)
 void
 PinyinEditor::cursorDown (void)
 {
+    if ((m_lookup_table.cursorPos () == m_lookup_table.size () - 1) &&
+        (fillLookupTableByPage () == FALSE)) {
+        return;
+    }
+
     if (m_lookup_table.cursorDown ()) {
         updateLookupTableFast (m_lookup_table, TRUE);
         updatePreeditText ();
