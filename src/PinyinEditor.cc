@@ -198,7 +198,12 @@ PinyinEditor::processOthers (guint keyval, guint keycode, guint modifiers)
 
         case IBUS_Right:
         case IBUS_KP_Right:
-            moveCursorRight ();
+            if (m_phrase_editor.unselectCandidates ()) {
+                update ();
+            }
+            else {
+                moveCursorRight ();
+            }
             break;
 
         case IBUS_Home:
@@ -213,7 +218,12 @@ PinyinEditor::processOthers (guint keyval, guint keycode, guint modifiers)
 
         case IBUS_End:
         case IBUS_KP_End:
-            moveCursorToEnd ();
+            if (m_phrase_editor.unselectCandidates ()) {
+                update ();
+            }
+            else {
+                moveCursorToEnd ();
+            }
             break;
 
         case IBUS_Up:
@@ -266,7 +276,12 @@ PinyinEditor::processOthers (guint keyval, guint keycode, guint modifiers)
 
         case IBUS_Right:
         case IBUS_KP_Right:
-            moveCursorToEnd ();
+            if (m_phrase_editor.unselectCandidates ()) {
+                update ();
+            }
+            else {
+                moveCursorToEnd ();
+            }
             break;
 
         default:
