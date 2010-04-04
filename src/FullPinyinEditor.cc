@@ -77,7 +77,8 @@ FullPinyinEditor::removeCharAfter (void)
         return FALSE;
 
     m_text.erase (m_cursor, 1);
-    update ();
+    updatePreeditText ();
+    updateAuxiliaryText ();
 
     return TRUE;
 }
@@ -114,7 +115,8 @@ FullPinyinEditor::removeWordAfter (void)
         return FALSE;
 
     m_text.erase (m_cursor, -1);
-    update ();
+    updatePreeditText ();
+    updateAuxiliaryText ();
     return TRUE;
 }
 
