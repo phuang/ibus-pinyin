@@ -20,6 +20,90 @@ namespace PY {
 
 #define DB_PREFETCH_LEN     (6)
 
+class Conditions : public vector<string> {
+public:
+    Conditions (void) :
+        vector<string> (32),
+        m_length (1) {
+    }
+
+    ~Conditions (void) {
+    }
+
+    guint length (void) { return m_length; }
+
+    void _double (void) {
+        for (gint i = m_length - 1; i >= 0; i--) {
+            (*this)[m_length + i] = (*this)[i];
+        }
+        m_length = m_length + m_length;
+    }
+
+    void triple (void) {
+        for (gint i = m_length - 1; i >= 0; i--) {
+            operator[](m_length + i) = operator[]((m_length << 1) + i) = operator[](i);
+        }
+        m_length = m_length + m_length + m_length;
+    }
+
+    void appendVPrintf (gint begin, gint end, const gchar *fmt, va_list args) {
+        gchar str[64];
+        g_vsnprintf (str, sizeof(str), fmt, args);
+        for (gint i = begin; i < end; i++) {
+            operator[](i) += str;
+        }
+    }
+
+    void appendPrintf (gint begin, gint end, const gchar *fmt, ...) {
+        va_list args;
+        va_start (args, fmt);
+        appendVPrintf (begin, end, fmt, args);
+        va_end (args);
+    }
+private:
+    guint m_length;
+};
+
+class SQLStmt {
+public:
+    SQLStmt (sqlite3 *db) : m_db (db), m_stmt (NULL) {
+    }
+
+    ~SQLStmt () {
+        if (m_stmt != NULL)
+            sqlite3_finalize (m_stmt);
+    }
+
+    gboolean prepare (const gchar *sql) {
+        if (sqlite3_prepare (m_db,
+                             sql,
+                             -1,
+                             &m_stmt,
+                             NULL) != SQLITE_OK) {
+            g_debug ("parse sql failed!\n %s", sql);
+            return FALSE;
+        }
+
+        return TRUE;
+    }
+
+    gboolean step (void) {
+        return sqlite3_step (m_stmt) == SQLITE_ROW;
+    }
+
+    const gchar *columnText (guint i) {
+        return (const gchar *) sqlite3_column_text (m_stmt, i);
+    }
+
+    gint columnInt (guint i) {
+        return sqlite3_column_int (m_stmt, i);
+    }
+
+private:
+    sqlite3 *m_db;
+    sqlite3_stmt *m_stmt;
+};
+
 Database::Database (void)
     : m_db (NULL)
 {
@@ -311,7 +395,7 @@ Database::query (const PinyinArray &pinyin,
         return -1;
 
     /* prepare sql */
-    m_conditions.reset ();
+    Conditions conditions;
 
     for (guint i = 0; i < pinyin_len; i++) {
         const Pinyin *p;
@@ -322,72 +406,72 @@ Database::query (const PinyinArray &pinyin,
         fs2 = pinyin_option_check_sheng (option, p->sheng_id, p->fsheng_id_2);
 
         if (G_LIKELY (i > 0))
-            m_conditions.appendPrintf (0, m_conditions.length (),
+            conditions.appendPrintf (0, conditions.length (),
                                        " AND ");
 
         if (fs1 || fs2) {
             if (G_LIKELY (i < DB_INDEX_SIZE)) {
                 if (fs1 && fs2 == 0) {
-                    m_conditions._double ();
-                    m_conditions.appendPrintf (0, m_conditions.length ()  >> 1,
+                    conditions._double ();
+                    conditions.appendPrintf (0, conditions.length ()  >> 1,
                                                "s%d=%d", i, p->sheng_id);
-                    m_conditions.appendPrintf (m_conditions.length () >> 1, m_conditions.length (),
+                    conditions.appendPrintf (conditions.length () >> 1, conditions.length (),
                                                "s%d=%d", i, p->fsheng_id);
                 }
                 else if (fs1 == 0 && fs2) {
-                    m_conditions._double ();
-                    m_conditions.appendPrintf (0, m_conditions.length ()  >> 1,
+                    conditions._double ();
+                    conditions.appendPrintf (0, conditions.length ()  >> 1,
                                                "s%d=%d", i, p->sheng_id);
-                    m_conditions.appendPrintf (m_conditions.length () >> 1, m_conditions.length (),
+                    conditions.appendPrintf (conditions.length () >> 1, conditions.length (),
                                                "s%d=%d", i, p->fsheng_id_2);
                 }
                 else {
-                    gint len = m_conditions.length ();
-                    m_conditions.triple ();
-                    m_conditions.appendPrintf (0, len,
+                    gint len = conditions.length ();
+                    conditions.triple ();
+                    conditions.appendPrintf (0, len,
                                                "s%d=%d", i, p->sheng_id);
-                    m_conditions.appendPrintf (len, len << 1,
+                    conditions.appendPrintf (len, len << 1,
                                                "s%d=%d", i, p->fsheng_id);
-                    m_conditions.appendPrintf (len << 1, m_conditions.length (),
+                    conditions.appendPrintf (len << 1, conditions.length (),
                                                "s%d=%d", i, p->fsheng_id_2);
                 }
             }
             else {
                 if (fs1 && fs2 == 0) {
-                    m_conditions.appendPrintf (0, m_conditions.length (),
+                    conditions.appendPrintf (0, conditions.length (),
                                                "s%d IN (%d,%d)", i, p->sheng_id, p->fsheng_id);
                 }
                 else if (fs1 == 0 && fs2) {
-                    m_conditions.appendPrintf (0, m_conditions.length (),
+                    conditions.appendPrintf (0, conditions.length (),
                                                "s%d IN (%d,%d)", i, p->sheng_id, p->fsheng_id_2);
                 }
                 else {
-                    m_conditions.appendPrintf (0, m_conditions.length (),
+                    conditions.appendPrintf (0, conditions.length (),
                                                "s%d IN (%d,%d,%d)", i, p->sheng_id, p->fsheng_id, p->fsheng_id_2);
                 }
             }
         }
         else {
-            m_conditions.appendPrintf (0, m_conditions.length (),
+            conditions.appendPrintf (0, conditions.length (),
                                        "s%d=%d", i, p->sheng_id);
         }
 
         if (p->yun_id != PINYIN_ID_ZERO) {
             if (pinyin_option_check_yun (option, p->yun_id, p->fyun_id)) {
                 if (G_LIKELY (i < DB_INDEX_SIZE)) {
-                    m_conditions._double ();
-                    m_conditions.appendPrintf (0, m_conditions.length ()  >> 1,
+                    conditions._double ();
+                    conditions.appendPrintf (0, conditions.length ()  >> 1,
                                                " AND y%d=%d", i, p->yun_id);
-                    m_conditions.appendPrintf (m_conditions.length () >> 1, m_conditions.length (),
+                    conditions.appendPrintf (conditions.length () >> 1, conditions.length (),
                                                " and y%d=%d", i, p->fyun_id);
                 }
                 else {
-                    m_conditions.appendPrintf (0, m_conditions.length (),
+                    conditions.appendPrintf (0, conditions.length (),
                                                " AND y%d IN (%d,%d)", i, p->yun_id, p->fyun_id);
                 }
             }
             else {
-                m_conditions.appendPrintf (0, m_conditions.length (),
+                conditions.appendPrintf (0, conditions.length (),
                                            " AND y%d=%d", i, p->yun_id);
             }
         }
@@ -395,11 +479,11 @@ Database::query (const PinyinArray &pinyin,
 
 
     m_buffer.erase (0);
-    for (guint i = 0; i < m_conditions.length (); i++) {
+    for (guint i = 0; i < conditions.length (); i++) {
         if (G_UNLIKELY (i == 0))
-            m_buffer << "  (" << m_conditions[i].c_str() << ")\n";
+            m_buffer << "  (" << conditions[i].c_str() << ")\n";
         else
-            m_buffer << "  OR (" << m_conditions[i].c_str() << ")\n";
+            m_buffer << "  OR (" << conditions[i].c_str() << ")\n";
     }
 
     m_sql.printf ("SELECT * FROM ("
@@ -414,36 +498,29 @@ Database::query (const PinyinArray &pinyin,
 #endif
 
     /* query database */
-    sqlite3_stmt *stmt;
-    if (sqlite3_prepare (m_db,
-                         (const gchar *) m_sql,
-                         -1,
-                         &stmt,
-                         NULL) != SQLITE_OK) {
-        g_debug ("parse sql failed!\n %s", (const gchar *)m_sql);
+    SQLStmt stmt (m_db);
+
+    if (!stmt.prepare (m_sql))
         return -1;
-    }
 
     gint row = 0;
-    while (sqlite3_step (stmt) == SQLITE_ROW) {
+    while (stmt.step ()) {
         Phrase p;
 
         g_strlcpy (p.phrase,
-                   (gchar *) sqlite3_column_text (stmt, DB_COLUMN_PHRASE),
+                   stmt.columnText (DB_COLUMN_PHRASE),
                    sizeof (p.phrase));
-        p.freq = sqlite3_column_int (stmt, DB_COLUMN_FREQ);
-        p.user_freq = sqlite3_column_int (stmt, DB_COLUMN_USER_FREQ);
+        p.freq = stmt.columnInt (DB_COLUMN_FREQ);
+        p.user_freq = stmt.columnInt (DB_COLUMN_USER_FREQ);
         p.len = pinyin_len;
 
         for (guint i = 0; i < pinyin_len; i++) {
-            p.pinyin_id[i][0] = sqlite3_column_int (stmt, (i << 1) + DB_COLUMN_S0);
-            p.pinyin_id[i][1] = sqlite3_column_int (stmt, (i << 1) + DB_COLUMN_S0 + 1);
+            p.pinyin_id[i][0] = stmt.columnInt ((i << 1) + DB_COLUMN_S0);
+            p.pinyin_id[i][1] = stmt.columnInt ((i << 1) + DB_COLUMN_S0 + 1);
         }
         result << p;
         row ++;
     }
-
-    sqlite3_finalize (stmt);
     return row;
 }
 
