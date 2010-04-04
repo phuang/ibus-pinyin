@@ -34,6 +34,19 @@ public:
         return phrase.len > 1 && phrase.user_freq > 0 && phrase.freq == 0;
     }
 
+    gboolean unselectCandidates (void) {
+        if (m_cursor == 0) {
+            return FALSE;
+        }
+        else {
+            m_selected_phrases.removeAll ();
+            m_selected_string.truncate (0);
+            m_cursor = 0;
+            updateCandidates ();
+            return TRUE;
+        }
+    }
+
     void reset (void) {
         m_candidates.removeAll ();
         m_selected_phrases.removeAll ();

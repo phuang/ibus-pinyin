@@ -173,7 +173,12 @@ PinyinEditor::processOthers (guint keyval, guint keycode, guint modifiers)
             break;
 
         case IBUS_BackSpace:
-            removeCharBefore ();
+            if (m_phrase_editor.unselectCandidates ()) {
+                update ();
+            }
+            else {
+                removeCharBefore ();
+            }
             break;
 
         case IBUS_Delete:
@@ -183,7 +188,12 @@ PinyinEditor::processOthers (guint keyval, guint keycode, guint modifiers)
 
         case IBUS_Left:
         case IBUS_KP_Left:
-            moveCursorLeft ();
+            if (m_phrase_editor.unselectCandidates ()) {
+                update ();
+            }
+            else {
+                moveCursorLeft ();
+            }
             break;
 
         case IBUS_Right:
@@ -193,7 +203,12 @@ PinyinEditor::processOthers (guint keyval, guint keycode, guint modifiers)
 
         case IBUS_Home:
         case IBUS_KP_Home:
-            moveCursorToBegin ();
+            if (m_phrase_editor.unselectCandidates ()) {
+                update ();
+            }
+            else {
+                moveCursorToBegin ();
+            }
             break;
 
         case IBUS_End:
@@ -226,7 +241,12 @@ PinyinEditor::processOthers (guint keyval, guint keycode, guint modifiers)
     else {
         switch (keyval) {
         case IBUS_BackSpace:
-            removeWordBefore ();
+            if (m_phrase_editor.unselectCandidates ()) {
+                update ();
+            }
+            else {
+                removeWordBefore ();
+            }
             break;
 
         case IBUS_Delete:
@@ -236,7 +256,12 @@ PinyinEditor::processOthers (guint keyval, guint keycode, guint modifiers)
 
         case IBUS_Left:
         case IBUS_KP_Left:
-            moveCursorLeftByWord ();
+            if (m_phrase_editor.unselectCandidates ()) {
+                update ();
+            }
+            else {
+                moveCursorLeftByWord ();
+            }
             break;
 
         case IBUS_Right:
