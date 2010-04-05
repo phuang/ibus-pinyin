@@ -2,8 +2,6 @@
 #include "PhraseEditor.h"
 #include "SimpTradConverter.h"
 
-// #define CONFIG_REVERSE_FIRST_CANDIDATE
-
 namespace PY {
 
 Database PhraseEditor::m_database;
@@ -89,21 +87,17 @@ PhraseEditor::updateCandidates (void)
     if (G_LIKELY (m_candidate_0_phrases.length () > 1)) {
         m_candidates.resize (1);
         m_candidates[0].reset ();
-#ifndef CONFIG_REVERSE_FIRST_CANDIDATE
         for (guint i = 0; i < m_candidate_0_phrases.length (); i++)
-#else
-        for (guint i = m_candidate_0_phrases.length () - 1; i >= 0; i--)
-#endif
             m_candidates[0] += m_candidate_0_phrases[i];
     }
-    guint len = m_pinyin.length () - m_cursor;
-    for (; len > 0; len--) {
-        retval = m_database.query (m_pinyin,
-                                   m_cursor,
-                                   len,
-                                   -1,
-                                   Config::option (),
-                                   m_candidates);
+
+    {
+        Query query (m_database,
+                     m_pinyin,
+                     m_cursor, 
+                     m_pinyin.length () - m_cursor,
+                     Config::option ());
+        query.fill (m_candidates, -1);
     }
 }
 
@@ -123,37 +117,17 @@ PhraseEditor::updateTheFirstCandidate (void)
     end = m_pinyin.length ();
 
     while (begin != end) {
-#ifndef CONFIG_REVERSE_FIRST_CANDIDATE
-        for (guint i = end; i > begin; i--) {
-            retval = m_database.query (m_pinyin,
-                                       begin,
-                                       i - begin,
-                                       1,
-                                       Config::option (),
-                                       m_candidate_0_phrases);
-            if (G_LIKELY (retval > 0)) {
-                begin = i;
-                break;
-            }
-        }
-#else
-        for (guint i = begin; i < end; i++) {
-            retval = m_database.query (m_pinyin,
-                                       i,
-                                       end - i,
-                                       1,
-                                       Config::option (),
-                                       m_candidate_0_phrases);
-            if (G_LIKELY (retval > 0)) {
-                end = i;
-                break;
-            }
-        }
-#endif
-        if (retval <= 0)
-            g_debug ("%s", m_pinyin[begin]->text);
-        g_assert (retval > 0);
+        gint ret;
+        Query query (m_database,
+                     m_pinyin,
+                     begin,
+                     end - begin,
+                     Config::option ());
+        ret = query.fill (m_candidate_0_phrases, 1);
+        g_assert (ret == 1);
+        begin += m_candidate_0_phrases.back ().len;
     }
+    g_debug ("is me");
 }
 
 };

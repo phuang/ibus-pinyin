@@ -15,21 +15,45 @@ namespace PY {
 
 using namespace std;
 
+class SQLStmt;
+class Database;
+
+class Query {
+public:
+    Query (Database             & db,
+           const PinyinArray    & pinyin,
+           guint                  pinyin_begin,
+           guint                  pinyin_len,
+           guint                  option)
+        : m_db (db),
+          m_pinyin (pinyin),
+          m_pinyin_begin (pinyin_begin),
+          m_pinyin_len (pinyin_len),
+          m_option (option),
+          m_stmt (NULL) {
+    }
+
+    ~Query (void);
+    gint fill (PhraseArray &phrases, gint count);
+
+private:
+    Database & m_db;
+    const PinyinArray & m_pinyin;
+    guint m_pinyin_begin;
+    guint m_pinyin_len;
+    guint m_option;
+    SQLStmt *m_stmt;
+};
+
 class Database {
 public:
     Database ();
     ~Database ();
-    gint query (const PinyinArray   & pinyin,
-                guint                 m,
-                guint                 option,
-                PhraseArray         & result);
-
-    gint query (const PinyinArray   & pinyin,
-                guint                 pinyin_begin,
-                guint                 pinyin_len,
-                gint                  m,
-                guint                 option,
-                PhraseArray         & result);
+    SQLStmt *query (const PinyinArray   & pinyin,
+                    guint                 pinyin_begin,
+                    guint                 pinyin_len,
+                    gint                  m,
+                    guint                 option);
     void commit (const PhraseArray  & phrases);
     void remove (const Phrase & phrase);
 

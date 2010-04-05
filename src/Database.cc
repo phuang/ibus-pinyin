@@ -104,6 +104,49 @@ private:
     sqlite3_stmt *m_stmt;
 };
 
+Query::~Query (void)
+{
+    if (m_stmt)
+        delete m_stmt;
+}
+
+gint
+Query::fill (PhraseArray &phrases, gint count)
+{
+    guint row = 0;
+
+    for (m_pinyin_len; m_pinyin_len > 0; m_pinyin_len--) {
+        if (m_stmt == NULL)
+            m_stmt = m_db.query (m_pinyin, m_pinyin_begin, m_pinyin_len, -1, m_option);
+        if (m_stmt == NULL)
+            return -1;
+
+        while (m_stmt->step () && ((row < count) || (count < 0))) {
+            Phrase p;
+
+            g_strlcpy (p.phrase,
+                       m_stmt->columnText (DB_COLUMN_PHRASE),
+                       sizeof (p.phrase));
+            p.freq = m_stmt->columnInt (DB_COLUMN_FREQ);
+            p.user_freq = m_stmt->columnInt (DB_COLUMN_USER_FREQ);
+            p.len = m_pinyin_len;
+
+            for (guint i = 0; i < m_pinyin_len; i++) {
+                p.pinyin_id[i][0] = m_stmt->columnInt ((i << 1) + DB_COLUMN_S0);
+                p.pinyin_id[i][1] = m_stmt->columnInt ((i << 1) + DB_COLUMN_S0 + 1);
+            }
+            phrases << p;
+            row ++;
+        }
+        if (row == count)
+            return row;
+
+        delete m_stmt;
+        m_stmt = NULL;
+    }
+    return row;
+}
+
 Database::Database (void)
     : m_db (NULL)
 {
@@ -277,42 +320,6 @@ Database::prefetch (void)
     executeSQL (m_sql);
 }
 
-gint
-Database::query (const PinyinArray &pinyin,
-                 guint              m,
-                 guint              option,
-                 PhraseArray       &result)
-{
-    gint len;
-    gint i;
-    gint row;
-    gint ret;
-
-    len = MIN (pinyin.length (), MAX_PHRASE_LEN);
-
-    row = 0;
-    for (i = len; i > 0; i--) {
-        if (m < 0) {
-            ret = query (pinyin, 0, i, -1, option, result);
-            if (ret < 0)
-                return ret;
-            row += ret;
-        }
-        else {
-            ret = query (pinyin, 0, i, m - result.length (), option, result);
-            if (ret < 0)
-                return ret;
-            row += ret;
-            if (result.length () >= m)
-                break;
-        }
-    }
-    return row;
-}
-
-
-
-
 inline static gboolean
 pinyin_option_check_sheng (guint option, gint id, gint fid)
 {
@@ -377,22 +384,16 @@ pinyin_option_check_yun (guint option, gint id, gint fid)
     }
 }
 
-gint
+SQLStmt *
 Database::query (const PinyinArray &pinyin,
                  guint              pinyin_begin,
                  guint              pinyin_len,
                  gint               m,
-                 guint              option,
-                 PhraseArray       &result)
+                 guint              option)
 {
-    if (G_UNLIKELY (pinyin_begin > pinyin.length ()))
-        pinyin_begin = pinyin.length ();
-
-    if (G_UNLIKELY (pinyin_len > pinyin.length () - pinyin_begin))
-        pinyin_len = pinyin.length () - pinyin_begin;
-
-    if (G_UNLIKELY (pinyin_len > MAX_PHRASE_LEN))
-        return -1;
+    g_assert (pinyin_begin < pinyin.length ());
+    g_assert (pinyin_len <= pinyin.length () - pinyin_begin);
+    g_assert (pinyin_len <= MAX_PHRASE_LEN);
 
     /* prepare sql */
     Conditions conditions;
@@ -498,30 +499,15 @@ Database::query (const PinyinArray &pinyin,
 #endif
 
     /* query database */
-    SQLStmt stmt (m_db);
+    SQLStmt *stmt = new SQLStmt (m_db);
 
-    if (!stmt.prepare (m_sql))
-        return -1;
-
-    gint row = 0;
-    while (stmt.step ()) {
-        Phrase p;
-
-        g_strlcpy (p.phrase,
-                   stmt.columnText (DB_COLUMN_PHRASE),
-                   sizeof (p.phrase));
-        p.freq = stmt.columnInt (DB_COLUMN_FREQ);
-        p.user_freq = stmt.columnInt (DB_COLUMN_USER_FREQ);
-        p.len = pinyin_len;
-
-        for (guint i = 0; i < pinyin_len; i++) {
-            p.pinyin_id[i][0] = stmt.columnInt ((i << 1) + DB_COLUMN_S0);
-            p.pinyin_id[i][1] = stmt.columnInt ((i << 1) + DB_COLUMN_S0 + 1);
-        }
-        result << p;
-        row ++;
+    if (!stmt->prepare (m_sql)) {
+        delete stmt;
+        return NULL;
     }
-    return row;
+
+    return stmt;
+
 }
 
 inline void
