@@ -351,23 +351,15 @@ PinyinEditor::updatePreeditTextInTypingMode (void)
     /* add highlight candidate */
     guint candidate_begin = m_buffer.utf8Length ();
     guint candidate_length = 0;
-    if (m_phrase_editor.candidates ().length () > 0) {
-        if (m_lookup_table.cursorPos () == 0 && !m_props.modeSimp ()) {
-            const PhraseArray & phrases = m_phrase_editor.candidate0 ();
-            candidate_length = 0;
-            for (guint i = 0; i < phrases.length (); i++) {
-                candidate_length += phrases[i].len;
-                SimpTradConverter::simpToTrad (phrases[i], m_buffer);
-            }
-        }
-        else {
-            const Phrase & candidate = m_phrase_editor.candidate (m_lookup_table.cursorPos ());
-            candidate_length = candidate.len;
-            if (m_props.modeSimp ())
-                m_buffer << candidate;
-            else
-                SimpTradConverter::simpToTrad (candidate, m_buffer);
-        }
+
+    /* if (m_phrase_editor.candidates ().length () > 0) */
+    {
+        const Phrase & candidate = m_phrase_editor.candidate (m_lookup_table.cursorPos ());
+        candidate_length = candidate.len;
+        if (m_props.modeSimp ())
+            m_buffer << candidate;
+        else
+            SimpTradConverter::simpToTrad (candidate, m_buffer);
     }
 
     /* add rest text */
@@ -377,7 +369,6 @@ PinyinEditor::updatePreeditTextInTypingMode (void)
                                                 candidate_begin + candidate_length));
     else
         m_buffer << ((const gchar *) textAfterPinyin ());
-
     StaticText preedit_text (m_buffer);
     /* underline */
     preedit_text.appendAttribute (IBUS_ATTR_TYPE_UNDERLINE, IBUS_ATTR_UNDERLINE_SINGLE, 0, -1);
@@ -389,7 +380,6 @@ PinyinEditor::updatePreeditTextInTypingMode (void)
         preedit_text.appendAttribute (IBUS_ATTR_TYPE_BACKGROUND, 0x00c8c8f0,
                 candidate_begin, candidate_begin + candidate_length);
     }
-    // ibus_engine_update_preedit_text (m_engine, preedit_text, m_buffer.utf8Length (), TRUE);
     Editor::updatePreeditText (preedit_text, candidate_begin, TRUE);
 }
 
@@ -408,7 +398,9 @@ PinyinEditor::updatePreeditTextInEditingMode (void)
     guint candidate_begin = m_buffer.utf8Length ();
     guint candidate_length = 0;
     guint candidate_pinyin_end = 0;
-    if (m_phrase_editor.candidates ().length () > 0) {
+
+    /*if (m_phrase_editor.candidates ().length () > 0) */
+    {
         const Phrase & candidate = m_phrase_editor.candidate (m_lookup_table.cursorPos ());
         candidate_length = candidate.len;
 
@@ -446,7 +438,6 @@ PinyinEditor::updatePreeditTextInEditingMode (void)
         preedit_text.appendAttribute (IBUS_ATTR_TYPE_BACKGROUND, 0x00c8c8f0,
                 candidate_begin, candidate_pinyin_end);
     }
-    // ibus_engine_update_preedit_text (m_engine, preedit_text, m_buffer.utf8Length (), TRUE);
     Editor::updatePreeditText (preedit_text, candidate_begin, TRUE);
 }
 
@@ -514,6 +505,12 @@ PinyinEditor::fillLookupTableByPage (void)
 {
     guint candidate_nr = m_phrase_editor.candidates ().length ();
 
+    if (candidate_nr < m_lookup_table.size () + Config::pageSize ()) {
+        if (m_phrase_editor.fillCandidates ()) {
+            candidate_nr = m_phrase_editor.candidates ().length ();
+        }
+    }
+
     if (candidate_nr == m_lookup_table.size ()) {
         return FALSE;
     }
@@ -544,7 +541,7 @@ PinyinEditor::fillLookupTableByPage (void)
 void
 PinyinEditor::pageUp (void)
 {
-    if (m_lookup_table.pageUp ()) {
+    if (G_LIKELY (m_lookup_table.pageUp ())) {
         updateLookupTableFast (m_lookup_table, TRUE);
         updatePreeditText ();
     }
@@ -553,8 +550,9 @@ PinyinEditor::pageUp (void)
 void
 PinyinEditor::pageDown (void)
 {
-    if ((m_lookup_table.pageDown ()) ||
-        (fillLookupTableByPage () && m_lookup_table.pageDown ())) {
+    if (G_LIKELY(
+            (m_lookup_table.pageDown ()) ||
+            (fillLookupTableByPage () && m_lookup_table.pageDown ()))) {
         updateLookupTableFast (m_lookup_table, TRUE);
         updatePreeditText ();
     }
@@ -563,7 +561,7 @@ PinyinEditor::pageDown (void)
 void
 PinyinEditor::cursorUp (void)
 {
-    if (m_lookup_table.cursorUp ()) {
+    if (G_LIKELY (m_lookup_table.cursorUp ())) {
         updateLookupTableFast (m_lookup_table, TRUE);
         updatePreeditText ();
     }
@@ -572,12 +570,13 @@ PinyinEditor::cursorUp (void)
 void
 PinyinEditor::cursorDown (void)
 {
-    if ((m_lookup_table.cursorPos () == m_lookup_table.size () - 1) &&
-        (fillLookupTableByPage () == FALSE)) {
+    if (G_LIKELY (
+            (m_lookup_table.cursorPos () == m_lookup_table.size () - 1) &&
+            (fillLookupTableByPage () == FALSE))) {
         return;
     }
 
-    if (m_lookup_table.cursorDown ()) {
+    if (G_LIKELY (m_lookup_table.cursorDown ())) {
         updateLookupTableFast (m_lookup_table, TRUE);
         updatePreeditText ();
     }

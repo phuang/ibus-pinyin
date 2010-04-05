@@ -13,12 +13,15 @@ PhraseEditor::PhraseEditor (PinyinProperties & props)
       m_candidate_0_phrases (8),
       m_pinyin (16),
       m_cursor (0),
-      m_props (props)
+      m_props (props),
+      m_query (NULL)
 {
 }
 
 PhraseEditor::~PhraseEditor (void)
 {
+    if (m_query)
+        delete m_query;
 }
 
 gboolean
@@ -80,6 +83,10 @@ PhraseEditor::updateCandidates (void)
 
     m_candidates.removeAll ();
     updateTheFirstCandidate ();
+    if (m_query) {
+        delete m_query;
+        m_query = NULL;
+    }
 
     if (G_UNLIKELY (m_pinyin.length () == 0))
         return;
@@ -91,14 +98,21 @@ PhraseEditor::updateCandidates (void)
             m_candidates[0] += m_candidate_0_phrases[i];
     }
 
-    {
-        Query query (m_database,
-                     m_pinyin,
-                     m_cursor, 
-                     m_pinyin.length () - m_cursor,
-                     Config::option ());
-        query.fill (m_candidates, -1);
+    m_query = new Query (m_database,
+                         m_pinyin,
+                         m_cursor,
+                         m_pinyin.length () - m_cursor,
+                         Config::option ());
+#if 0
+    if (G_UNLIKELY (m_query->fill (m_candidates, FILL_GRAN) < FILL_GRAN)) {
+        delete m_query;
+        m_query = NULL;
     }
+#else
+    m_query->fill (m_candidates, -1);
+    delete m_query;
+    m_query = NULL;
+#endif
 }
 
 void

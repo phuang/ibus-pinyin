@@ -70,8 +70,10 @@ public:
     }
 
     ~SQLStmt () {
-        if (m_stmt != NULL)
-            sqlite3_finalize (m_stmt);
+        if (m_stmt != NULL) {
+            gint retval = sqlite3_finalize (m_stmt);
+            g_assert (retval == SQLITE_OK);
+        }
     }
 
     gboolean prepare (const gchar *sql) {
@@ -80,7 +82,7 @@ public:
                              -1,
                              &m_stmt,
                              NULL) != SQLITE_OK) {
-            g_debug ("parse sql failed!\n %s", sql);
+            g_warning ("parse sql failed!\n %s", sql);
             return FALSE;
         }
 
@@ -88,7 +90,7 @@ public:
     }
 
     gboolean step (void) {
-        return sqlite3_step (m_stmt) == SQLITE_ROW;
+        return sqlite3_step (m_stmt) == SQLITE_ROW ? TRUE : FALSE;
     }
 
     const gchar *columnText (guint i) {
@@ -115,13 +117,13 @@ Query::fill (PhraseArray &phrases, gint count)
 {
     guint row = 0;
 
-    for (m_pinyin_len; m_pinyin_len > 0; m_pinyin_len--) {
-        if (m_stmt == NULL)
+    while (m_pinyin_len > 0) {
+        if (G_LIKELY (m_stmt == NULL))
             m_stmt = m_db.query (m_pinyin, m_pinyin_begin, m_pinyin_len, -1, m_option);
-        if (m_stmt == NULL)
-            return -1;
+        g_assert (m_stmt != NULL);
 
-        while (m_stmt->step () && ((row < count) || (count < 0))) {
+        while (m_stmt->step () &&
+               ((row < count) || (count < 0))) {
             Phrase p;
 
             g_strlcpy (p.phrase,
@@ -131,9 +133,13 @@ Query::fill (PhraseArray &phrases, gint count)
             p.user_freq = m_stmt->columnInt (DB_COLUMN_USER_FREQ);
             p.len = m_pinyin_len;
 
-            for (guint i = 0; i < m_pinyin_len; i++) {
-                p.pinyin_id[i][0] = m_stmt->columnInt ((i << 1) + DB_COLUMN_S0);
-                p.pinyin_id[i][1] = m_stmt->columnInt ((i << 1) + DB_COLUMN_S0 + 1);
+            guint i;
+            for (i = 0;i < m_pinyin_len; i++) {
+                p.pinyin_id[i][0] = m_stmt->columnInt (i + i + DB_COLUMN_S0);
+                p.pinyin_id[i][1] = m_stmt->columnInt (i + i + DB_COLUMN_S0 + 1);
+            }
+            for (;i < MAX_PHRASE_LEN; i++) {
+                p.pinyin_id[i][0] = p.pinyin_id[i][1] = PINYIN_ID_VOID;
             }
             phrases << p;
             row ++;
@@ -143,7 +149,9 @@ Query::fill (PhraseArray &phrases, gint count)
 
         delete m_stmt;
         m_stmt = NULL;
+        m_pinyin_len --;
     }
+
     return row;
 }
 

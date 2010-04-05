@@ -6,6 +6,8 @@
 #include "PhraseArray.h"
 #include "PinyinProperties.h"
 
+#define FILL_GRAN (32)
+
 namespace PY {
 
 class PhraseEditor {
@@ -23,6 +25,22 @@ public:
 
     const Phrase & candidate (guint i) const {
         return m_candidates[i];
+    }
+
+    gboolean fillCandidates (void) {
+        if (G_UNLIKELY (m_query == NULL)) {
+            return FALSE;
+        }
+
+        gint ret = m_query->fill (m_candidates, FILL_GRAN);
+
+        if (G_UNLIKELY (ret < FILL_GRAN)) {
+            /* got all candidates from query */
+            delete m_query;
+            m_query = NULL;
+        }
+
+        return ret > 0 ? TRUE : FALSE;
     }
 
     const PhraseArray & candidate0 (void) const {
@@ -85,6 +103,7 @@ private:
     PinyinArray m_pinyin;
     guint m_cursor;
     PinyinProperties & m_props;
+    Query       * m_query;
 
 private:
     static Database m_database;
