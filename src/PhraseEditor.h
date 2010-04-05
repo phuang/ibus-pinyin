@@ -6,7 +6,7 @@
 #include "PhraseArray.h"
 #include "PinyinProperties.h"
 
-#define FILL_GRAN (32)
+#define FILL_GRAN (16)
 
 namespace PY {
 

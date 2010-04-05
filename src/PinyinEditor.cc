@@ -352,8 +352,7 @@ PinyinEditor::updatePreeditTextInTypingMode (void)
     guint candidate_begin = m_buffer.utf8Length ();
     guint candidate_length = 0;
 
-    /* if (m_phrase_editor.candidates ().length () > 0) */
-    {
+    if (m_lookup_table.size () > 0) {
         const Phrase & candidate = m_phrase_editor.candidate (m_lookup_table.cursorPos ());
         candidate_length = candidate.len;
         if (m_props.modeSimp ())
@@ -399,8 +398,7 @@ PinyinEditor::updatePreeditTextInEditingMode (void)
     guint candidate_length = 0;
     guint candidate_pinyin_end = 0;
 
-    /*if (m_phrase_editor.candidates ().length () > 0) */
-    {
+    if (m_lookup_table.size () > 0) {
         const Phrase & candidate = m_phrase_editor.candidate (m_lookup_table.cursorPos ());
         candidate_length = candidate.len;
 
@@ -505,17 +503,18 @@ PinyinEditor::fillLookupTableByPage (void)
 {
     guint candidate_nr = m_phrase_editor.candidates ().length ();
 
-    if (candidate_nr < m_lookup_table.size () + Config::pageSize ()) {
+    if (candidate_nr < m_lookup_table.size () + m_lookup_table.pageSize ()) {
         if (m_phrase_editor.fillCandidates ()) {
             candidate_nr = m_phrase_editor.candidates ().length ();
         }
     }
 
     if (candidate_nr == m_lookup_table.size ()) {
+        g_debug ("no more candidates");
         return FALSE;
     }
 
-    guint end = min (candidate_nr, m_lookup_table.size () + Config::pageSize ());
+    guint end = MIN (candidate_nr, m_lookup_table.size () + m_lookup_table.pageSize ());
     if (G_LIKELY (m_props.modeSimp () || !Config::tradCandidate ())) {
         for (guint i = m_lookup_table.size (); i < end; i++ ) {
             StaticText text (m_phrase_editor.candidate (i));

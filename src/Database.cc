@@ -133,13 +133,9 @@ Query::fill (PhraseArray &phrases, gint count)
             p.user_freq = m_stmt->columnInt (DB_COLUMN_USER_FREQ);
             p.len = m_pinyin_len;
 
-            guint i;
-            for (i = 0;i < m_pinyin_len; i++) {
+            for (gint i = 0; i < m_pinyin_len; i++) {
                 p.pinyin_id[i][0] = m_stmt->columnInt (i + i + DB_COLUMN_S0);
                 p.pinyin_id[i][1] = m_stmt->columnInt (i + i + DB_COLUMN_S0 + 1);
-            }
-            for (;i < MAX_PHRASE_LEN; i++) {
-                p.pinyin_id[i][0] = p.pinyin_id[i][1] = PINYIN_ID_VOID;
             }
             phrases << p;
             row ++;

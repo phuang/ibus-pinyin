@@ -103,7 +103,7 @@ PhraseEditor::updateCandidates (void)
                          m_cursor,
                          m_pinyin.length () - m_cursor,
                          Config::option ());
-#if 0
+#if 1
     if (G_UNLIKELY (m_query->fill (m_candidates, FILL_GRAN) < FILL_GRAN)) {
         delete m_query;
         m_query = NULL;
