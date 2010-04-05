@@ -6,7 +6,7 @@
 #include "PhraseArray.h"
 #include "PinyinProperties.h"
 
-#define FILL_GRAN (16)
+#define FILL_GRAN (12)
 
 namespace PY {
 
@@ -72,6 +72,10 @@ public:
         m_candidate_0_phrases.removeAll ();
         m_pinyin.removeAll ();
         m_cursor = 0;
+        if (m_query) {
+            delete m_query;
+            m_query = NULL;
+        }
     }
 
     gboolean update (const PinyinArray &pinyin);

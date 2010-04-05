@@ -24,7 +24,7 @@ public:
     }
 
     Array<T> & removeAll () {
-        std::vector<T>::resize (0);
+        std::vector<T>::clear ();
         return *this;
     }
 

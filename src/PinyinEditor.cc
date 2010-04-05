@@ -491,7 +491,7 @@ PinyinEditor::updateLookupTable (void)
     m_lookup_table.setOrientation (Config::orientation ());
 
     if (fillLookupTableByPage ()) {
-        Editor::updateLookupTable (m_lookup_table, TRUE);
+        Editor::updateLookupTableFast (m_lookup_table, TRUE);
     }
     else {
         hideLookupTable ();
@@ -510,14 +510,13 @@ PinyinEditor::fillLookupTableByPage (void)
     }
 
     if (candidate_nr == m_lookup_table.size ()) {
-        g_debug ("no more candidates");
         return FALSE;
     }
 
     guint end = MIN (candidate_nr, m_lookup_table.size () + m_lookup_table.pageSize ());
     if (G_LIKELY (m_props.modeSimp () || !Config::tradCandidate ())) {
-        for (guint i = m_lookup_table.size (); i < end; i++ ) {
-            StaticText text (m_phrase_editor.candidate (i));
+        for (guint i = m_lookup_table.size (); i < end; i++) {
+            Text text (m_phrase_editor.candidate (i));
             if (m_phrase_editor.candidateIsUserPhease (i))
                 text.appendAttribute (IBUS_ATTR_TYPE_FOREGROUND, 0x000000ef, 0, -1);
             m_lookup_table.appendCandidate (text);

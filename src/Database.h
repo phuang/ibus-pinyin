@@ -24,15 +24,7 @@ public:
            const PinyinArray    & pinyin,
            guint                  pinyin_begin,
            guint                  pinyin_len,
-           guint                  option)
-        : m_db (db),
-          m_pinyin (pinyin),
-          m_pinyin_begin (pinyin_begin),
-          m_pinyin_len (pinyin_len),
-          m_option (option),
-          m_stmt (NULL) {
-    }
-
+           guint                  option);
     ~Query (void);
     gint fill (PhraseArray &phrases, gint count);
 

@@ -79,8 +79,6 @@ PhraseEditor::selectCandidate (guint i)
 void
 PhraseEditor::updateCandidates (void)
 {
-    gboolean retval;
-
     m_candidates.removeAll ();
     updateTheFirstCandidate ();
     if (m_query) {
@@ -92,10 +90,11 @@ PhraseEditor::updateCandidates (void)
         return;
 
     if (G_LIKELY (m_candidate_0_phrases.length () > 1)) {
-        m_candidates.resize (1);
-        m_candidates[0].reset ();
+        Phrase phrase;
+        phrase.reset ();
         for (guint i = 0; i < m_candidate_0_phrases.length (); i++)
-            m_candidates[0] += m_candidate_0_phrases[i];
+            phrase += m_candidate_0_phrases[i];
+        m_candidates << phrase;
     }
 
     m_query = new Query (m_database,
@@ -103,16 +102,7 @@ PhraseEditor::updateCandidates (void)
                          m_cursor,
                          m_pinyin.length () - m_cursor,
                          Config::option ());
-#if 1
-    if (G_UNLIKELY (m_query->fill (m_candidates, FILL_GRAN) < FILL_GRAN)) {
-        delete m_query;
-        m_query = NULL;
-    }
-#else
-    m_query->fill (m_candidates, -1);
-    delete m_query;
-    m_query = NULL;
-#endif
+    fillCandidates ();
 }
 
 void
@@ -120,7 +110,6 @@ PhraseEditor::updateTheFirstCandidate (void)
 {
     guint begin;
     guint end;
-    gboolean retval;
 
     m_candidate_0_phrases.removeAll ();
 
@@ -141,7 +130,6 @@ PhraseEditor::updateTheFirstCandidate (void)
         g_assert (ret == 1);
         begin += m_candidate_0_phrases.back ().len;
     }
-    g_debug ("is me");
 }
 
 };

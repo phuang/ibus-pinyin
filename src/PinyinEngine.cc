@@ -249,7 +249,11 @@ PinyinEngine::slotUpdateLookupTable (LookupTable & table, gboolean visible)
 void
 PinyinEngine::slotUpdateLookupTableFast (LookupTable & table, gboolean visible)
 {
+#if 0
     ibus_engine_update_lookup_table_fast (m_engine, table, visible);
+#else
+    ibus_engine_update_lookup_table (m_engine, table, visible);
+#endif
 }
 
 void

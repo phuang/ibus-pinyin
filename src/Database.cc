@@ -106,16 +106,32 @@ private:
     sqlite3_stmt *m_stmt;
 };
 
+Query::Query (Database             & db,
+              const PinyinArray    & pinyin,
+              guint                  pinyin_begin,
+              guint                  pinyin_len,
+              guint                  option)
+    : m_db (db),
+      m_pinyin (pinyin),
+      m_pinyin_begin (pinyin_begin),
+      m_pinyin_len (pinyin_len),
+      m_option (option),
+      m_stmt (NULL)
+{
+    g_assert (m_pinyin.length () >= pinyin_begin + pinyin_len);
+}
+
 Query::~Query (void)
 {
-    if (m_stmt)
+    if (m_stmt) {
         delete m_stmt;
+    }
 }
 
 gint
 Query::fill (PhraseArray &phrases, gint count)
 {
-    guint row = 0;
+    gint row = 0;
 
     while (m_pinyin_len > 0) {
         if (G_LIKELY (m_stmt == NULL))
@@ -133,7 +149,7 @@ Query::fill (PhraseArray &phrases, gint count)
             p.user_freq = m_stmt->columnInt (DB_COLUMN_USER_FREQ);
             p.len = m_pinyin_len;
 
-            for (gint i = 0; i < m_pinyin_len; i++) {
+            for (guint i = 0; i < m_pinyin_len; i++) {
                 p.pinyin_id[i][0] = m_stmt->columnInt (i + i + DB_COLUMN_S0);
                 p.pinyin_id[i][1] = m_stmt->columnInt (i + i + DB_COLUMN_S0 + 1);
             }
