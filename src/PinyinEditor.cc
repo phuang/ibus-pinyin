@@ -491,7 +491,7 @@ PinyinEditor::updateLookupTable (void)
     m_lookup_table.setOrientation (Config::orientation ());
 
     if (fillLookupTableByPage ()) {
-        Editor::updateLookupTableFast (m_lookup_table, TRUE);
+        Editor::updateLookupTable (m_lookup_table, TRUE);
     }
     else {
         hideLookupTable ();
