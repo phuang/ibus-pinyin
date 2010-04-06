@@ -134,30 +134,31 @@ Query::fill (PhraseArray &phrases, gint count)
     gint row = 0;
 
     while (m_pinyin_len > 0) {
-        if (G_LIKELY (m_stmt == NULL))
+        if (G_LIKELY (m_stmt == NULL)) {
             m_stmt = m_db.query (m_pinyin, m_pinyin_begin, m_pinyin_len, -1, m_option);
-        g_assert (m_stmt != NULL);
-
-        while (m_stmt->step () &&
-               ((row < count) || (count < 0))) {
-            Phrase p;
-
-            g_strlcpy (p.phrase,
-                       m_stmt->columnText (DB_COLUMN_PHRASE),
-                       sizeof (p.phrase));
-            p.freq = m_stmt->columnInt (DB_COLUMN_FREQ);
-            p.user_freq = m_stmt->columnInt (DB_COLUMN_USER_FREQ);
-            p.len = m_pinyin_len;
-
-            for (guint i = 0; i < m_pinyin_len; i++) {
-                p.pinyin_id[i][0] = m_stmt->columnInt (i + i + DB_COLUMN_S0);
-                p.pinyin_id[i][1] = m_stmt->columnInt (i + i + DB_COLUMN_S0 + 1);
-            }
-            phrases << p;
-            row ++;
+            g_assert (m_stmt != NULL);
         }
-        if (row == count)
-            return row;
+
+        while (m_stmt->step ()) {
+            Phrase phrase;
+
+            g_strlcpy (phrase.phrase,
+                       m_stmt->columnText (DB_COLUMN_PHRASE),
+                       sizeof (phrase.phrase));
+            phrase.freq = m_stmt->columnInt (DB_COLUMN_FREQ);
+            phrase.user_freq = m_stmt->columnInt (DB_COLUMN_USER_FREQ);
+            phrase.len = m_pinyin_len;
+
+            for (guint i = 0, column = DB_COLUMN_S0; i < m_pinyin_len; i++) {
+                phrase.pinyin_id[i][0] = m_stmt->columnInt (column++);
+                phrase.pinyin_id[i][1] = m_stmt->columnInt (column++);
+            }
+            phrases << phrase;
+            row ++;
+            if (G_UNLIKELY (row == count)) {
+                return row;
+            }
+        }
 
         delete m_stmt;
         m_stmt = NULL;
