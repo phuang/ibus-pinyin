@@ -58,8 +58,8 @@ static const struct {
     { StaticString ("CorrectPinyin_IOU_IU"),   PINYIN_CORRECT_IOU_TO_IU,   TRUE },
     { StaticString ("CorrectPinyin_UEI_UI"),   PINYIN_CORRECT_UEI_TO_UI,   TRUE },
     { StaticString ("CorrectPinyin_UEN_UN"),   PINYIN_CORRECT_UEN_TO_UN,   TRUE },
-    { StaticString ("CorrectPinyin_VE_UE"),    PINYIN_CORRECT_VE_TO_UE,    TRUE },
     { StaticString ("CorrectPinyin_UE_VE"),    PINYIN_CORRECT_UE_TO_VE,    TRUE },
+    { StaticString ("CorrectPinyin_VE_UE"),    PINYIN_CORRECT_VE_TO_UE,    TRUE },
     /* fuzzy pinyin */
     { StaticString ("FuzzyPinyin_C_CH"),      PINYIN_FUZZY_C_CH,  FALSE },
     { StaticString ("FuzzyPinyin_CH_C"),      PINYIN_FUZZY_CH_C,  FALSE },
