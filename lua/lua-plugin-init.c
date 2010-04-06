@@ -65,7 +65,7 @@ static int ime_join_string(lua_State* L){
   if ( !lua_istable(L, 1) )
     return 0;
 
-  sep = lua_tolstring(L, 2, NULL);
+  sep = luaL_checklstring(L, 2, NULL);
   vec_len = lua_objlen(L, 1);
 
   if ( 0 == vec_len ){
@@ -105,18 +105,10 @@ static int ime_parse_mapping(lua_State * L){
   gchar** key_value = NULL; const char * key = NULL;
   gchar** values = NULL; size_t values_no = 0; const char * value = NULL;
 
-  src_string = lua_tolstring(L, 1, NULL);
-  if ( NULL == src_string || '\0' == src_string[0])
-    goto failed;
-  line_sep = lua_tolstring(L, 2, NULL);
-  if ( NULL == line_sep || '\0' == line_sep[0])
-    goto failed;
-  key_value_sep = lua_tolstring(L, 3, NULL);
-  if ( NULL == key_value_sep || '\0' == key_value_sep[0])
-    goto failed;
-  values_sep = lua_tolstring(L, 4, NULL);
-  if ( NULL == values_sep || '\0' == values_sep[0])
-    goto failed;
+  src_string = luaL_checklstring(L, 1, NULL);
+  line_sep = luaL_checklstring(L, 2, NULL);
+  key_value_sep = luaL_checklstring(L, 3, NULL);
+  values_sep = luaL_checklstring(L, 4, NULL);
   
   lines = g_strsplit(src_string, line_sep, 0);
   lines_no = g_strv_length(lines);
@@ -157,29 +149,15 @@ static int ime_parse_mapping(lua_State * L){
   lua_remove(L, 2);
   lua_remove(L, 1);
   return 1;
-
-failed:
-  lua_createtable(L, 0, 0);
-  return 1;
 }
 
 static int ime_split_string(lua_State * L){
   gchar ** str_vec;
   guint str_vec_len = 0; int i;
   const char * sep;
-  const char * str = lua_tolstring(L, 1, NULL);
+  const char * str = luaL_checklstring(L, 1, NULL);
 
-  if ( NULL == str || '\0' == str[0]){
-    lua_newtable(L);
-    return 1;
-  }
-  
-  sep = lua_tolstring(L, 2, NULL);
-
-  if ( NULL == sep || '\0' == sep[0]){
-    lua_newtable(L);
-    return 1;
-  }
+  sep = luaL_checklstring(L, 2, NULL);
 
   str_vec = g_strsplit(str, sep, 0);
   str_vec_len = g_strv_length(str_vec);
@@ -209,13 +187,6 @@ static gboolean ime_is_white_space(const char c){
   return FALSE;
 }
 
-#define IME_TRIM_PRECHECK                       \
-  if (NULL == s || '\0' == s[0]){               \
-  lua_pushliteral(L, "");                       \
-  return 1;                                     \
-  }
-
-
 static int ime_push_string(lua_State* L, const char * s, 
                                 int start, int end){
   if (start >= end ){
@@ -229,9 +200,8 @@ static int ime_push_string(lua_State* L, const char * s,
 
 static int ime_trim_string_left(lua_State* L){
   size_t l; int start, end;
-  const char * s = lua_tolstring(L, 1, &l);
+  const char * s = luaL_checklstring(L, 1, &l);
 
-  IME_TRIM_PRECHECK;
   start = 0; end = l;
   while( ime_is_white_space(s[start])){
     start++;
@@ -242,9 +212,8 @@ static int ime_trim_string_left(lua_State* L){
 
 static int ime_trim_string_right(lua_State* L){
   size_t l; int start, end;
-  const char * s = lua_tolstring(L, 1, &l);
+  const char * s = luaL_checklstring(L, 1, &l);
 
-  IME_TRIM_PRECHECK;
   start = 0; end = l;
   while( ime_is_white_space(s[end - 1]) && end > 0){
     end--;
@@ -255,9 +224,8 @@ static int ime_trim_string_right(lua_State* L){
 
 static int ime_trim_string(lua_State* L){
   size_t l; int start, end;
-  const char * s = lua_tolstring(L, 1, &l);
+  const char * s = luaL_checklstring(L, 1, &l);
 
-  IME_TRIM_PRECHECK;
   start = 0; end = l;
   while( ime_is_white_space(s[start])){
     start++;
