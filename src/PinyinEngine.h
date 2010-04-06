@@ -26,6 +26,7 @@ public:
     }
 
     void reset (gboolean need_update = TRUE) {
+        m_prev_pressed_key = IBUS_VoidSymbol;
         m_input_mode = MODE_INIT;
         for (gint i = 0; i < MODE_LAST; i++) {
             m_editors[i]->reset ();

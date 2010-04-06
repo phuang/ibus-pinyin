@@ -21,7 +21,7 @@ namespace PY {
 /* constructor */
 PinyinEngine::PinyinEngine (IBusEngine *engine)
     : m_engine (engine),
-      m_prev_pressed_key (0),
+      m_prev_pressed_key (IBUS_VoidSymbol),
       m_input_mode (MODE_INIT),
       m_fallback_editor (m_props)
 {
@@ -120,7 +120,7 @@ PinyinEngine::processKeyEvent (guint keyval, guint keycode, guint modifiers)
         retval = m_fallback_editor.processKeyEvent (keyval, keycode, modifiers);
 
     /* store ignored key event by editors */
-    m_prev_pressed_key = keyval;
+    m_prev_pressed_key = retval ? IBUS_VoidSymbol : keyval;
 
     return retval;
 }
