@@ -35,7 +35,6 @@ class StaticText : public Text {
 public:
     StaticText (const gchar *str)
         : Text (ibus_text_new_from_static_string (str)) {
-        g_debug ("StaticText(%s)", str);
     }
 
     StaticText (const String & str)
