@@ -22,28 +22,22 @@ namespace PY {
 
 class Conditions : public vector<string> {
 public:
-    Conditions (void) :
-        vector<string> (32),
-        m_length (1) {
-    }
+    Conditions (void) : vector<string> (1) {}
 
-    ~Conditions (void) {
-    }
-
-    guint length (void) { return m_length; }
-
-    void _double (void) {
-        for (gint i = m_length - 1; i >= 0; i--) {
-            (*this)[m_length + i] = (*this)[i];
-        }
-        m_length = m_length + m_length;
+    void double_ (void) {
+        gint i = size ();
+        do {
+            push_back (at (--i));
+        } while (i > 0);
     }
 
     void triple (void) {
-        for (gint i = m_length - 1; i >= 0; i--) {
-            operator[](m_length + i) = operator[]((m_length << 1) + i) = operator[](i);
-        }
-        m_length = m_length + m_length + m_length;
+        gint i = size ();
+        do {
+            const string & value = at (--i);
+            push_back (value);
+            push_back (value);
+        } while (i > 0);
     }
 
     void appendVPrintf (gint begin, gint end, const gchar *fmt, va_list args) {
@@ -60,8 +54,6 @@ public:
         appendVPrintf (begin, end, fmt, args);
         va_end (args);
     }
-private:
-    guint m_length;
 };
 
 class SQLStmt {
@@ -428,72 +420,72 @@ Database::query (const PinyinArray &pinyin,
         fs2 = pinyin_option_check_sheng (option, p->sheng_id, p->fsheng_id_2);
 
         if (G_LIKELY (i > 0))
-            conditions.appendPrintf (0, conditions.length (),
+            conditions.appendPrintf (0, conditions.size (),
                                        " AND ");
 
         if (fs1 || fs2) {
             if (G_LIKELY (i < DB_INDEX_SIZE)) {
                 if (fs1 && fs2 == 0) {
-                    conditions._double ();
-                    conditions.appendPrintf (0, conditions.length ()  >> 1,
+                    conditions.double_ ();
+                    conditions.appendPrintf (0, conditions.size ()  >> 1,
                                                "s%d=%d", i, p->sheng_id);
-                    conditions.appendPrintf (conditions.length () >> 1, conditions.length (),
+                    conditions.appendPrintf (conditions.size () >> 1, conditions.size (),
                                                "s%d=%d", i, p->fsheng_id);
                 }
                 else if (fs1 == 0 && fs2) {
-                    conditions._double ();
-                    conditions.appendPrintf (0, conditions.length ()  >> 1,
+                    conditions.double_ ();
+                    conditions.appendPrintf (0, conditions.size ()  >> 1,
                                                "s%d=%d", i, p->sheng_id);
-                    conditions.appendPrintf (conditions.length () >> 1, conditions.length (),
+                    conditions.appendPrintf (conditions.size () >> 1, conditions.size (),
                                                "s%d=%d", i, p->fsheng_id_2);
                 }
                 else {
-                    gint len = conditions.length ();
+                    gint len = conditions.size ();
                     conditions.triple ();
                     conditions.appendPrintf (0, len,
                                                "s%d=%d", i, p->sheng_id);
                     conditions.appendPrintf (len, len << 1,
                                                "s%d=%d", i, p->fsheng_id);
-                    conditions.appendPrintf (len << 1, conditions.length (),
+                    conditions.appendPrintf (len << 1, conditions.size (),
                                                "s%d=%d", i, p->fsheng_id_2);
                 }
             }
             else {
                 if (fs1 && fs2 == 0) {
-                    conditions.appendPrintf (0, conditions.length (),
+                    conditions.appendPrintf (0, conditions.size (),
                                                "s%d IN (%d,%d)", i, p->sheng_id, p->fsheng_id);
                 }
                 else if (fs1 == 0 && fs2) {
-                    conditions.appendPrintf (0, conditions.length (),
+                    conditions.appendPrintf (0, conditions.size (),
                                                "s%d IN (%d,%d)", i, p->sheng_id, p->fsheng_id_2);
                 }
                 else {
-                    conditions.appendPrintf (0, conditions.length (),
+                    conditions.appendPrintf (0, conditions.size (),
                                                "s%d IN (%d,%d,%d)", i, p->sheng_id, p->fsheng_id, p->fsheng_id_2);
                 }
             }
         }
         else {
-            conditions.appendPrintf (0, conditions.length (),
+            conditions.appendPrintf (0, conditions.size (),
                                        "s%d=%d", i, p->sheng_id);
         }
 
         if (p->yun_id != PINYIN_ID_ZERO) {
             if (pinyin_option_check_yun (option, p->yun_id, p->fyun_id)) {
                 if (G_LIKELY (i < DB_INDEX_SIZE)) {
-                    conditions._double ();
-                    conditions.appendPrintf (0, conditions.length ()  >> 1,
+                    conditions.double_ ();
+                    conditions.appendPrintf (0, conditions.size ()  >> 1,
                                                " AND y%d=%d", i, p->yun_id);
-                    conditions.appendPrintf (conditions.length () >> 1, conditions.length (),
+                    conditions.appendPrintf (conditions.size () >> 1, conditions.size (),
                                                " and y%d=%d", i, p->fyun_id);
                 }
                 else {
-                    conditions.appendPrintf (0, conditions.length (),
+                    conditions.appendPrintf (0, conditions.size (),
                                                " AND y%d IN (%d,%d)", i, p->yun_id, p->fyun_id);
                 }
             }
             else {
-                conditions.appendPrintf (0, conditions.length (),
+                conditions.appendPrintf (0, conditions.size (),
                                            " AND y%d=%d", i, p->yun_id);
             }
         }
@@ -501,7 +493,7 @@ Database::query (const PinyinArray &pinyin,
 
 
     m_buffer.erase (0);
-    for (guint i = 0; i < conditions.length (); i++) {
+    for (guint i = 0; i < conditions.size (); i++) {
         if (G_UNLIKELY (i == 0))
             m_buffer << "  (" << conditions[i].c_str() << ")\n";
         else
