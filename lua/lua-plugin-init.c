@@ -70,7 +70,7 @@ static int ime_join_string(lua_State* L){
 
   if ( 0 == vec_len ){
     lua_pop(L, 2);
-    lua_pushliteral(L, "");
+    lua_pushnil(L);
     return 1;
   }
 
