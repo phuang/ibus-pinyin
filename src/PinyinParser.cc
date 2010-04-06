@@ -82,7 +82,11 @@ sp_cmp (const void *p1,
     const Pinyin **pys = (const Pinyin **) p1;
     const Pinyin **e = (const Pinyin **) p2;
 
-    return ((pys[0] - e[0]) << 16) + (pys[1] - e[1]);
+    int retval = pys[0] - e[0];
+
+    if (retval != 0)
+        return retval;
+    return pys[1] - e[1];
 }
 
 static const Pinyin **
