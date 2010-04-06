@@ -58,13 +58,14 @@ public:
 
 class SQLStmt {
 public:
-    SQLStmt (sqlite3 *db) : m_db (db), m_stmt (NULL) {
-    }
+    SQLStmt (sqlite3 *db)
+        : m_db (db), m_stmt (NULL) {}
 
     ~SQLStmt () {
         if (m_stmt != NULL) {
-            gint retval = sqlite3_finalize (m_stmt);
-            g_assert (retval == SQLITE_OK);
+            if (sqlite3_finalize (m_stmt) != SQLITE_OK) {
+                g_warning ("destroy sqlite stmt failed!");
+            }
         }
     }
 
@@ -169,8 +170,9 @@ Database::Database (void)
 Database::~Database (void)
 {
     if (m_db) {
-        sqlite3_close (m_db);
-        m_db = NULL;
+        if (sqlite3_close (m_db) != SQLITE_OK) {
+            g_warning ("close sqlite database failed!");
+        }
     }
 }
 
