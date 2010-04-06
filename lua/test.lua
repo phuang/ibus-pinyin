@@ -11,6 +11,7 @@ tab = ime.split_string("aa..bb..cc", "..");
 print(ime.join_string(tab, ", "));
 
 print(ime.join_string({}, ".."));
+print(ime.join_string({"aa"}, "  "));
 
 _MAPPING_TABLE = [[
 a 啊

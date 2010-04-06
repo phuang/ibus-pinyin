@@ -62,15 +62,14 @@ static int ime_join_string(lua_State* L){
   const char * sep;
   const char * str;
 
-  if ( !lua_istable(L, 1) )
-    return 0;
+  luaL_checktype(L, 1, LUA_TTABLE);
 
   sep = luaL_checklstring(L, 2, NULL);
   vec_len = lua_objlen(L, 1);
 
   if ( 0 == vec_len ){
     lua_pop(L, 2);
-    lua_pushnil(L);
+    lua_pushliteral(L, "");
     return 1;
   }
 
