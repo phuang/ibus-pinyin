@@ -26,5 +26,6 @@ for k,v in pairs(_MAPPING) do
   end
 end
 
+-- print(ime.join_string({nil, "  "}, ","));
 
 print("test finished...");
