@@ -29,23 +29,41 @@ void lua_plugin_openlibs (lua_State *L) {
   }
 }
 
+static GArray * g_lua_commands = NULL;
 
 int lua_plugin_init(lua_State *L){
   /* enable libs in sandbox */
   lua_plugin_openlibs(L);
 
+  if ( NULL == g_lua_commands )
+    g_lua_commands = g_array_new(TRUE, TRUE, sizeof(lua_command_t));
+
   return 0;
 }
 
 int lua_plugin_fini(lua_State *L){
+  size_t i;
+  lua_command_t * command;
   lua_close(L);
-  
+
+  if ( g_lua_commands ){
+    for ( i = 0; i < g_lua_commands->len; ++i){
+      command = &g_array_index(g_lua_commands, lua_command_t, i);
+      g_free((gpointer)command->command_name);
+      g_free((gpointer)command->lua_function_name);
+      g_free((gpointer)command->description);
+      g_free((gpointer)command->leading);
+      g_free((gpointer)command->help);
+    }
+    g_array_free(g_lua_commands, TRUE);
+    g_lua_commands = NULL;
+  }
   return 0;
 }
 
 static int ime_get_last_commit(lua_State* L){
   /*TODO: not implemented. */
-  g_assert_not_reached();
+  fprintf(stderr, "TODO: ime_get_last_commit unimplemented.\n");
   lua_pushstring(L, "");
   return 1;
 }
@@ -150,6 +168,30 @@ static int ime_parse_mapping(lua_State * L){
   return 1;
 }
 
+static int ime_register_command(lua_State * L){
+  const char * command_name = NULL;
+  const char * lua_function_name = NULL;
+  const char * description = NULL;
+  const char * leading = NULL;
+  const char * help = NULL;
+  size_t l;
+
+  command_name = luaL_checklstring(L, 1, &l);
+  if ( 2 != l ){
+    return luaL_error(L, "ime_register_command is called with command_name: %s, whose length is not 2.\n", command_name);
+  }
+
+
+  return 0;
+}
+
+static int ime_register_trigger(lua_State * L){
+  const char * lua_function_name = luaL_checklstring(L, 1, NULL);
+  const char * description = luaL_checklstring(L, 2, NULL);
+  fprintf(stderr, "TODO: ime_register_trigger unimplemented when called with %s (%s).\n", lua_function_name, description);
+  return 0;
+}
+
 static int ime_split_string(lua_State * L){
   gchar ** str_vec;
   guint str_vec_len = 0; int i;
@@ -242,11 +284,9 @@ static const luaL_Reg imelib[] = {
   {"get_version", ime_get_version},
   {"join_string", ime_join_string},
   {"parse_mapping", ime_parse_mapping},
-#if 0
   {"register_command", ime_register_command},
   /* Note: the register_trigger function is dropped for ibus-pinyin. */
   {"register_trigger", ime_register_trigger},
-#endif
   {"split_string", ime_split_string},
   {"trim_string_left", ime_trim_string_left},
   {"trim_string_right", ime_trim_string_right},
