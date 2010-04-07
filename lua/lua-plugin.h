@@ -15,6 +15,11 @@ typedef struct{
   const char * help; /* optional. */
 } lua_command_t;
 
+typedef struct{
+  lua_State * L;
+  GArray * lua_commands; /* Array of lua_command_t. */
+} lua_plugin_context_t;
+
 /**
  * retrieve all available lua plugin commands.
  * return array of command informations of type lua_command_t.
