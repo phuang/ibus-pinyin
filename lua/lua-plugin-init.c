@@ -181,6 +181,23 @@ static int ime_register_command(lua_State * L){
     return luaL_error(L, "ime_register_command is called with command_name: %s, whose length is not 2.\n", command_name);
   }
 
+  lua_function_name = luaL_checklstring(L, 2, NULL);
+  lua_getglobal(L, lua_function_name);
+  luaL_checktype(L, -1, LUA_TFUNCTION);
+  lua_pop(L, 1);
+
+  description = luaL_checklstring(L, 3, NULL);
+  if ( !lua_isnil(L, 4)) {
+    leading = luaL_checklstring(L, 4, NULL);
+  }else{
+    leading = "digit";
+  }
+
+  if ( !lua_isnil(L, 5)) {
+    help = luaL_checklstring(L, 5, NULL);
+  }
+
+
 
   return 0;
 }
