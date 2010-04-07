@@ -187,17 +187,17 @@ static int ime_register_command(lua_State * L){
   lua_pop(L, 1);
 
   description = luaL_checklstring(L, 3, NULL);
-  if ( !lua_isnil(L, 4)) {
+  if ( !lua_isnone(L, 4)) {
     leading = luaL_checklstring(L, 4, NULL);
   }else{
     leading = "digit";
   }
 
-  if ( !lua_isnil(L, 5)) {
+  if ( !lua_isnone(L, 5)) {
     help = luaL_checklstring(L, 5, NULL);
   }
 
-
+  /* check whether the same command exists. */
 
   return 0;
 }
