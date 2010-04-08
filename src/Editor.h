@@ -30,17 +30,17 @@ public:
     }
 
     /* signals */
-    sigc::signal <void, Text &> signalCommitText (void) { return m_signal_commit_text; }
-    sigc::signal <void, Text &, guint, gboolean> signalUpdatePreeditText (void) { return m_signal_update_preedit_text; }
-    sigc::signal <void> signalShowPreeditText (void) { return m_signal_show_preedit_text; }
-    sigc::signal <void> signalHidePreeditText (void) { return m_signal_hide_preedit_text; }
-    sigc::signal <void, Text &, gboolean> signalUpdateAuxiliaryText (void) { return m_signal_update_auxiliary_text; }
-    sigc::signal <void> signalShowAuxiliaryText (void) { return m_signal_show_auxiliary_text; }
-    sigc::signal <void> signalHideAuxiliaryText (void) { return m_signal_hide_auxiliary_text; }
-    sigc::signal <void, LookupTable &, gboolean> signalUpdateLookupTable (void) { return m_signal_update_lookup_table; }
-    sigc::signal <void, LookupTable &, gboolean> signalUpdateLookupTableFast (void) { return m_signal_update_lookup_table_fast; }
-    sigc::signal <void> signalShowLookupTable (void) { return m_signal_show_lookup_table; }
-    sigc::signal <void> signalHideLookupTable (void) { return m_signal_hide_lookup_table; }
+    sigc::signal <void, Text &> & signalCommitText (void) { return m_signal_commit_text; }
+    sigc::signal <void, Text &, guint, gboolean> & signalUpdatePreeditText (void) { return m_signal_update_preedit_text; }
+    sigc::signal <void> & signalShowPreeditText (void) { return m_signal_show_preedit_text; }
+    sigc::signal <void> & signalHidePreeditText (void) { return m_signal_hide_preedit_text; }
+    sigc::signal <void, Text &, gboolean> & signalUpdateAuxiliaryText (void) { return m_signal_update_auxiliary_text; }
+    sigc::signal <void> & signalShowAuxiliaryText (void) { return m_signal_show_auxiliary_text; }
+    sigc::signal <void> & signalHideAuxiliaryText (void) { return m_signal_hide_auxiliary_text; }
+    sigc::signal <void, LookupTable &, gboolean> & signalUpdateLookupTable (void) { return m_signal_update_lookup_table; }
+    sigc::signal <void, LookupTable &, gboolean> & signalUpdateLookupTableFast (void) { return m_signal_update_lookup_table_fast; }
+    sigc::signal <void> & signalShowLookupTable (void) { return m_signal_show_lookup_table; }
+    sigc::signal <void> & signalHideLookupTable (void) { return m_signal_hide_lookup_table; }
 
 protected:
     /* methods */
