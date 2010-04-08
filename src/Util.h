@@ -49,6 +49,7 @@ public:
         str = getenv (name);
         assign (str != NULL ? str : "");
     }
+
     operator const gchar *(void) const {
         return c_str();
     }
@@ -57,19 +58,23 @@ public:
 class StaticString {
 public:
     StaticString (const gchar *str) : m_string (str) {}
-    gboolean operator == (const gchar *str) const {
-        if (G_UNLIKELY (m_string == str))
-            return TRUE;
+
+    gboolean equal (const gchar *str) const {
         return g_strcmp0 (m_string, str) == 0;
     }
-    gboolean operator != (const gchar *str) const {
-        if (G_UNLIKELY (m_string == str))
-            return FALSE;
-        return g_strcmp0 (m_string, str) != 0;
+
+    gboolean operator == (const gchar *str) const {
+        return equal (str);
     }
+
+    gboolean operator != (const gchar *str) const {
+        return ! equal (str);
+    }
+
     operator const gchar * (void) const {
         return m_string;
     }
+
 private:
     const gchar *m_string;
 };
