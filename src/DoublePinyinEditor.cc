@@ -40,7 +40,7 @@ DoublePinyinEditor::insert (gint ch)
         return FALSE;
     }
 
-    if (G_UNLIKELY (m_text.isEmpty () &&
+    if (G_UNLIKELY (m_text.empty () &&
         ID_TO_SHENG (id) == PINYIN_ID_VOID)) {
         return FALSE;
     }
@@ -241,8 +241,8 @@ void
 DoublePinyinEditor::reset (void)
 {
     if (m_cursor != 0 ||
-        m_text.isEmpty () == FALSE ||
-        m_pinyin.isEmpty () == FALSE) {
+        m_text.empty () == FALSE ||
+        m_pinyin.empty () == FALSE) {
         m_cursor = 0;
         m_text.truncate (0);
         m_pinyin.removeAll ();
@@ -295,7 +295,7 @@ DoublePinyinEditor::updatePinyin (gboolean all)
     gboolean retval = FALSE;
 
     if (all &&
-        (m_pinyin_len != 0 || !m_pinyin.isEmpty ())) {
+        (m_pinyin_len != 0 || !m_pinyin.empty ())) {
         m_pinyin.removeAll ();
         m_pinyin_len = 0;
         retval = TRUE;
@@ -315,7 +315,7 @@ DoublePinyinEditor::updatePinyin (gboolean all)
 
     if (m_pinyin_len < m_cursor) {
         guint len = m_pinyin_len;
-        if (m_pinyin.isEmpty () == FALSE &&
+        if (m_pinyin.empty () == FALSE &&
             m_pinyin.back ()->flags & PINYIN_INCOMPLETE_PINYIN) {
             const Pinyin *pinyin = isPinyin (ID (m_text[m_pinyin_len -1]),ID (m_text[m_pinyin_len]));
             if (pinyin) {
@@ -324,7 +324,7 @@ DoublePinyinEditor::updatePinyin (gboolean all)
                 m_pinyin_len += 1;
             }
         }
-        while (m_pinyin_len < m_cursor && m_pinyin.length () < MAX_PHRASE_LEN) {
+        while (m_pinyin_len < m_cursor && m_pinyin.size () < MAX_PHRASE_LEN) {
             const Pinyin *pinyin = NULL;
             if (m_pinyin_len == m_cursor - 1) {
                 pinyin = isPinyin (ID (m_text[m_pinyin_len]));

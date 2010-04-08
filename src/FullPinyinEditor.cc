@@ -201,7 +201,7 @@ FullPinyinEditor::moveCursorToEnd (void)
 void
 FullPinyinEditor::updatePinyin (void)
 {
-    if (G_UNLIKELY (m_text.isEmpty ())) {
+    if (G_UNLIKELY (m_text.empty ())) {
         m_pinyin.removeAll ();
         m_pinyin_len = 0;
     }

@@ -111,7 +111,7 @@ Query::Query (Database             & db,
       m_option (option),
       m_stmt (NULL)
 {
-    g_assert (m_pinyin.length () >= pinyin_begin + pinyin_len);
+    g_assert (m_pinyin.size () >= pinyin_begin + pinyin_len);
 }
 
 Query::~Query (void)
@@ -406,8 +406,8 @@ Database::query (const PinyinArray &pinyin,
                  gint               m,
                  guint              option)
 {
-    g_assert (pinyin_begin < pinyin.length ());
-    g_assert (pinyin_len <= pinyin.length () - pinyin_begin);
+    g_assert (pinyin_begin < pinyin.size ());
+    g_assert (pinyin_len <= pinyin.size () - pinyin_begin);
     g_assert (pinyin_len <= MAX_PHRASE_LEN);
 
     /* prepare sql */
@@ -425,7 +425,7 @@ Database::query (const PinyinArray &pinyin,
             conditions.appendPrintf (0, conditions.size (),
                                        " AND ");
 
-        if (fs1 || fs2) {
+        if (G_UNLIKELY (fs1 || fs2)) {
             if (G_LIKELY (i < DB_INDEX_SIZE)) {
                 if (fs1 && fs2 == 0) {
                     conditions.double_ ();
@@ -564,11 +564,11 @@ Database::commit (const PhraseArray  &phrases)
     Phrase phrase = {""};
 
     m_sql = "BEGIN TRANSACTION;\n";
-    for (guint i = 0; i < phrases.length (); i++) {
+    for (guint i = 0; i < phrases.size (); i++) {
         phrase += phrases[i];
         phraseSql (phrases[i], m_sql);
     }
-    if (phrases.length () > 1)
+    if (phrases.size () > 1)
         phraseSql (phrase, m_sql);
     m_sql << "COMMIT;\n";
 

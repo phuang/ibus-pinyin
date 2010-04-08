@@ -15,14 +15,6 @@ public:
     ~Array () {
     }
 
-    guint length (void) const {
-        return std::vector<T>::size ();
-    }
-
-    gboolean isEmpty (void) const {
-        return length () == 0;
-    }
-
     Array<T> & removeAll () {
         std::vector<T>::clear ();
         return *this;
@@ -34,7 +26,7 @@ public:
     }
 
     Array<T> & append (const Array<T> & a) {
-        for (guint i = 0; i < a.length (); i++)
+        for (guint i = 0; i < a.size (); i++)
             append (a.at (i));
         return *this;
     }
@@ -45,7 +37,7 @@ public:
     }
 
     void pop (void) {
-        g_assert (!isEmpty ());
+        g_assert (! std::vector<T>::empty ());
         std::vector<T>::pop_back ();
     }
 
@@ -58,17 +50,17 @@ public:
     }
 
     T & operator[] (guint i) {
-        g_assert (i < length ());
+        g_assert (i < std::vector<T>::size ());
         return std::vector<T>::operator[](i);
     }
 
     const T & operator[] (guint i) const {
-        g_assert (i < length ());
+        g_assert (i < std::vector<T>::size ());
         return std::vector<T>::operator[](i);
     }
 
     operator gboolean (void) const {
-        return length () != 0;
+        return ! std::vector<T>::empty ();
     }
 };
 

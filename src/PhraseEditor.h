@@ -20,7 +20,7 @@ public:
     const PhraseArray & candidates (void) const { return m_candidates; }
     guint cursor (void) const { return m_cursor; }
     gboolean pinyinExistsAfterCursor (void) const {
-        return m_pinyin.length () > m_cursor;
+        return m_pinyin.size () > m_cursor;
     }
 
     const Phrase & candidate (guint i) const {
@@ -87,12 +87,12 @@ public:
         reset ();
     }
 
-    gboolean isEmpty (void) const {
-        return m_selected_string.isEmpty () && m_candidate_0_phrases.isEmpty ();
+    gboolean empty (void) const {
+        return m_selected_string.empty () && m_candidate_0_phrases.empty ();
     }
 
     operator gboolean (void) const {
-        return !isEmpty ();
+        return !empty ();
     }
 
 private:

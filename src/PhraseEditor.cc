@@ -27,8 +27,8 @@ PhraseEditor::~PhraseEditor (void)
 gboolean
 PhraseEditor::update (const PinyinArray &pinyin)
 {
-    /* the length of pinyin must not bigger than MAX_PHRASE_LEN */
-    g_assert (pinyin.length () <= MAX_PHRASE_LEN);
+    /* the size of pinyin must not bigger than MAX_PHRASE_LEN */
+    g_assert (pinyin.size () <= MAX_PHRASE_LEN);
 
     m_pinyin = pinyin;
     m_cursor = 0;
@@ -52,7 +52,7 @@ PhraseEditor::resetCandidate (guint i)
 gboolean
 PhraseEditor::selectCandidate (guint i)
 {
-    if (G_UNLIKELY (i >= m_candidates.length ()))
+    if (G_UNLIKELY (i >= m_candidates.size ()))
         return FALSE;
 
     if (G_LIKELY (i == 0)) {
@@ -61,7 +61,7 @@ PhraseEditor::selectCandidate (guint i)
             m_selected_string << m_candidates[0].phrase;
         else
             SimpTradConverter::simpToTrad (m_candidates[0].phrase, m_selected_string);
-        m_cursor = m_pinyin.length ();
+        m_cursor = m_pinyin.size ();
     }
     else {
         m_selected_phrases << m_candidates[i];
@@ -86,13 +86,13 @@ PhraseEditor::updateCandidates (void)
         m_query = NULL;
     }
 
-    if (G_UNLIKELY (m_pinyin.length () == 0))
+    if (G_UNLIKELY (m_pinyin.size () == 0))
         return;
 
-    if (G_LIKELY (m_candidate_0_phrases.length () > 1)) {
+    if (G_LIKELY (m_candidate_0_phrases.size () > 1)) {
         Phrase phrase;
         phrase.reset ();
-        for (guint i = 0; i < m_candidate_0_phrases.length (); i++)
+        for (guint i = 0; i < m_candidate_0_phrases.size (); i++)
             phrase += m_candidate_0_phrases[i];
         m_candidates << phrase;
     }
@@ -100,7 +100,7 @@ PhraseEditor::updateCandidates (void)
     m_query = new Query (m_database,
                          m_pinyin,
                          m_cursor,
-                         m_pinyin.length () - m_cursor,
+                         m_pinyin.size () - m_cursor,
                          Config::option ());
     fillCandidates ();
 }
@@ -113,11 +113,11 @@ PhraseEditor::updateTheFirstCandidate (void)
 
     m_candidate_0_phrases.removeAll ();
 
-    if (G_UNLIKELY (m_pinyin.length () == 0))
+    if (G_UNLIKELY (m_pinyin.size () == 0))
         return;
 
     begin = m_cursor;
-    end = m_pinyin.length ();
+    end = m_pinyin.size ();
 
     while (begin != end) {
         gint ret;

@@ -58,10 +58,6 @@ public:
         return *this;
     }
 
-    gboolean isEmpty (void) const {
-        return empty ();
-    }
-
     gsize utf8Length (void) const {
         return g_utf8_strlen (c_str(), -1);
     }
@@ -113,7 +109,7 @@ public:
     }
 
     operator gboolean (void) const {
-        return ! isEmpty ();
+        return ! empty ();
     }
 };
 

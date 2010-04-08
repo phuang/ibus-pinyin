@@ -55,7 +55,7 @@ protected:
     const String & text (void) const { return m_text; }
     const gchar * textAfterPinyin (void) const { return (const gchar *)m_text + m_pinyin_len; }
     const gchar * textAfterPinyin (guint i) const {
-        g_assert (i <= m_pinyin.length ());
+        g_assert (i <= m_pinyin.size ());
         if ( G_UNLIKELY (i == 0))
             return m_text;
         i--;
@@ -63,10 +63,10 @@ protected:
     }
     const gchar * textAfterCursor (void) const { return (const gchar *)m_text + m_cursor; }
     guint cursor (void) const { return m_cursor; }
-    gboolean isEmpty (void) const { return m_buffer.isEmpty (); }
+    gboolean empty (void) const { return m_buffer.empty (); }
     const PinyinArray & pinyin (void) const { return m_pinyin; }
     guint pinyinLength (void) const { return m_pinyin_len; }
-    operator gboolean (void) const { return !isEmpty (); }
+    operator gboolean (void) const { return ! empty (); }
 
     /* virtual functions */
     virtual gboolean insert (gint ch) = 0;

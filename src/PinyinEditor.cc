@@ -94,7 +94,7 @@ PinyinEditor::processSpace (guint keyval, guint keycode, guint modifiers)
 inline gboolean
 PinyinEditor::processPunct (guint keyval, guint keycode, guint modifiers)
 {
-    if (m_text.isEmpty ())
+    if (m_text.empty ())
         return FALSE;
 
     if (CMSHM_FILTER (modifiers) != 0)
@@ -142,7 +142,7 @@ PinyinEditor::processPunct (guint keyval, guint keycode, guint modifiers)
 inline gboolean
 PinyinEditor::processOthers (guint keyval, guint keycode, guint modifiers)
 {
-    if (m_text.isEmpty ())
+    if (m_text.empty ())
         return FALSE;
 
     /* ignore numlock */
@@ -327,12 +327,12 @@ void
 PinyinEditor::updatePreeditText (void)
 {
     /* preedit text = selected phrases + highlight candidate + rest text */
-    if (G_UNLIKELY (m_phrase_editor.isEmpty () && m_text.isEmpty ())) {
+    if (G_UNLIKELY (m_phrase_editor.empty () && m_text.empty ())) {
         hidePreeditText ();
         return;
     }
 
-    if (m_cursor == m_text.length ())
+    if (m_cursor == m_text.size ())
         updatePreeditTextInTypingMode ();
     else
         updatePreeditTextInEditingMode ();
@@ -363,7 +363,7 @@ PinyinEditor::updatePreeditTextInTypingMode (void)
 
     /* add rest text */
     const PinyinArray & pinyin = m_phrase_editor.pinyin ();
-    if (candidate_begin + candidate_length < pinyin.length ())
+    if (candidate_begin + candidate_length < pinyin.size ())
         m_buffer << ((const gchar *) textAfterPinyin (
                                                 candidate_begin + candidate_length));
     else
@@ -411,7 +411,7 @@ PinyinEditor::updatePreeditTextInEditingMode (void)
     }
 
     /* add rest text */
-    if (candidate_begin + candidate_length < pinyin.length ()) {
+    if (candidate_begin + candidate_length < pinyin.size ()) {
         if (m_buffer)
             m_buffer << ' ' ;
         m_buffer << textAfterPinyin (candidate_begin + candidate_length);
@@ -443,8 +443,8 @@ void
 PinyinEditor::updateAuxiliaryText (void)
 {
     /* clear pinyin array */
-    if (G_UNLIKELY (m_text.isEmpty () ||
-        m_phrase_editor.cursor () == m_pinyin.length ())) {
+    if (G_UNLIKELY (m_text.empty () ||
+        m_phrase_editor.cursor () == m_pinyin.size ())) {
         hideAuxiliaryText ();
         return;
     }
@@ -455,7 +455,7 @@ PinyinEditor::updateAuxiliaryText (void)
 
     updateAuxiliaryTextBefore (m_buffer);
 
-    for (guint i = m_phrase_editor.cursor (); i < m_pinyin.length (); ++i) {
+    for (guint i = m_phrase_editor.cursor (); i < m_pinyin.size (); ++i) {
         if (G_LIKELY (i != m_phrase_editor.cursor ()))
             m_buffer << ' ';
         const Pinyin *p = m_pinyin[i];
@@ -501,11 +501,11 @@ PinyinEditor::updateLookupTable (void)
 inline gboolean
 PinyinEditor::fillLookupTableByPage (void)
 {
-    guint candidate_nr = m_phrase_editor.candidates ().length ();
+    guint candidate_nr = m_phrase_editor.candidates ().size ();
 
     if (candidate_nr < m_lookup_table.size () + m_lookup_table.pageSize ()) {
         if (m_phrase_editor.fillCandidates ()) {
-            candidate_nr = m_phrase_editor.candidates ().length ();
+            candidate_nr = m_phrase_editor.candidates ().size ();
         }
     }
 
@@ -620,7 +620,7 @@ PinyinEditor::commit (const gchar *str)
 void
 PinyinEditor::commit (void)
 {
-    if (G_UNLIKELY (isEmpty ()))
+    if (G_UNLIKELY (empty ()))
         return;
 
     m_buffer.truncate (0);

@@ -116,7 +116,7 @@ PinyinParser::parse (const String   &pinyin,
     result.removeAll ();
 
     if (G_UNLIKELY (len < 0))
-        len = pinyin.length ();
+        len = pinyin.size ();
 
     p = pinyin;
     end = p + len;
@@ -124,7 +124,7 @@ PinyinParser::parse (const String   &pinyin,
     prev_py = NULL;
 
     prev_c = 0;
-    for (; p < end && result.length () < max; ) {
+    for (; p < end && result.size () < max; ) {
         switch (prev_c) {
         case 'r':
         case 'n':
@@ -153,7 +153,7 @@ PinyinParser::parse (const String   &pinyin,
 
                         if (((new_py2 != NULL) && (new_py2->len > 1 )) &&
                             (py == NULL || new_py2->len > py->len + 1)) {
-                            PinyinSegment & segment = result[result.length () - 1];
+                            PinyinSegment & segment = result[result.size () - 1];
                             segment.pinyin = new_py1;
                             segment.len = new_py1->len;
                             py = new_py2;
@@ -167,7 +167,7 @@ PinyinParser::parse (const String   &pinyin,
 
                     pp = need_resplit (prev_py, py);
                     if (pp != NULL) {
-                        PinyinSegment & segment = result[result.length () - 1];
+                        PinyinSegment & segment = result[result.size () - 1];
                         segment.pinyin = pp[2];
                         segment.len = pp[2]->len;
                         py = pp[3];

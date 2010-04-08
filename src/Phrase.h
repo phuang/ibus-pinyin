@@ -23,7 +23,7 @@ struct _Phrase {
         len = 0;
     }
 
-    gboolean isEmpty (void) const {
+    gboolean empty (void) const {
         return len == 0;
     }
 
