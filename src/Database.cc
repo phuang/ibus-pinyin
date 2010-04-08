@@ -20,9 +20,9 @@ namespace PY {
 
 #define DB_PREFETCH_LEN     (6)
 
-class Conditions : public vector<string> {
+class Conditions : public std::vector<std::string> {
 public:
-    Conditions (void) : vector<string> (1) {}
+    Conditions (void) : std::vector<std::string> (1) {}
 
     void double_ (void) {
         gint i = size ();
@@ -34,7 +34,7 @@ public:
     void triple (void) {
         gint i = size ();
         do {
-            const string & value = at (--i);
+            const std::string & value = std::vector<std::string>::at (--i);
             push_back (value);
             push_back (value);
         } while (i > 0);
@@ -59,7 +59,9 @@ public:
 class SQLStmt {
 public:
     SQLStmt (sqlite3 *db)
-        : m_db (db), m_stmt (NULL) {}
+        : m_db (db), m_stmt (NULL) {
+        g_assert (m_db != NULL);
+    }
 
     ~SQLStmt () {
         if (m_stmt != NULL) {
@@ -522,7 +524,6 @@ Database::query (const PinyinArray &pinyin,
     }
 
     return stmt;
-
 }
 
 inline void

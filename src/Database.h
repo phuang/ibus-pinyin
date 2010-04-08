@@ -3,17 +3,12 @@
 #define __PY_DATABASE_H__
 
 #include <sqlite3.h>
-#include <string>
-#include <vector>
-#include <sstream>
 #include "String.h"
 #include "Types.h"
 #include "PinyinArray.h"
 #include "PhraseArray.h"
 
 namespace PY {
-
-using namespace std;
 
 class SQLStmt;
 class Database;
