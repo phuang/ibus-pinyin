@@ -61,9 +61,9 @@ start_component (void)
                                     "",
                                     "ibus-pinyin");
     ibus_component_add_engine (component,
-                               ibus_engine_desc_new ("pinyin",
-                                                     N_("Pinyin"),
-                                                     N_("Pinyin input method"),
+                               ibus_engine_desc_new ("pinyin-debug",
+                                                     N_("Pinyin (debug)"),
+                                                     N_("Pinyin input method (debug)"),
                                                      "zh_CN",
                                                      "GPL",
                                                      "Peng Huang <shawn.p.huang@gmail.com>",
@@ -72,12 +72,13 @@ start_component (void)
 
     factory = ibus_factory_new (ibus_bus_get_connection (bus));
 
-    ibus_factory_add_engine (factory, "pinyin", IBUS_TYPE_PINYIN_ENGINE);
 
     if (ibus) {
+        ibus_factory_add_engine (factory, "pinyin", IBUS_TYPE_PINYIN_ENGINE);
         ibus_bus_request_name (bus, "org.freedesktop.IBus.Pinyin", 0);
     }
     else {
+        ibus_factory_add_engine (factory, "pinyin-debug", IBUS_TYPE_PINYIN_ENGINE);
         ibus_bus_register_component (bus, component);
     }
 
