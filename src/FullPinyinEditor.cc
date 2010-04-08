@@ -95,7 +95,7 @@ FullPinyinEditor::removeWordBefore (void)
         const Pinyin & p = *m_pinyin.back ();
         cursor = m_cursor - p.len;
         m_pinyin_len -= p.len;
-        m_pinyin.pop ();
+        m_pinyin.pop_back ();
     }
 
     m_text.erase (cursor, m_cursor - cursor);
@@ -156,7 +156,7 @@ FullPinyinEditor::moveCursorLeftByWord (void)
     const Pinyin & p = *m_pinyin.back ();
     m_cursor -= p.len;
     m_pinyin_len -= p.len;
-    m_pinyin.pop ();
+    m_pinyin.pop_back ();
 
     updatePhraseEditor ();
     update ();
@@ -177,7 +177,7 @@ FullPinyinEditor::moveCursorToBegin (void)
         return FALSE;
 
     m_cursor = 0;
-    m_pinyin.removeAll ();
+    m_pinyin.clear ();
     m_pinyin_len = 0;
 
     updatePhraseEditor ();
@@ -202,7 +202,7 @@ void
 FullPinyinEditor::updatePinyin (void)
 {
     if (G_UNLIKELY (m_text.empty ())) {
-        m_pinyin.removeAll ();
+        m_pinyin.clear ();
         m_pinyin_len = 0;
     }
     else {

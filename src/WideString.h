@@ -1,12 +1,13 @@
 #ifndef __PY_WIDE_STRING_H_
 #define __PY_WIDE_STRING_H_
+
+#if 0
 #include <glib.h>
 #include <stdarg.h>
 #include "Array.h"
 
 namespace PY {
 
-#if 0
 class WideString {
 public:
     WideString (const gchar *init) : m_string (g_utf8_strlen (init, -1) + 1) {
@@ -101,6 +102,6 @@ public:
 private:
     Array<gunichar> m_string;
 };
-#endif
 };
+#endif
 #endif

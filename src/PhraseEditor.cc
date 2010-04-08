@@ -34,7 +34,7 @@ PhraseEditor::update (const PinyinArray &pinyin)
     m_cursor = 0;
 
     /* FIXME, should not remove all phrases1 */
-    m_selected_phrases.removeAll ();
+    m_selected_phrases.clear ();
     m_selected_string.truncate (0);
     updateCandidates ();
     return TRUE;
@@ -56,7 +56,9 @@ PhraseEditor::selectCandidate (guint i)
         return FALSE;
 
     if (G_LIKELY (i == 0)) {
-        m_selected_phrases << m_candidate_0_phrases;
+        m_selected_phrases.insert (m_selected_phrases.end (),
+                                   m_candidate_0_phrases.begin (),
+                                   m_candidate_0_phrases.end ());
         if (G_LIKELY (m_props.modeSimp ()))
             m_selected_string << m_candidates[0].phrase;
         else
@@ -64,7 +66,7 @@ PhraseEditor::selectCandidate (guint i)
         m_cursor = m_pinyin.size ();
     }
     else {
-        m_selected_phrases << m_candidates[i];
+        m_selected_phrases.push_back (m_candidates[i]);
         if (G_LIKELY (m_props.modeSimp ()))
             m_selected_string << m_candidates[i].phrase;
         else
@@ -79,7 +81,7 @@ PhraseEditor::selectCandidate (guint i)
 void
 PhraseEditor::updateCandidates (void)
 {
-    m_candidates.removeAll ();
+    m_candidates.clear ();
     updateTheFirstCandidate ();
     if (m_query) {
         delete m_query;
@@ -94,7 +96,7 @@ PhraseEditor::updateCandidates (void)
         phrase.reset ();
         for (guint i = 0; i < m_candidate_0_phrases.size (); i++)
             phrase += m_candidate_0_phrases[i];
-        m_candidates << phrase;
+        m_candidates.push_back (phrase);
     }
 
     m_query = new Query (m_database,
@@ -111,7 +113,7 @@ PhraseEditor::updateTheFirstCandidate (void)
     guint begin;
     guint end;
 
-    m_candidate_0_phrases.removeAll ();
+    m_candidate_0_phrases.clear ();
 
     if (G_UNLIKELY (m_pinyin.size () == 0))
         return;

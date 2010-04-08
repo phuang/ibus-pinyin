@@ -57,7 +57,7 @@ public:
             return FALSE;
         }
         else {
-            m_selected_phrases.removeAll ();
+            m_selected_phrases.clear ();
             m_selected_string.truncate (0);
             m_cursor = 0;
             updateCandidates ();
@@ -66,11 +66,11 @@ public:
     }
 
     void reset (void) {
-        m_candidates.removeAll ();
-        m_selected_phrases.removeAll ();
+        m_candidates.clear ();
+        m_selected_phrases.clear ();
         m_selected_string.truncate (0);
-        m_candidate_0_phrases.removeAll ();
-        m_pinyin.removeAll ();
+        m_candidate_0_phrases.clear ();
+        m_pinyin.clear ();
         m_cursor = 0;
         if (m_query) {
             delete m_query;
@@ -82,7 +82,8 @@ public:
     gboolean selectCandidate (guint i);
     gboolean resetCandidate (guint i);
     void commit (void) {
-        m_selected_phrases << m_candidate_0_phrases;
+        m_selected_phrases.insert (m_selected_phrases.end (),
+                    m_candidate_0_phrases.begin (), m_candidate_0_phrases.end ());
         m_database.commit (m_selected_phrases);
         reset ();
     }

@@ -111,7 +111,7 @@ DoublePinyinEditor::removeWordBefore (void)
     }
     else {
         m_pinyin_len = m_pinyin.back ().begin;
-        m_pinyin.pop ();
+        m_pinyin.pop_back ();
         m_text.erase (m_pinyin_len, m_cursor - m_pinyin_len);
         m_cursor = m_pinyin_len;
         updatePhraseEditor ();
@@ -190,7 +190,7 @@ DoublePinyinEditor::moveCursorLeftByWord (void)
     }
     else {
         m_cursor = m_pinyin_len = m_pinyin.back ().begin;
-        m_pinyin.pop ();
+        m_pinyin.pop_back ();
         updatePhraseEditor ();
         update ();
     }
@@ -211,7 +211,7 @@ DoublePinyinEditor::moveCursorToBegin (void)
         return FALSE;
 
     m_cursor = 0;
-    m_pinyin.removeAll ();
+    m_pinyin.clear ();
     m_pinyin_len = 0;
     updatePhraseEditor ();
     update ();
@@ -245,7 +245,7 @@ DoublePinyinEditor::reset (void)
         m_pinyin.empty () == FALSE) {
         m_cursor = 0;
         m_text.truncate (0);
-        m_pinyin.removeAll ();
+        m_pinyin.clear ();
         m_pinyin_len = 0;
         updatePhraseEditor ();
         update ();
@@ -296,7 +296,7 @@ DoublePinyinEditor::updatePinyin (gboolean all)
 
     if (all &&
         (m_pinyin_len != 0 || !m_pinyin.empty ())) {
-        m_pinyin.removeAll ();
+        m_pinyin.clear ();
         m_pinyin_len = 0;
         retval = TRUE;
     }
@@ -305,7 +305,7 @@ DoublePinyinEditor::updatePinyin (gboolean all)
         retval = TRUE;
         while (m_pinyin_len > m_cursor) {
             m_pinyin_len = m_pinyin.back ().begin;
-            m_pinyin.pop ();
+            m_pinyin.pop_back ();
         }
     }
 
@@ -319,7 +319,7 @@ DoublePinyinEditor::updatePinyin (gboolean all)
             m_pinyin.back ()->flags & PINYIN_INCOMPLETE_PINYIN) {
             const Pinyin *pinyin = isPinyin (ID (m_text[m_pinyin_len -1]),ID (m_text[m_pinyin_len]));
             if (pinyin) {
-                m_pinyin.pop ();
+                m_pinyin.pop_back ();
                 m_pinyin.append (pinyin, m_pinyin_len - 1, 2);
                 m_pinyin_len += 1;
             }

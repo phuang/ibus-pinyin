@@ -113,7 +113,7 @@ PinyinParser::parse (const String   &pinyin,
     const Pinyin *prev_py;
     gchar prev_c;
 
-    result.removeAll ();
+    result.clear ();
 
     if (G_UNLIKELY (len < 0))
         len = pinyin.size ();

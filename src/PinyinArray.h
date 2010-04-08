@@ -1,8 +1,8 @@
 #ifndef __PY_PINYIN_ARRAY_H_
 #define __PY_PINYIN_ARRAY_H_
 
+#include <vector>
 #include "Types.h"
-#include "Array.h"
 
 namespace PY {
 
@@ -31,9 +31,12 @@ struct PinyinSegment {
     }
 };
 
-class PinyinArray: public Array<PinyinSegment> {
+class PinyinArray: public std::vector<PinyinSegment> {
 public:
-    PinyinArray (guint init_size = 0) : Array<PinyinSegment> (init_size) {}
+    PinyinArray (guint init_size = 0) {
+        std::vector<PinyinSegment>::reserve (init_size);
+    }
+
     void append (const Pinyin *pinyin, guint begin, guint len) {
         push_back (PinyinSegment (pinyin, begin, len));
     }

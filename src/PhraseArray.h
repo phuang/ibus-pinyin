@@ -1,12 +1,12 @@
 #ifndef __PY_PHRASE_ARRAY_H_
 #define __PY_PHRASE_ARRAY_H_
 
+#include <vector>
 #include "Phrase.h"
-#include "Array.h"
 
 namespace PY {
 
-typedef Array<Phrase> PhraseArray;
+typedef std::vector<Phrase> PhraseArray;
 
 };
 

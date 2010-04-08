@@ -148,7 +148,7 @@ Query::fill (PhraseArray &phrases, gint count)
                 phrase.pinyin_id[i][0] = m_stmt->columnInt (column++);
                 phrase.pinyin_id[i][1] = m_stmt->columnInt (column++);
             }
-            phrases << phrase;
+            phrases.push_back (phrase);
             row ++;
             if (G_UNLIKELY (row == count)) {
                 return row;
