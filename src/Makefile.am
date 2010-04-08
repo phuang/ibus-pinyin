@@ -58,7 +58,6 @@ ibus_engine_built_h_sources = \
 	SimpTradConverterTable.h \
 	$(NULL)
 ibus_engine_h_sources = \
-	Array.h \
 	Bus.h \
 	Config.h \
 	CustomPhrase.h \
