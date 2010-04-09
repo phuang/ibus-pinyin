@@ -70,7 +70,6 @@ ibus_engine_h_sources = \
 	FallbackEditor.h \
 	FullPinyinEditor.h \
 	HalfFullConverter.h \
-	HashTable.h \
 	LookupTable.h \
 	Phrase.h \
 	PhraseArray.h \
