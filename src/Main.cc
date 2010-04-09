@@ -72,7 +72,6 @@ start_component (void)
 
     factory = ibus_factory_new (ibus_bus_get_connection (bus));
 
-
     if (ibus) {
         ibus_factory_add_engine (factory, "pinyin", IBUS_TYPE_PINYIN_ENGINE);
         ibus_bus_request_name (bus, "org.freedesktop.IBus.Pinyin", 0);
