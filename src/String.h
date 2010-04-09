@@ -95,6 +95,10 @@ public:
         return *this;
     }
 
+    String & operator<< (const std::string &str) {
+        return operator<< (str.c_str ());
+    }
+
     String & operator<< (const String &str) {
         return operator<< ((const gchar *)str);
     }

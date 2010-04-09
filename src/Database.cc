@@ -44,7 +44,7 @@ public:
         gchar str[64];
         g_vsnprintf (str, sizeof(str), fmt, args);
         for (gint i = begin; i < end; i++) {
-            operator[](i) += str;
+            at (i) += str;
         }
     }
 
@@ -71,13 +71,13 @@ public:
         }
     }
 
-    gboolean prepare (const gchar *sql) {
+    gboolean prepare (const String &sql) {
         if (sqlite3_prepare (m_db,
-                             sql,
-                             -1,
+                             sql.c_str (),
+                             sql.size (),
                              &m_stmt,
                              NULL) != SQLITE_OK) {
-            g_warning ("parse sql failed!\n %s", sql);
+            g_warning ("parse sql failed!\n %s", sql.c_str ());
             return FALSE;
         }
 
@@ -85,7 +85,7 @@ public:
     }
 
     gboolean step (void) {
-        return sqlite3_step (m_stmt) == SQLITE_ROW ? TRUE : FALSE;
+        return sqlite3_step (m_stmt) == SQLITE_ROW;
     }
 
     const gchar *columnText (guint i) {
@@ -222,7 +222,7 @@ Database::init (void)
         goto _failed;
     }
 
-    m_sql.erase (0);
+    m_sql.clear ();
 
 #if 1
     /* Set synchronous=OFF, write user database will become much faster.
@@ -255,7 +255,7 @@ Database::init (void)
     m_buffer << G_DIR_SEPARATOR_S << "user-1.3.db";
     retval = initUserDatabase (m_buffer);
     if (!retval) {
-        g_warning ("Can not open user database %s", (const gchar *)m_buffer);
+        g_warning ("Can not open user database %s", m_buffer.c_str ());
         if (!initUserDatabase (":memory:"))
             goto _failed;
     }
@@ -331,7 +331,7 @@ _failed:
 void
 Database::prefetch (void)
 {
-    m_sql.erase (0);
+    m_sql.clear ();
     for (guint i = 0; i < DB_PREFETCH_LEN; i++)
         m_sql << "SELECT * FROM py_phrase_" << i << ";\n";
     executeSQL (m_sql);
@@ -496,23 +496,24 @@ Database::query (const PinyinArray &pinyin,
     }
 
 
-    m_buffer.erase (0);
+    m_buffer.clear ();
     for (guint i = 0; i < conditions.size (); i++) {
         if (G_UNLIKELY (i == 0))
-            m_buffer << "  (" << conditions[i].c_str() << ")\n";
+            m_buffer << "  (" << conditions[i] << ")\n";
         else
-            m_buffer << "  OR (" << conditions[i].c_str() << ")\n";
+            m_buffer << "  OR (" << conditions[i] << ")\n";
     }
 
-    m_sql.printf ("SELECT * FROM ("
-                  "SELECT 0 AS user_freq, * FROM main.py_phrase_%d WHERE %s UNION ALL "
-                  "SELECT * FROM userdb.py_phrase_%d WHERE %s) "
-                  "GROUP BY phrase ORDER BY user_freq DESC, freq DESC ",
-                  pinyin_len - 1, (const gchar *) m_buffer, pinyin_len - 1, (const gchar *)m_buffer);
+    m_sql.clear ();
+    gint id = pinyin_len - 1;
+    m_sql << "SELECT * FROM ("
+                "SELECT 0 AS user_freq, * FROM main.py_phrase_" << id << " WHERE " << m_buffer<< " UNION ALL "
+                "SELECT * FROM userdb.py_phrase_" << id << " WHERE " << m_buffer << ") "
+                    "GROUP BY phrase ORDER BY user_freq DESC, freq DESC";
     if (m > 0)
-        m_sql << "LIMIT " << m;
+        m_sql << " LIMIT " << m;
 #if 0
-    g_debug ("sql =\n%s", (const gchar *)m_sql);
+    g_debug ("sql =\n%s", m_sql.c_str ());
 #endif
 
     /* query database */
