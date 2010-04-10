@@ -261,7 +261,7 @@ Database::init (void)
     }
 
     /* prefetch some tables */
-    prefetch ();
+    // prefetch ();
 
     return TRUE;
 
@@ -334,7 +334,10 @@ Database::prefetch (void)
     m_sql.clear ();
     for (guint i = 0; i < DB_PREFETCH_LEN; i++)
         m_sql << "SELECT * FROM py_phrase_" << i << ";\n";
+
+    // g_debug ("prefetching ...");
     executeSQL (m_sql);
+    // g_debug ("done");
 }
 
 inline static gboolean
