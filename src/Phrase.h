@@ -7,10 +7,9 @@
 
 namespace PY {
 
-
 typedef struct _Phrase Phrase;
 struct _Phrase {
-    gchar phrase[(MAX_PHRASE_LEN + 1) * MAX_UTF8_LEN];
+    gchar phrase[MAX_UTF8_LEN * (MAX_PHRASE_LEN + 1)];
     guint  freq;
     guint  user_freq;
     guint  pinyin_id[MAX_PHRASE_LEN][2];

@@ -85,15 +85,23 @@ public:
     }
 
     gboolean step (void) {
-        return sqlite3_step (m_stmt) == SQLITE_ROW;
+        switch (sqlite3_step (m_stmt)) {
+        case SQLITE_ROW:
+            return TRUE;
+        case SQLITE_DONE:
+            return FALSE;
+        default:
+            g_warning ("sqlites step error!");
+            return FALSE;
+        }
     }
 
-    const gchar *columnText (guint i) {
-        return (const gchar *) sqlite3_column_text (m_stmt, i);
+    const gchar *columnText (guint col) {
+        return (const gchar *) sqlite3_column_text (m_stmt, col);
     }
 
-    gint columnInt (guint i) {
-        return sqlite3_column_int (m_stmt, i);
+    gint columnInt (guint col) {
+        return sqlite3_column_int (m_stmt, col);
     }
 
 private:
@@ -148,6 +156,7 @@ Query::fill (PhraseArray &phrases, gint count)
                 phrase.pinyin_id[i][0] = m_stmt->columnInt (column++);
                 phrase.pinyin_id[i][1] = m_stmt->columnInt (column++);
             }
+
             phrases.push_back (phrase);
             row ++;
             if (G_UNLIKELY (row == count)) {
