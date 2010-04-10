@@ -18,14 +18,14 @@ static int _cmp (const void *p1, const void *p2)
 void
 SimpTradConverter::simpToTrad (const gchar *in, String &out)
 {
-    if (!g_utf8_validate (in, -1 , NULL)) {
-        g_debug ("\%s\" is not an utf8 string!", in);
-        g_assert_not_reached ();
-    }
-
     gunichar *p;
     gunichar *in_ucs4;
     gunichar buf[SIMP_TO_TRAD_MAX_LEN + 1];
+
+    if (!g_utf8_validate (in, -1 , NULL)) {
+        g_warning ("\%s\" is not an utf8 string!", in);
+        g_assert_not_reached ();
+    }
 
     p = in_ucs4 = g_utf8_to_ucs4_fast (in, -1, NULL);
 
@@ -34,6 +34,7 @@ SimpTradConverter::simpToTrad (const gchar *in, String &out)
         const gunichar **result;
         for (i = 0; i < SIMP_TO_TRAD_MAX_LEN && p[i] != 0; i++) {
             buf[i] = p[i];
+            g_debug ("i = %d", i);
         }
         for (; i > 0; i--) {
             buf[i] = 0;
