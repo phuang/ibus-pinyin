@@ -59,8 +59,8 @@ is_pinyin (const gchar *p,
         return NULL;
     }
 
-    len = strnlen (p, 6);
-    len = MIN (len, end - p);
+    /* len < 0 */
+    len = MIN (6, end - p);
     strncpy (buf, p, len);
 
     for (; len > 0; len --) {
