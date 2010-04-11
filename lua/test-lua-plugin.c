@@ -35,6 +35,7 @@ static int run_test(lua_State *L, const char * filename){
 
 int main(int argc, char * argv[]){
   printf("starting test...\n");
+
   g_type_init();
   
   IBusEnginePlugin * plugin;
@@ -44,5 +45,6 @@ int main(int argc, char * argv[]){
   run_test(L, "test.lua");
   
   g_object_unref(plugin);
+
   return 0;
 }

@@ -52,15 +52,6 @@ lua_plugin_fini(IBusEnginePluginPrivate * plugin){
 }
 
 static void
-ibus_engine_plugin_dispose (GObject *gobject)
-{
-  IBusEnginePlugin *self = IBUS_ENGINE_PLUGIN (gobject);
-  
-  /* Chain up to the parent class */
-  G_OBJECT_CLASS (ibus_engine_plugin_parent_class)->dispose(gobject);
-}
-
-static void
 ibus_engine_plugin_finalize (GObject *gobject)
 {
   IBusEnginePlugin *self = IBUS_ENGINE_PLUGIN (gobject);
@@ -77,7 +68,6 @@ ibus_engine_plugin_class_init (IBusEnginePluginClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
-  gobject_class->dispose = ibus_engine_plugin_dispose;
   gobject_class->finalize = ibus_engine_plugin_finalize;
 
   g_type_class_add_private (klass, sizeof (IBusEnginePluginPrivate));
