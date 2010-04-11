@@ -12,39 +12,7 @@ struct _IBusEnginePluginPrivate{
   GArray * lua_commands; /* Array of lua_command_t. */
 };
 
-
 G_DEFINE_TYPE (IBusEnginePlugin, ibus_engine_plugin, G_TYPE_OBJECT);
-
-static void
-ibus_engine_plugin_dispose (GObject *gobject)
-{
-  IBusEnginePlugin *self = IBUS_ENGINE_PLUGIN (gobject);
-  
-  /* do some cleaning here. */
-
-  /* Chain up to the parent class */
-  G_OBJECT_CLASS (ibus_engine_plugin_parent_class)->dispose(gobject);
-}
-
-static void
-ibus_engine_plugin_finalize (GObject *gobject)
-{
-  IBusEnginePlugin *self = IBUS_ENGINE_PLUGIN (gobject);
-
-  /* Chain up to the parent class */
-  G_OBJECT_CLASS (ibus_engine_plugin_parent_class)->dispose(gobject);
-}
-
-static void
-ibus_engine_plugin_class_init (IBusEnginePluginClass *klass)
-{
-  GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
-
-  gobject_class->dispose = ibus_engine_plugin_dispose;
-  gobject_class->finalize = ibus_engine_plugin_finalize;
-
-  g_type_class_add_private (klass, sizeof (IBusEnginePluginPrivate));
-}
 
 static int
 lua_plugin_init(IBusEnginePluginPrivate * plugin){
@@ -55,9 +23,8 @@ lua_plugin_init(IBusEnginePluginPrivate * plugin){
   /* enable libs in sandbox */
   lua_plugin_openlibs(plugin->L);
 
-  if ( NULL == plugin->lua_commands )
-    plugin->lua_commands = g_array_new(TRUE, TRUE, sizeof(lua_command_t));
-
+  g_assert ( NULL == plugin->lua_commands );
+  plugin->lua_commands = g_array_new(TRUE, TRUE, sizeof(lua_command_t));
   return 0;
 }
 
@@ -80,7 +47,40 @@ lua_plugin_fini(IBusEnginePluginPrivate * plugin){
   }
 
   lua_close(plugin->L);
+  plugin->L = NULL;
   return 0;
+}
+
+static void
+ibus_engine_plugin_dispose (GObject *gobject)
+{
+  IBusEnginePlugin *self = IBUS_ENGINE_PLUGIN (gobject);
+  
+  /* Chain up to the parent class */
+  G_OBJECT_CLASS (ibus_engine_plugin_parent_class)->dispose(gobject);
+}
+
+static void
+ibus_engine_plugin_finalize (GObject *gobject)
+{
+  IBusEnginePlugin *self = IBUS_ENGINE_PLUGIN (gobject);
+
+  /* do some cleaning here. */
+  lua_plugin_fini(self->priv);
+
+  /* Chain up to the parent class */
+  G_OBJECT_CLASS (ibus_engine_plugin_parent_class)->dispose(gobject);
+}
+
+static void
+ibus_engine_plugin_class_init (IBusEnginePluginClass *klass)
+{
+  GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+
+  gobject_class->dispose = ibus_engine_plugin_dispose;
+  gobject_class->finalize = ibus_engine_plugin_finalize;
+
+  g_type_class_add_private (klass, sizeof (IBusEnginePluginPrivate));
 }
 
 static void
@@ -91,5 +91,21 @@ ibus_engine_plugin_init (IBusEnginePlugin *self)
   self->priv = priv = IBUS_ENGINE_PLUGIN_GET_PRIVATE (self);
 
   memset(priv, 0, sizeof(IBusEnginePluginPrivate));
+
+  lua_plugin_init(priv);
+}
+
+IBusEnginePlugin * ibus_engine_plugin_new(){
+  IBusEnginePlugin * plugin;
+
+  plugin = (IBusEnginePlugin *) g_object_new (IBUS_TYPE_ENGINE_PLUGIN,
+                                              NULL);
+
+  return plugin;
+}
+
+/* will drop this function soon. */
+lua_State * ibus_engine_plugin_get_lua_State(IBusEnginePlugin * plugin){
+  return plugin->priv->L;
 }
 

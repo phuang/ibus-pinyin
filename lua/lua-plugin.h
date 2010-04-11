@@ -46,24 +46,30 @@ struct _IBusEnginePluginClass
 
 GType ibus_engine_plugin_get_type(void);
 
+IBusEnginePlugin * ibus_engine_plugin_new();
+
 /**
  * retrieve all available lua plugin commands.
  * return array of command informations of type lua_command_t.
  */
-GArray * lua_plugin_ime_get_available_commands(IBusEnginePlugin * plugin);
+GArray * ibus_engine_plugin_ime_get_available_commands(IBusEnginePlugin * plugin);
 
 /**
  * retval int: only support string or string array.
  */
-int lua_plugin_ime_call(IBusEnginePlugin * plugin, const lua_command_t * command, const char * argument /*optional, maybe NULL.*/);
+int ibus_engine_plugin_ime_call(IBusEnginePlugin * plugin, const lua_command_t * command, const char * argument /*optional, maybe NULL.*/);
 
 /**
  * retrieve the retval string value. (value has been copied.)
  */
-const char * lua_plugin_ime_get_retval(IBusEnginePlugin * plugin);
+const char * ibus_engine_plugin_ime_get_retval(IBusEnginePlugin * plugin);
 /**
  * retrieve the array of string values. (string values have been copied.)
  */
-GArray * lua_plugin_ime_get_retvals(IBusEnginePlugin * plugin);
+GArray * ibus_engine_plugin_ime_get_retvals(IBusEnginePlugin * plugin);
 
+
+/*< private >*/
+/* will drop this function soon. */
+lua_State * ibus_engine_plugin_get_lua_State(IBusEnginePlugin * plugin);
 #endif
