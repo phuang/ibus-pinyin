@@ -34,7 +34,6 @@ SimpTradConverter::simpToTrad (const gchar *in, String &out)
         const gunichar **result;
         for (i = 0; i < SIMP_TO_TRAD_MAX_LEN && p[i] != 0; i++) {
             buf[i] = p[i];
-            g_debug ("i = %d", i);
         }
         for (; i > 0; i--) {
             buf[i] = 0;

@@ -192,7 +192,7 @@ Database::executeSQL (const gchar *sql)
 {
     gchar *errmsg;
     if (sqlite3_exec (m_db, sql, NULL, NULL, &errmsg) != SQLITE_OK) {
-        g_debug ("%s: %s", errmsg, sql);
+        g_warning ("%s: %s", errmsg, sql);
         sqlite3_free (errmsg);
         return FALSE;
     }
