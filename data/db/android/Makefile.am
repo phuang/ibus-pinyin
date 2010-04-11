@@ -39,7 +39,7 @@ endif
 android.db: $(android_raw_data) $(create_scripts)
 	$(AM_V_GEN) \
 	$(RM) $@; \
-	$(srcdir)/create_db.py $(srcdir)/rawdict_utf16_65105_freq.txt | sqlite3 $@
+	$(srcdir)/create_db.py $(srcdir)/rawdict_utf16_65105_freq.txt | @SQLITE3@ $@
 
 EXTRA_DIST = \
 	$(data_files) \
