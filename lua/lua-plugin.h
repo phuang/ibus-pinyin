@@ -6,6 +6,8 @@
 #define LUA_IMELIBNAME   "ime"
 LUALIB_API int (luaopen_ime) (lua_State * L);
 
+void lua_plugin_openlibs (lua_State *L);
+
 typedef struct{
   const char * command_name;
   const char * lua_function_name;
@@ -64,12 +66,4 @@ const char * lua_plugin_ime_get_retval(IBusEnginePlugin * plugin);
  */
 GArray * lua_plugin_ime_get_retvals(IBusEnginePlugin * plugin);
 
-/*< private >*/
-int lua_plugin_init(IBusEnginePluginPrivate * private);
-int lua_plugin_fini(IBusEnginePluginPrivate * private);
-
-struct _IBusEnginePluginPrivate{
-  lua_State * L;
-  GArray * lua_commands; /* Array of lua_command_t. */
-};
 #endif
