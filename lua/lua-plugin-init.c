@@ -198,6 +198,7 @@ static int ime_register_command(lua_State * L){
   }
 
   /* check whether the same command exists. */
+  /* use the sorted array. */
 
   return 0;
 }
