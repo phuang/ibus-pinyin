@@ -24,6 +24,7 @@ noinst_LTLIBRARIES = \
 
 libpylua_la_SOURCES = \
 	lua-plugin.h \
+	lua-plugin.c \
 	lua-plugin-init.c \
 	$(NULL)
 

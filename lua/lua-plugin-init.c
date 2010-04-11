@@ -29,35 +29,38 @@ void lua_plugin_openlibs (lua_State *L) {
   }
 }
 
-static GArray * g_lua_commands = NULL;
+int lua_plugin_init(IBusEnginePluginPrivate * plugin){
+  g_assert(NULL == plugin->L);
+  /* initialize Lua */
+  plugin->L = lua_open();
 
-int lua_plugin_init(lua_State *L){
   /* enable libs in sandbox */
-  lua_plugin_openlibs(L);
+  lua_plugin_openlibs(plugin->L);
 
-  if ( NULL == g_lua_commands )
-    g_lua_commands = g_array_new(TRUE, TRUE, sizeof(lua_command_t));
+  if ( NULL == plugin->lua_commands )
+    plugin->lua_commands = g_array_new(TRUE, TRUE, sizeof(lua_command_t));
 
   return 0;
 }
 
-int lua_plugin_fini(lua_State *L){
+int lua_plugin_fini(IBusEnginePluginPrivate * plugin){
   size_t i;
   lua_command_t * command;
-  lua_close(L);
 
-  if ( g_lua_commands ){
-    for ( i = 0; i < g_lua_commands->len; ++i){
-      command = &g_array_index(g_lua_commands, lua_command_t, i);
+  if ( plugin->lua_commands ){
+    for ( i = 0; i < plugin->lua_commands->len; ++i){
+      command = &g_array_index(plugin->lua_commands, lua_command_t, i);
       g_free((gpointer)command->command_name);
       g_free((gpointer)command->lua_function_name);
       g_free((gpointer)command->description);
       g_free((gpointer)command->leading);
       g_free((gpointer)command->help);
     }
-    g_array_free(g_lua_commands, TRUE);
-    g_lua_commands = NULL;
+    g_array_free(plugin->lua_commands, TRUE);
+    plugin->lua_commands = NULL;
   }
+
+  lua_close(plugin->L);
   return 0;
 }
 

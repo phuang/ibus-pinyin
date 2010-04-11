@@ -36,13 +36,15 @@ static int run_test(lua_State *L, const char * filename){
 int main(int argc, char * argv[]){
   printf("starting test...\n");
 
-  /* initialize Lua */
-  L = lua_open();
+  IBusEnginePluginPrivate priv;
 
-  lua_plugin_init(L);
+  priv.L = NULL;
+  priv.lua_commands = NULL;
 
-  run_test(L, "test.lua");
+  lua_plugin_init(&priv);
+
+  run_test(priv.L, "test.lua");
   
-  lua_plugin_fini(L);
+  lua_plugin_fini(&priv);
   return 0;
 }
