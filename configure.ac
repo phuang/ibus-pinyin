@@ -65,9 +65,34 @@ AC_PATH_PROG(SQLITE3, sqlite3)
 # check uuid
 PKG_CHECK_MODULES(UUID, [
     uuid
+],
+[
+    cat >>confdefs.h <<_ACEOF
+#define HAVE_UUID_UUID_H 1
+#define HAVE_UUID_GENERATE 1
+_ACEOF
+],
+[
+    uuid_revert_save_LIBS=$LIBS
+    AC_CHECK_HEADERS(uuid.h uuid/uuid.h sys/uuid.h)
+    AC_SEARCH_LIBS(uuid_create, uuid, [
+        if test "$ac_cv_search_uuid_create" != "none required"; then
+            UUID_LIBS=$ac_cv_search_uuid_create
+        fi
+        AC_CHECK_FUNCS(uuid_create)
+    ],
+    [
+        AC_SEARCH_LIBS(uuid_generate, uuid, [
+            if test "$ac_cv_search_uuid_generate" != "none required"; then
+                UUID_LIBS=$ac_cv_search_uuid_generate
+            fi
+            AC_CHECK_FUNCS(uuid_generate)
+        ])
+    ])
+    LIBS=$uuid_revert_save_LIBS
 ])
 
-# check uuid
+# check sigc
 PKG_CHECK_MODULES(SIGC, [
     sigc++-2.0
 ])
