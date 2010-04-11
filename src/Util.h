@@ -30,7 +30,7 @@ public:
         free(uuid);
 #elif defined(HAVE_UUID_GENERATE)
         uuid_generate (u);
-        uuid_unparse (u, m_uuid);
+        uuid_unparse_lower (u, m_uuid);
 #endif
     }
 
@@ -39,7 +39,7 @@ public:
     }
 
 private:
-    gchar m_uuid[40];
+    gchar m_uuid[256];
 };
 
 class Uname {
