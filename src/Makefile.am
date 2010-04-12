@@ -102,7 +102,6 @@ ibus_engine_pinyin_SOURCES = \
 ibus_engine_pinyin_CXXFLAGS = \
 	@IBUS_CFLAGS@ \
 	@SQLITE_CFLAGS@ \
-	@UUID_CFLAGS@ \
 	@SIGC_CFLAGS@ \
 	-DGETTEXT_PACKAGE=\"@GETTEXT_PACKAGE@\" \
 	-DPKGDATADIR=\"$(pkgdatadir)\" \
@@ -111,9 +110,13 @@ ibus_engine_pinyin_CXXFLAGS = \
 ibus_engine_pinyin_LDADD = \
 	@IBUS_LIBS@ \
 	@SQLITE_LIBS@ \
-	@UUID_LIBS@ \
 	@SIGC_LIBS@ \
 	$(NULL)
+
+if WITH_LIBUUID
+ibus_engine_pinyin_CXXFLAGS += $(LIBUUID_CFLAGS)
+ibus_engine_pinyin_LDADD += $(LIBUUID_LIBS)
+endif
 
 BUILT_SOURCES = \
 	$(ibus_engine_built_c_sources) \

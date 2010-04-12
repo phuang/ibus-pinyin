@@ -2,16 +2,15 @@
 #define __PY_UTIL_H_
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#  include "config.h"
 #endif
 
-#if defined(HAVE_UUID_H)
-#include <uuid.h>
-#elif defined(HAVE_UUID_UUID_H)
-#include <uuid/uuid.h>
-#elif defined(HAVE_SYS_UUID_H)
-#include <sys/uuid.h>
+#if defined(HAVE_UUID_CREATE)
+#  include <uuid.h>
+#elif defined(HAVE_LIBUUID)
+#  include <uuid/uuid.h>
 #endif
+
 #include <sys/utsname.h>
 #include <stdlib.h>
 #include "String.h"
@@ -28,7 +27,7 @@ public:
         uuid_to_string (&u, &uuid, 0);
         g_strlcpy (m_uuid, uuid, sizeof(m_uuid));
         free(uuid);
-#elif defined(HAVE_UUID_GENERATE)
+#elif defined(HAVE_LIBUUID)
         uuid_generate (u);
         uuid_unparse_lower (u, m_uuid);
 #endif

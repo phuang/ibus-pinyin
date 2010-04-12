@@ -63,34 +63,28 @@ PKG_CHECK_MODULES(SQLITE, [
 AC_PATH_PROG(SQLITE3, sqlite3)
 
 # check uuid
-PKG_CHECK_MODULES(UUID, [
-    uuid
-],
-[
-    cat >>confdefs.h <<_ACEOF
-#define HAVE_UUID_UUID_H 1
-#define HAVE_UUID_GENERATE 1
-_ACEOF
-],
-[
-    uuid_revert_save_LIBS=$LIBS
-    AC_CHECK_HEADERS(uuid.h uuid/uuid.h sys/uuid.h)
-    AC_SEARCH_LIBS(uuid_create, uuid, [
-        if test "$ac_cv_search_uuid_create" != "none required"; then
-            UUID_LIBS=$ac_cv_search_uuid_create
-        fi
-        AC_CHECK_FUNCS(uuid_create)
-    ],
-    [
-        AC_SEARCH_LIBS(uuid_generate, uuid, [
-            if test "$ac_cv_search_uuid_generate" != "none required"; then
-                UUID_LIBS=$ac_cv_search_uuid_generate
-            fi
-            AC_CHECK_FUNCS(uuid_generate)
+AC_CHECK_FUNCS([uuid_create], [], [
+    PKG_CHECK_MODULES(LIBUUID, uuid, [
+        # uuid.pc exist
+        AC_DEFINE(HAVE_LIBUUID, 1, [Define if found libuuid])
+        HAVE_LIBUUID=yes
+    ], [
+        # uuid.pc does not exist
+        AC_CHECK_HEADERS(uuid/uuid.h, [
+            AC_CHECK_LIB(uuid, uuid_generate, [
+                LIBUUID_LIBS=-luuid
+                AC_DEFINE(HAVE_LIBUUID, 1, [Define if found libuuid])
+                HAVE_LIBUUID=yes
+            ], [
+                AC_MSG_ERROR([Can not find libuuid and uuid_create in libc!])
+            ])
+        ], [
+            AC_MSG_ERROR([Can not find libuuid and uuid_create in libc!])
         ])
     ])
-    LIBS=$uuid_revert_save_LIBS
 ])
+
+AM_CONDITIONAL(WITH_LIBUUID, test x"$HAVE_LIBUUID" = x"yes")
 
 # check sigc
 PKG_CHECK_MODULES(SIGC, [
