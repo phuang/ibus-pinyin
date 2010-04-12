@@ -240,6 +240,8 @@ DoublePinyinEditor::moveCursorToEnd (void)
 void
 DoublePinyinEditor::reset (void)
 {
+    PinyinEditor::reset ();
+#if 0
     if (m_cursor != 0 ||
         m_text.empty () == FALSE ||
         m_pinyin.empty () == FALSE) {
@@ -250,6 +252,7 @@ DoublePinyinEditor::reset (void)
         updatePhraseEditor ();
         update ();
     }
+#endif
 }
 
 inline const Pinyin *

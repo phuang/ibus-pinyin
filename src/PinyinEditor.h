@@ -6,10 +6,13 @@
 #include "Database.h"
 #include "PinyinParser.h"
 #include "PhraseEditor.h"
+#include "SpecialTable.h"
 
 namespace PY {
 
 #define MAX_PINYIN_LEN 64
+
+class SpecialTable;
 
 class PinyinEditor : public Editor {
 public:
@@ -23,6 +26,7 @@ public:
     virtual void cursorUp (void);
     virtual void cursorDown (void);
     virtual void update (void);
+    virtual void reset (void);
     virtual void candidateClicked (guint index, guint button, guint state);
     virtual void updateAuxiliaryTextBefore (String &buffer);
     virtual void updateAuxiliaryTextAfter (String &buffer);
@@ -68,6 +72,20 @@ protected:
     guint pinyinLength (void) const { return m_pinyin_len; }
     operator gboolean (void) const { return ! empty (); }
 
+    gboolean updateSpecialPhrases (void) {
+        guint oldsize = m_special_phrases.size ();
+        m_special_phrases.clear ();
+        guint begin = m_phrase_editor.cursorInChar ();
+        guint end = m_cursor;
+
+        if (begin < end &&
+            m_selected_special_phrase.empty () &&
+            m_special_table.lookup (m_text.substr (begin, m_cursor - begin), m_special_phrases)) {
+            return TRUE;
+        }
+        return oldsize > 0;
+    }
+
     /* virtual functions */
     virtual gboolean insert (gint ch) = 0;
     virtual gboolean removeCharBefore (void) = 0;
@@ -87,9 +105,12 @@ protected:
     String      m_buffer;       // temp buffer
     LookupTable m_lookup_table;
     PhraseEditor m_phrase_editor;
+    std::vector<std::string> m_special_phrases;
+    std::string m_selected_special_phrase;
 
 protected:
     static PinyinParser m_parser;
+    static SpecialTable m_special_table;
 };
 };
 

@@ -15,6 +15,8 @@ FullPinyinEditor::~FullPinyinEditor (void)
 void
 FullPinyinEditor::reset (void)
 {
+    PinyinEditor::reset ();
+#if 0
     gboolean retval = FALSE;
     if (m_cursor != 0) {
         m_cursor = 0;
@@ -27,8 +29,10 @@ FullPinyinEditor::reset (void)
     }
 
     if (retval) {
+        updateSpecialPhrases ();
         updatePinyin ();
     }
+#endif
 }
 
 gboolean
@@ -41,14 +45,21 @@ FullPinyinEditor::insert (gint ch)
     m_text.insert (m_cursor++, ch);
 
     if (G_UNLIKELY (!(Config::option () & PINYIN_INCOMPLETE_PINYIN))) {
+        updateSpecialPhrases ();
         updatePinyin ();
     }
     else if (G_LIKELY (m_cursor <= m_pinyin_len + 2)) {
+        updateSpecialPhrases ();
         updatePinyin ();
     }
     else {
-        updatePreeditText ();
-        updateAuxiliaryText ();
+        if (updateSpecialPhrases ()) {
+            update ();
+        }
+        else {
+            updatePreeditText ();
+            updateAuxiliaryText ();
+        }
     }
     return TRUE;
 }
@@ -62,6 +73,7 @@ FullPinyinEditor::removeCharBefore (void)
     m_cursor --;
     m_text.erase (m_cursor, 1);
 
+    updateSpecialPhrases ();
     updatePinyin ();
 
     return TRUE;
@@ -100,6 +112,7 @@ FullPinyinEditor::removeWordBefore (void)
 
     m_text.erase (cursor, m_cursor - cursor);
     m_cursor = cursor;
+    updateSpecialPhrases ();
     updatePhraseEditor ();
     update ();
     return TRUE;
@@ -124,6 +137,7 @@ FullPinyinEditor::moveCursorLeft (void)
         return FALSE;
 
     m_cursor --;
+    updateSpecialPhrases ();
     updatePinyin ();
 
     return TRUE;
@@ -137,6 +151,7 @@ FullPinyinEditor::moveCursorRight (void)
 
     m_cursor ++;
 
+    updateSpecialPhrases ();
     updatePinyin ();
 
     return TRUE;
@@ -158,6 +173,7 @@ FullPinyinEditor::moveCursorLeftByWord (void)
     m_pinyin_len -= p.len;
     m_pinyin.pop_back ();
 
+    updateSpecialPhrases ();
     updatePhraseEditor ();
     update ();
 
@@ -180,6 +196,7 @@ FullPinyinEditor::moveCursorToBegin (void)
     m_pinyin.clear ();
     m_pinyin_len = 0;
 
+    updateSpecialPhrases ();
     updatePhraseEditor ();
     update ();
 
@@ -193,6 +210,7 @@ FullPinyinEditor::moveCursorToEnd (void)
         return FALSE;
 
     m_cursor = m_text.length ();
+    updateSpecialPhrases ();
     updatePinyin ();
 
     return TRUE;

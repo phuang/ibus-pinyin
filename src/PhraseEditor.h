@@ -19,6 +19,7 @@ public:
     const PinyinArray & pinyin (void) const { return m_pinyin; }
     const PhraseArray & candidates (void) const { return m_candidates; }
     guint cursor (void) const { return m_cursor; }
+    guint cursorInChar (void) const { return m_cursor == 0 ? 0 : m_pinyin[m_cursor - 1].begin + m_pinyin[m_cursor - 1].len; }
     gboolean pinyinExistsAfterCursor (void) const {
         return m_pinyin.size () > m_cursor;
     }
@@ -82,8 +83,10 @@ public:
     gboolean selectCandidate (guint i);
     gboolean resetCandidate (guint i);
     void commit (void) {
+    #if 0
         m_selected_phrases.insert (m_selected_phrases.end (),
                     m_candidate_0_phrases.begin (), m_candidate_0_phrases.end ());
+    #endif
         m_database.commit (m_selected_phrases);
         reset ();
     }

@@ -87,7 +87,7 @@ Editor::processKeyEvent (guint keyval, guint keycode, guint modifiers)
 void
 Editor::reset (void)
 {
-    gboolean need_update = (m_cursor != 0 || m_text);
+    gboolean need_update = (m_cursor != 0 || !m_text.empty ());
     m_cursor = 0;
     m_text = "";
     if (need_update)
