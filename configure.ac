@@ -70,17 +70,19 @@ AC_CHECK_FUNCS([uuid_create], [], [
         HAVE_LIBUUID=yes
     ], [
         # uuid.pc does not exist
+        uuid_old_LIBS=$LIBS
         AC_CHECK_HEADERS(uuid/uuid.h, [
-            AC_CHECK_LIB(uuid, uuid_generate, [
-                LIBUUID_LIBS=-luuid
+            AC_SEARCH_LIBS(uuid_generate, uuid, [
+                test x"$ac_cv_search_uuid_generate" != x"none required" && LIBUUID_LIBS=$ac_cv_search_uuid_generate
                 AC_DEFINE(HAVE_LIBUUID, 1, [Define if found libuuid])
                 HAVE_LIBUUID=yes
             ], [
-                AC_MSG_ERROR([Can not find libuuid and uuid_create in libc!])
+                AC_MSG_ERROR([Can not find uuid_create and uuid_generate in libc or libuuid])
             ])
         ], [
-            AC_MSG_ERROR([Can not find libuuid and uuid_create in libc!])
+            AC_MSG_ERROR([Can not find uuid_create and uuid_generate in libc or libuuid])
         ])
+        LIBS=$uuid_old_LIBS
     ])
 ])
 
