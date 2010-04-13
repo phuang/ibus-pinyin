@@ -105,9 +105,6 @@ protected:
     PhraseEditor m_phrase_editor;
     std::vector<std::string> m_special_phrases;
     std::string m_selected_special_phrase;
-
-protected:
-    static PinyinParser m_parser;
 };
 };
 

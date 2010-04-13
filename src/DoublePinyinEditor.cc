@@ -314,7 +314,7 @@ DoublePinyinEditor::isPinyin (gint i)
         return NULL;
     }
 
-    return m_parser.isPinyin (sheng, 0, PINYIN_INCOMPLETE_PINYIN);
+    return PinyinParser::isPinyin (sheng, 0, PINYIN_INCOMPLETE_PINYIN);
 }
 
 inline const Pinyin *
@@ -330,10 +330,10 @@ DoublePinyinEditor::isPinyin (gint i, gint j)
     if (sheng == PINYIN_ID_ZERO && yun[0] == PINYIN_ID_ZERO)
         return pinyin;
 
-    pinyin = m_parser.isPinyin (sheng, yun[0],
+    pinyin = PinyinParser::isPinyin (sheng, yun[0],
                         Config::option () & PINYIN_FUZZY_ALL);
     if (pinyin == NULL && yun[1] != PINYIN_ID_VOID)
-        pinyin = m_parser.isPinyin (sheng, yun[1],
+        pinyin = PinyinParser::isPinyin (sheng, yun[1],
                         Config::option () & PINYIN_FUZZY_ALL);
     return pinyin;
 }

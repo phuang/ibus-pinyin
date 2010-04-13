@@ -8,8 +8,6 @@ namespace PY {
 #define MAX_PINYIN_LEN 64
 
 /* init static members */
-PinyinParser PinyinEditor::m_parser;
-
 PinyinEditor::PinyinEditor (PinyinProperties & props)
     : Editor (props),
       m_pinyin (MAX_PHRASE_LEN),

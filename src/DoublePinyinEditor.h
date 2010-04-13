@@ -29,8 +29,10 @@ public:
     void reset (void);
     void updateAuxiliaryTextAfter (String &buffer);
 
-private:
+protected:
     gboolean updatePinyin (gboolean all);
+
+private:
     const Pinyin *isPinyin (gint i, gint j);
     const Pinyin *isPinyin (gint i);
 
