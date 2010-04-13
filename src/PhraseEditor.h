@@ -87,7 +87,7 @@ public:
         m_selected_phrases.insert (m_selected_phrases.end (),
                     m_candidate_0_phrases.begin (), m_candidate_0_phrases.end ());
     #endif
-        m_database.commit (m_selected_phrases);
+        Database::instance ().commit (m_selected_phrases);
         reset ();
     }
 
@@ -112,9 +112,6 @@ private:
     guint m_cursor;
     PinyinProperties & m_props;
     Query       * m_query;
-
-private:
-    static Database m_database;
 };
 
 };

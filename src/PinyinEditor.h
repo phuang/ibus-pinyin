@@ -78,7 +78,7 @@ protected:
 
         if (begin < end &&
             m_selected_special_phrase.empty () &&
-            m_special_table.lookup (m_text.substr (begin, m_cursor - begin), m_special_phrases)) {
+            SpecialTable::instance ().lookup (m_text.substr (begin, m_cursor - begin), m_special_phrases)) {
             return TRUE;
         }
         return oldsize > 0;
@@ -108,7 +108,6 @@ protected:
 
 protected:
     static PinyinParser m_parser;
-    static SpecialTable m_special_table;
 };
 };
 

@@ -2,6 +2,8 @@
 
 namespace PY {
 
+SpecialTable SpecialTable::m_instance;
+
 class StaticPhrase : public SpecialPhrase {
 public:
     StaticPhrase (const std::string &text, guint pos) :

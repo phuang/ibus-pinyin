@@ -4,8 +4,6 @@
 
 namespace PY {
 
-Database PhraseEditor::m_database;
-
 PhraseEditor::PhraseEditor (PinyinProperties & props)
     : m_candidates (32),
       m_selected_phrases (8),
@@ -43,7 +41,7 @@ PhraseEditor::update (const PinyinArray &pinyin)
 gboolean
 PhraseEditor::resetCandidate (guint i)
 {
-    m_database.remove (m_candidates[i]);
+    Database::instance ().remove (m_candidates[i]);
 
     updateCandidates ();
     return TRUE;
@@ -99,8 +97,7 @@ PhraseEditor::updateCandidates (void)
         m_candidates.push_back (phrase);
     }
 
-    m_query = new Query (m_database,
-                         m_pinyin,
+    m_query = new Query (m_pinyin,
                          m_cursor,
                          m_pinyin.size () - m_cursor,
                          Config::option ());
@@ -123,8 +120,7 @@ PhraseEditor::updateTheFirstCandidate (void)
 
     while (begin != end) {
         gint ret;
-        Query query (m_database,
-                     m_pinyin,
+        Query query (m_pinyin,
                      begin,
                      end - begin,
                      Config::option ());

@@ -9,7 +9,6 @@ namespace PY {
 
 /* init static members */
 PinyinParser PinyinEditor::m_parser;
-SpecialTable PinyinEditor::m_special_table;
 
 PinyinEditor::PinyinEditor (PinyinProperties & props)
     : Editor (props),

@@ -20,6 +20,8 @@ namespace PY {
 
 #define DB_PREFETCH_LEN     (6)
 
+Database Database::m_instance;
+
 class Conditions : public std::vector<std::string> {
 public:
     Conditions (void) : std::vector<std::string> (1) {}
@@ -109,13 +111,11 @@ private:
     sqlite3_stmt *m_stmt;
 };
 
-Query::Query (Database             & db,
-              const PinyinArray    & pinyin,
+Query::Query (const PinyinArray    & pinyin,
               guint                  pinyin_begin,
               guint                  pinyin_len,
               guint                  option)
-    : m_db (db),
-      m_pinyin (pinyin),
+    : m_pinyin (pinyin),
       m_pinyin_begin (pinyin_begin),
       m_pinyin_len (pinyin_len),
       m_option (option),
@@ -138,7 +138,7 @@ Query::fill (PhraseArray &phrases, gint count)
 
     while (m_pinyin_len > 0) {
         if (G_LIKELY (m_stmt == NULL)) {
-            m_stmt = m_db.query (m_pinyin, m_pinyin_begin, m_pinyin_len, -1, m_option);
+            m_stmt = Database::instance ().query (m_pinyin, m_pinyin_begin, m_pinyin_len, -1, m_option);
             g_assert (m_stmt != NULL);
         }
 

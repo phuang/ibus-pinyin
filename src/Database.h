@@ -15,8 +15,7 @@ class Database;
 
 class Query {
 public:
-    Query (Database             & db,
-           const PinyinArray    & pinyin,
+    Query (const PinyinArray    & pinyin,
            guint                  pinyin_begin,
            guint                  pinyin_len,
            guint                  option);
@@ -24,7 +23,6 @@ public:
     gint fill (PhraseArray &phrases, gint count);
 
 private:
-    Database & m_db;
     const PinyinArray & m_pinyin;
     guint m_pinyin_begin;
     guint m_pinyin_len;
@@ -33,9 +31,11 @@ private:
 };
 
 class Database {
-public:
+private:
     Database ();
     ~Database ();
+
+public:
     SQLStmt *query (const PinyinArray   & pinyin,
                     guint                 pinyin_begin,
                     guint                 pinyin_len,
@@ -46,6 +46,8 @@ public:
 
     void conditionsDouble (void);
     void conditionsTriple (void);
+
+    static Database & instance (void) {return m_instance; }
 
 private:
     gboolean init (void);
@@ -60,6 +62,9 @@ private:
 
     String m_sql;        /* sql stmt */
     String m_buffer;     /* temp buffer */
+
+private:
+    static Database m_instance;
 };
 
 
