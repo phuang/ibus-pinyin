@@ -40,8 +40,6 @@ protected:
     gboolean processOthers (guint keyval, guint keycode, guint modifiers);
 
     void updatePreeditText (void);
-    void updatePreeditTextInTypingMode (void);
-    void updatePreeditTextInEditingMode (void);
     void updateAuxiliaryText (void);
     void updateLookupTable (void);
     gboolean fillLookupTableByPage (void);

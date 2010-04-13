@@ -333,19 +333,6 @@ PinyinEditor::updatePreeditText (void)
         return;
     }
 
-    updatePreeditTextInTypingMode ();
-    return;
-#if 0
-    if (m_cursor == m_text.size () || 1)
-        updatePreeditTextInTypingMode ();
-    else
-        updatePreeditTextInEditingMode ();
-#endif
-}
-
-inline void
-PinyinEditor::updatePreeditTextInTypingMode (void)
-{
     guint edit_begin = 0;
     guint edit_end = 0;
 
@@ -415,74 +402,6 @@ PinyinEditor::updatePreeditTextInTypingMode (void)
                                         edit_begin, edit_end);
     }
     Editor::updatePreeditText (preedit_text, edit_begin, TRUE);
-}
-
-inline void
-PinyinEditor::updatePreeditTextInEditingMode (void)
-{
-    m_buffer.clear ();
-
-    /* add select phrases */
-    m_buffer << m_phrase_editor.selectedString ();
-
-    /* add selected special phrase */
-    m_buffer << m_selected_special_phrase;
-
-    /* add highlight candidate */
-    const PinyinArray & pinyin = m_phrase_editor.pinyin ();
-    guint candidate_begin = m_buffer.utf8Length ();
-    guint candidate_length = 0;
-    guint candidate_pinyin_end = 0;
-
-    if (m_lookup_table.size () > 0) {
-        guint cursor = m_lookup_table.cursorPos ();
-        if (cursor < m_special_phrases.size ()) {
-            /* highligh candidates is a special phrase */
-            m_buffer << m_text.substr (m_phrase_editor.cursorInChar (),
-                    m_cursor -  m_phrase_editor.cursorInChar ());
-        }
-        else {
-            /* highligh candidates is a normail phrase */
-            cursor -= m_special_phrases.size ();
-            const Phrase & candidate = m_phrase_editor.candidate (cursor);
-            candidate_length = candidate.len;
-
-            m_buffer << pinyin[candidate_begin]->sheng << pinyin[candidate_begin]->yun;
-
-            for (guint i = 1; i < candidate_length; i++) {
-                m_buffer << ' ' << pinyin[candidate_begin + i]->sheng << pinyin[candidate_begin + i]->yun;
-            }
-        }
-        candidate_pinyin_end = m_buffer.utf8Length ();
-    }
-
-    /* add rest text */
-    if (candidate_begin + candidate_length < pinyin.size ()) {
-        if (m_buffer)
-            m_buffer << ' ' ;
-        m_buffer << textAfterPinyin (candidate_begin + candidate_length);
-    }
-    else {
-        const gchar * p = textAfterPinyin ();
-        if (*p != '\0') {
-            if (m_buffer)
-                m_buffer << ' ';
-            m_buffer << p;
-        }
-    }
-
-    StaticText preedit_text (m_buffer);
-    /* underline */
-    preedit_text.appendAttribute (IBUS_ATTR_TYPE_UNDERLINE, IBUS_ATTR_UNDERLINE_SINGLE, 0, -1);
-
-    /* candidate */
-    if (candidate_length != 0) {
-        preedit_text.appendAttribute (IBUS_ATTR_TYPE_FOREGROUND, 0x00000000,
-                candidate_begin, candidate_pinyin_end);
-        preedit_text.appendAttribute (IBUS_ATTR_TYPE_BACKGROUND, 0x00c8c8f0,
-                candidate_begin, candidate_pinyin_end);
-    }
-    Editor::updatePreeditText (preedit_text, candidate_begin, TRUE);
 }
 
 void

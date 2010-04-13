@@ -16,23 +16,6 @@ void
 FullPinyinEditor::reset (void)
 {
     PinyinEditor::reset ();
-#if 0
-    gboolean retval = FALSE;
-    if (m_cursor != 0) {
-        m_cursor = 0;
-        retval = TRUE;
-    }
-
-    if (m_text.length () != 0) {
-        m_text.truncate (0);
-        retval = TRUE;
-    }
-
-    if (retval) {
-        updateSpecialPhrases ();
-        updatePinyin ();
-    }
-#endif
 }
 
 gboolean
