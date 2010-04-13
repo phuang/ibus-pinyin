@@ -15,6 +15,16 @@ typedef struct{
   const char * help; /* optional. */
 } lua_command_t;
 
+typedef struct{
+  const char * lua_function_name;
+  const char * description;
+  /*< private, skip it, and register it into Special Table directly with * wildcard. >*/
+  /*
+   * list of input_trigger_strings;
+   * list of candidate_trigger_strings;
+   */
+} lua_trigger_t;
+
 /*
  * Type macros.
  */
@@ -52,24 +62,37 @@ GType ibus_engine_plugin_get_type(void);
 IBusEnginePlugin * ibus_engine_plugin_new();
 
 /**
+ * add a lua_command_t to plugin.
+ */
+gboolean ibus_engine_plugin_add_command(IBusEnginePlugin * plugin, lua_command_t * command);
+
+/**
  * retrieve all available lua plugin commands.
  * return array of command informations of type lua_command_t.
  */
-GArray * ibus_engine_plugin_ime_get_available_commands(IBusEnginePlugin * plugin);
+GArray * ibus_engine_plugin_get_available_commands(IBusEnginePlugin * plugin);
 
 /**
- * retval int: only support string or string array.
+ * Lookup a special command in ime lua extension.
+ * command must be an 2-char long string.
+ * return the matched command.
  */
-int ibus_engine_plugin_ime_call(IBusEnginePlugin * plugin, const lua_command_t * command, const char * argument /*optional, maybe NULL.*/);
+lua_command_t * ibus_engine_plugin_lookup_command(IBusEnginePlugin * plugin, const char * command);
+
+/**
+ * retval int: returns the number of results,
+ *              only support string or string array.
+ */
+int ibus_engine_plugin_call(IBusEnginePlugin * plugin, const lua_command_t * command, const char * argument /*optional, maybe NULL.*/);
 
 /**
  * retrieve the retval string value. (value has been copied.)
  */
-const char * ibus_engine_plugin_ime_get_retval(IBusEnginePlugin * plugin);
+const char * ibus_engine_plugin_get_retval(IBusEnginePlugin * plugin);
 /**
  * retrieve the array of string values. (string values have been copied.)
  */
-GArray * ibus_engine_plugin_ime_get_retvals(IBusEnginePlugin * plugin);
+GArray * ibus_engine_plugin_get_retvals(IBusEnginePlugin * plugin);
 
 
 /*< private >*/
