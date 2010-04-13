@@ -18,7 +18,8 @@ SpecialTable::SpecialTable (void)
 {
     g_debug ("SpecialTable");
     insert ("xixi", new StaticPhrase ("(*^__^*) 嘻嘻……", 0));
-    insert ("haha", new StaticPhrase ("o(∩∩)o...哈哈", 0));
+    insert ("haha", new StaticPhrase ("^_^", 0));
+    insert ("haha", new StaticPhrase ("o(∩∩)o...哈哈", 1));
     insert ("bsn", new StaticPhrase ("╭∩╮（︶︿︶）╭∩╮鄙视你！", 0));
 }
 
