@@ -83,6 +83,8 @@ ibus_engine_plugin_init (IBusEnginePlugin *self)
   memset(priv, 0, sizeof(IBusEnginePluginPrivate));
 
   lua_plugin_init(priv);
+
+  lua_plugin_store_plugin(priv->L, self);
 }
 
 IBusEnginePlugin * ibus_engine_plugin_new(){

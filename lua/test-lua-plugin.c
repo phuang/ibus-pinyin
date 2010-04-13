@@ -44,6 +44,8 @@ int main(int argc, char * argv[]){
   lua_State * L = ibus_engine_plugin_get_lua_State(plugin);
   run_test(L, "test.lua");
   
+  g_assert(lua_plugin_retrieve_plugin(L) == plugin);
+
   g_object_unref(plugin);
 
   return 0;

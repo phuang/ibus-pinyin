@@ -29,6 +29,25 @@ void lua_plugin_openlibs (lua_State *L) {
   }
 }
 
+void lua_plugin_store_plugin(lua_State * L, IBusEnginePlugin * plugin){
+  luaL_newmetatable(L, LUA_IMELIBNAME);
+  lua_pushliteral(L, LUA_IMELIB_CONTEXT);
+  lua_pushlightuserdata(L, plugin);
+  lua_rawset(L, -3);
+  lua_pop(L, 1);
+}
+
+IBusEnginePlugin * lua_plugin_retrieve_plugin(lua_State * L) {
+  luaL_newmetatable(L, LUA_IMELIBNAME);
+  lua_pushliteral(L, LUA_IMELIB_CONTEXT);
+  lua_rawget(L, -2);
+  luaL_checktype(L, -1, LUA_TLIGHTUSERDATA);
+  IBusEnginePlugin * plugin = lua_touserdata(L, -1);
+  g_assert(IBUS_IS_ENGINE_PLUGIN(plugin));
+  lua_pop(L, 2);
+  return plugin;
+}
+
 static int ime_get_last_commit(lua_State* L){
   /*TODO: not implemented. */
   fprintf(stderr, "TODO: ime_get_last_commit unimplemented.\n");
