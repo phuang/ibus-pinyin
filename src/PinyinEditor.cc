@@ -464,16 +464,7 @@ PinyinEditor::updateLookupTable (void)
     m_lookup_table.setPageSize (Config::pageSize ());
     m_lookup_table.setOrientation (Config::orientation ());
 
-    if (m_selected_special_phrase.empty ()) {
-        for (guint i = 0; i < m_special_phrases.size (); i++) {
-            Text text (m_special_phrases[i].c_str ());
-            text.appendAttribute (IBUS_ATTR_TYPE_FOREGROUND, 0x0000ef00, 0, -1);
-            m_lookup_table.appendCandidate (text);
-        }
-
-        fillLookupTableByPage ();
-    }
-
+    fillLookupTableByPage ();
     if (m_lookup_table.size ()) {
         Editor::updateLookupTable (m_lookup_table, TRUE);
     }
@@ -489,38 +480,42 @@ PinyinEditor::fillLookupTableByPage (void)
         return FALSE;
     }
 
-    guint candidate_nr = m_phrase_editor.candidates ().size ();
-    guint candidate_in_table = m_lookup_table.size () - m_special_phrases.size ();
+    guint filled_nr = m_lookup_table.size ();
+    guint page_size = m_lookup_table.pageSize ();
 
-    if (candidate_nr < candidate_in_table + m_lookup_table.pageSize ()) {
-        if (m_phrase_editor.fillCandidates ()) {
-            candidate_nr = m_phrase_editor.candidates ().size ();
-        }
-    }
+    if (m_special_phrases.size () + m_phrase_editor.candidates ().size () < filled_nr + page_size)
+        m_phrase_editor.fillCandidates ();
 
-    if (candidate_nr == candidate_in_table) {
+    guint need_nr = MIN (page_size, m_special_phrases.size () + m_phrase_editor.candidates ().size () - filled_nr);
+    g_assert (need_nr >= 0);
+    if (need_nr == 0) {
         return FALSE;
     }
 
-    guint end = MIN (candidate_nr, candidate_in_table + m_lookup_table.pageSize ());
-    if (G_LIKELY (m_props.modeSimp () || !Config::tradCandidate ())) {
-        for (guint i = candidate_in_table; i < end; i++) {
-            Text text (m_phrase_editor.candidate (i));
-            if (m_phrase_editor.candidateIsUserPhease (i))
-                text.appendAttribute (IBUS_ATTR_TYPE_FOREGROUND, 0x000000ef, 0, -1);
+    for (guint i = filled_nr; i < filled_nr + need_nr; i++) {
+        if (i < m_special_phrases.size ()) {
+            Text text (m_special_phrases[i].c_str ());
+            text.appendAttribute (IBUS_ATTR_TYPE_FOREGROUND, 0x0000ef00, 0, -1);
             m_lookup_table.appendCandidate (text);
         }
-    }
-    else {
-        for (guint i = candidate_in_table; i < end; i++ ) {
-            m_buffer.truncate (0);
-            SimpTradConverter::simpToTrad (m_phrase_editor.candidate (i), m_buffer);
-            Text text (m_buffer);
-            if (m_phrase_editor.candidateIsUserPhease (i))
-                text.appendAttribute (IBUS_ATTR_TYPE_FOREGROUND, 0x000000ef, 0, -1);
-            m_lookup_table.appendCandidate (text);
+        else {
+            if (G_LIKELY (m_props.modeSimp () || !Config::tradCandidate ())) {
+                Text text (m_phrase_editor.candidate (i - m_special_phrases.size ()));
+                if (m_phrase_editor.candidateIsUserPhease (i - m_special_phrases.size ()))
+                    text.appendAttribute (IBUS_ATTR_TYPE_FOREGROUND, 0x000000ef, 0, -1);
+                m_lookup_table.appendCandidate (text);
+            }
+            else {
+                m_buffer.truncate (0);
+                SimpTradConverter::simpToTrad (m_phrase_editor.candidate (i - m_special_phrases.size ()), m_buffer);
+                Text text (m_buffer);
+                if (m_phrase_editor.candidateIsUserPhease (i - m_special_phrases.size ()))
+                    text.appendAttribute (IBUS_ATTR_TYPE_FOREGROUND, 0x000000ef, 0, -1);
+                m_lookup_table.appendCandidate (text);
+            }
         }
     }
+
 
     return TRUE;
 }
