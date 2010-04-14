@@ -123,11 +123,6 @@ BUILT_SOURCES = \
 	$(ibus_engine_built_h_sources) \
 	$(NULL)
 
-# db_DATA = \
-# 	py.db \
-# 	$(NULL)
-# dbdir = $(pkgdatadir)
-
 component_DATA = \
 	pinyin.xml \
 	$(NULL)
@@ -140,32 +135,6 @@ EXTRA_DIST = \
 CLEANFILES = \
 	pinyin.xml \
 	ZhConversion.* \
-	$(NULL)
-
-check_PROGRAMS =
-
-# check_PROGRAMS += test-parser
-# test_parser_SOURCES = \
-# 	PinyinParser.cc \
-# 	Table.h \
-# 	$(NULL)
-# test_parser_CFLAGS = \
-# 	$(AM_CFLAGS) \
-# 	-DTEST \
-# 	$(NULL)
-# 
-# check_PROGRAMS += test-pydatabase
-# test_pydatabase_SOURCES = \
-# 	Database.cc \
-# 	Database.h \
-# 	$(NULL)
-# test_pydatabase_CFLAGS = \
-# 	$(AM_CFLAGS) \
-# 	-DTEST \
-# 	$(NULL)
-
-TESTS = \
-	$(check_PROGRAMS) \
 	$(NULL)
 
 PinyinParserTable.h:
