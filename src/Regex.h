@@ -20,7 +20,7 @@ public:
         }
     }
 
-    ~ Regex (void) {
+    ~Regex (void) {
         regfree (&m_regex);
     }
 

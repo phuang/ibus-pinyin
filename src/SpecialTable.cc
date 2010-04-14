@@ -23,7 +23,9 @@ public:
         SpecialPhrase (pos), m_text (text) { }
 
     std::string text (void) {
+        /* get the current time */
         std::time (&m_time);
+
         std::string result;
 
         size_t pos = 0;
