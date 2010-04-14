@@ -1,7 +1,7 @@
 /* vim:set et sts=4: */
 
+#include <cstring>
 #include <ibus.h>
-#include <string.h>
 #include "Engine.h"
 #include "PinyinEngine.h"
 

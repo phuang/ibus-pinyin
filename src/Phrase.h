@@ -2,7 +2,6 @@
 #ifndef __PY_PHRASE_H_
 #define __PY_PHRASE_H_
 
-#include <string.h>
 #include "Types.h"
 
 namespace PY {

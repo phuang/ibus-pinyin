@@ -1,10 +1,10 @@
 /* vim:set et sts=4: */
-#include <string.h>
+#include <cstring>
+#include <cstdio>
+#include <cstdlib>
+#include <cstdarg>
 #include <glib.h>
 #include <sqlite3.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdarg.h>
 #include "Database.h"
 #include "Util.h"
 

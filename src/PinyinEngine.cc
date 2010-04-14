@@ -1,8 +1,7 @@
 /* vim:set et sts=4: */
 
-#include <ibus.h>
-#include <string.h>
 #include <libintl.h>
+#include <ibus.h>
 #include "RawEditor.h"
 #include "ExtEditor.h"
 #include "FullPinyinEditor.h"
