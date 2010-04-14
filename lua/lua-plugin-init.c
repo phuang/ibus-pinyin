@@ -156,36 +156,36 @@ static int ime_parse_mapping(lua_State * L){
 }
 
 static int ime_register_command(lua_State * L){
-  const char * command_name = NULL;
-  const char * lua_function_name = NULL;
-  const char * description = NULL;
-  const char * leading = NULL;
-  const char * help = NULL;
+  lua_command_t new_command;
   size_t l;
 
-  command_name = luaL_checklstring(L, 1, &l);
+  new_command.command_name = luaL_checklstring(L, 1, &l);
   if ( 2 != l ){
-    return luaL_error(L, "ime_register_command is called with command_name: %s, whose length is not 2.\n", command_name);
+    return luaL_error(L, "ime_register_command is called with command_name: %s, whose length is not 2.\n", new_command.command_name);
   }
 
-  lua_function_name = luaL_checklstring(L, 2, NULL);
-  lua_getglobal(L, lua_function_name);
+  new_command.lua_function_name = luaL_checklstring(L, 2, NULL);
+  lua_getglobal(L, new_command.lua_function_name);
   luaL_checktype(L, -1, LUA_TFUNCTION);
   lua_pop(L, 1);
 
-  description = luaL_checklstring(L, 3, NULL);
+  new_command.description = luaL_checklstring(L, 3, NULL);
+
   if ( !lua_isnone(L, 4)) {
-    leading = luaL_checklstring(L, 4, NULL);
+    new_command.leading = luaL_checklstring(L, 4, NULL);
   }else{
-    leading = "digit";
+    new_command.leading = "digit";
   }
 
   if ( !lua_isnone(L, 5)) {
-    help = luaL_checklstring(L, 5, NULL);
+    new_command.help = luaL_checklstring(L, 5, NULL);
   }
 
-  /* check whether the same command exists. */
-  /* use the sorted array. */
+  gboolean result = ibus_engine_plugin_add_command
+    (lua_plugin_retrieve_plugin(L), &new_command);
+
+  if (!result)
+    return luaL_error(L, "register command %s with function %s failed.\n", new_command.command_name, new_command.lua_function_name);
 
   return 0;
 }

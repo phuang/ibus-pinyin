@@ -68,9 +68,9 @@ gboolean ibus_engine_plugin_add_command(IBusEnginePlugin * plugin, lua_command_t
 
 /**
  * retrieve all available lua plugin commands.
- * return array of command informations of type lua_command_t.
+ * return array of command informations of type lua_command_t without copies.
  */
-GArray * ibus_engine_plugin_get_available_commands(IBusEnginePlugin * plugin);
+const GArray * ibus_engine_plugin_get_available_commands(IBusEnginePlugin * plugin);
 
 /**
  * Lookup a special command in ime lua extension.
