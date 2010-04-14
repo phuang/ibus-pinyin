@@ -79,9 +79,8 @@ PinyinEditor::processSpace (guint keyval, guint keycode, guint modifiers)
         return FALSE;
     if (CMSHM_FILTER (modifiers) != 0)
         return TRUE;
-    if (m_selected_special_phrase.empty () &&
-        m_phrase_editor.pinyinExistsAfterCursor ()) {
-            selectCandidate (m_lookup_table.cursorPos ());
+    if (m_lookup_table.size () != 0) {
+        selectCandidate (m_lookup_table.cursorPos ());
     }
     else {
         commit ();
@@ -406,7 +405,7 @@ PinyinEditor::updateAuxiliaryText (void)
 {
     /* clear pinyin array */
     if (G_UNLIKELY (m_text.empty () ||
-        m_phrase_editor.cursor () == m_pinyin.size ())) {
+        m_lookup_table.size () == 0)) {
         hideAuxiliaryText ();
         return;
     }
