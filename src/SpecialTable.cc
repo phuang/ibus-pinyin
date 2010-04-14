@@ -73,56 +73,108 @@ public:
         std::snprintf (string, sizeof (string), fmt, d);
         return string;
     }
-#if 0
-;       $(year)         年(4位)         2006、2008
-;       $(year_yy)      年(2位)         06、08
-;       $(month)        月              12、8、3
-;       $(month_mm)     月              12、08、03
-;       $(day)          日              3、13、22
-;       $(day_dd)       日              03、13、22
-;       $(weekday)      星期            0、1、2、5、6
-;       $(fullhour)     时(24小时制)    02、08、13、23
-;       $(halfhour)     时(12小时制)    02、08、01、11
-;       $(ampm)         AM、PM(英)      AM、PM（大写）
-;       $(minute)       分              02、08、15、28
-;       $(second)       秒              02、08、15、28
-;       $(year_cn)      年(中文4位)     二〇〇六
-;       $(year_yy_cn)   年(中文2位)     〇六
-;       $(month_cn)     月(中文)        十二、八、三
-;       $(day_cn)       日(中文)        三、十三、二十二
-;       $(weekday_cn)   星期(中文)      日、一、二、五、六
-;       $(fullhour_cn)  月(中文24时制)  二、八、十三、二十三
-;       $(halfhour_cn)  时(中文12时制)  二、八、一、十一
-;       $(ampm_cn)      上午下午(中文)  上午、下午
-;       $(minute_cn)    分(中文)        零二、零八、十五、二十八
-;       $(second_cn)    秒(中文)        零二、零八、十五、二十八
-#endif
+
+    const std::string year_cn (gboolean yy = FALSE) {
+        static const gchar * digits[] = {
+            "〇", "一", "二", "三", "四",
+            "五", "六", "七", "八", "九"
+        };
+
+        gint year = localtime (&m_time)->tm_year + 1900;
+        gint bit = 0;
+        if (yy) {
+            year %= 100;
+            bit = 2;
+        }
+
+        std::string result;
+        while (year != 0 || bit > 0) {
+            result.insert(0, digits[year % 10]);
+            year /= 10;
+            bit -= 1;
+        }
+        return result;
+    }
+
+    const std::string month_cn (void) {
+        static const gchar *month_num[] = {
+            "一", "二", "三", "四", "五", "六", "七", "八",
+            "九", "十", "十一", "十二"
+        };
+        return month_num[localtime (&m_time)->tm_mon];
+    }
+
+    const std::string weekday_cn (void) {
+        static const gchar *week_num[] = {
+            "一", "二", "三", "四", "五", "六", "日",
+        };
+        return week_num[localtime (&m_time)->tm_wday];
+    }
+
+    const std::string hour_cn (guint i) {
+        static const gchar *hour_num[] = {
+            "一", "二", "三", "四", "五",
+            "六", "七", "八", "九", "十",
+            "十一", "十二", "十三", "十四", "十五",
+            "十六", "十七", "十八", "十九", "二十",
+            "二十一", "二十二", "二十三", "零"
+        };
+        return hour_num[i];
+    }
+
+    const std::string fullhour_cn (void) {
+        return hour_cn (localtime (&m_time)->tm_hour);
+    }
+
+    const std::string halfhour_cn (void) {
+        return hour_cn (localtime (&m_time)->tm_hour % 12);
+    }
+
+    const std::string day_cn (void) {
+        static const gchar *day_num[] = {
+            "", "一", "二", "三", "四",
+            "五", "六", "七", "八", "九",
+            "", "十","二十", "三十"
+        };
+        guint day = localtime (&m_time)->tm_mday + 1;
+        return std::string () + day_num[day / 10 + 10] + day_num[day % 10];
+    }
+
+    const std::string minsec_cn (guint i) {
+        static const gchar *num[] = {
+            "", "一", "二", "三", "四",
+            "五", "六", "七", "八", "九",
+            "零", "十","二十", "三十", "四十"
+            "五十", "六十"
+        };
+        return std::string () + num[i / 10 + 10] + num[i % 10];
+    }
+
     const std::string variable (const std::string &name) {
-        if (name == "year")
-            return dec (localtime (&m_time)->tm_year + 1900);
-        if (name == "year_yy")
-            return dec ((localtime (&m_time)->tm_year + 1900) % 100, "%02d");
-        if (name == "month")
-            return dec (localtime (&m_time)->tm_mon + 1);
-        if (name == "month_mm")
-            return dec (localtime (&m_time)->tm_mon + 1, "%02d");
-        if (name == "day")
-            return dec (localtime (&m_time)->tm_mday + 1);
-        if (name == "day_dd")
-            return dec (localtime (&m_time)->tm_mday + 1, "%02d");
-        if (name == "week")
-            return dec (localtime (&m_time)->tm_wday + 1);
-        if (name == "fullhour")
-            return dec (localtime (&m_time)->tm_hour + 1, "%02d");
-        if (name == "falfhour")
-            return dec ((localtime (&m_time)->tm_hour + 1) % 12, "%02d");
-        if (name == "ampm")
-            return localtime (&m_time)->tm_hour < 12 ? "AM" : "PM";
-        if (name == "minute")
-            return dec (localtime (&m_time)->tm_min + 1, "%02d");
-        if (name == "second")
-            return dec (localtime (&m_time)->tm_sec + 1, "%02d");
-        return name;
+        if (name == "year")     return dec (localtime (&m_time)->tm_year + 1900);
+        if (name == "year_yy")  return dec ((localtime (&m_time)->tm_year + 1900) % 100, "%02d");
+        if (name == "month")    return dec (localtime (&m_time)->tm_mon + 1);
+        if (name == "month_mm") return dec (localtime (&m_time)->tm_mon + 1, "%02d");
+        if (name == "day")      return dec (localtime (&m_time)->tm_mday + 1);
+        if (name == "day_dd")   return dec (localtime (&m_time)->tm_mday + 1, "%02d");
+        if (name == "weekday")  return dec (localtime (&m_time)->tm_wday + 1);
+        if (name == "fullhour") return dec (localtime (&m_time)->tm_hour + 1, "%02d");
+        if (name == "falfhour") return dec ((localtime (&m_time)->tm_hour + 1) % 12, "%02d");
+        if (name == "ampm")     return localtime (&m_time)->tm_hour < 12 ? "AM" : "PM";
+        if (name == "minute")   return dec (localtime (&m_time)->tm_min + 1, "%02d");
+        if (name == "second")   return dec (localtime (&m_time)->tm_sec + 1, "%02d");
+        if (name == "year_cn")      return year_cn ();
+        if (name == "year_yy_cn")   return year_cn (TRUE);
+        if (name == "month_cn")     return month_cn ();
+        if (name == "day_cn")       return day_cn ();
+        if (name == "weekday_cn")   return weekday_cn ();
+        if (name == "fullhour_cn")  return fullhour_cn ();
+        if (name == "halfhour_cn")  return halfhour_cn ();
+        if (name == "ampm_cn")      return localtime (&m_time)->tm_hour < 12 ? "上午" : "下午";
+        if (name == "minute_cn")    return minsec_cn (localtime (&m_time)->tm_min + 1);
+        if (name == "second_cn")    return minsec_cn (localtime (&m_time)->tm_sec + 1);
+
+        return "${" + name + "}";
     }
 
 private:
@@ -144,33 +196,41 @@ SpecialTable::SpecialTable (void)
     insert ("sj", new DynamicPhrase ("%(hour_24)时%(minute)分%(second)秒", 0));
     insert ("sj", new DynamicPhrase ("%(hour_24):%(minute):%(second)", 1));
 #endif
-    load ("special_phrases");
+    gchar * path = g_build_filename (g_get_user_config_dir (),
+                        "ibus", "ibus-pinyin", "phrases.txt", NULL);
+    load (path) ||
+    load (PKGDATADIR G_DIR_SEPARATOR_S "phrases.txt") ||
+    load ("phrases.txt");
+    g_free (path);
 }
 
 gboolean
 SpecialTable::load (const gchar *file)
 {
-    try {
-        std::ifstream in (file);
-        std::string line;
-        
-        while (!in.eof ()) {
-            getline (in, line);
-            if (line.size () == 0 || line[0] == ';')
-                continue;
-            size_t pos = line.find ('=');
-            if (pos == line.npos)
-                continue;
-            
-            std::string command = line.substr(0, pos);
-            std::string phrase = line.substr(pos + 1);
-            insert (command, new DynamicPhrase (phrase, 0));
-        }
-
-
-    } catch (...) {
-        std::cerr << "error" << std::endl;
+    std::ifstream in (file);
+    if (in.fail ())
         return FALSE;
+
+    std::string line;
+    while (!in.eof ()) {
+        getline (in, line);
+        if (line.size () == 0 || line[0] == ';')
+            continue;
+        size_t pos = line.find ('=');
+        if (pos == line.npos)
+            continue;
+
+        std::string command = line.substr(0, pos);
+        std::string phrase = line.substr(pos + 1);
+        if (command.empty () || phrase.empty ())
+            continue;
+
+        if (phrase[0] != '#') {
+            insert (command, new StaticPhrase (phrase, 0));
+        }
+        else if (phrase.size () > 1) {
+            insert (command, new DynamicPhrase (phrase.substr (1), 0));
+        }
     }
     return TRUE;
 }
