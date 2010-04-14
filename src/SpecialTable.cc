@@ -73,26 +73,55 @@ public:
         std::snprintf (string, sizeof (string), fmt, d);
         return string;
     }
-
+#if 0
+;       $(year)         年(4位)         2006、2008
+;       $(year_yy)      年(2位)         06、08
+;       $(month)        月              12、8、3
+;       $(month_mm)     月              12、08、03
+;       $(day)          日              3、13、22
+;       $(day_dd)       日              03、13、22
+;       $(weekday)      星期            0、1、2、5、6
+;       $(fullhour)     时(24小时制)    02、08、13、23
+;       $(halfhour)     时(12小时制)    02、08、01、11
+;       $(ampm)         AM、PM(英)      AM、PM（大写）
+;       $(minute)       分              02、08、15、28
+;       $(second)       秒              02、08、15、28
+;       $(year_cn)      年(中文4位)     二〇〇六
+;       $(year_yy_cn)   年(中文2位)     〇六
+;       $(month_cn)     月(中文)        十二、八、三
+;       $(day_cn)       日(中文)        三、十三、二十二
+;       $(weekday_cn)   星期(中文)      日、一、二、五、六
+;       $(fullhour_cn)  月(中文24时制)  二、八、十三、二十三
+;       $(halfhour_cn)  时(中文12时制)  二、八、一、十一
+;       $(ampm_cn)      上午下午(中文)  上午、下午
+;       $(minute_cn)    分(中文)        零二、零八、十五、二十八
+;       $(second_cn)    秒(中文)        零二、零八、十五、二十八
+#endif
     const std::string variable (const std::string &name) {
-        if (name == "year") {
+        if (name == "year")
             return dec (localtime (&m_time)->tm_year + 1900);
-        }
-        if (name == "month") {
+        if (name == "year_yy")
+            return dec ((localtime (&m_time)->tm_year + 1900) % 100, "%02d");
+        if (name == "month")
             return dec (localtime (&m_time)->tm_mon + 1);
-        }
-        if (name == "day") {
+        if (name == "month_mm")
+            return dec (localtime (&m_time)->tm_mon + 1, "%02d");
+        if (name == "day")
             return dec (localtime (&m_time)->tm_mday + 1);
-        }
-        if (name == "hour_24") {
-            return dec (localtime (&m_time)->tm_hour + 1);
-        }
-        if (name == "minute") {
-            return dec (localtime (&m_time)->tm_min + 1);
-        }
-        if (name == "second") {
-            return dec (localtime (&m_time)->tm_sec + 1);
-        }
+        if (name == "day_dd")
+            return dec (localtime (&m_time)->tm_mday + 1, "%02d");
+        if (name == "week")
+            return dec (localtime (&m_time)->tm_wday + 1);
+        if (name == "fullhour")
+            return dec (localtime (&m_time)->tm_hour + 1, "%02d");
+        if (name == "falfhour")
+            return dec ((localtime (&m_time)->tm_hour + 1) % 12, "%02d");
+        if (name == "ampm")
+            return localtime (&m_time)->tm_hour < 12 ? "AM" : "PM";
+        if (name == "minute")
+            return dec (localtime (&m_time)->tm_min + 1, "%02d");
+        if (name == "second")
+            return dec (localtime (&m_time)->tm_sec + 1, "%02d");
         return name;
     }
 
@@ -127,10 +156,12 @@ SpecialTable::load (const gchar *file)
         
         while (!in.eof ()) {
             getline (in, line);
-            size_t pos = line.find ('\t');
-            if (pos == line.npos) {
+            if (line.size () == 0 || line[0] == ';')
                 continue;
-            }
+            size_t pos = line.find ('=');
+            if (pos == line.npos)
+                continue;
+            
             std::string command = line.substr(0, pos);
             std::string phrase = line.substr(pos + 1);
             insert (command, new DynamicPhrase (phrase, 0));
