@@ -66,6 +66,7 @@ rm -rf $RPM_BUILD_ROOT
 %doc AUTHORS COPYING README
 %{_libexecdir}/ibus-engine-pinyin
 %{_libexecdir}/ibus-setup-pinyin
+%{_datadir}/@PACKAGE@/phrases.txt
 %{_datadir}/@PACKAGE@/icons
 %{_datadir}/@PACKAGE@/setup
 %{_datadir}/@PACKAGE@/db/create_index.sql

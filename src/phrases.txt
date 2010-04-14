@@ -62,6 +62,7 @@ upan=U盘
 xixi=(*^__^*) 嘻嘻……
 xshexian=X射线
 
+; 动态短语
 rq=#${year}年${month}月${day}日
 rq=#${year_cn}年${month_cn}月${day_cn}日
 rq=#${year}-${month}-${day}

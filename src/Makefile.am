@@ -123,6 +123,10 @@ BUILT_SOURCES = \
 	$(ibus_engine_built_h_sources) \
 	$(NULL)
 
+pkgdata_DATA = \
+	phrases.txt \
+	$(NULL)
+
 component_DATA = \
 	pinyin.xml \
 	$(NULL)
@@ -130,6 +134,7 @@ componentdir = @datadir@/ibus/component
 
 EXTRA_DIST = \
 	pinyin.xml.in \
+	phrases.txt \
 	$(NULL)
 
 CLEANFILES = \

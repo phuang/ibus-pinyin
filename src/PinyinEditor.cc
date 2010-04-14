@@ -695,6 +695,7 @@ PinyinEditor::selectCandidateInPage (guint i)
 inline gboolean
 PinyinEditor::resetCandidate (guint i)
 {
+    i -= m_special_phrases.size ();
     if (m_phrase_editor.resetCandidate (i)) {
         update ();
     }
