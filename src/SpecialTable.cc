@@ -1,5 +1,8 @@
 #include <ctime>
 #include <cstdio>
+#include <iostream>
+#include <fstream>
+#include <string>
 #include "SpecialTable.h"
 
 namespace PY {
@@ -101,6 +104,7 @@ private:
 
 SpecialTable::SpecialTable (void)
 {
+#if 0
     insert ("hehe", new StaticPhrase (":-)", 0));
     insert ("haha", new StaticPhrase ("^_^", 0));
     insert ("haha", new StaticPhrase ("o(∩∩)o...哈哈", 1));
@@ -110,6 +114,35 @@ SpecialTable::SpecialTable (void)
     insert ("rq", new DynamicPhrase ("%(year)-%(month)-%(day)", 1));
     insert ("sj", new DynamicPhrase ("%(hour_24)时%(minute)分%(second)秒", 0));
     insert ("sj", new DynamicPhrase ("%(hour_24):%(minute):%(second)", 1));
+#endif
+    load ("special_phrases");
+}
+
+gboolean
+SpecialTable::load (const gchar *file)
+{
+    try {
+        std::ifstream in (file);
+        std::string line;
+        
+        while (!in.eof ()) {
+            getline (in, line);
+            size_t pos = line.find ('\t');
+            if (pos == line.npos) {
+                std::cerr << "error: " << line << std::endl;
+                continue;
+            }
+            std::string command = line.substr(0, pos);
+            std::string phrase = line.substr(pos + 1);
+            insert (command, new DynamicPhrase (phrase, 0));
+        }
+
+
+    } catch (...) {
+        std::cerr << "error" << std::endl;
+        return FALSE;
+    }
+    return TRUE;
 }
 
 static bool
@@ -128,7 +161,9 @@ SpecialTable::insert (const std::string   &command,
     }
     List & list = m_map[command];
     list.push_back (phrase);
+#if 0
     list.sort (phraseCmp);
+#endif
 }
 
 gboolean
