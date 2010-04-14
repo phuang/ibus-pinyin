@@ -37,7 +37,7 @@ public:
         while (s != 2) {
             switch (s) {
             case 0:
-                pnext = m_text.find ("%(", pos);
+                pnext = m_text.find ("${", pos);
                 if (pnext == m_text.npos) {
                     result += m_text.substr (pos);
                     s = 2;
@@ -49,9 +49,9 @@ public:
                 }
                 break;
             case 1:
-                pnext = m_text.find (")", pos);
+                pnext = m_text.find ("}", pos);
                 if (pnext == m_text.npos) {
-                    result += "%(";
+                    result += "${";
                     result += m_text.substr (pos);
                     s = 2;
                 }
@@ -68,9 +68,9 @@ public:
         return result;
     }
 
-    const std::string dec (gint d) {
+    const std::string dec (gint d, const gchar *fmt = "%d") {
         char string [32];
-        std::snprintf (string, sizeof (string), "%d", d);
+        std::snprintf (string, sizeof (string), fmt, d);
         return string;
     }
 
@@ -129,7 +129,6 @@ SpecialTable::load (const gchar *file)
             getline (in, line);
             size_t pos = line.find ('\t');
             if (pos == line.npos) {
-                std::cerr << "error: " << line << std::endl;
                 continue;
             }
             std::string command = line.substr(0, pos);
@@ -145,12 +144,14 @@ SpecialTable::load (const gchar *file)
     return TRUE;
 }
 
+#if 0
 static bool
 phraseCmp (const SpecialPhrase *first,
            const SpecialPhrase *second)
 {
     return first->position () <= second->position ();
 }
+#endif
 
 void
 SpecialTable::insert (const std::string   &command,
