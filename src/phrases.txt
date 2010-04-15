@@ -70,4 +70,4 @@ sj=#${fullhour}时${minute}分${second}秒
 sj=#${fullhour}:${minute}:${second}
 xq=#星期${weekday_cn}
 lb=#礼拜${weekday_cn}
-nl=#农历${lunardate}
+;nl=#农历${lunardate}
