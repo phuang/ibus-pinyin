@@ -2,7 +2,8 @@
 ; 
 ; 说明：
 ;   **注意**
-;       修改后请重新启动输入法，或者运行命令pkill ibus-engine-pinyin
+;       修改后请重新启动输入法
+;       或者运行下面命令：pkill -x -u $USERNAME ibus-engine-pinyin
 ;   格式：
 ;       英文字符串=短语
 ;       英文字符串=#动态短语
