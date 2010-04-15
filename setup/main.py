@@ -239,8 +239,8 @@ class PreferencesDialog:
             os.path.exists(path) or os.makedirs(path)
             path = os.path.join(path, "phrases.txt")
             if not os.path.exists(path):
-                datadir = os.getenv("IBUS_DATAROOTDIR") or "/usr/share/ibus-pinyin"
-                src = os.path.join(datadir, "phrases.txt")
+                datadir = os.getenv("IBUS_DATAROOTDIR") or "/usr/share"
+                src = os.path.join(datadir, "ibus-pinyin", "phrases.txt")
                 shutil.copyfile(src, path)
             os.system("xdg-open %s" % path)
 
