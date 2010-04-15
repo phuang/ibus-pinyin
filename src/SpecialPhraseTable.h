@@ -1,30 +1,18 @@
-#ifndef __PY_SPECIAL_TABLE_H_
-#define __PY_SPECIAL_TABLE_H_
+#ifndef __PY_SPECIAL_PHRASE_TABLE_H_
+#define __PY_SPECIAL_PHRASE_TABLE_H_
 
 #include <map>
 #include <list>
 #include <string>
 #include <vector>
 #include <glib.h>
+#include "SpecialPhrase.h"
 
 namespace PY {
 
-class SpecialPhrase {
-public:
-    SpecialPhrase (guint pos) : m_position (pos) { }
-
-    guint position (void) const {
-        return m_position;
-    }
-
-    virtual std::string text (void) = 0;
+class SpecialPhraseTable {
 private:
-    guint m_position;
-};
-
-class SpecialTable {
-private:
-    SpecialTable (void);
+    SpecialPhraseTable (void);
 
 public:
     void insert (const std::string & command, SpecialPhrase *phrase);
@@ -34,7 +22,7 @@ private:
     gboolean load (const gchar *file);
 
 public:
-    static SpecialTable & instance (void) { return m_instance; }
+    static SpecialPhraseTable & instance (void) { return m_instance; }
 
 private:
     typedef std::list<SpecialPhrase *> List;
@@ -42,7 +30,7 @@ private:
     Map m_map;
 
 private:
-    static SpecialTable m_instance;
+    static SpecialPhraseTable m_instance;
 };
 
 };

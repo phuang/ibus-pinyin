@@ -51,7 +51,8 @@ ibus_engine_c_sources = \
 	PinyinParser.cc \
 	PinyinProperties.cc \
 	SimpTradConverter.cc \
-	SpecialTable.cc \
+	DynamicSpecialPhrase.cc \
+	SpecialPhraseTable.cc \
 	$(NULL)
 ibus_engine_built_h_sources = \
 	PinyinParserTable.h \
@@ -86,7 +87,10 @@ ibus_engine_h_sources = \
 	Property.h \
 	SimpTradConverter.h \
 	SimpTradConverterTable.h \
-	SpecialTable.h \
+	SpecialPhrase.h \
+	StaticSpecialPhrase.h \
+	DynamicSpecialPhrase.h \
+	SpecialPhraseTable.h \
 	String.h \
 	Text.h \
 	Types.h \

@@ -6,13 +6,13 @@
 #include "Database.h"
 #include "PinyinParser.h"
 #include "PhraseEditor.h"
-#include "SpecialTable.h"
+#include "SpecialPhraseTable.h"
 
 namespace PY {
 
 #define MAX_PINYIN_LEN 64
 
-class SpecialTable;
+class SpecialPhraseTable;
 
 class PinyinEditor : public Editor {
 public:
@@ -56,7 +56,7 @@ protected:
 
         m_special_phrases.clear ();
         if (begin < end) {
-            SpecialTable::instance ().lookup (
+            SpecialPhraseTable::instance ().lookup (
                 m_text.substr (begin, m_cursor - begin),
                 m_special_phrases);
         }

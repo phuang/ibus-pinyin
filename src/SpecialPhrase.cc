@@ -3,11 +3,11 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include "SpecialTable.h"
+#include "SpecialPhraseTable.h"
 
 namespace PY {
 
-SpecialTable SpecialTable::m_instance;
+SpecialPhraseTable SpecialPhraseTable::m_instance;
 
 class StaticPhrase : public SpecialPhrase {
 public:
@@ -183,7 +183,7 @@ private:
 
 };
 
-SpecialTable::SpecialTable (void)
+SpecialPhraseTable::SpecialPhraseTable (void)
 {
     gchar * path = g_build_filename (g_get_user_config_dir (),
                         "ibus", "ibus-pinyin", "phrases.txt", NULL);
@@ -195,7 +195,7 @@ SpecialTable::SpecialTable (void)
 }
 
 gboolean
-SpecialTable::load (const gchar *file)
+SpecialPhraseTable::load (const gchar *file)
 {
     std::ifstream in (file);
     if (in.fail ())
@@ -235,8 +235,8 @@ phraseCmp (const SpecialPhrase *first,
 #endif
 
 void
-SpecialTable::insert (const std::string   &command,
-                      SpecialPhrase       *phrase)
+SpecialPhraseTable::insert (const std::string   &command,
+                            SpecialPhrase       *phrase)
 {
     if (m_map.find (command) == m_map.end ()) {
         m_map[command] = List ();
@@ -249,8 +249,8 @@ SpecialTable::insert (const std::string   &command,
 }
 
 gboolean
-SpecialTable::lookup (const std::string         &command,
-                      std::vector<std::string>  &result)
+SpecialPhraseTable::lookup (const std::string         &command,
+                            std::vector<std::string>  &result)
 {
     result.clear ();
 
