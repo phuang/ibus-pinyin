@@ -106,18 +106,18 @@ public:
 
     const std::string weekday_cn (void) {
         static const gchar *week_num[] = {
-            "一", "二", "三", "四", "五", "六", "日",
+            "日", "一", "二", "三", "四", "五", "六"
         };
         return week_num[localtime (&m_time)->tm_wday];
     }
 
     const std::string hour_cn (guint i) {
         static const gchar *hour_num[] = {
-            "一", "二", "三", "四", "五",
-            "六", "七", "八", "九", "十",
-            "十一", "十二", "十三", "十四", "十五",
-            "十六", "十七", "十八", "十九", "二十",
-            "二十一", "二十二", "二十三", "零"
+            "零", "一", "二", "三", "四",
+            "五", "六", "七", "八", "九",
+            "十", "十一", "十二", "十三", "十四",
+            "十五", "十六", "十七", "十八", "十九",
+            "二十", "二十一", "二十二", "二十三",
         };
         return hour_num[i];
     }
@@ -136,8 +136,8 @@ public:
             "五", "六", "七", "八", "九",
             "", "十","二十", "三十"
         };
-        guint day = localtime (&m_time)->tm_mday + 1;
-        return std::string () + day_num[day / 10 + 10] + day_num[day % 10];
+        guint day = localtime (&m_time)->tm_mday;
+        return std::string (day_num[day / 10 + 10]) + day_num[day % 10];
     }
 
     const std::string minsec_cn (guint i) {
@@ -147,7 +147,7 @@ public:
             "零", "十","二十", "三十", "四十"
             "五十", "六十"
         };
-        return std::string () + num[i / 10 + 10] + num[i % 10];
+        return std::string (num[i / 10 + 10]) + num[i % 10];
     }
 
     const std::string variable (const std::string &name) {
@@ -155,14 +155,14 @@ public:
         if (name == "year_yy")  return dec ((localtime (&m_time)->tm_year + 1900) % 100, "%02d");
         if (name == "month")    return dec (localtime (&m_time)->tm_mon + 1);
         if (name == "month_mm") return dec (localtime (&m_time)->tm_mon + 1, "%02d");
-        if (name == "day")      return dec (localtime (&m_time)->tm_mday + 1);
-        if (name == "day_dd")   return dec (localtime (&m_time)->tm_mday + 1, "%02d");
+        if (name == "day")      return dec (localtime (&m_time)->tm_mday);
+        if (name == "day_dd")   return dec (localtime (&m_time)->tm_mday, "%02d");
         if (name == "weekday")  return dec (localtime (&m_time)->tm_wday + 1);
-        if (name == "fullhour") return dec (localtime (&m_time)->tm_hour + 1, "%02d");
-        if (name == "falfhour") return dec ((localtime (&m_time)->tm_hour + 1) % 12, "%02d");
+        if (name == "fullhour") return dec (localtime (&m_time)->tm_hour, "%02d");
+        if (name == "falfhour") return dec (localtime (&m_time)->tm_hour % 12, "%02d");
         if (name == "ampm")     return localtime (&m_time)->tm_hour < 12 ? "AM" : "PM";
-        if (name == "minute")   return dec (localtime (&m_time)->tm_min + 1, "%02d");
-        if (name == "second")   return dec (localtime (&m_time)->tm_sec + 1, "%02d");
+        if (name == "minute")   return dec (localtime (&m_time)->tm_min, "%02d");
+        if (name == "second")   return dec (localtime (&m_time)->tm_sec, "%02d");
         if (name == "year_cn")      return year_cn ();
         if (name == "year_yy_cn")   return year_cn (TRUE);
         if (name == "month_cn")     return month_cn ();
@@ -171,8 +171,8 @@ public:
         if (name == "fullhour_cn")  return fullhour_cn ();
         if (name == "halfhour_cn")  return halfhour_cn ();
         if (name == "ampm_cn")      return localtime (&m_time)->tm_hour < 12 ? "上午" : "下午";
-        if (name == "minute_cn")    return minsec_cn (localtime (&m_time)->tm_min + 1);
-        if (name == "second_cn")    return minsec_cn (localtime (&m_time)->tm_sec + 1);
+        if (name == "minute_cn")    return minsec_cn (localtime (&m_time)->tm_min);
+        if (name == "second_cn")    return minsec_cn (localtime (&m_time)->tm_sec);
 
         return "${" + name + "}";
     }
@@ -185,22 +185,12 @@ private:
 
 SpecialTable::SpecialTable (void)
 {
-#if 0
-    insert ("hehe", new StaticPhrase (":-)", 0));
-    insert ("haha", new StaticPhrase ("^_^", 0));
-    insert ("haha", new StaticPhrase ("o(∩∩)o...哈哈", 1));
-    insert ("xixi", new StaticPhrase ("(*^__^*) 嘻嘻……", 0));
-    insert ("bsn", new StaticPhrase ("╭∩╮（︶︿︶）╭∩╮鄙视你！", 0));
-    insert ("rq", new DynamicPhrase ("%(year)年%(month)月%(day)日", 0));
-    insert ("rq", new DynamicPhrase ("%(year)-%(month)-%(day)", 1));
-    insert ("sj", new DynamicPhrase ("%(hour_24)时%(minute)分%(second)秒", 0));
-    insert ("sj", new DynamicPhrase ("%(hour_24):%(minute):%(second)", 1));
-#endif
     gchar * path = g_build_filename (g_get_user_config_dir (),
                         "ibus", "ibus-pinyin", "phrases.txt", NULL);
+
+    load ("phrases.txt") ||
     load (path) ||
-    load (PKGDATADIR G_DIR_SEPARATOR_S "phrases.txt") ||
-    load ("phrases.txt");
+    load (PKGDATADIR G_DIR_SEPARATOR_S "phrases.txt");
     g_free (path);
 }
 
