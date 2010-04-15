@@ -1,7 +1,5 @@
 #include <ctime>
 #include <cstdio>
-#include <iostream>
-#include <fstream>
 #include "DynamicSpecialPhrase.h"
 
 namespace PY {
