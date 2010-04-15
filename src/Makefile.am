@@ -88,7 +88,6 @@ ibus_engine_h_sources = \
 	SimpTradConverter.h \
 	SimpTradConverterTable.h \
 	SpecialPhrase.h \
-	StaticSpecialPhrase.h \
 	DynamicSpecialPhrase.h \
 	SpecialPhraseTable.h \
 	String.h \
