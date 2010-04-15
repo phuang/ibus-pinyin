@@ -9,12 +9,14 @@ namespace PY {
 class SpecialPhrase {
 public:
     SpecialPhrase (guint pos) : m_position (pos) { }
+    virtual ~SpecialPhrase (void);
 
     guint position (void) const {
         return m_position;
     }
 
     virtual std::string text (void) = 0;
+
 private:
     guint m_position;
 };

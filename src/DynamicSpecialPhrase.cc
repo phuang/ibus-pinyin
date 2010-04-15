@@ -4,6 +4,10 @@
 
 namespace PY {
 
+DynamicSpecialPhrase::~DynamicSpecialPhrase (void)
+{
+}
+
 std::string
 DynamicSpecialPhrase::text (void)
 {

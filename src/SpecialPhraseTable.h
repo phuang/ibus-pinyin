@@ -20,6 +20,7 @@ public:
 
 private:
     gboolean load (const gchar *file);
+    void clear (void);
 
 public:
     static SpecialPhraseTable & instance (void) { return m_instance; }

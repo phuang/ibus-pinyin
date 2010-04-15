@@ -12,6 +12,7 @@ class DynamicSpecialPhrase : public SpecialPhrase {
 public:
     DynamicSpecialPhrase (const std::string &text, guint pos) :
         SpecialPhrase (pos), m_text (text) { }
+    ~DynamicSpecialPhrase (void);
 
     std::string text (void);
     const std::string dec (gint d, const gchar *fmt = "%d");

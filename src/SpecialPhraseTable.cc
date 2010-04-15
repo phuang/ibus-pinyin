@@ -12,6 +12,7 @@ class StaticSpecialPhrase : public SpecialPhrase {
 public:
     StaticSpecialPhrase (const std::string &text, guint pos) :
         SpecialPhrase (pos), m_text (text) { }
+    ~StaticSpecialPhrase (void) { }
 
     std::string text (void) { return m_text; }
 
@@ -28,37 +29,6 @@ SpecialPhraseTable::SpecialPhraseTable (void)
     load (path) ||
     load (PKGDATADIR G_DIR_SEPARATOR_S "phrases.txt");
     g_free (path);
-}
-
-gboolean
-SpecialPhraseTable::load (const gchar *file)
-{
-    std::ifstream in (file);
-    if (in.fail ())
-        return FALSE;
-
-    std::string line;
-    while (!in.eof ()) {
-        getline (in, line);
-        if (line.size () == 0 || line[0] == ';')
-            continue;
-        size_t pos = line.find ('=');
-        if (pos == line.npos)
-            continue;
-
-        std::string command = line.substr(0, pos);
-        std::string phrase = line.substr(pos + 1);
-        if (command.empty () || phrase.empty ())
-            continue;
-
-        if (phrase[0] != '#') {
-            insert (command, new StaticSpecialPhrase (phrase, 0));
-        }
-        else if (phrase.size () > 1) {
-            insert (command, new DynamicSpecialPhrase (phrase.substr (1), 0));
-        }
-    }
-    return TRUE;
 }
 
 #if 0
@@ -99,6 +69,54 @@ SpecialPhraseTable::lookup (const std::string         &command,
     }
 
     return result.size () > 0;
+}
+
+gboolean
+SpecialPhraseTable::load (const gchar *file)
+{
+    clear ();
+    
+    std::ifstream in (file);
+    if (in.fail ())
+        return FALSE;
+
+    std::string line;
+    while (!in.eof ()) {
+        getline (in, line);
+        if (line.size () == 0 || line[0] == ';')
+            continue;
+        size_t pos = line.find ('=');
+        if (pos == line.npos)
+            continue;
+
+        std::string command = line.substr(0, pos);
+        std::string phrase = line.substr(pos + 1);
+        if (command.empty () || phrase.empty ())
+            continue;
+
+        if (phrase[0] != '#') {
+            insert (command, new StaticSpecialPhrase (phrase, 0));
+        }
+        else if (phrase.size () > 1) {
+            insert (command, new DynamicSpecialPhrase (phrase.substr (1), 0));
+        }
+    }
+    return TRUE;
+}
+
+void
+SpecialPhraseTable::clear (void)
+{
+    Map::iterator it;
+
+    for (it = m_map.begin (); it != m_map.end (); it ++) {
+        std::list<SpecialPhrase *>::iterator pit;
+        for (pit = (*it).second.begin (); pit != (*it).second.end (); pit ++) {
+            delete *pit;
+        }
+    }
+
+    m_map.clear ();
 }
 
 };

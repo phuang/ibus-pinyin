@@ -52,6 +52,7 @@ ibus_engine_c_sources = \
 	PinyinProperties.cc \
 	SimpTradConverter.cc \
 	DynamicSpecialPhrase.cc \
+	SpecialPhrase.cc \
 	SpecialPhraseTable.cc \
 	$(NULL)
 ibus_engine_built_h_sources = \
