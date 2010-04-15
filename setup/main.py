@@ -117,7 +117,6 @@ class PreferencesDialog:
         self.__comma_period_page = self.__builder.get_object("CommaPeriodPage")
         self.__auto_commit = self.__builder.get_object("AutoCommit")
         self.__trad_candidate = self.__builder.get_object("TradCandidate")
-        self.__half_width_puncts = self.__builder.get_object("HalfWidthPuncts")
 
         # read values
         self.__lookup_table_orientation.set_active(self.__get_value("LookupTableOrientation", 0))
@@ -127,7 +126,6 @@ class PreferencesDialog:
         self.__comma_period_page.set_active(self.__get_value("CommaPeriodPage", True))
         self.__auto_commit.set_active(self.__get_value("AutoCommit", False))
         self.__trad_candidate.set_active(self.__get_value("TradCandidate", False))
-        self.__half_width_puncts.set_text(self.__get_value("HalfWidthPuncts", "+-*/=%"))
 
         # connect signals
         def __lookup_table_page_size_changed_cb(adjustment):
@@ -148,7 +146,6 @@ class PreferencesDialog:
         def __entry_activate_cb(widget, name):
             text = widget.get_text()
             self.__set_value(name, text)
-        self.__half_width_puncts.connect("activate", __entry_activate_cb, "HalfWidthPuncts")
 
     def __init_correct_pinyin(self):
         # auto correct

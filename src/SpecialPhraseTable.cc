@@ -23,7 +23,7 @@ private:
 SpecialPhraseTable::SpecialPhraseTable (void)
 {
     gchar * path = g_build_filename (g_get_user_config_dir (),
-                        "ibus", "ibus-pinyin", "phrases.txt", NULL);
+                        "ibus", "pinyin", "phrases.txt", NULL);
 
     load ("phrases.txt") ||
     load (path) ||
