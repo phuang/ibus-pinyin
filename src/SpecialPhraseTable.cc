@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include "Config.h"
 #include "DynamicSpecialPhrase.h"
 #include "SpecialPhraseTable.h"
 
@@ -60,6 +61,8 @@ SpecialPhraseTable::lookup (const std::string         &command,
 {
     result.clear ();
 
+    if (!Config::specialPhrases ())
+        return FALSE;
     if (m_map.find (command) == m_map.end ())
         return FALSE;
 

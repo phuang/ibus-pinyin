@@ -363,6 +363,127 @@
                       </packing>
                     </child>
                     <child>
+                      <object class="GtkFrame" id="frame6">
+                        <property name="visible">True</property>
+                        <property name="label_xalign">0</property>
+                        <property name="shadow_type">none</property>
+                        <child>
+                          <object class="GtkAlignment" id="alignment11">
+                            <property name="visible">True</property>
+                            <property name="top_padding">6</property>
+                            <property name="left_padding">12</property>
+                            <child>
+                              <object class="GtkVBox" id="vbox11">
+                                <property name="visible">True</property>
+                                <property name="orientation">vertical</property>
+                                <property name="spacing">6</property>
+                                <child>
+                                  <object class="GtkTable" id="table2">
+                                    <property name="visible">True</property>
+                                    <property name="n_rows">2</property>
+                                    <property name="n_columns">2</property>
+                                    <property name="column_spacing">6</property>
+                                    <property name="row_spacing">6</property>
+                                    <property name="homogeneous">True</property>
+                                    <child>
+                                      <object class="GtkCheckButton" id="ShiftSelectCandidate">
+                                        <property name="label" translatable="yes">[Shift] select candidate</property>
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="receives_default">False</property>
+                                        <property name="draw_indicator">True</property>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkCheckButton" id="MinusEqualPage">
+                                        <property name="label" translatable="yes">[-] [=] flip page</property>
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="receives_default">False</property>
+                                        <property name="active">True</property>
+                                        <property name="draw_indicator">True</property>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">1</property>
+                                        <property name="right_attach">2</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkCheckButton" id="CommaPeriodPage">
+                                        <property name="label" translatable="yes">[,] [.] flip page</property>
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="receives_default">False</property>
+                                        <property name="active">True</property>
+                                        <property name="draw_indicator">True</property>
+                                      </object>
+                                      <packing>
+                                        <property name="top_attach">1</property>
+                                        <property name="bottom_attach">2</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkCheckButton" id="AutoCommit">
+                                        <property name="label" translatable="yes">Auto commit</property>
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="receives_default">False</property>
+                                        <property name="draw_indicator">True</property>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">1</property>
+                                        <property name="right_attach">2</property>
+                                        <property name="top_attach">1</property>
+                                        <property name="bottom_attach">2</property>
+                                      </packing>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="position">0</property>
+                                  </packing>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child type="label">
+                          <object class="GtkLabel" id="label20">
+                            <property name="visible">True</property>
+                            <property name="label" translatable="yes">&lt;b&gt;Others&lt;/b&gt;</property>
+                            <property name="use_markup">True</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="position">2</property>
+                      </packing>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child type="tab">
+              <object class="GtkLabel" id="label1">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes">Pinyin mode</property>
+              </object>
+              <packing>
+                <property name="tab_fill">False</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkAlignment" id="alignment10">
+                <property name="visible">True</property>
+                <property name="top_padding">12</property>
+                <property name="bottom_padding">12</property>
+                <property name="left_padding">12</property>
+                <property name="right_padding">12</property>
+                <child>
+                  <object class="GtkVBox" id="vbox10">
+                    <property name="visible">True</property>
+                    <property name="orientation">vertical</property>
+                    <child>
                       <object class="GtkFrame" id="frame5">
                         <property name="visible">True</property>
                         <property name="label_xalign">0</property>
@@ -428,7 +549,6 @@
                                       <object class="GtkHScale" id="hscaleLookupTablePageSize">
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
-                                        <property name="tooltip_text" translatable="yes">Setup the number of candidates show in one page of lookup table.</property>
                                         <property name="update_policy">delayed</property>
                                         <property name="adjustment">LookupTablePageSize</property>
                                         <property name="digits">0</property>
@@ -444,102 +564,27 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkTable" id="table5">
+                                  <object class="GtkCheckButton" id="TradCandidate">
+                                    <property name="label" translatable="yes">Show candidates in traditional Chinese</property>
                                     <property name="visible">True</property>
-                                    <property name="n_rows">4</property>
-                                    <property name="n_columns">2</property>
-                                    <property name="column_spacing">6</property>
-                                    <property name="row_spacing">6</property>
-                                    <property name="homogeneous">True</property>
-                                    <child>
-                                      <object class="GtkCheckButton" id="ShiftSelectCandidate">
-                                        <property name="label" translatable="yes">[Shift] select candidate</property>
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">True</property>
-                                        <property name="receives_default">False</property>
-                                        <property name="tooltip_text" translatable="yes">Use left and right shift keys to select the second and thrid candidates.</property>
-                                        <property name="draw_indicator">True</property>
-                                      </object>
-                                    </child>
-                                    <child>
-                                      <object class="GtkCheckButton" id="MinusEqualPage">
-                                        <property name="label" translatable="yes">[-] [=] flip page</property>
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">True</property>
-                                        <property name="receives_default">False</property>
-                                        <property name="tooltip_text" translatable="yes">Use [-] [=] key to page up/down the lookup table.</property>
-                                        <property name="active">True</property>
-                                        <property name="draw_indicator">True</property>
-                                      </object>
-                                      <packing>
-                                        <property name="left_attach">1</property>
-                                        <property name="right_attach">2</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="GtkCheckButton" id="CommaPeriodPage">
-                                        <property name="label" translatable="yes">[,] [.] flip page</property>
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">True</property>
-                                        <property name="receives_default">False</property>
-                                        <property name="tooltip_text" translatable="yes">Use [,] [.] key to page up/down the lookup table.</property>
-                                        <property name="active">True</property>
-                                        <property name="draw_indicator">True</property>
-                                      </object>
-                                      <packing>
-                                        <property name="top_attach">1</property>
-                                        <property name="bottom_attach">2</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="GtkCheckButton" id="AutoCommit">
-                                        <property name="label" translatable="yes">Auto commit</property>
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">True</property>
-                                        <property name="receives_default">False</property>
-                                        <property name="tooltip_text" translatable="yes">Enable automatic commit phrase.</property>
-                                        <property name="draw_indicator">True</property>
-                                      </object>
-                                      <packing>
-                                        <property name="left_attach">1</property>
-                                        <property name="right_attach">2</property>
-                                        <property name="top_attach">1</property>
-                                        <property name="bottom_attach">2</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="GtkCheckButton" id="TradCandidate">
-                                        <property name="label" translatable="yes">Show candidates in traditional Chinese</property>
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">True</property>
-                                        <property name="receives_default">False</property>
-                                        <property name="tooltip_text" translatable="yes">Show candidates in traditional Chinese, if the input method is in traditional Chinese inputing mode.</property>
-                                        <property name="draw_indicator">True</property>
-                                      </object>
-                                      <packing>
-                                        <property name="right_attach">2</property>
-                                        <property name="top_attach">2</property>
-                                        <property name="bottom_attach">3</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="GtkCheckButton" id="DoublePinyinShowRaw">
-                                        <property name="label" translatable="yes">Show raw input of Double Pinyin</property>
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">True</property>
-                                        <property name="receives_default">False</property>
-                                        <property name="tooltip_text" translatable="yes">Show raw input of Double Pinyin</property>
-                                        <property name="draw_indicator">True</property>
-                                      </object>
-                                      <packing>
-                                        <property name="right_attach">2</property>
-                                        <property name="top_attach">3</property>
-                                        <property name="bottom_attach">4</property>
-                                      </packing>
-                                    </child>
+                                    <property name="can_focus">True</property>
+                                    <property name="receives_default">False</property>
+                                    <property name="draw_indicator">True</property>
                                   </object>
                                   <packing>
                                     <property name="position">2</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkCheckButton" id="DoublePinyinShowRaw">
+                                    <property name="label" translatable="yes">Show raw input of Double Pinyin</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="receives_default">False</property>
+                                    <property name="draw_indicator">True</property>
+                                  </object>
+                                  <packing>
+                                    <property name="position">3</property>
                                   </packing>
                                 </child>
                               </object>
@@ -549,26 +594,36 @@
                         <child type="label">
                           <object class="GtkLabel" id="label8">
                             <property name="visible">True</property>
-                            <property name="label" translatable="yes">&lt;b&gt;Others&lt;/b&gt;</property>
+                            <property name="label" translatable="yes">&lt;b&gt;UI&lt;/b&gt;</property>
                             <property name="use_markup">True</property>
                           </object>
                         </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
-                        <property name="position">2</property>
+                        <property name="position">0</property>
                       </packing>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <child>
+                      <placeholder/>
                     </child>
                   </object>
                 </child>
               </object>
+              <packing>
+                <property name="position">1</property>
+              </packing>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="label1">
+              <object class="GtkLabel" id="label13">
                 <property name="visible">True</property>
-                <property name="label" translatable="yes">General</property>
+                <property name="label" translatable="yes">UI</property>
               </object>
               <packing>
+                <property name="position">1</property>
                 <property name="tab_fill">False</property>
               </packing>
             </child>
@@ -715,7 +770,7 @@
                 </child>
               </object>
               <packing>
-                <property name="position">1</property>
+                <property name="position">2</property>
               </packing>
             </child>
             <child type="tab">
@@ -724,7 +779,7 @@
                 <property name="label" translatable="yes">Correct pinyin</property>
               </object>
               <packing>
-                <property name="position">1</property>
+                <property name="position">2</property>
                 <property name="tab_fill">False</property>
               </packing>
             </child>
@@ -1147,7 +1202,7 @@
                 </child>
               </object>
               <packing>
-                <property name="position">2</property>
+                <property name="position">3</property>
               </packing>
             </child>
             <child type="tab">
@@ -1156,26 +1211,106 @@
                 <property name="label" translatable="yes">Fuzzy pinyin</property>
               </object>
               <packing>
-                <property name="position">2</property>
+                <property name="position">3</property>
                 <property name="tab_fill">False</property>
               </packing>
             </child>
             <child>
-              <object class="GtkVBox" id="vbox5">
+              <object class="GtkAlignment" id="alignment12">
                 <property name="visible">True</property>
-                <property name="orientation">vertical</property>
+                <property name="top_padding">12</property>
+                <property name="bottom_padding">12</property>
+                <property name="left_padding">12</property>
+                <property name="right_padding">12</property>
                 <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
+                  <object class="GtkVBox" id="vbox5">
+                    <property name="visible">True</property>
+                    <property name="orientation">vertical</property>
+                    <child>
+                      <object class="GtkFrame" id="frame7">
+                        <property name="visible">True</property>
+                        <property name="label_xalign">0</property>
+                        <property name="shadow_type">none</property>
+                        <child>
+                          <object class="GtkAlignment" id="alignment13">
+                            <property name="visible">True</property>
+                            <property name="top_padding">6</property>
+                            <property name="left_padding">12</property>
+                            <child>
+                              <object class="GtkVBox" id="vbox12">
+                                <property name="visible">True</property>
+                                <property name="orientation">vertical</property>
+                                <property name="spacing">6</property>
+                                <child>
+                                  <object class="GtkHBox" id="hbox2">
+                                    <property name="visible">True</property>
+                                    <property name="spacing">12</property>
+                                    <child>
+                                      <object class="GtkCheckButton" id="SpecialPhrases">
+                                        <property name="label" translatable="yes">Use custom phrases</property>
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="receives_default">False</property>
+                                        <property name="draw_indicator">True</property>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="position">0</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkButton" id="EditSpecialPhrases">
+                                        <property name="label" translatable="yes">Edit custom phrases</property>
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="receives_default">True</property>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">False</property>
+                                        <property name="position">1</property>
+                                      </packing>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">False</property>
+                                    <property name="position">0</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                                <child>
+                                  <placeholder/>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child type="label">
+                          <object class="GtkLabel" id="label17">
+                            <property name="visible">True</property>
+                            <property name="label" translatable="yes">&lt;b&gt;Dictionary option&lt;/b&gt;</property>
+                            <property name="use_markup">True</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
+                  </object>
                 </child>
               </object>
               <packing>
-                <property name="position">3</property>
+                <property name="position">4</property>
               </packing>
             </child>
             <child type="tab">
@@ -1184,7 +1319,7 @@
                 <property name="label" translatable="yes">Dictionary</property>
               </object>
               <packing>
-                <property name="position">3</property>
+                <property name="position">4</property>
                 <property name="tab_fill">False</property>
               </packing>
             </child>
@@ -1275,7 +1410,7 @@
                 </child>
               </object>
               <packing>
-                <property name="position">4</property>
+                <property name="position">5</property>
               </packing>
             </child>
             <child type="tab">
@@ -1284,7 +1419,7 @@
                 <property name="label" translatable="yes">About</property>
               </object>
               <packing>
-                <property name="position">4</property>
+                <property name="position">5</property>
                 <property name="tab_fill">False</property>
               </packing>
             </child>

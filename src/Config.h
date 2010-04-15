@@ -31,6 +31,7 @@ public:
     static gboolean initFullPunct (void) { return m_init_full_punct; }
     static gboolean initSimpChinese (void) { return m_init_simp_chinese; }
     static gboolean tradCandidate (void) { return m_trad_candidate; }
+    static gboolean specialPhrases (void) { return m_special_phrases; }
 
 private:
     bool read (const gchar *section, const gchar *name, bool defval);
@@ -65,6 +66,7 @@ private:
     static gboolean m_init_full_punct;
     static gboolean m_init_simp_chinese;
     static gboolean m_trad_candidate;
+    static gboolean m_special_phrases;
 };
 
 };

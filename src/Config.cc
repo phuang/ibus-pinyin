@@ -23,6 +23,7 @@ gboolean Config::m_init_full = FALSE;
 gboolean Config::m_init_full_punct = TRUE;
 gboolean Config::m_init_simp_chinese = TRUE;
 gboolean Config::m_trad_candidate = FALSE;
+gboolean Config::m_special_phrases = TRUE;
 
 static const StaticString engine_pinyin ("engine/Pinyin");
 static const StaticString correct_pinyin ("CorrectPinyin");
@@ -44,6 +45,7 @@ static const StaticString init_full ("InitFull");
 static const StaticString init_full_punct ("InitFullPunct");
 static const StaticString init_simp_chinese ("InitSimplifiedChinese");
 static const StaticString trad_candidate ("TradCandidate");
+static const StaticString special_phrases ("SpecialPhrases");
 
 static const struct {
     StaticString name;
@@ -106,6 +108,7 @@ Config::readDefaultValues (void)
     m_init_simp_chinese = read (engine_pinyin, init_simp_chinese, true);
 
     m_trad_candidate = read (engine_pinyin, trad_candidate, false);
+    m_special_phrases = read (engine_pinyin, special_phrases, true);
 
     /* others */
     m_orientation = read (engine_pinyin, PY::orientation, 0);
@@ -216,6 +219,8 @@ Config::valueChangedCallback (IBusConfig    *config,
         m_init_simp_chinese = normalizeGValue (value, true);
     else if (trad_candidate == name)
         m_trad_candidate = normalizeGValue (value, false);
+    else if (special_phrases == name)
+        m_special_phrases = normalizeGValue (value, true);
     /* lookup table page size */
     else if (PY::orientation == name) {
         m_orientation = normalizeGValue (value, 0);
