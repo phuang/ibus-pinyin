@@ -12,7 +12,9 @@ std::string
 DynamicSpecialPhrase::text (void)
 {
     /* get the current time */
-    std::time (&m_time);
+    std::time_t time;
+    std::time (&time);
+    m_time = *std::localtime (&time);
 
     std::string result;
 
@@ -56,8 +58,8 @@ DynamicSpecialPhrase::text (void)
 inline const std::string
 DynamicSpecialPhrase::dec (gint d, const gchar *fmt)
 {
-    char string [32];
-    std::snprintf (string, sizeof (string), fmt, d);
+    gchar string [32];
+    g_snprintf (string, sizeof (string), fmt, d);
     return string;
 }
 
@@ -69,7 +71,7 @@ DynamicSpecialPhrase::year_cn (gboolean yy)
         "五", "六", "七", "八", "九"
     };
 
-    gint year = localtime (&m_time)->tm_year + 1900;
+    gint year = m_time.tm_year + 1900;
     gint bit = 0;
     if (yy) {
         year %= 100;
@@ -92,7 +94,7 @@ DynamicSpecialPhrase::month_cn (void)
         "一", "二", "三", "四", "五", "六", "七", "八",
         "九", "十", "十一", "十二"
     };
-    return month_num[localtime (&m_time)->tm_mon];
+    return month_num[m_time.tm_mon];
 }
 
 inline const std::string
@@ -101,7 +103,7 @@ DynamicSpecialPhrase::weekday_cn (void)
     static const gchar *week_num[] = {
         "日", "一", "二", "三", "四", "五", "六"
     };
-    return week_num[localtime (&m_time)->tm_wday];
+    return week_num[m_time.tm_wday];
 }
 
 inline const std::string
@@ -120,13 +122,13 @@ DynamicSpecialPhrase::hour_cn (guint i)
 inline const std::string
 DynamicSpecialPhrase::fullhour_cn (void)
 {
-    return hour_cn (localtime (&m_time)->tm_hour);
+    return hour_cn (m_time.tm_hour);
 }
 
 inline const std::string
 DynamicSpecialPhrase::halfhour_cn (void)
 {
-    return hour_cn (localtime (&m_time)->tm_hour % 12);
+    return hour_cn (m_time.tm_hour % 12);
 }
 
 inline const std::string
@@ -137,7 +139,7 @@ DynamicSpecialPhrase::day_cn (void)
         "五", "六", "七", "八", "九",
         "", "十","二十", "三十"
     };
-    guint day = localtime (&m_time)->tm_mday;
+    guint day = m_time.tm_mday;
     return std::string (day_num[day / 10 + 10]) + day_num[day % 10];
 }
 
@@ -156,18 +158,18 @@ DynamicSpecialPhrase::minsec_cn (guint i)
 inline const std::string
 DynamicSpecialPhrase::variable (const std::string &name)
 {
-    if (name == "year")     return dec (localtime (&m_time)->tm_year + 1900);
-    if (name == "year_yy")  return dec ((localtime (&m_time)->tm_year + 1900) % 100, "%02d");
-    if (name == "month")    return dec (localtime (&m_time)->tm_mon + 1);
-    if (name == "month_mm") return dec (localtime (&m_time)->tm_mon + 1, "%02d");
-    if (name == "day")      return dec (localtime (&m_time)->tm_mday);
-    if (name == "day_dd")   return dec (localtime (&m_time)->tm_mday, "%02d");
-    if (name == "weekday")  return dec (localtime (&m_time)->tm_wday + 1);
-    if (name == "fullhour") return dec (localtime (&m_time)->tm_hour, "%02d");
-    if (name == "falfhour") return dec (localtime (&m_time)->tm_hour % 12, "%02d");
-    if (name == "ampm")     return localtime (&m_time)->tm_hour < 12 ? "AM" : "PM";
-    if (name == "minute")   return dec (localtime (&m_time)->tm_min, "%02d");
-    if (name == "second")   return dec (localtime (&m_time)->tm_sec, "%02d");
+    if (name == "year")     return dec (m_time.tm_year + 1900);
+    if (name == "year_yy")  return dec ((m_time.tm_year + 1900) % 100, "%02d");
+    if (name == "month")    return dec (m_time.tm_mon + 1);
+    if (name == "month_mm") return dec (m_time.tm_mon + 1, "%02d");
+    if (name == "day")      return dec (m_time.tm_mday);
+    if (name == "day_dd")   return dec (m_time.tm_mday, "%02d");
+    if (name == "weekday")  return dec (m_time.tm_wday + 1);
+    if (name == "fullhour") return dec (m_time.tm_hour, "%02d");
+    if (name == "falfhour") return dec (m_time.tm_hour % 12, "%02d");
+    if (name == "ampm")     return m_time.tm_hour < 12 ? "AM" : "PM";
+    if (name == "minute")   return dec (m_time.tm_min, "%02d");
+    if (name == "second")   return dec (m_time.tm_sec, "%02d");
     if (name == "year_cn")      return year_cn ();
     if (name == "year_yy_cn")   return year_cn (TRUE);
     if (name == "month_cn")     return month_cn ();
@@ -175,9 +177,9 @@ DynamicSpecialPhrase::variable (const std::string &name)
     if (name == "weekday_cn")   return weekday_cn ();
     if (name == "fullhour_cn")  return fullhour_cn ();
     if (name == "halfhour_cn")  return halfhour_cn ();
-    if (name == "ampm_cn")      return localtime (&m_time)->tm_hour < 12 ? "上午" : "下午";
-    if (name == "minute_cn")    return minsec_cn (localtime (&m_time)->tm_min);
-    if (name == "second_cn")    return minsec_cn (localtime (&m_time)->tm_sec);
+    if (name == "ampm_cn")      return m_time.tm_hour < 12 ? "上午" : "下午";
+    if (name == "minute_cn")    return minsec_cn (m_time.tm_min);
+    if (name == "second_cn")    return minsec_cn (m_time.tm_sec);
 
     return "${" + name + "}";
 }

@@ -28,7 +28,7 @@ public:
 
 private:
     std::string m_text;
-    time_t m_time;
+    std::tm m_time;
 };
 
 };
