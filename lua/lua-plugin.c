@@ -109,6 +109,29 @@ IBusEnginePlugin * ibus_engine_plugin_new(){
   return plugin;
 }
 
+static void l_message (const char *pname, const char *msg) {
+  if (pname) fprintf(stderr, "%s: ", pname);
+  fprintf(stderr, "%s\n", msg);
+  fflush(stderr);
+}
+
+static int report (lua_State *L, int status) {
+  if (status && !lua_isnil(L, -1)) {
+    const char *msg = lua_tostring(L, -1);
+    if (msg == NULL) msg = "(error object is not a string)";
+    l_message(NULL, msg);
+    lua_pop(L, 1);
+  }
+  return status;
+}
+
+int ibus_engine_plugin_load_lua_script(IBusEnginePlugin * plugin, const char * filename){
+  IBusEnginePluginPrivate * priv = IBUS_ENGINE_PLUGIN_GET_PRIVATE(plugin);
+  int status = luaL_dofile(priv->L, filename);
+  return report(priv->L, status);
+}
+
+
 static gint compare_command(gconstpointer a, gconstpointer b){
   lua_command_t * ca = (lua_command_t *) a;
   lua_command_t * cb = (lua_command_t *) b;
@@ -126,6 +149,7 @@ gboolean ibus_engine_plugin_add_command(IBusEnginePlugin * plugin, lua_command_t
   lua_command_clone(command, &new_command);
 
   g_array_append_val(priv->lua_commands, new_command);
+  /* Note: need to improve speed here? */
   g_array_sort(priv->lua_commands, compare_command);
 
   return TRUE;

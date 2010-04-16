@@ -59,7 +59,15 @@ struct _IBusEnginePluginClass
 
 GType ibus_engine_plugin_get_type(void);
 
+/**
+ * create a new ibus engine plugin.
+ */
 IBusEnginePlugin * ibus_engine_plugin_new();
+
+/**
+ * load a new lua script for ibus engine plugin.
+ */
+int ibus_engine_plugin_load_lua_script(IBusEnginePlugin * plugin, const char * filename);
 
 /**
  * add a lua_command_t to plugin.
