@@ -43,7 +43,7 @@ def get_records():
 
 def main():
 
-    print "const wchar_t *simp_to_trad[][2] = {"
+    print "const wchar_t * const simp_to_trad[][2] = {"
     maxlen, records = get_records()
     for s, ts in records:
         print '    { L"%s", L"%s" },' % (s.encode("utf8"), ts.encode("utf8"))

@@ -12,9 +12,9 @@ std::string
 DynamicSpecialPhrase::text (void)
 {
     /* get the current time */
-    std::time_t time;
-    std::time (&time);
-    m_time = *std::localtime (&time);
+    std::time_t rawtime;
+    std::time (&rawtime);
+    m_time = *std::localtime (&rawtime);
 
     std::string result;
 
@@ -23,7 +23,7 @@ DynamicSpecialPhrase::text (void)
     gint s = 0;
     while (s != 2) {
         switch (s) {
-        case 0:
+        case 0: // expect "${"
             pnext = m_text.find ("${", pos);
             if (pnext == m_text.npos) {
                 result += m_text.substr (pos);
@@ -35,7 +35,7 @@ DynamicSpecialPhrase::text (void)
                 s = 1;
             }
             break;
-        case 1:
+        case 1: // expect "}"
             pnext = m_text.find ("}", pos);
             if (pnext == m_text.npos) {
                 result += "${";
@@ -48,7 +48,7 @@ DynamicSpecialPhrase::text (void)
                 s = 0;
             }
             break;
-        default:
+        default: /* should not be reached */
             g_assert_not_reached ();
         }
     }
@@ -66,7 +66,7 @@ DynamicSpecialPhrase::dec (gint d, const gchar *fmt)
 inline const std::string
 DynamicSpecialPhrase::year_cn (gboolean yy)
 {
-    static const gchar * digits[] = {
+    static const gchar * const digits[] = {
         "〇", "一", "二", "三", "四",
         "五", "六", "七", "八", "九"
     };
@@ -90,7 +90,7 @@ DynamicSpecialPhrase::year_cn (gboolean yy)
 inline const std::string
 DynamicSpecialPhrase::month_cn (void)
 {
-    static const gchar *month_num[] = {
+    static const gchar * const month_num[] = {
         "一", "二", "三", "四", "五", "六", "七", "八",
         "九", "十", "十一", "十二"
     };
@@ -100,7 +100,7 @@ DynamicSpecialPhrase::month_cn (void)
 inline const std::string
 DynamicSpecialPhrase::weekday_cn (void)
 {
-    static const gchar *week_num[] = {
+    static const gchar * const week_num[] = {
         "日", "一", "二", "三", "四", "五", "六"
     };
     return week_num[m_time.tm_wday];
@@ -109,7 +109,7 @@ DynamicSpecialPhrase::weekday_cn (void)
 inline const std::string
 DynamicSpecialPhrase::hour_cn (guint i)
 {
-    static const gchar *hour_num[] = {
+    static const gchar * const hour_num[] = {
         "零", "一", "二", "三", "四",
         "五", "六", "七", "八", "九",
         "十", "十一", "十二", "十三", "十四",
@@ -134,7 +134,7 @@ DynamicSpecialPhrase::halfhour_cn (void)
 inline const std::string
 DynamicSpecialPhrase::day_cn (void)
 {
-    static const gchar *day_num[] = {
+    static const gchar * const day_num[] = {
         "", "一", "二", "三", "四",
         "五", "六", "七", "八", "九",
         "", "十","二十", "三十"
@@ -146,7 +146,7 @@ DynamicSpecialPhrase::day_cn (void)
 inline const std::string
 DynamicSpecialPhrase::minsec_cn (guint i)
 {
-    static const gchar *num[] = {
+    static const gchar * const num[] = {
         "", "一", "二", "三", "四",
         "五", "六", "七", "八", "九",
         "零", "十","二十", "三十", "四十"

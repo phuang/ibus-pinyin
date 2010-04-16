@@ -1,4 +1,4 @@
-const wchar_t *simp_to_trad[][2] = {
+const wchar_t * const simp_to_trad[][2] = {
     { L"〇余", L"〇餘" },
     { L"〇只", L"〇隻" },
     { L"一个准", L"一個準" },
