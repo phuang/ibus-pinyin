@@ -90,13 +90,15 @@ lua_command_t * ibus_engine_plugin_lookup_command(IBusEnginePlugin * plugin, con
 /**
  * retval int: returns the number of results,
  *              only support string or string array.
+ * the consequence call of ibus_engine_plugin_get_retval* must follow this call immediately.
  */
-int ibus_engine_plugin_call(IBusEnginePlugin * plugin, const lua_command_t * command, const char * argument /*optional, maybe NULL.*/);
+int ibus_engine_plugin_call(IBusEnginePlugin * plugin, const char * lua_function_name, const char * argument /*optional, maybe NULL.*/);
 
 /**
  * retrieve the retval string value. (value has been copied.)
  */
 const char * ibus_engine_plugin_get_retval(IBusEnginePlugin * plugin);
+
 /**
  * retrieve the array of string values. (string values have been copied.)
  */

@@ -169,6 +169,89 @@ const GArray * ibus_engine_plugin_get_available_commands(IBusEnginePlugin * plug
   return priv->lua_commands;
 }
 
+int ibus_engine_plugin_call(IBusEnginePlugin * plugin, const char * lua_function_name, const char * argument /*optional, maybe NULL.*/){
+  IBusEnginePluginPrivate * priv = IBUS_ENGINE_PLUGIN_GET_PRIVATE(plugin);
+  int type; int result;
+
+  lua_State * L = priv->L;
+
+  /* In google pinyin, argument can't be NULL,
+     but empty string is acceptable. */
+  if (NULL == argument) argument = "";
+
+  /* check whether lua_function_name exists. */
+  lua_getglobal(L, lua_function_name);
+  type = lua_type(L, -1);
+  if ( LUA_TFUNCTION != type )
+    return 0;
+  lua_pushstring(L, argument);
+
+  result = lua_pcall(L, 1, 1, 0);
+  if (result) return 0;
+
+  type = lua_type(L, -1);
+  if ( LUA_TTABLE == type ){
+    return lua_objlen(L, -1);
+  } else if (LUA_TNUMBER == type || LUA_TSTRING == type){
+    return 1;
+  }
+
+  return 0;
+}
+
+/**
+ * retrieve the retval string value. (value has been copied.)
+ */
+const char * ibus_engine_plugin_get_retval(IBusEnginePlugin * plugin){
+  IBusEnginePluginPrivate * priv = IBUS_ENGINE_PLUGIN_GET_PRIVATE(plugin);
+  const char * result = NULL;
+  lua_State * L = priv->L;
+
+  result = g_strdup(lua_tostring(L, -1));
+  lua_pop(L, 1);
+
+  return result;
+}
+
+/**
+ * retrieve the array of string values. (string values have been copied.)
+ */
+GArray * ibus_engine_plugin_get_retvals(IBusEnginePlugin * plugin){
+  IBusEnginePluginPrivate * priv = IBUS_ENGINE_PLUGIN_GET_PRIVATE(plugin);
+  lua_State * L = priv->L; int elem_num; int type;
+  GArray * result =  NULL; int i;
+  const char * suggest, * help, * candidate;
+
+  type = lua_type(L, -1);
+  if ( LUA_TTABLE != type )
+    return result;
+
+  result = g_array_new(TRUE, TRUE, sizeof(char *));
+  elem_num = lua_objlen(L, -1);
+
+  for ( i = 0; i < elem_num; ++i ){
+    lua_pushinteger(L, i + 1);
+    lua_gettable(L, -2);
+    type = lua_type(L, -1);
+    if ( LUA_TTABLE == type ){
+      lua_pushliteral(L, "suggest");
+      lua_gettable(L, -2);
+      lua_pushliteral(L, "help");
+      lua_gettable(L, -3);
+      suggest = lua_tostring(L, -2);
+      help = lua_tostring(L, -1);
+      candidate = g_strdup_printf("%s [%s]", suggest, help);
+      lua_pop(L, 3);
+    } else if (LUA_TNUMBER == type || LUA_TSTRING == type) {
+      candidate = g_strdup(lua_tostring(L, -1));
+      lua_pop(L, 1);
+    }
+    g_array_append_val(result, candidate);
+  }
+
+  return result;
+}
+
 
 /* will drop this function soon. */
 lua_State * ibus_engine_plugin_get_lua_State(IBusEnginePlugin * plugin){
