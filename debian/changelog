@@ -1,4 +1,66 @@
-ibus-pinyin (1.2.99.20090929-1~ppa2) karmic; urgency=low
+ibus-pinyin (1.3.3-1) unstable; urgency=low
+
+  * New upstream release.
+
+ -- Peng Huang <shawn.p.huang@gmail.com>  Fri, 16 Apr 2010 12:23:00 +0800
+
+ibus-pinyin (1.3.1-1) unstable; urgency=low
+
+  * New upstream release.
+
+ -- LI Daobing <lidaobing@debian.org>  Sat, 10 Apr 2010 15:32:18 +0800
+
+ibus-pinyin (1.3.0-1) unstable; urgency=low
+
+  * New upstream release.
+  * debian/source/format: 3.0.
+
+ -- LI Daobing <lidaobing@debian.org>  Sat, 03 Apr 2010 21:22:28 +0800
+
+ibus-pinyin (1.2.99.20100318-1) experimental; urgency=low
+
+  * New upstream release.
+  * debian/control: bump standards version to 3.8.4.
+  * debian/control: switch to ibus 1.3.
+  * debian/control: build depends on libsigc++-2.0-dev. 
+  * debian/control: fix debhelper-but-no-misc-depends.
+  * debian/rules: remove config.log 
+
+ -- LI Daobing <lidaobing@debian.org>  Sun, 21 Mar 2010 19:22:14 +0800
+
+ibus-pinyin (1.2.99.20091211-1) unstable; urgency=low
+
+  * New upstream release.
+  * debian/control: add build depends on intltool 
+
+ -- LI Daobing <lidaobing@debian.org>  Sat, 12 Dec 2009 22:43:01 +0800
+
+ibus-pinyin (1.2.99.20091009-1) unstable; urgency=low
+
+  * new upstream release.
+  * debian/control: rename package ibus-pinyin-db-google to
+    ibus-pinyin-db-android.
+  * debian/rules: updated. 
+
+ -- LI Daobing <lidaobing@debian.org>  Sun, 11 Oct 2009 12:58:12 +0800
+
+ibus-pinyin (1.2.99.20091007-1) unstable; urgency=low
+
+  * new upstream release.
+  * debian/control: remove package ibus-pinyin-data, add packages
+    ibus-pinyin-db-open-phrase and ibus-pinyin-db-google.
+  * debian/rules: updated.
+
+ -- LI Daobing <lidaobing@debian.org>  Thu, 08 Oct 2009 12:39:25 +0800
+
+ibus-pinyin (1.2.99.20090930-1) unstable; urgency=low
+
+  * new upstream release.
+  * debian/control: update build depends.
+
+ -- LI Daobing <lidaobing@debian.org>  Wed, 30 Sep 2009 22:44:05 +0800
+
+ibus-pinyin (1.2.99.20090929-1) unstable; urgency=low
 
   * new upstream release.
   * debian/watch: updated. 
@@ -8,7 +70,7 @@ ibus-pinyin (1.2.99.20090929-1~ppa2) karmic; urgency=low
   * debian/rules: updated. 
   * debian/README.Debian: no longer needed. 
 
- -- LI Daobing <lidaobing@debian.org>  Tue, 29 Sep 2009 23:00:34 +0800
+ -- LI Daobing <lidaobing@debian.org>  Tue, 29 Sep 2009 22:33:06 +0800
 
 ibus-pinyin (1.2.99.20090923+1-1) unstable; urgency=low
 

@@ -3,17 +3,17 @@ Section: utils
 Priority: optional
 Maintainer: LI Daobing <lidaobing@debian.org>
 Build-Depends: debhelper (>= 7), autotools-dev, swig, pkg-config,
- libibus-dev (>= 1.2), libsqlite3-dev, sqlite3, uuid-dev, python-support,
- pinyin-database (>= 1.2.99-2~), pinyin-database (<< 1.2.100), lsb-release
-Standards-Version: 3.8.3
+ libibus-dev (>= 1.2.99), libsqlite3-dev (>= 3.6), sqlite3, uuid-dev,
+ python-support, intltool (>= 0.35.0), libsigc++-2.0-dev
+Standards-Version: 3.8.4
 Homepage: http://code.google.com/p/ibus
 Vcs-Bzr: lp:~lidaobing/ibus/ibus-pinyin
 Vcs-Browser: https://code.launchpad.net/~lidaobing/ibus/ibus-pinyin
 
 Package: ibus-pinyin
 Architecture: any
-Depends: ibus-pinyin-data (=${source:Version}), ${python:Depends},
- ${shlibs:Depends}, ${misc:Depends}, ibus (>= 1.2)
+Depends: ibus-pinyin-db-open-phrase (=${source:Version}) | ibus-pinyin-db-android (=${source:Version}),
+ ${python:Depends}, ${shlibs:Depends}, ${misc:Depends}, ibus (>= 1.2.99)
 Description: pinyin engine for ibus
  ibus-pinyin is a im engine for Chinese, based on ibus.
  .
@@ -23,13 +23,10 @@ Description: pinyin engine for ibus
  for more information on pinyin input method, check
  http://en.wikipedia.org/wiki/Pinyin_method .
 
-Package: ibus-pinyin-data
+Package: ibus-pinyin-db-open-phrase
 Architecture: all
-Conflicts: ibus-pinyin (<< 1.2.99.20090929)
-Replaces: ibus-pinyin (<< 1.2.99.20090929)
-Pre-Depends: dpkg (>= 1.13.25)
-Depends: ${python:Depends}, ${shlibs:Depends}, ${misc:Depends}
-Description: pinyin engine for ibus (data package)
+Depends: ${misc:Depends}, pinyin-database (>= 1.2.99-3~), pinyin-database (<< 1.2.100)
+Description: pinyin engine for ibus, open-phrase database
  ibus-pinyin is a im engine for Chinese, based on ibus.
  .
  this package provide one input method:
@@ -38,5 +35,18 @@ Description: pinyin engine for ibus (data package)
  for more information on pinyin input method, check
  http://en.wikipedia.org/wiki/Pinyin_method .
  .
- This package contains the data files used by ibus-pinyin.
+ This package contains the open-phrase data files used by ibus-pinyin.
 
+Package: ibus-pinyin-db-android
+Architecture: all
+Depends: ${misc:Depends}
+Description: pinyin engine for ibus, android database
+ ibus-pinyin is a im engine for Chinese, based on ibus.
+ .
+ this package provide one input method:
+   * pinyin: pinyin input method.
+ .
+ for more information on pinyin input method, check
+ http://en.wikipedia.org/wiki/Pinyin_method .
+ .
+ This package contains the android data files used by ibus-pinyin.
