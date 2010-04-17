@@ -88,10 +88,13 @@ AC_CHECK_FUNCS([uuid_create], [], [
 
 AM_CONDITIONAL(WITH_LIBUUID, test x"$HAVE_LIBUUID" = x"yes")
 
+# check boost
+BOOST_REQUIRE([1.39])
+
 # check sigc
-PKG_CHECK_MODULES(SIGC, [
-    sigc++-2.0
-])
+# PKG_CHECK_MODULES(SIGC, [
+#     sigc++-2.0
+# ])
 
 # check env
 AC_PATH_PROG(ENV, env)

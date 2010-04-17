@@ -34,7 +34,7 @@ PinyinEngine::PinyinEngine (IBusEngine *engine)
     m_editors[MODE_RAW] = new RawEditor (m_props);
     m_editors[MODE_EXTENSION] = new ExtEditor (m_props);
 
-    m_props.signalUpdateProperty ().connect (sigc::mem_fun (*this, &PinyinEngine::slotUpdateProperty));
+    m_props.signalUpdateProperty ().connect (bind (&PinyinEngine::slotUpdateProperty, this, _1));
 
     for (i = MODE_INIT; i < MODE_LAST; i++) {
         connectEditorSignals (m_editors[i]);
@@ -273,31 +273,30 @@ void
 PinyinEngine::connectEditorSignals (Editor *editor)
 {
     editor->signalCommitText ().connect (
-        sigc::mem_fun (*this, &PinyinEngine::slotCommitText));
+        bind (&PinyinEngine::slotCommitText, this, _1));
 
     editor->signalUpdatePreeditText ().connect (
-        sigc::mem_fun (*this, &PinyinEngine::slotUpdatePreeditText));
+        bind (&PinyinEngine::slotUpdatePreeditText, this, _1, _2, _3));
     editor->signalShowPreeditText ().connect (
-        sigc::mem_fun (*this, &PinyinEngine::slotShowPreeditText));
+        bind (&PinyinEngine::slotShowPreeditText, this));
     editor->signalHidePreeditText ().connect (
-        sigc::mem_fun (*this, &PinyinEngine::slotHidePreeditText));
+        bind (&PinyinEngine::slotHidePreeditText, this));
 
     editor->signalUpdateAuxiliaryText ().connect (
-        sigc::mem_fun (*this, &PinyinEngine::slotUpdateAuxiliaryText));
+        bind (&PinyinEngine::slotUpdateAuxiliaryText, this, _1, _2));
     editor->signalShowAuxiliaryText ().connect (
-        sigc::mem_fun (*this, &PinyinEngine::slotShowAuxiliaryText));
+        bind (&PinyinEngine::slotShowAuxiliaryText, this));
     editor->signalHideAuxiliaryText ().connect (
-        sigc::mem_fun (*this, &PinyinEngine::slotHideAuxiliaryText));
+        bind (&PinyinEngine::slotHideAuxiliaryText, this));
 
     editor->signalUpdateLookupTable ().connect (
-        sigc::mem_fun (*this, &PinyinEngine::slotUpdateLookupTable));
+        bind (&PinyinEngine::slotUpdateLookupTable, this, _1, _2));
     editor->signalUpdateLookupTableFast ().connect (
-        sigc::mem_fun (*this, &PinyinEngine::slotUpdateLookupTableFast));
+        bind (&PinyinEngine::slotUpdateLookupTableFast, this, _1, _2));
     editor->signalShowLookupTable ().connect (
-        sigc::mem_fun (*this, &PinyinEngine::slotShowLookupTable));
+        bind (&PinyinEngine::slotShowLookupTable, this));
     editor->signalHideLookupTable ().connect (
-        sigc::mem_fun (*this, &PinyinEngine::slotHideLookupTable));
-
+        bind (&PinyinEngine::slotHideLookupTable, this));
 }
 
 };

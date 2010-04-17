@@ -83,9 +83,10 @@ ibus_engine_h_sources = \
 	PinyinParserTable.h \
 	PinyinProperties.h \
 	Pointer.h \
+	Property.h \
 	RawEditor.h \
 	Regex.h \
-	Property.h \
+	Signal.h \
 	SimpTradConverter.h \
 	SimpTradConverterTable.h \
 	SpecialPhrase.h \
@@ -105,7 +106,7 @@ ibus_engine_pinyin_SOURCES = \
 ibus_engine_pinyin_CXXFLAGS = \
 	@IBUS_CFLAGS@ \
 	@SQLITE_CFLAGS@ \
-	@SIGC_CFLAGS@ \
+	@BOOST_CPPFLAGS@ \
 	-DGETTEXT_PACKAGE=\"@GETTEXT_PACKAGE@\" \
 	-DPKGDATADIR=\"$(pkgdatadir)\" \
 	-DLIBEXECDIR=\"$(libexecdir)\" \
@@ -113,7 +114,6 @@ ibus_engine_pinyin_CXXFLAGS = \
 ibus_engine_pinyin_LDADD = \
 	@IBUS_LIBS@ \
 	@SQLITE_LIBS@ \
-	@SIGC_LIBS@ \
 	$(NULL)
 
 if WITH_LIBUUID
