@@ -15,19 +15,16 @@ private:
     SpecialPhraseTable (void);
 
 public:
-    void insert (const std::string & command, SpecialPhrase *phrase);
     gboolean lookup (const std::string &command, std::vector<std::string> &result);
 
 private:
     gboolean load (const gchar *file);
-    void clear (void);
 
 public:
     static SpecialPhraseTable & instance (void) { return m_instance; }
 
 private:
-    typedef std::list<SpecialPhrase *> List;
-    typedef std::map<std::string, List> Map;
+    typedef std::multimap<std::string, SpecialPhrasePtr> Map;
     Map m_map;
 
 private:

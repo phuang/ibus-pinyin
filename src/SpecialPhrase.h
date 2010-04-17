@@ -2,6 +2,7 @@
 #define __PY_SPECIAL_PHRASE_H_
 
 #include <string>
+#include <boost/shared_ptr.hpp>
 #include <glib.h>
 
 namespace PY {
@@ -20,6 +21,8 @@ public:
 private:
     guint m_position;
 };
+
+typedef boost::shared_ptr<SpecialPhrase> SpecialPhrasePtr;
 
 };
 

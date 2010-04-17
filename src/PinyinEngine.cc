@@ -22,17 +22,17 @@ PinyinEngine::PinyinEngine (IBusEngine *engine)
     : m_engine (engine),
       m_prev_pressed_key (IBUS_VoidSymbol),
       m_input_mode (MODE_INIT),
-      m_fallback_editor (m_props)
+      m_fallback_editor (new FallbackEditor (m_props))
 {
     gint i;
     /* create editors */
     if (Config::doublePinyin ())
-        m_editors[MODE_INIT] = new DoublePinyinEditor (m_props);
+        m_editors[MODE_INIT].reset (new DoublePinyinEditor (m_props));
     else
-        m_editors[MODE_INIT] = new FullPinyinEditor (m_props);
+        m_editors[MODE_INIT].reset (new FullPinyinEditor (m_props));
 
-    m_editors[MODE_RAW] = new RawEditor (m_props);
-    m_editors[MODE_EXTENSION] = new ExtEditor (m_props);
+    m_editors[MODE_RAW].reset (new RawEditor (m_props));
+    m_editors[MODE_EXTENSION].reset (new ExtEditor (m_props));
 
     m_props.signalUpdateProperty ().connect (bind (&PinyinEngine::slotUpdateProperty, this, _1));
 
@@ -40,15 +40,12 @@ PinyinEngine::PinyinEngine (IBusEngine *engine)
         connectEditorSignals (m_editors[i]);
     }
 
-    connectEditorSignals (&m_fallback_editor);
+    connectEditorSignals (m_fallback_editor);
 }
 
 /* destructor */
 PinyinEngine::~PinyinEngine (void)
 {
-    for (gint i = 0; i < MODE_LAST; i++) {
-        delete m_editors[i];
-    }
 }
 
 
@@ -116,7 +113,7 @@ PinyinEngine::processKeyEvent (guint keyval, guint keycode, guint modifiers)
     }
 
     if (G_UNLIKELY (!retval))
-        retval = m_fallback_editor.processKeyEvent (keyval, keycode, modifiers);
+        retval = m_fallback_editor->processKeyEvent (keyval, keycode, modifiers);
 
     /* store ignored key event by editors */
     m_prev_pressed_key = retval ? IBUS_VoidSymbol : keyval;
@@ -129,16 +126,16 @@ PinyinEngine::focusIn (void)
 {
     /* reset pinyin editor */
     if (Config::doublePinyin ()) {
-        if (dynamic_cast <DoublePinyinEditor *> (m_editors[MODE_INIT]) == NULL)
-            delete m_editors[MODE_INIT];
-        m_editors[MODE_INIT] = new DoublePinyinEditor (m_props);
-        connectEditorSignals (m_editors[MODE_INIT]);
+        if (dynamic_cast <DoublePinyinEditor *> (m_editors[MODE_INIT].get ()) == NULL) {
+            m_editors[MODE_INIT].reset (new DoublePinyinEditor (m_props));
+            connectEditorSignals (m_editors[MODE_INIT]);
+        }
     }
     else {
-        if (dynamic_cast <FullPinyinEditor *> (m_editors[MODE_INIT]) == NULL)
-            delete m_editors[MODE_INIT];
-        m_editors[MODE_INIT] = new FullPinyinEditor (m_props);
-        connectEditorSignals (m_editors[MODE_INIT]);
+        if (dynamic_cast <FullPinyinEditor *> (m_editors[MODE_INIT].get ()) == NULL) {
+            m_editors[MODE_INIT].reset (new FullPinyinEditor (m_props));
+            connectEditorSignals (m_editors[MODE_INIT]);
+        }
     }
     ibus_engine_register_properties (m_engine, m_props.properties ());
 }
@@ -270,7 +267,7 @@ PinyinEngine::slotUpdateProperty (Property & prop)
 }
 
 void
-PinyinEngine::connectEditorSignals (Editor *editor)
+PinyinEngine::connectEditorSignals (EditorPtr editor)
 {
     editor->signalCommitText ().connect (
         bind (&PinyinEngine::slotCommitText, this, _1));

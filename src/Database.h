@@ -3,6 +3,7 @@
 #define __PY_DATABASE_H__
 
 #include <sqlite3.h>
+#include <boost/shared_ptr.hpp>
 #include "String.h"
 #include "Types.h"
 #include "PinyinArray.h"
@@ -11,6 +12,8 @@
 namespace PY {
 
 class SQLStmt;
+typedef boost::shared_ptr<SQLStmt> SQLStmtPtr;
+
 class Database;
 
 class Query {
@@ -27,8 +30,9 @@ private:
     guint m_pinyin_begin;
     guint m_pinyin_len;
     guint m_option;
-    SQLStmt *m_stmt;
+    SQLStmtPtr m_stmt;
 };
+typedef boost::shared_ptr<Query> QueryPtr;
 
 class Database {
 private:
@@ -36,11 +40,11 @@ private:
     ~Database ();
 
 public:
-    SQLStmt *query (const PinyinArray   & pinyin,
-                    guint                 pinyin_begin,
-                    guint                 pinyin_len,
-                    gint                  m,
-                    guint                 option);
+    SQLStmtPtr query (const PinyinArray   & pinyin,
+                      guint                 pinyin_begin,
+                      guint                 pinyin_len,
+                      gint                  m,
+                      guint                 option);
     void commit (const PhraseArray  & phrases);
     void remove (const Phrase & phrase);
 

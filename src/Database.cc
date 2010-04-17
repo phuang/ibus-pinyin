@@ -118,17 +118,13 @@ Query::Query (const PinyinArray    & pinyin,
     : m_pinyin (pinyin),
       m_pinyin_begin (pinyin_begin),
       m_pinyin_len (pinyin_len),
-      m_option (option),
-      m_stmt (NULL)
+      m_option (option)
 {
     g_assert (m_pinyin.size () >= pinyin_begin + pinyin_len);
 }
 
 Query::~Query (void)
 {
-    if (m_stmt) {
-        delete m_stmt;
-    }
 }
 
 gint
@@ -137,9 +133,9 @@ Query::fill (PhraseArray &phrases, gint count)
     gint row = 0;
 
     while (m_pinyin_len > 0) {
-        if (G_LIKELY (m_stmt == NULL)) {
+        if (G_LIKELY (m_stmt.get () == NULL)) {
             m_stmt = Database::instance ().query (m_pinyin, m_pinyin_begin, m_pinyin_len, -1, m_option);
-            g_assert (m_stmt != NULL);
+            g_assert (m_stmt.get () != NULL);
         }
 
         while (m_stmt->step ()) {
@@ -164,8 +160,7 @@ Query::fill (PhraseArray &phrases, gint count)
             }
         }
 
-        delete m_stmt;
-        m_stmt = NULL;
+        m_stmt.reset ();
         m_pinyin_len --;
     }
 
@@ -413,7 +408,7 @@ pinyin_option_check_yun (guint option, gint id, gint fid)
     }
 }
 
-SQLStmt *
+SQLStmtPtr
 Database::query (const PinyinArray &pinyin,
                  guint              pinyin_begin,
                  guint              pinyin_len,
@@ -529,11 +524,10 @@ Database::query (const PinyinArray &pinyin,
 #endif
 
     /* query database */
-    SQLStmt *stmt = new SQLStmt (m_db);
+    SQLStmtPtr stmt (new SQLStmt (m_db));
 
     if (!stmt->prepare (m_sql)) {
-        delete stmt;
-        return NULL;
+        stmt.reset ();
     }
 
     return stmt;

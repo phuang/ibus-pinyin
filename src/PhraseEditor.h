@@ -29,7 +29,7 @@ public:
     }
 
     gboolean fillCandidates (void) {
-        if (G_UNLIKELY (m_query == NULL)) {
+        if (G_UNLIKELY (m_query.get () == NULL)) {
             return FALSE;
         }
 
@@ -37,8 +37,7 @@ public:
 
         if (G_UNLIKELY (ret < FILL_GRAN)) {
             /* got all candidates from query */
-            delete m_query;
-            m_query = NULL;
+            m_query.reset ();
         }
 
         return ret > 0 ? TRUE : FALSE;
@@ -73,10 +72,7 @@ public:
         m_candidate_0_phrases.clear ();
         m_pinyin.clear ();
         m_cursor = 0;
-        if (m_query) {
-            delete m_query;
-            m_query = NULL;
-        }
+        m_query.reset ();
     }
 
     gboolean update (const PinyinArray &pinyin);
@@ -111,7 +107,7 @@ private:
     PinyinArray m_pinyin;
     guint m_cursor;
     PinyinProperties & m_props;
-    Query       * m_query;
+    QueryPtr    m_query;
 };
 
 };

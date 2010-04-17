@@ -2,12 +2,16 @@
 #define __PY_EDITOR_H_
 
 #include <glib.h>
+#include <boost/shared_ptr.hpp>
 #include "Signal.h"
 #include "Text.h"
 #include "LookupTable.h"
 #include "PinyinProperties.h"
 
 namespace PY {
+
+class Editor;
+typedef boost::shared_ptr<Editor> EditorPtr;
 
 class Editor {
 public:

@@ -2,6 +2,7 @@
 #ifndef __PY_PIN_YIN_ENGINE_H__
 #define __PY_PIN_YIN_ENGINE_H__
 
+#include <boost/shared_ptr.hpp>
 #include <ibus.h>
 #include "Pointer.h"
 #include "Database.h"
@@ -14,6 +15,8 @@
 
 namespace PY {
 
+class PinyinEngine;
+typedef boost::shared_ptr<PinyinEngine> PinyinEnginePtr;
 class PinyinEngine {
 public:
     PinyinEngine (IBusEngine *engine);
@@ -31,7 +34,7 @@ public:
         for (gint i = 0; i < MODE_LAST; i++) {
             m_editors[i]->reset ();
         }
-        m_fallback_editor.reset ();
+        m_fallback_editor->reset ();
         m_last_commit_text = NULL;
     }
 
@@ -51,7 +54,7 @@ private:
 
 private:
     void showSetupDialog (void);
-    void connectEditorSignals (Editor *editor);
+    void connectEditorSignals (EditorPtr editor);
 
 private:
     void slotCommitText (Text & text);
@@ -85,8 +88,8 @@ private:
         MODE_LAST,
     } m_input_mode;
 
-    Editor *m_editors[MODE_LAST];
-    FallbackEditor m_fallback_editor;
+    EditorPtr m_editors[MODE_LAST];
+    EditorPtr m_fallback_editor;
     Text m_last_commit_text;
 };
 

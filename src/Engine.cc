@@ -26,7 +26,7 @@ struct _IBusPinyinEngine {
     IBusEngine parent;
 
     /* members */
-    PinyinEngine *engine;
+    PinyinEnginePtr engine;
 };
 
 struct _IBusPinyinEngineClass {
@@ -115,16 +115,13 @@ ibus_pinyin_engine_init (IBusPinyinEngine *pinyin)
 {
     if (g_object_is_floating (pinyin))
         g_object_ref_sink (pinyin);  // make engine sink
-    pinyin->engine = new PinyinEngine (IBUS_ENGINE (pinyin));
+    new (& (pinyin->engine)) PinyinEnginePtr (new PinyinEngine (IBUS_ENGINE (pinyin)));
 }
 
 static void
 ibus_pinyin_engine_destroy (IBusPinyinEngine *pinyin)
 {
-    if (pinyin->engine) {
-        delete pinyin->engine;
-        pinyin->engine = NULL;
-    }
+    pinyin->engine.~PinyinEnginePtr ();
     ((IBusObjectClass *) ibus_pinyin_engine_parent_class)->destroy ((IBusObject *)pinyin);
 }
 

@@ -32,29 +32,6 @@ SpecialPhraseTable::SpecialPhraseTable (void)
     g_free (path);
 }
 
-#if 0
-static bool
-phraseCmp (const SpecialPhrase *first,
-           const SpecialPhrase *second)
-{
-    return first->position () <= second->position ();
-}
-#endif
-
-void
-SpecialPhraseTable::insert (const std::string   &command,
-                            SpecialPhrase       *phrase)
-{
-    if (m_map.find (command) == m_map.end ()) {
-        m_map[command] = List ();
-    }
-    List & list = m_map[command];
-    list.push_back (phrase);
-#if 0
-    list.sort (phraseCmp);
-#endif
-}
-
 gboolean
 SpecialPhraseTable::lookup (const std::string         &command,
                             std::vector<std::string>  &result)
@@ -63,12 +40,10 @@ SpecialPhraseTable::lookup (const std::string         &command,
 
     if (!Config::specialPhrases ())
         return FALSE;
-    if (m_map.find (command) == m_map.end ())
-        return FALSE;
 
-    List list = m_map[command];
-    for (List::iterator it = list.begin (); it != list.end (); it ++) {
-        result.push_back ((*it)->text ());
+    std::pair<Map::iterator, Map::iterator> range = m_map.equal_range (command);
+    for (Map::iterator it = range.first; it != range.second; it ++) {
+        result.push_back ((*it).second->text ());
     }
 
     return result.size () > 0;
@@ -77,8 +52,8 @@ SpecialPhraseTable::lookup (const std::string         &command,
 gboolean
 SpecialPhraseTable::load (const gchar *file)
 {
-    clear ();
-    
+    m_map.clear ();
+
     std::ifstream in (file);
     if (in.fail ())
         return FALSE;
@@ -93,33 +68,20 @@ SpecialPhraseTable::load (const gchar *file)
             continue;
 
         std::string command = line.substr(0, pos);
-        std::string phrase = line.substr(pos + 1);
-        if (command.empty () || phrase.empty ())
+        std::string value = line.substr(pos + 1);
+        if (command.empty () || value.empty ())
             continue;
 
-        if (phrase[0] != '#') {
-            insert (command, new StaticSpecialPhrase (phrase, 0));
+        if (value[0] != '#') {
+            SpecialPhrasePtr phrase (new StaticSpecialPhrase (value, 0));
+            m_map.insert (Map::value_type (command, phrase));
         }
-        else if (phrase.size () > 1) {
-            insert (command, new DynamicSpecialPhrase (phrase.substr (1), 0));
+        else if (value.size () > 1) {
+            SpecialPhrasePtr phrase (new DynamicSpecialPhrase (value.substr (1), 0));
+            m_map.insert (Map::value_type (command, phrase));
         }
     }
     return TRUE;
-}
-
-void
-SpecialPhraseTable::clear (void)
-{
-    Map::iterator it;
-
-    for (it = m_map.begin (); it != m_map.end (); it ++) {
-        std::list<SpecialPhrase *>::iterator pit;
-        for (pit = (*it).second.begin (); pit != (*it).second.end (); pit ++) {
-            delete *pit;
-        }
-    }
-
-    m_map.clear ();
 }
 
 };

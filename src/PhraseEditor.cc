@@ -11,15 +11,12 @@ PhraseEditor::PhraseEditor (PinyinProperties & props)
       m_candidate_0_phrases (8),
       m_pinyin (16),
       m_cursor (0),
-      m_props (props),
-      m_query (NULL)
+      m_props (props)
 {
 }
 
 PhraseEditor::~PhraseEditor (void)
 {
-    if (m_query)
-        delete m_query;
 }
 
 gboolean
@@ -80,11 +77,8 @@ void
 PhraseEditor::updateCandidates (void)
 {
     m_candidates.clear ();
+    m_query.reset ();
     updateTheFirstCandidate ();
-    if (m_query) {
-        delete m_query;
-        m_query = NULL;
-    }
 
     if (G_UNLIKELY (m_pinyin.size () == 0))
         return;
@@ -97,10 +91,10 @@ PhraseEditor::updateCandidates (void)
         m_candidates.push_back (phrase);
     }
 
-    m_query = new Query (m_pinyin,
-                         m_cursor,
-                         m_pinyin.size () - m_cursor,
-                         Config::option ());
+    m_query.reset (new Query (m_pinyin,
+                              m_cursor,
+                              m_pinyin.size () - m_cursor,
+                              Config::option ()));
     fillCandidates ();
 }
 
