@@ -6,9 +6,11 @@
 
 namespace PY {
 
-template <typename Signature>
-class signal : public boost::signals2::signal_type <Signature, boost::signals2::keywords::mutex_type<boost::signals2::dummy_mutex> >::type {};
 using boost::bind;
+
+template <typename Signature>
+struct signal : public boost::signals2::signal_type <Signature, boost::signals2::keywords::mutex_type<boost::signals2::dummy_mutex> >::type {
+};
 
 };
 
