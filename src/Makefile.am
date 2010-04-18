@@ -73,6 +73,7 @@ ibus_engine_h_sources = \
 	FullPinyinEditor.h \
 	HalfFullConverter.h \
 	LookupTable.h \
+	Object.h \
 	Phrase.h \
 	PhraseArray.h \
 	PhraseEditor.h \

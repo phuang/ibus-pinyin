@@ -2,32 +2,30 @@
 #define __PY_TEXT_H_
 
 #include <ibus.h>
-#include "Pointer.h"
+#include "Object.h"
 #include "String.h"
 
 namespace PY {
 
-class Text : public Pointer<IBusText> {
+class Text : Object {
 public:
-    Text () : Pointer<IBusText> () {}
     Text (IBusText *text)
-        : Pointer<IBusText> (text) {}
+        : Object (text) {}
     Text (const gchar *str)
-        : Pointer<IBusText> (ibus_text_new_from_string (str)) {}
+        : Object (ibus_text_new_from_string (str)) {}
 
     Text (const String & str)
-        : Pointer<IBusText> (ibus_text_new_from_string ((const gchar *) str)) {}
+        : Object (ibus_text_new_from_string ((const gchar *) str)) {}
 
     Text (gunichar ch)
-        : Pointer<IBusText> (ibus_text_new_from_unichar (ch)) {}
+        : Object (ibus_text_new_from_unichar (ch)) {}
 
     void appendAttribute (guint type, guint value, guint start, guint end) {
-        ibus_text_append_attribute (*this, type, value, start, end);
+        ibus_text_append_attribute (get<IBusText> (), type, value, start, end);
     }
 
-    Text & operator= (IBusText *p) {
-        set (p);
-        return *this;
+    operator IBusText * (void) const {
+        return get<IBusText> ();
     }
 };
 
@@ -42,6 +40,10 @@ public:
 
     StaticText (gunichar ch)
         : Text (ch) {}
+
+    operator IBusText * (void) const {
+        return Text::operator IBusText * ();
+    }
 };
 
 };

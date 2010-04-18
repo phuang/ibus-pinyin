@@ -152,7 +152,7 @@ inline bool
 Config::read (const gchar *section, const gchar *name, bool defval)
 {
     GValue value = {0};
-    if (ibus_config_get_value (m_config, section, name, &value)) {
+    if (ibus_config_get_value (get<IBusConfig> (), section, name, &value)) {
         if (G_VALUE_TYPE (&value) == G_TYPE_BOOLEAN)
             return g_value_get_boolean (&value);
     }
@@ -163,7 +163,7 @@ inline gint
 Config::read (const gchar *section, const gchar *name, gint defval)
 {
     GValue value = {0};
-    if (ibus_config_get_value (m_config, section, name, &value)) {
+    if (ibus_config_get_value (get<IBusConfig> (), section, name, &value)) {
         if (G_VALUE_TYPE (&value) == G_TYPE_INT)
             return g_value_get_int (&value);
     }

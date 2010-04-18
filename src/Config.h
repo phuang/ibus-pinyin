@@ -4,16 +4,16 @@
 #include <glib.h>
 #include <glib-object.h>
 #include <ibus.h>
-#include "Pointer.h"
+#include "Object.h"
+#include "Bus.h"
 
 namespace PY {
 
-class Config {
+class Config : Object {
 public:
-    Config (Pointer<IBusBus> & bus) {
-        m_config = ibus_bus_get_config (bus);
+    Config (Bus & bus) : Object (ibus_bus_get_config (bus)) {
         readDefaultValues ();
-        g_signal_connect ((IBusConfig *) m_config, "value-changed", G_CALLBACK (valueChangedCallback), this);
+        g_signal_connect (get<IBusConfig> (), "value-changed", G_CALLBACK (valueChangedCallback), this);
     }
 
     static guint option (void) { return m_option & m_option_mask; }
@@ -42,9 +42,6 @@ private:
                                       const gchar   *name,
                                       const GValue  *value,
                                       Config        *self);
-
-private:
-    Pointer<IBusConfig> m_config;
 
 private:
     static guint m_option;

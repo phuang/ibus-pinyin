@@ -50,7 +50,7 @@ start_component (void)
 
     Config config (bus);
 
-    g_signal_connect (bus, "disconnected", G_CALLBACK (ibus_disconnected_cb), NULL);
+    g_signal_connect ((IBusBus *)bus, "disconnected", G_CALLBACK (ibus_disconnected_cb), NULL);
 
     component = ibus_component_new ("org.freedesktop.IBus.Pinyin",
                                     N_("Pinyin input method"),
