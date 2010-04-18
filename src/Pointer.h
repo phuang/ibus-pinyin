@@ -9,13 +9,11 @@ template<typename T>
 struct Pointer {
 public:
     Pointer (T *p = NULL) : m_p (NULL) {
-        g_debug ("new");
         set (p);
     }
 
     ~Pointer (void) {
         set (NULL);
-        g_debug ("delete");
     }
 
     void set (T * p) {
