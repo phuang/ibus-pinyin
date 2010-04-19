@@ -13,7 +13,7 @@
 
 #include <sys/utsname.h>
 #include <cstdlib>
-#include "String.h"
+#include <string>
 
 namespace PY {
 
@@ -59,7 +59,7 @@ public:
     }
 };
 
-class Env : public String {
+class Env : public std::string {
 public:
     Env (const gchar *name) {
         gchar *str;

@@ -1,9 +1,9 @@
 #ifndef __PY_TEXT_H_
 #define __PY_TEXT_H_
 
+#include <string>
 #include <ibus.h>
 #include "Object.h"
-#include "String.h"
 
 namespace PY {
 
@@ -14,8 +14,8 @@ public:
     Text (const gchar *str)
         : Object (ibus_text_new_from_string (str)) {}
 
-    Text (const String & str)
-        : Object (ibus_text_new_from_string ((const gchar *) str)) {}
+    Text (const std::string & str)
+        : Object (ibus_text_new_from_string (str.c_str ())) {}
 
     Text (gunichar ch)
         : Object (ibus_text_new_from_unichar (ch)) {}
@@ -35,8 +35,8 @@ public:
         : Text (ibus_text_new_from_static_string (str)) {
     }
 
-    StaticText (const String & str)
-        : Text (ibus_text_new_from_static_string ((const gchar *) str)) {}
+    StaticText (const std::string & str)
+        : Text (ibus_text_new_from_static_string (str.c_str ())) {}
 
     StaticText (gunichar ch)
         : Text (ch) {}

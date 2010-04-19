@@ -4,6 +4,7 @@
 #include <glib.h>
 #include <boost/shared_ptr.hpp>
 #include "Signal.h"
+#include "String.h"
 #include "Text.h"
 #include "LookupTable.h"
 #include "PinyinProperties.h"
