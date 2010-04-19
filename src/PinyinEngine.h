@@ -2,7 +2,6 @@
 #ifndef __PY_PIN_YIN_ENGINE_H__
 #define __PY_PIN_YIN_ENGINE_H__
 
-#include <boost/shared_ptr.hpp>
 #include <ibus.h>
 #include "Pointer.h"
 #include "Database.h"
@@ -15,8 +14,6 @@
 
 namespace PY {
 
-class PinyinEngine;
-typedef boost::shared_ptr<PinyinEngine> PinyinEnginePtr;
 class PinyinEngine {
 public:
     PinyinEngine (IBusEngine *engine);

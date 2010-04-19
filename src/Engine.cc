@@ -26,7 +26,7 @@ struct _IBusPinyinEngine {
     IBusEngine parent;
 
     /* members */
-    PinyinEnginePtr engine;
+    PinyinEngine engine;
 };
 
 struct _IBusPinyinEngineClass {
@@ -115,13 +115,13 @@ ibus_pinyin_engine_init (IBusPinyinEngine *pinyin)
 {
     if (g_object_is_floating (pinyin))
         g_object_ref_sink (pinyin);  // make engine sink
-    new (& (pinyin->engine)) PinyinEnginePtr (new PinyinEngine (IBUS_ENGINE (pinyin)));
+    new (& (pinyin->engine)) PinyinEngine (IBUS_ENGINE (pinyin));
 }
 
 static void
 ibus_pinyin_engine_destroy (IBusPinyinEngine *pinyin)
 {
-    pinyin->engine.~PinyinEnginePtr ();
+    pinyin->engine.~PinyinEngine ();
     ((IBusObjectClass *) ibus_pinyin_engine_parent_class)->destroy ((IBusObject *)pinyin);
 }
 
@@ -132,7 +132,7 @@ ibus_pinyin_engine_process_key_event (IBusEngine     *engine,
                                       guint           modifiers)
 {
     IBusPinyinEngine *pinyin = (IBusPinyinEngine *) engine;
-    return pinyin->engine->processKeyEvent (keyval, keycode, modifiers);
+    return pinyin->engine.processKeyEvent (keyval, keycode, modifiers);
 }
 
 static void
@@ -141,7 +141,7 @@ ibus_pinyin_engine_property_activate (IBusEngine    *engine,
                                       guint          prop_state)
 {
     IBusPinyinEngine *pinyin = (IBusPinyinEngine *) engine;
-    pinyin->engine->propertyActivate (prop_name, prop_state);
+    pinyin->engine.propertyActivate (prop_name, prop_state);
 }
 static void
 ibus_pinyin_engine_candidate_clicked (IBusEngine *engine,
@@ -150,7 +150,7 @@ ibus_pinyin_engine_candidate_clicked (IBusEngine *engine,
                                       guint       state)
 {
     IBusPinyinEngine *pinyin = (IBusPinyinEngine *) engine;
-    pinyin->engine->candidateClicked (index, button, state);
+    pinyin->engine.candidateClicked (index, button, state);
 }
 
 #define FUNCTION(name, Name)                                        \
@@ -158,7 +158,7 @@ ibus_pinyin_engine_candidate_clicked (IBusEngine *engine,
     ibus_pinyin_engine_##name (IBusEngine *engine)                  \
     {                                                               \
         IBusPinyinEngine *pinyin = (IBusPinyinEngine *) engine;     \
-        pinyin->engine->Name ();                                    \
+        pinyin->engine.Name ();                                    \
         ((IBusEngineClass *) ibus_pinyin_engine_parent_class)       \
             ->name (engine);                                        \
     }
