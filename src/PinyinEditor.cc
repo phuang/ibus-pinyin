@@ -237,6 +237,7 @@ PinyinEditor::processOthers (guint keyval, guint keycode, guint modifiers)
 
         case IBUS_Page_Down:
         case IBUS_KP_Page_Down:
+        case IBUS_Tab:
             pageDown (); break;
 
         case IBUS_Escape:

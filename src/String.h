@@ -1,9 +1,9 @@
 #ifndef __PY_STRING_H_
 #define __PY_STRING_H_
+
 #include <glib.h>
 #include <stdarg.h>
 #include <string>
-
 
 namespace PY {
 
