@@ -183,6 +183,7 @@ void
 FallbackEditor::reset (void) {
     m_quote = TRUE;
     m_double_quote = TRUE;
+    m_prev_commited_char = 0;
 }
 
 
