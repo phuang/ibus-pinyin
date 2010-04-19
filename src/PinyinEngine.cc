@@ -195,7 +195,6 @@ PinyinEngine::candidateClicked (guint index, guint button, guint state)
 void
 PinyinEngine::slotCommitText (Text & text)
 {
-    // m_last_commit_text = text;
     ibus_engine_commit_text (m_engine, text);
     if (m_input_mode != MODE_INIT)
         m_input_mode = MODE_INIT;
