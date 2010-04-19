@@ -1,4 +1,4 @@
-#include "Util.h"
+#include <string>
 #include "PinyinProperties.h"
 
 namespace PY {
@@ -101,10 +101,10 @@ PinyinProperties::toggleModeSimp (void)
 
 gboolean
 PinyinProperties::propertyActivate (const gchar *prop_name, guint prop_state) {
-    const static StaticString mode_chinese ("mode.chinese");
-    const static StaticString mode_full ("mode.full");
-    const static StaticString mode_full_punct ("mode.full_punct");
-    const static StaticString mode_simp ("mode.simp");
+    const static std::string mode_chinese ("mode.chinese");
+    const static std::string mode_full ("mode.full");
+    const static std::string mode_full_punct ("mode.full_punct");
+    const static std::string mode_simp ("mode.simp");
 
     if (mode_chinese == prop_name) {
         toggleModeChinese ();

@@ -1,6 +1,7 @@
 /* vim:set et sts=4: */
 
 #include <libintl.h>
+#include <string>
 #include <ibus.h>
 #include "RawEditor.h"
 #include "ExtEditor.h"
@@ -174,7 +175,7 @@ PinyinEngine::showSetupDialog (void)
 gboolean
 PinyinEngine::propertyActivate (const gchar *prop_name, guint prop_state)
 {
-    const static StaticString setup ("setup");
+    const static std::string setup ("setup");
     if (m_props.propertyActivate (prop_name, prop_state)) {
         return TRUE;
     }

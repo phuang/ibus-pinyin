@@ -25,68 +25,68 @@ gboolean Config::m_init_simp_chinese = TRUE;
 gboolean Config::m_trad_candidate = FALSE;
 gboolean Config::m_special_phrases = TRUE;
 
-static const StaticString engine_pinyin ("engine/Pinyin");
-static const StaticString correct_pinyin ("CorrectPinyin");
-static const StaticString fuzzy_pinyin ("FuzzyPinyin");
+static const std::string engine_pinyin ("engine/Pinyin");
+static const std::string correct_pinyin ("CorrectPinyin");
+static const std::string fuzzy_pinyin ("FuzzyPinyin");
 
-static const StaticString orientation ("LookupTableOrientation");
-static const StaticString page_size ("LookupTablePageSize");
-static const StaticString shift_select_candidate ("ShiftSelectCandidate");
-static const StaticString minus_equal_page ("MinusEqualPage");
-static const StaticString comma_period_page ("CommaPeriodPage");
-static const StaticString auto_commit ("AutoCommit");
+static const std::string orientation ("LookupTableOrientation");
+static const std::string page_size ("LookupTablePageSize");
+static const std::string shift_select_candidate ("ShiftSelectCandidate");
+static const std::string minus_equal_page ("MinusEqualPage");
+static const std::string comma_period_page ("CommaPeriodPage");
+static const std::string auto_commit ("AutoCommit");
 
-static const StaticString double_pinyin ("DoublePinyin");
-static const StaticString double_pinyin_schema ("DoublePinyinSchema");
-static const StaticString double_pinyin_show_raw ("DoublePinyinShowRaw");
+static const std::string double_pinyin ("DoublePinyin");
+static const std::string double_pinyin_schema ("DoublePinyinSchema");
+static const std::string double_pinyin_show_raw ("DoublePinyinShowRaw");
 
-static const StaticString init_chinese ("InitChinese");
-static const StaticString init_full ("InitFull");
-static const StaticString init_full_punct ("InitFullPunct");
-static const StaticString init_simp_chinese ("InitSimplifiedChinese");
-static const StaticString trad_candidate ("TradCandidate");
-static const StaticString special_phrases ("SpecialPhrases");
+static const std::string init_chinese ("InitChinese");
+static const std::string init_full ("InitFull");
+static const std::string init_full_punct ("InitFullPunct");
+static const std::string init_simp_chinese ("InitSimplifiedChinese");
+static const std::string trad_candidate ("TradCandidate");
+static const std::string special_phrases ("SpecialPhrases");
 
 static const struct {
-    StaticString name;
+    std::string name;
     guint option;
     bool defval;
 } options [] = {
-    { StaticString ("IncompletePinyin"), PINYIN_INCOMPLETE_PINYIN, TRUE },
+    { std::string ("IncompletePinyin"), PINYIN_INCOMPLETE_PINYIN, TRUE },
     /* correct */
-    { StaticString ("CorrectPinyin_GN_NG"),    PINYIN_CORRECT_GN_TO_NG,    TRUE },
-    { StaticString ("CorrectPinyin_GN_NG"),    PINYIN_CORRECT_GN_TO_NG,    TRUE },
-    { StaticString ("CorrectPinyin_MG_NG"),    PINYIN_CORRECT_MG_TO_NG,    TRUE },
-    { StaticString ("CorrectPinyin_IOU_IU"),   PINYIN_CORRECT_IOU_TO_IU,   TRUE },
-    { StaticString ("CorrectPinyin_UEI_UI"),   PINYIN_CORRECT_UEI_TO_UI,   TRUE },
-    { StaticString ("CorrectPinyin_UEN_UN"),   PINYIN_CORRECT_UEN_TO_UN,   TRUE },
-    { StaticString ("CorrectPinyin_UE_VE"),    PINYIN_CORRECT_UE_TO_VE,    TRUE },
-    { StaticString ("CorrectPinyin_VE_UE"),    PINYIN_CORRECT_VE_TO_UE,    TRUE },
+    { std::string ("CorrectPinyin_GN_NG"),    PINYIN_CORRECT_GN_TO_NG,    TRUE },
+    { std::string ("CorrectPinyin_GN_NG"),    PINYIN_CORRECT_GN_TO_NG,    TRUE },
+    { std::string ("CorrectPinyin_MG_NG"),    PINYIN_CORRECT_MG_TO_NG,    TRUE },
+    { std::string ("CorrectPinyin_IOU_IU"),   PINYIN_CORRECT_IOU_TO_IU,   TRUE },
+    { std::string ("CorrectPinyin_UEI_UI"),   PINYIN_CORRECT_UEI_TO_UI,   TRUE },
+    { std::string ("CorrectPinyin_UEN_UN"),   PINYIN_CORRECT_UEN_TO_UN,   TRUE },
+    { std::string ("CorrectPinyin_UE_VE"),    PINYIN_CORRECT_UE_TO_VE,    TRUE },
+    { std::string ("CorrectPinyin_VE_UE"),    PINYIN_CORRECT_VE_TO_UE,    TRUE },
     /* fuzzy pinyin */
-    { StaticString ("FuzzyPinyin_C_CH"),      PINYIN_FUZZY_C_CH,  FALSE },
-    { StaticString ("FuzzyPinyin_CH_C"),      PINYIN_FUZZY_CH_C,  FALSE },
-    { StaticString ("FuzzyPinyin_Z_ZH"),      PINYIN_FUZZY_Z_ZH,  FALSE },
-    { StaticString ("FuzzyPinyin_ZH_Z"),      PINYIN_FUZZY_ZH_Z,  FALSE },
-    { StaticString ("FuzzyPinyin_S_SH"),      PINYIN_FUZZY_S_SH,  FALSE },
-    { StaticString ("FuzzyPinyin_SH_S"),      PINYIN_FUZZY_SH_S,  FALSE },
-    { StaticString ("FuzzyPinyin_L_N"),       PINYIN_FUZZY_L_N,   FALSE },
-    { StaticString ("FuzzyPinyin_N_L"),       PINYIN_FUZZY_N_L,   FALSE },
-    { StaticString ("FuzzyPinyin_F_H"),       PINYIN_FUZZY_F_H,   FALSE },
-    { StaticString ("FuzzyPinyin_H_F"),       PINYIN_FUZZY_H_F,   FALSE },
-    { StaticString ("FuzzyPinyin_L_R"),       PINYIN_FUZZY_L_R,   FALSE },
-    { StaticString ("FuzzyPinyin_R_L"),       PINYIN_FUZZY_R_L,   FALSE },
-    { StaticString ("FuzzyPinyin_K_G"),       PINYIN_FUZZY_K_G,   FALSE },
-    { StaticString ("FuzzyPinyin_G_K"),       PINYIN_FUZZY_G_K,   FALSE },
-    { StaticString ("FuzzyPinyin_AN_ANG"),    PINYIN_FUZZY_AN_ANG,    FALSE },
-    { StaticString ("FuzzyPinyin_ANG_AN"),    PINYIN_FUZZY_ANG_AN,    FALSE },
-    { StaticString ("FuzzyPinyin_EN_ENG"),    PINYIN_FUZZY_EN_ENG,    FALSE },
-    { StaticString ("FuzzyPinyin_ENG_EN"),    PINYIN_FUZZY_ENG_EN,    FALSE },
-    { StaticString ("FuzzyPinyin_IN_ING"),    PINYIN_FUZZY_IN_ING,    FALSE },
-    { StaticString ("FuzzyPinyin_ING_IN"),    PINYIN_FUZZY_ING_IN,    FALSE },
-    { StaticString ("FuzzyPinyin_IAN_IANG"),  PINYIN_FUZZY_IAN_IANG,  FALSE },
-    { StaticString ("FuzzyPinyin_IANG_IAN"),  PINYIN_FUZZY_IANG_IAN,  FALSE },
-    { StaticString ("FuzzyPinyin_UAN_UANG"),  PINYIN_FUZZY_UAN_UANG,  FALSE },
-    { StaticString ("FuzzyPinyin_UANG_UAN"),  PINYIN_FUZZY_UANG_UAN,  FALSE },
+    { std::string ("FuzzyPinyin_C_CH"),      PINYIN_FUZZY_C_CH,  FALSE },
+    { std::string ("FuzzyPinyin_CH_C"),      PINYIN_FUZZY_CH_C,  FALSE },
+    { std::string ("FuzzyPinyin_Z_ZH"),      PINYIN_FUZZY_Z_ZH,  FALSE },
+    { std::string ("FuzzyPinyin_ZH_Z"),      PINYIN_FUZZY_ZH_Z,  FALSE },
+    { std::string ("FuzzyPinyin_S_SH"),      PINYIN_FUZZY_S_SH,  FALSE },
+    { std::string ("FuzzyPinyin_SH_S"),      PINYIN_FUZZY_SH_S,  FALSE },
+    { std::string ("FuzzyPinyin_L_N"),       PINYIN_FUZZY_L_N,   FALSE },
+    { std::string ("FuzzyPinyin_N_L"),       PINYIN_FUZZY_N_L,   FALSE },
+    { std::string ("FuzzyPinyin_F_H"),       PINYIN_FUZZY_F_H,   FALSE },
+    { std::string ("FuzzyPinyin_H_F"),       PINYIN_FUZZY_H_F,   FALSE },
+    { std::string ("FuzzyPinyin_L_R"),       PINYIN_FUZZY_L_R,   FALSE },
+    { std::string ("FuzzyPinyin_R_L"),       PINYIN_FUZZY_R_L,   FALSE },
+    { std::string ("FuzzyPinyin_K_G"),       PINYIN_FUZZY_K_G,   FALSE },
+    { std::string ("FuzzyPinyin_G_K"),       PINYIN_FUZZY_G_K,   FALSE },
+    { std::string ("FuzzyPinyin_AN_ANG"),    PINYIN_FUZZY_AN_ANG,    FALSE },
+    { std::string ("FuzzyPinyin_ANG_AN"),    PINYIN_FUZZY_ANG_AN,    FALSE },
+    { std::string ("FuzzyPinyin_EN_ENG"),    PINYIN_FUZZY_EN_ENG,    FALSE },
+    { std::string ("FuzzyPinyin_ENG_EN"),    PINYIN_FUZZY_ENG_EN,    FALSE },
+    { std::string ("FuzzyPinyin_IN_ING"),    PINYIN_FUZZY_IN_ING,    FALSE },
+    { std::string ("FuzzyPinyin_ING_IN"),    PINYIN_FUZZY_ING_IN,    FALSE },
+    { std::string ("FuzzyPinyin_IAN_IANG"),  PINYIN_FUZZY_IAN_IANG,  FALSE },
+    { std::string ("FuzzyPinyin_IANG_IAN"),  PINYIN_FUZZY_IANG_IAN,  FALSE },
+    { std::string ("FuzzyPinyin_UAN_UANG"),  PINYIN_FUZZY_UAN_UANG,  FALSE },
+    { std::string ("FuzzyPinyin_UANG_UAN"),  PINYIN_FUZZY_UANG_UAN,  FALSE },
 };
 
 void
@@ -149,10 +149,12 @@ Config::readDefaultValues (void)
 }
 
 inline bool
-Config::read (const gchar *section, const gchar *name, bool defval)
+Config::read (const std::string & section,
+              const std::string & name,
+              bool                defval)
 {
     GValue value = {0};
-    if (ibus_config_get_value (get<IBusConfig> (), section, name, &value)) {
+    if (ibus_config_get_value (get<IBusConfig> (), section.c_str (), name.c_str (), &value)) {
         if (G_VALUE_TYPE (&value) == G_TYPE_BOOLEAN)
             return g_value_get_boolean (&value);
     }
@@ -160,10 +162,12 @@ Config::read (const gchar *section, const gchar *name, bool defval)
 }
 
 inline gint
-Config::read (const gchar *section, const gchar *name, gint defval)
+Config::read (const std::string & section,
+              const std::string & name,
+              gint                defval)
 {
     GValue value = {0};
-    if (ibus_config_get_value (get<IBusConfig> (), section, name, &value)) {
+    if (ibus_config_get_value (get<IBusConfig> (), section.c_str (), name.c_str (), &value)) {
         if (G_VALUE_TYPE (&value) == G_TYPE_INT)
             return g_value_get_int (&value);
     }

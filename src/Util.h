@@ -72,29 +72,5 @@ public:
     }
 };
 
-class StaticString {
-public:
-    StaticString (const gchar *str) : m_string (str) {}
-
-    gboolean equal (const gchar *str) const {
-        return g_strcmp0 (m_string, str) == 0;
-    }
-
-    gboolean operator == (const gchar *str) const {
-        return equal (str);
-    }
-
-    gboolean operator != (const gchar *str) const {
-        return ! equal (str);
-    }
-
-    operator const gchar * (void) const {
-        return m_string;
-    }
-
-private:
-    const gchar *m_string;
-};
-
 };
 #endif

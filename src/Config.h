@@ -1,6 +1,7 @@
 #ifndef __PY_CONFIG_H_
 #define __PY_CONFIG_H_
 
+#include <string>
 #include <glib.h>
 #include <glib-object.h>
 #include <ibus.h>
@@ -34,8 +35,8 @@ public:
     static gboolean specialPhrases (void) { return m_special_phrases; }
 
 private:
-    bool read (const gchar *section, const gchar *name, bool defval);
-    int read (const gchar *section, const gchar *name, int defval);
+    bool read (const std::string & section, const std::string & name, bool defval);
+    int read (const std::string & section, const std::string & name, int defval);
     void readDefaultValues (void);
     static void valueChangedCallback (IBusConfig    *config,
                                       const gchar   *section,
