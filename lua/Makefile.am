@@ -43,6 +43,7 @@ TESTS = \
 	$(NULL)
 
 noinst_PROGRAMS = \
+	lua-ext-console
 	$(TESTS) \
 	$(NULL)
 
@@ -58,3 +59,16 @@ test_lua_plugin_CFLAGS = \
 test_lua_plugin_LDADD = \
 	libpylua.la \
 	$(NULL)
+
+lua_ext_console_SOURCES = \
+	lua-ext-console.c \
+	$(NULL)
+
+lua_ext_console_CFLAGS = \
+    @IBUS_CFLAGS@ \
+    @LUA_CFLAGS@ \
+    $(NULL)
+
+lua_ext_console_LDADD = \
+    libpylua.la \
+    $(NULL)

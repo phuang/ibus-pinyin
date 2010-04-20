@@ -17,7 +17,7 @@ G_DEFINE_TYPE (IBusEnginePlugin, ibus_engine_plugin, G_TYPE_OBJECT);
 
 static void lua_command_clone(lua_command_t * command, lua_command_t * new_command){
   new_command->command_name = g_strdup(command->command_name);
-  new_command->lua_function_name = g_strdup(command->command_name);
+  new_command->lua_function_name = g_strdup(command->lua_function_name);
   new_command->description = g_strdup(command->description);
   new_command->leading = g_strdup(command->leading);
   new_command->help = g_strdup(command->help);
@@ -155,10 +155,10 @@ gboolean ibus_engine_plugin_add_command(IBusEnginePlugin * plugin, lua_command_t
   return TRUE;
 }
 
-lua_command_t * ibus_engine_plugin_lookup_command(IBusEnginePlugin * plugin, const char * command){
+lua_command_t * ibus_engine_plugin_lookup_command(IBusEnginePlugin * plugin, const char * command_name){
   IBusEnginePluginPrivate * priv = IBUS_ENGINE_PLUGIN_GET_PRIVATE(plugin);
   GArray * lua_commands = priv->lua_commands;
-  lua_command_t lookup_command = {.command_name = command, };
+  lua_command_t lookup_command = {.command_name = command_name, };
 
   lua_command_t * result = bsearch(&lookup_command, lua_commands->data, lua_commands->len, sizeof(lua_command_t), compare_command);
   return result;

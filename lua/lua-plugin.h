@@ -85,7 +85,7 @@ const GArray * ibus_engine_plugin_get_available_commands(IBusEnginePlugin * plug
  * command must be an 2-char long string.
  * return the matched command.
  */
-lua_command_t * ibus_engine_plugin_lookup_command(IBusEnginePlugin * plugin, const char * command);
+lua_command_t * ibus_engine_plugin_lookup_command(IBusEnginePlugin * plugin, const char * command_name);
 
 /**
  * retval int: returns the number of results,
