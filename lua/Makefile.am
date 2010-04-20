@@ -43,7 +43,7 @@ TESTS = \
 	$(NULL)
 
 noinst_PROGRAMS = \
-	lua-ext-console
+	lua-ext-console \
 	$(TESTS) \
 	$(NULL)
 
