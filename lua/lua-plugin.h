@@ -42,7 +42,6 @@ typedef struct _IBusEnginePluginPrivate IBusEnginePluginPrivate;
 
 void lua_plugin_openlibs (lua_State *L);
 void lua_plugin_store_plugin(lua_State * L, IBusEnginePlugin * plugin);
-IBusEnginePlugin * lua_plugin_retrieve_plugin(lua_State * L);
 
 struct _IBusEnginePlugin
 {
