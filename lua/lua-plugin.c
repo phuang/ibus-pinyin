@@ -274,10 +274,3 @@ GArray * ibus_engine_plugin_get_retvals(IBusEnginePlugin * plugin){
   lua_pop(L, 1);
   return result;
 }
-
-
-/* will drop this function soon. */
-lua_State * ibus_engine_plugin_get_lua_State(IBusEnginePlugin * plugin){
-  return plugin->priv->L;
-}
-

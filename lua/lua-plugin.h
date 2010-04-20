@@ -104,8 +104,4 @@ const char * ibus_engine_plugin_get_retval(IBusEnginePlugin * plugin);
  */
 GArray * ibus_engine_plugin_get_retvals(IBusEnginePlugin * plugin);
 
-
-/*< private >*/
-/* will drop this function soon. */
-lua_State * ibus_engine_plugin_get_lua_State(IBusEnginePlugin * plugin);
 #endif

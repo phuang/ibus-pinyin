@@ -15,10 +15,8 @@ int main(int argc, char * argv[]){
   IBusEnginePlugin * plugin;
   plugin = ibus_engine_plugin_new();
 
-  lua_State * L = ibus_engine_plugin_get_lua_State(plugin);
   ibus_engine_plugin_load_lua_script(plugin, "test.lua");
   
-  g_assert(lua_plugin_retrieve_plugin(L) == plugin);
   g_object_unref(plugin);
 
   printf("done.\n");
