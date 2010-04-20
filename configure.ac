@@ -86,11 +86,21 @@ AC_CHECK_FUNCS([uuid_create], [], [
     ])
 ])
 
-AM_CONDITIONAL(WITH_LIBUUID, test x"$HAVE_LIBUUID" = x"yes")
+AM_CONDITIONAL(HAVE_LIBUUID, test x"$HAVE_LIBUUID" = x"yes")
 
 # check boost
 BOOST_REQUIRE([1.39])
-
+BOOST_FIND_HEADER([boost/signals2.hpp])
+# BOOST_FIND_HEADER([boost/signals2.hpp], [
+#     HAVE_BOOST_SIGNALS2=no
+#     BOOST_SIGNALS([s])
+# ], [
+#     AC_DEFINE(HAVE_BOOST_SIGNALS2_HPP, 1, [Define if found boost.signals2])
+#     HAVE_BOOST_SGINALS2=yes
+# ])
+# 
+# AM_CONDITIONAL(HAVE_BOOST_SIGNALS2, test x"$HAVE_BOOST_SIGNALS2" = x"yes")
+# 
 # check sigc
 # PKG_CHECK_MODULES(SIGC, [
 #     sigc++-2.0

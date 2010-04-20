@@ -117,10 +117,20 @@ ibus_engine_pinyin_LDADD = \
 	@SQLITE_LIBS@ \
 	$(NULL)
 
-if WITH_LIBUUID
+if HAVE_LIBUUID
 ibus_engine_pinyin_CXXFLAGS += $(LIBUUID_CFLAGS)
 ibus_engine_pinyin_LDADD += $(LIBUUID_LIBS)
 endif
+
+# if HAVE_BOOST_SIGNALS2
+# # do nothing
+# else
+# ibus_engine_pinyin_CXXFLAGS += $(LIBUUID_CFLAGS)
+# ibus_engine_pinyin_LDADD += \
+# 	$(BOOST_SIGNALS_LDFLAGS) \
+# 	$(BOOST_SIGNALS_LIBS) \
+# 	$(NULL)
+# endif
 
 BUILT_SOURCES = \
 	$(ibus_engine_built_c_sources) \
