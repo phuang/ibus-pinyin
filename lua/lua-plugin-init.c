@@ -193,7 +193,30 @@ static int ime_register_command(lua_State * L){
 static int ime_register_trigger(lua_State * L){
   const char * lua_function_name = luaL_checklstring(L, 1, NULL);
   const char * description = luaL_checklstring(L, 2, NULL);
+  size_t num; size_t i;
   fprintf(stderr, "TODO: ime_register_trigger unimplemented when called with %s (%s).\n", lua_function_name, description);
+
+  luaL_checktype(L, 3, LUA_TTABLE);
+  fprintf(stderr, "TODO: register_trigger with input_trigger_strings:\n");
+  num = lua_objlen(L, 3);
+  for ( i = 0; i < num; ++i) {
+    lua_pushinteger(L, i + 1);
+    lua_gettable(L, 3);
+    fprintf(stderr, "%d:%s\t", i + 1, lua_tostring(L, -1));
+    lua_pop(L, 1);
+  }
+  fprintf(stderr, "\n");
+
+  luaL_checktype(L, 4, LUA_TTABLE);
+  fprintf(stderr, "TODO: register_trigger with candidate_trigger_strings:\n");
+  num = lua_objlen(L, 4);
+  for ( i = 0; i < num; ++i) {
+    lua_pushinteger(L, i + 1);
+    lua_gettable(L, 4);
+    fprintf(stderr, "%d:%s\t", i + 1, lua_tostring(L, -1));
+  }
+  fprintf(stderr, "\n");
+
   return 0;
 }
 
