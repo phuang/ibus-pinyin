@@ -10,6 +10,7 @@ class Object {
 protected:
     template <typename T>
     Object (T *p) : m_p ((GObject *)p) {
+        g_assert (get <GObject *>() != NULL);
     }
 
     operator GObject * (void) const {
