@@ -69,6 +69,8 @@ PinyinEngine::processKeyEvent (guint keyval, guint keycode, guint modifiers)
          * and no other key event between the press and release ket event*/
         if (m_prev_pressed_key == keyval) {
             if (keyval == IBUS_Shift_L || keyval == IBUS_Shift_R) {
+                if (!m_editors[MODE_INIT]->text ().empty ())
+                    m_editors[MODE_INIT]->reset ();
                 m_props.toggleModeChinese ();
             }
         }

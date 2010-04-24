@@ -148,26 +148,25 @@ PinyinEditor::processOthers (guint keyval, guint keycode, guint modifiers)
     if (modifiers != 0 && modifiers != IBUS_CONTROL_MASK)
         return TRUE;
 
-
     /* process some cursor control keys */
     if (modifiers == 0) {
         switch (keyval) {
         case IBUS_Shift_L:
-            if (Config::shiftSelectCandidate ()) {
-                selectCandidateInPage (1);
-            }
-            break;
+            if (!Config::shiftSelectCandidate ())
+                return FALSE;
+            selectCandidateInPage (1);
+            return TRUE;
 
         case IBUS_Shift_R:
-            if (Config::shiftSelectCandidate ()) {
-                selectCandidateInPage (2);
-            }
-            break;
+            if (!Config::shiftSelectCandidate ())
+                return FALSE;
+            selectCandidateInPage (2);
+            return TRUE;
 
         case IBUS_Return:
         case IBUS_KP_Enter:
             commit ();
-            break;
+            return TRUE;
 
         case IBUS_BackSpace:
             if (m_phrase_editor.unselectCandidates ()) {
@@ -176,12 +175,12 @@ PinyinEditor::processOthers (guint keyval, guint keycode, guint modifiers)
             else {
                 removeCharBefore ();
             }
-            break;
+            return TRUE;
 
         case IBUS_Delete:
         case IBUS_KP_Delete:
             removeCharAfter ();
-            break;
+            return TRUE;
 
         case IBUS_Left:
         case IBUS_KP_Left:
@@ -191,7 +190,7 @@ PinyinEditor::processOthers (guint keyval, guint keycode, guint modifiers)
             else {
                 moveCursorLeft ();
             }
-            break;
+            return TRUE;
 
         case IBUS_Right:
         case IBUS_KP_Right:
@@ -201,7 +200,7 @@ PinyinEditor::processOthers (guint keyval, guint keycode, guint modifiers)
             else {
                 moveCursorRight ();
             }
-            break;
+            return TRUE;
 
         case IBUS_Home:
         case IBUS_KP_Home:
@@ -211,7 +210,7 @@ PinyinEditor::processOthers (guint keyval, guint keycode, guint modifiers)
             else {
                 moveCursorToBegin ();
             }
-            break;
+            return TRUE;
 
         case IBUS_End:
         case IBUS_KP_End:
@@ -221,29 +220,34 @@ PinyinEditor::processOthers (guint keyval, guint keycode, guint modifiers)
             else {
                 moveCursorToEnd ();
             }
-            break;
+            return TRUE;
 
         case IBUS_Up:
         case IBUS_KP_Up:
-            cursorUp (); break;
+            cursorUp ();
+            return TRUE;
 
         case IBUS_Down:
         case IBUS_KP_Down:
-            cursorDown (); break;
+            cursorDown ();
+            return TRUE;
 
         case IBUS_Page_Up:
         case IBUS_KP_Page_Up:
-            pageUp (); break;
+            pageUp ();
+            return TRUE;
 
         case IBUS_Page_Down:
         case IBUS_KP_Page_Down:
         case IBUS_Tab:
-            pageDown (); break;
+            pageDown ();
+            return TRUE;
 
         case IBUS_Escape:
-            reset (); break;
+            reset ();
+            return TRUE;
         default:
-            break;
+            return TRUE;
         }
     }
     else {
@@ -255,12 +259,12 @@ PinyinEditor::processOthers (guint keyval, guint keycode, guint modifiers)
             else {
                 removeWordBefore ();
             }
-            break;
+            return TRUE;
 
         case IBUS_Delete:
         case IBUS_KP_Delete:
             removeWordAfter ();
-            break;
+            return TRUE;
 
         case IBUS_Left:
         case IBUS_KP_Left:
@@ -270,7 +274,7 @@ PinyinEditor::processOthers (guint keyval, guint keycode, guint modifiers)
             else {
                 moveCursorLeftByWord ();
             }
-            break;
+            return TRUE;
 
         case IBUS_Right:
         case IBUS_KP_Right:
@@ -280,10 +284,10 @@ PinyinEditor::processOthers (guint keyval, guint keycode, guint modifiers)
             else {
                 moveCursorToEnd ();
             }
-            break;
+            return TRUE;
 
         default:
-            break;
+            return TRUE;
         };
     }
     return TRUE;
