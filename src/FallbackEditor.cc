@@ -89,7 +89,7 @@ FallbackEditor::processPunct (guint keyval, guint keycode, guint modifiers)
             case ',':
                 commit ("，"); return TRUE;
             case '.':
-                if (m_prev_commited_char >= '0' && m_prev_commited_char <= '9')
+                if (m_prev_committed_char >= '0' && m_prev_committed_char <= '9')
                     commit (keyval);
                 else
                     commit ("。");
@@ -183,7 +183,7 @@ void
 FallbackEditor::reset (void) {
     m_quote = TRUE;
     m_double_quote = TRUE;
-    m_prev_commited_char = 0;
+    m_prev_committed_char = 0;
 }
 
 

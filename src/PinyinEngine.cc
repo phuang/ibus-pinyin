@@ -198,6 +198,10 @@ PinyinEngine::slotCommitText (Text & text)
     ibus_engine_commit_text (m_engine, text);
     if (m_input_mode != MODE_INIT)
         m_input_mode = MODE_INIT;
+    if (text.text ())
+        static_cast<FallbackEditor*> (m_fallback_editor.get ())->setPrevCommittedChar (*text.text ());
+    else
+        static_cast<FallbackEditor*> (m_fallback_editor.get ())->setPrevCommittedChar (0);
 }
 
 void

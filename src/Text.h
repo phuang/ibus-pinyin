@@ -24,6 +24,10 @@ public:
         ibus_text_append_attribute (get<IBusText> (), type, value, start, end);
     }
 
+    const gchar *text (void) const {
+        return get<IBusText> ()->text;
+    }
+
     operator IBusText * (void) const {
         return get<IBusText> ();
     }
