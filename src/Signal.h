@@ -20,9 +20,9 @@ namespace PY {
 using boost::bind;
 
 #if HAVE_BOOST_SIGNALS2_HPP
+namespace bs2 = boost::signals2;
 template <typename Signature>
-struct signal : public boost::signals2::signal_type <Signature, boost::signals2::keywords::mutex_type<boost::signals2::dummy_mutex> >::type {
-    };
+struct signal : public bs2::signal_type <Signature, bs2::keywords::mutex_type<bs2::dummy_mutex> >::type { };
 #elif HAVE_BOOST_SIGNALS_HPP
 using boost::signal;
 #endif
