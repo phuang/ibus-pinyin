@@ -1,5 +1,8 @@
 /* vim:set et sts=4: */
 
+#ifdef HAVE_CONFIG_H
+#  include "config.h"
+#endif
 #include <ibus.h>
 #include <stdlib.h>
 #include <locale.h>
@@ -54,7 +57,7 @@ start_component (void)
 
     component = ibus_component_new ("org.freedesktop.IBus.Pinyin",
                                     N_("Pinyin input method"),
-                                    "0.1.0",
+                                    VERSION,
                                     "GPL",
                                     "Peng Huang <shawn.p.huang@gmail.com>",
                                     "http://code.google.com/p/ibus/",
