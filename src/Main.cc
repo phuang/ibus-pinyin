@@ -20,7 +20,7 @@ static gboolean verbose = FALSE;
 
 static const GOptionEntry entries[] =
 {
-    { "ibus", 'i', 0, G_OPTION_ARG_NONE, &ibus, "component is executed by ibus", NULL },
+    { "ibus",    'i', 0, G_OPTION_ARG_NONE, &ibus, "component is executed by ibus", NULL },
     { "verbose", 'v', 0, G_OPTION_ARG_NONE, &verbose, "verbose", NULL },
     { NULL },
 };
