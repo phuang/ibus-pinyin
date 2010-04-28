@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 from ZhConversion import *
 from valid_hanzi import *
+from sctc import *
 
 def convert(s, d, n):
     out = u""
@@ -22,6 +23,16 @@ def filter_more(records, n):
     hanm = filter(lambda (k, v): convert(k, hand, n) != v, records)
     return hanm + han
 
+def eq_filter(k, v):
+    for i in range(0, len(k)):
+        if k[i] == v[i]:
+            continue
+        if k[i] not in S_2_T:
+            return False
+        if v[i] not in S_2_T[k[i]]:
+            return False
+    return True
+
 def get_records():
     records = zh2Hant.items()
 
@@ -33,6 +44,9 @@ def get_records():
 
     # remove if length > 4
     records = filter(lambda (k, v): len(k) <= 6, records)
+
+    # remove 
+    # records = filter(lambda (k, v):eq_filter(k, v), records)
 
     maxlen = max(map(lambda (k,v): len(k), records))
     for i in range(1,  maxlen - 1, 1):
