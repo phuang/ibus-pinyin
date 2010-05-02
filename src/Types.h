@@ -76,7 +76,6 @@ namespace PY {
 #define PINYIN_CORRECT_UEN_TO_UN    (1U << 5)
 #define PINYIN_CORRECT_UE_TO_VE     (1U << 6)
 #define PINYIN_CORRECT_V_TO_U       (1U << 7)
-#define PINYIN_CORRECT_VE_TO_UE     PINYIN_CORRECT_V_TO_U
 #define PINYIN_CORRECT_ALL          (0x000000fe)
 
 #define PINYIN_FUZZY_C_CH           (1U << 8)

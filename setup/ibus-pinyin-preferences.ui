@@ -734,7 +734,7 @@
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="CorrectPinyin_V_U">
-                                    <property name="label">v =&gt;u, ve =&gt; ue</property>
+                                    <property name="label">v =&gt;u, ve =&gt; ue, van =&gt; uan and etc</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
