@@ -320,21 +320,40 @@ DoublePinyinEditor::isPinyin (gint i)
 inline const Pinyin *
 DoublePinyinEditor::isPinyin (gint i, gint j)
 {
-    const Pinyin *pinyin = NULL;
+    const Pinyin *pinyin;
     gint sheng = ID_TO_SHENG (i);
     const gint *yun = ID_TO_YUNS (j);
 
     if (sheng == PINYIN_ID_VOID || yun[0] == PINYIN_ID_VOID)
-        return pinyin;
+        return NULL;
 
     if (sheng == PINYIN_ID_ZERO && yun[0] == PINYIN_ID_ZERO)
-        return pinyin;
+        return NULL;
+
+    if (yun[1] == PINYIN_ID_VOID) {
+        return PinyinParser::isPinyin (sheng, yun[0],
+                        Config::option () & (PINYIN_FUZZY_ALL | PINYIN_CORRECT_V_TO_U));
+    }
 
     pinyin = PinyinParser::isPinyin (sheng, yun[0],
-                        Config::option () & PINYIN_FUZZY_ALL);
-    if (pinyin == NULL && yun[1] != PINYIN_ID_VOID)
+                    Config::option () & (PINYIN_FUZZY_ALL));
+    if (pinyin == NULL)
         pinyin = PinyinParser::isPinyin (sheng, yun[1],
-                        Config::option () & PINYIN_FUZZY_ALL);
+                        Config::option () & (PINYIN_FUZZY_ALL));
+    if (pinyin != NULL)
+        return pinyin;
+
+    /* if sheng == j q x y and yun == v, try to correct v to u */
+    switch (sheng) {
+    case PINYIN_ID_J:
+    case PINYIN_ID_Q:
+    case PINYIN_ID_X:
+    case PINYIN_ID_Y:
+        if (yun[0] == PINYIN_ID_V || yun[1] == PINYIN_ID_V) {
+            pinyin = PinyinParser::isPinyin (sheng, PINYIN_ID_V,
+                            Config::option () & (PINYIN_FUZZY_ALL | PINYIN_CORRECT_ALL));
+        }
+    }
     return pinyin;
 }
 

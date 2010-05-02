@@ -157,7 +157,7 @@ class PreferencesDialog:
             ("CorrectPinyin_UEI_UI", True),
             ("CorrectPinyin_UEN_UN", True),
             ("CorrectPinyin_UE_VE", True),
-            ("CorrectPinyin_VE_UE", True),
+            ("CorrectPinyin_V_U", True),
         ]
 
         def __correct_pinyin_toggled_cb(widget):

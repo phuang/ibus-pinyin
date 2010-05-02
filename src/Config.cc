@@ -61,6 +61,7 @@ static const struct {
     { std::string ("CorrectPinyin_UEI_UI"),   PINYIN_CORRECT_UEI_TO_UI,   TRUE },
     { std::string ("CorrectPinyin_UEN_UN"),   PINYIN_CORRECT_UEN_TO_UN,   TRUE },
     { std::string ("CorrectPinyin_UE_VE"),    PINYIN_CORRECT_UE_TO_VE,    TRUE },
+    { std::string ("CorrectPinyin_V_U"),      PINYIN_CORRECT_V_TO_U,      TRUE },
     { std::string ("CorrectPinyin_VE_UE"),    PINYIN_CORRECT_VE_TO_UE,    TRUE },
     /* fuzzy pinyin */
     { std::string ("FuzzyPinyin_C_CH"),      PINYIN_FUZZY_C_CH,  FALSE },

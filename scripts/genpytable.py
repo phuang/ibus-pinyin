@@ -16,6 +16,7 @@ shengmu_list.remove("")
 shengmu_list.sort()
 
 auto_correct = [
+    # "correct", "wrong"
     ("ng", "gn"),
     ("ng", "mg"),
     ("iu", "iou"),
@@ -23,6 +24,14 @@ auto_correct = [
     ("un", "uen"),
     ("ue", "ve"),
     ("ve", "ue")]
+
+auto_correct_ext = [
+    # "correct", "wrong", flag
+    ("ju", "jv", "PINYIN_CORRECT_V_TO_U"),
+    ("qu", "qv", "PINYIN_CORRECT_V_TO_U"),
+    ("xu", "xv", "PINYIN_CORRECT_V_TO_U"),
+    ("yu", "yv", "PINYIN_CORRECT_V_TO_U"),
+]
 
 fuzzy_shengmu = [
     ("c", "ch"),
@@ -114,6 +123,10 @@ def get_pinyin():
                 wp = p.replace(c, w)
                 s, y = get_sheng_yun(p)
                 yield wp, s, y, len(wp), [flag]
+
+    for c, w, flag in auto_correct_ext:
+        s, y = get_sheng_yun(c)
+        yield w, s, y, len(w), [flag]
 
     for s1, s2 in fuzzy_shengmu:
         flag = "PINYIN_FUZZY_%s_%s" % (s1.upper(), s2.upper())
@@ -291,7 +304,8 @@ def get_max_freq_1(db, p1):
 
 def compaired_special():
     import sqlite3
-    db = sqlite3.connect("main.db")
+    db = sqlite3.connect("open-phrase.db")
+    # db = sqlite3.connect("main.db")
 
     for p1, p2, p3, p4 in get_all_special():
         if p3 not in pinyin_list or p4 not in pinyin_list:
