@@ -297,7 +297,8 @@ static const gint double_pinyin_pyjj_yun[][2] = {
 #define DOUBLE_PINYIN_MSPY  (0)
 #define DOUBLE_PINYIN_ZRM   (1)
 #define DOUBLE_PINYIN_ABC   (2)
-#define DOUBLE_PINYIN_PYJJ  (3)
+#define DOUBLE_PINYIN_ZGPY  (3)
+#define DOUBLE_PINYIN_PYJJ  (4)
 
 static const struct {
     const gint  (&sheng)[27];
