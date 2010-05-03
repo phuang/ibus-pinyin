@@ -1,4 +1,5 @@
 /* vim:set et sts=4: */
+
 #include <cstring>
 #include <cstdlib>
 #include <glib.h>
@@ -208,7 +209,8 @@ PinyinParser::parse (const String   &pinyin,
     return p - (const gchar *)pinyin;
 }
 
-static const gchar *id_map[] = {
+static const gchar * const
+id_map[] = {
     "", "b", "c", "ch",
     "d", "f", "g", "h",
     "j", "k", "l", "m",
@@ -221,17 +223,35 @@ static const gchar *id_map[] = {
     "ie", "in", "ing", "iong", "iu",
     "o", "ong", "ou",
     "u", "ua", "uai", "uan", "uang",
-    "ue", "ui", "un", "uo", "v"
+    0, /* it should be ue or ve */
+    "ui", "un", "uo", "v"
 };
 
 const Pinyin *
 PinyinParser::isPinyin (gint sheng, gint yun, guint option)
 {
     const Pinyin *result;
-    gchar buf[8];
+    gchar buf[16];
 
-    g_strlcpy (buf, id_map[sheng], sizeof (buf));
-    g_strlcat (buf, id_map[yun], sizeof (buf));
+    std::strcpy (buf, id_map[sheng]);
+
+    if (yun == PINYIN_ID_UE) {
+        /* append ue or ve base on sheng */
+        switch (sheng) {
+        case PINYIN_ID_J:
+        case PINYIN_ID_Q:
+        case PINYIN_ID_X:
+        case PINYIN_ID_Y:
+            std::strcat (buf, "ue");
+            break;
+        default:
+            std::strcat (buf, "ve");
+            break;
+        }
+    }
+    else {
+        std::strcat (buf, id_map[yun]);
+    }
 
     result = (const Pinyin *) bsearch (buf, pinyin_table, G_N_ELEMENTS (pinyin_table),
                                             sizeof (Pinyin), py_cmp);

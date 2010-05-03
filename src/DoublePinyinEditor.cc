@@ -344,17 +344,22 @@ DoublePinyinEditor::isPinyin (gint i, gint j)
         return pinyin;
 
     /* if sheng == j q x y and yun == v, try to correct v to u */
+    if ((Config::option () & PINYIN_CORRECT_V_TO_U) == 0)
+        return NULL;
+
+    if (yun[0] != PINYIN_ID_V && yun[1] != PINYIN_ID_V)
+        return NULL;
+
     switch (sheng) {
     case PINYIN_ID_J:
     case PINYIN_ID_Q:
     case PINYIN_ID_X:
     case PINYIN_ID_Y:
-        if (yun[0] == PINYIN_ID_V || yun[1] == PINYIN_ID_V) {
-            pinyin = PinyinParser::isPinyin (sheng, PINYIN_ID_V,
-                            Config::option () & (PINYIN_FUZZY_ALL | PINYIN_CORRECT_ALL));
-        }
+        return PinyinParser::isPinyin (sheng, PINYIN_ID_V,
+                            Config::option () & (PINYIN_FUZZY_ALL | PINYIN_CORRECT_V_TO_U));
+    default:
+        return NULL;
     }
-    return pinyin;
 }
 
 inline gboolean
