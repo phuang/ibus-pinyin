@@ -3,6 +3,13 @@
 #define __PY_EXT_EDITOR__
 
 #include <glib.h>
+extern "C" {
+#include <lua.h>
+#include <lualib.h>
+#include <lauxlib.h>
+#include "lua-plugin.h"
+}
+#include <string>
 #include "Editor.h"
 
 namespace PY {
@@ -20,7 +27,15 @@ public:
     virtual void reset (void);
     virtual void candidateClicked (guint index, guint button, guint state);
 
+    int load_lua_script(std::string filename);
+    void reset_lua_state();
+
 private:
+    Pointer<IBusEnginePlugin> m_lua_plugin;
+    lua_command_t * m_current_command;
+    std::string m_input;
+
+    LookupTable m_lookup_table;
 };
 
 };
