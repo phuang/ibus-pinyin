@@ -27,12 +27,14 @@ public:
     virtual void reset (void);
     virtual void candidateClicked (guint index, guint button, guint state);
 
-    int load_lua_script(std::string filename);
-    void reset_lua_state();
+    int loadLuaScript(std::string filename);
+    void resetLuaState();
 
 private:
+    bool updateStateFromInput();
+
     Pointer<IBusEnginePlugin> m_lua_plugin;
-    lua_command_t * m_current_command;
+
     std::string m_input;
 
     LookupTable m_lookup_table;
