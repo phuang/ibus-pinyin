@@ -38,9 +38,18 @@ private:
     bool fillCommandCandidates(std::string prefix);
     bool fillCommand(std::string command_name, const char * argument);
 
+    /* Auxiliary functions for lookup table */
+    void clearLookupTable();
+    void sendLookupTable();
+
+    void updatePreeditText();
+    void updateAuxiliaryText();
+
     Pointer<IBusEnginePlugin> m_lua_plugin;
 
     std::string m_input;
+    std::string m_preedit_text;
+    std::string m_auxiliary_text;
 
     LookupTable m_lookup_table;
 };

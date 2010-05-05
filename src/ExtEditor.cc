@@ -71,12 +71,6 @@ ExtEditor::candidateClicked (guint index, guint button, guint state)
 }
 
 bool
-ExtEditor::fillCommandCandidates()
-{
-    return true;
-}
-
-bool
 ExtEditor::updateStateFromInput()
 {
     /* Do parse and candidates update here. */
@@ -89,6 +83,48 @@ ExtEditor::updateStateFromInput()
      *      dispatch to fillCommand(std::string, const char * argument).
      */
     return true;
+}
+
+bool
+ExtEditor::fillCommandCandidates()
+{
+    clearLookupTable();
+
+    /* fill Candidates here. */
+    const GArray * commands = ibus_engine_plugin_get_available_commands(m_lua_plugin);
+    for ( int i = 0; i < commands->len; ++i){
+        lua_command_t * command = &g_array_index(commands, lua_command_t, i);
+        m_lookup_table.appendLabel(Text(command->command_name));
+        m_lookup_table.appendCandidate(Text(command->description));
+    }
+
+    sendLookupTable();
+    return true;
+}
+
+bool
+ExtEditor::fillCommandCandidates(std::string prefix)
+{
+    return true;
+}
+
+void
+ExtEditor::clearLookupTable()
+{
+    m_lookup_table.clear ();
+    m_lookup_table.setPageSize (Config::pageSize ());
+    m_lookup_table.setOrientation (Config::orientation ());
+}
+
+void
+ExtEditor::sendLookupTable()
+{
+    if (m_lookup_table.size ()) {
+        Editor::updateLookupTable (m_lookup_table, TRUE);
+    }
+    else {
+        hideLookupTable ();
+    }
 }
 
 };
