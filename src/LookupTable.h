@@ -33,6 +33,10 @@ public:
         ibus_lookup_table_append_candidate (*this, text);
     }
 
+    void appendLabel (IBusText *text) {
+        ibus_lookup_table_append_label (*this, text);
+    }
+
     operator IBusLookupTable * (void) const {
         return get<IBusLookupTable> ();
     }
