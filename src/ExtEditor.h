@@ -33,6 +33,11 @@ public:
 private:
     bool updateStateFromInput();
 
+    /* Fill lookup table, and update preedit string. */
+    bool fillCommandCandidates();
+    bool fillCommandCandidates(std::string prefix);
+    bool fillCommand(std::string command_name, const char * argument);
+
     Pointer<IBusEnginePlugin> m_lua_plugin;
 
     std::string m_input;

@@ -30,8 +30,9 @@ ExtEditor::resetLuaState()
 gboolean
 ExtEditor::processKeyEvent (guint keyval, guint keycode, guint modifiers)
 {
-    
-    return FALSE;
+    /* Remember the input string. */
+    /* Deal other staff with updateStateFromInput(). */
+    return false;
 }
 
 void
@@ -70,8 +71,24 @@ ExtEditor::candidateClicked (guint index, guint button, guint state)
 }
 
 bool
-ExtEditor::updateStateFromInput(){
-  return true;
+ExtEditor::fillCommandCandidates()
+{
+    return true;
+}
+
+bool
+ExtEditor::updateStateFromInput()
+{
+    /* Do parse and candidates update here. */
+    /* prefix i double check here. */
+    /* Check m_input len, and update auxiliary string meanwhile.
+     * 1. only "i", dispatch to fillCommandCandidates(void).
+     * 2. "i" with one charactor,
+     *      dispatch to fillCommandCandidates(std::string).
+     * 3. "i" with two charactor or more,
+     *      dispatch to fillCommand(std::string, const char * argument).
+     */
+    return true;
 }
 
 };
