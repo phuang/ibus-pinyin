@@ -88,9 +88,11 @@ ExtEditor::updateStateFromInput()
 bool
 ExtEditor::fillCommandCandidates()
 {
+
+    /* try to replace this with fillCommandCandidates("") call. */
     clearLookupTable();
 
-    /* fill Candidates here. */
+    /* fill candidates here. */
     const GArray * commands = ibus_engine_plugin_get_available_commands(m_lua_plugin);
     for ( int i = 0; i < commands->len; ++i){
         lua_command_t * command = &g_array_index(commands, lua_command_t, i);
@@ -105,6 +107,21 @@ ExtEditor::fillCommandCandidates()
 bool
 ExtEditor::fillCommandCandidates(std::string prefix)
 {
+    clearLookupTable();
+
+    /* fill candidates here. */
+    int len = prefix.length();
+    const char * prefix_str = prefix.c_str();
+    const GArray * commands = ibus_engine_plugin_get_available_commands(m_lua_plugin);
+    for ( int i = 0; i < commands->len; ++i){
+        lua_command_t * command = &g_array_index(commands, lua_command_t, i);
+        if ( strncmp(prefix_str, command->command_name, len) == 0){
+            m_lookup_table.appendLabel(Text(command->command_name));
+            m_lookup_table.appendCandidate(Text(command->description));
+        }
+    }
+
+    sendLookupTable();
     return true;
 }
 
