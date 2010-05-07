@@ -150,7 +150,7 @@ ExtEditor::fillCommandCandidates(std::string prefix)
 
 bool
 ExtEditor::fillCommand(std::string command_name, const char * argument){
-    lua_command_t * command = ibus_engine_plugin_lookup_command(m_lua_plugin, command_name.c_str());
+    const lua_command_t * command = ibus_engine_plugin_lookup_command(m_lua_plugin, command_name.c_str());
     if ( NULL == command )
         return false;
 
