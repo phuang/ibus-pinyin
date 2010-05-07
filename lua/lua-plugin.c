@@ -155,7 +155,7 @@ gboolean ibus_engine_plugin_add_command(IBusEnginePlugin * plugin, lua_command_t
   return TRUE;
 }
 
-lua_command_t * ibus_engine_plugin_lookup_command(IBusEnginePlugin * plugin, const char * command_name){
+const lua_command_t * ibus_engine_plugin_lookup_command(IBusEnginePlugin * plugin, const char * command_name){
   IBusEnginePluginPrivate * priv = IBUS_ENGINE_PLUGIN_GET_PRIVATE(plugin);
   GArray * lua_commands = priv->lua_commands;
   lua_command_t lookup_command = {.command_name = command_name, };
@@ -202,8 +202,12 @@ int ibus_engine_plugin_call(IBusEnginePlugin * plugin, const char * lua_function
 /**
  * get a candidate from lua return value.
  */
-static const char * ibus_engine_plugin_get_candidate(lua_State * L){
-  const char * suggest, * help, * candidate = NULL;
+static const lua_command_candidate_t * ibus_engine_plugin_get_candidate(lua_State * L){
+
+  const char * suggest, * help, * content = NULL;
+  lua_command_candidate_t * candidate = malloc(sizeof(lua_command_candidate_t));
+
+  memset(candidate, 0, sizeof(lua_command_candidate_t));
 
   int type = lua_type(L, -1);
 
@@ -214,10 +218,12 @@ static const char * ibus_engine_plugin_get_candidate(lua_State * L){
     lua_gettable(L, -3);
     suggest = lua_tostring(L, -2);
     help = lua_tostring(L, -1);
-    candidate = g_strdup_printf("%s [%s]", suggest, help);
+    candidate->suggest = g_strdup(suggest);
+    candidate->help = g_strdup(help);
     lua_pop(L, 2);
   } else if (LUA_TNUMBER == type || LUA_TBOOLEAN == type || LUA_TSTRING == type) {
-    candidate = g_strdup(lua_tostring(L, -1));
+    content = lua_tostring(L, -1);
+    candidate->content = g_strdup(content);
   }
 
   return candidate;
@@ -226,23 +232,25 @@ static const char * ibus_engine_plugin_get_candidate(lua_State * L){
 /**
  * retrieve the retval string value. (value has been copied.)
  */
-const char * ibus_engine_plugin_get_retval(IBusEnginePlugin * plugin){
+const lua_command_candidate_t * ibus_engine_plugin_get_retval(IBusEnginePlugin * plugin){
   IBusEnginePluginPrivate * priv = IBUS_ENGINE_PLUGIN_GET_PRIVATE(plugin);
-  const char * result = NULL; int type;
+  lua_command_candidate_t * result = NULL; int type;
   lua_State * L = priv->L;
 
   type = lua_type(L ,-1);
   if ( LUA_TNUMBER == type || LUA_TBOOLEAN == type || LUA_TSTRING == type) {
-    result = g_strdup(lua_tostring(L, -1));
+    result = malloc(sizeof(lua_command_candidate_t));
+    memset(result, 0, sizeof(lua_command_candidate_t));
+    result->content = g_strdup(lua_tostring(L, -1));
     lua_pop(L, 1);
   } else if( LUA_TTABLE == type ){
     lua_pushinteger(L, 1);
     lua_gettable(L, -2);
-    result = ibus_engine_plugin_get_candidate(L);
+    result = (lua_command_candidate_t *)ibus_engine_plugin_get_candidate(L);
     lua_pop(L, 2);
   }
 
-  return result;
+  return (const lua_command_candidate_t *)result;
 }
 
 /**
@@ -252,13 +260,13 @@ GArray * ibus_engine_plugin_get_retvals(IBusEnginePlugin * plugin){
   IBusEnginePluginPrivate * priv = IBUS_ENGINE_PLUGIN_GET_PRIVATE(plugin);
   lua_State * L = priv->L; int elem_num; int type;
   GArray * result =  NULL; int i;
-  const char * candidate;
+  const lua_command_candidate_t * candidate = NULL;
 
   type = lua_type(L, -1);
   if ( LUA_TTABLE != type )
     return result;
 
-  result = g_array_new(TRUE, TRUE, sizeof(char *));
+  result = g_array_new(TRUE, TRUE, sizeof(lua_command_candidate_t *));
   elem_num = lua_objlen(L, -1);
 
   for ( i = 0; i < elem_num; ++i ){
@@ -273,4 +281,10 @@ GArray * ibus_engine_plugin_get_retvals(IBusEnginePlugin * plugin){
 
   lua_pop(L, 1);
   return result;
+}
+
+void ibus_engine_plugin_free(lua_command_candidate_t * candidate){
+  g_free((gpointer)candidate->content);
+  g_free((gpointer)candidate->suggest);
+  g_free((gpointer)candidate->help);
 }

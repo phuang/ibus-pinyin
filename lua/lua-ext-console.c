@@ -34,15 +34,20 @@ void list_all_commands(IBusEnginePlugin * plugin){
 
 int print_lua_call_result(IBusEnginePlugin * plugin, size_t num){
   if ( 1 == num ) {
-    const char * result = ibus_engine_plugin_get_retval(plugin);
-    printf("result: %s.\n", result);
+    const lua_command_candidate_t * result = ibus_engine_plugin_get_retval(plugin);
+    if (result->content)
+      printf("result: %s.\n", result->content);
   }
   if ( num > 1) {
     GArray * results = ibus_engine_plugin_get_retvals(plugin);
     size_t i;
     for ( i = 0; i < results->len; ++i) {
-      const char * result = g_array_index(results, const char *, i);
-      printf("%d.%s >\t", i, result);
+      const lua_command_candidate_t * result = g_array_index(results, const lua_command_candidate_t *, i);
+      if (result->content)
+          printf("%d.%s >\t", i, result->content);
+      else{
+          printf("%d. %s [%s]\t", i, result->suggest, result->help);
+      }
     }
     printf("\n");
   }
