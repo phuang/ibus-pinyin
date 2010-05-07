@@ -14,6 +14,15 @@ extern "C" {
 
 namespace PY {
 
+enum ExtEditorLabelMode{
+    LABEL_NONE,
+    LABEL_LIST_COMMANDS,
+    LABEL_LIST_NONE,
+    LABEL_LIST_DIGIT,
+    LABEL_LIST_ALPHA,
+    LABEL_LAST,
+};
+
 class ExtEditor : public Editor {
 public:
     ExtEditor (PinyinProperties &props);

@@ -2,6 +2,10 @@
 
 namespace PY {
 
+/* Write digit/alpha/none Label generator here.
+ * foreach (results): 1, from get_retval; 2..n from get_retvals.
+ */
+
 ExtEditor::ExtEditor (PinyinProperties & props)
     : Editor (props)
 {
@@ -30,9 +34,28 @@ ExtEditor::resetLuaState()
 gboolean
 ExtEditor::processKeyEvent (guint keyval, guint keycode, guint modifiers)
 {
+    modifiers &= (IBUS_SHIFT_MASK |
+                  IBUS_CONTROL_MASK |
+                  IBUS_MOD1_MASK |
+                  IBUS_SUPER_MASK |
+                  IBUS_HYPER_MASK |
+                  IBUS_META_MASK |
+                  IBUS_LOCK_MASK);
+    if ( modifiers )
+        return FALSE;
+
     /* Remember the input string. */
+    switch (keyval){
+    case IBUS_a ... IBUS_z:
+        break;
+    case IBUS_0 ... IBUS_9:
+    case IBUS_KP_0 ... IBUS_KP_9:
+        break;
+    }
+
     /* Deal other staff with updateStateFromInput(). */
-    return false;
+    updateStateFromInput();
+    return FALSE;
 }
 
 void
@@ -124,6 +147,21 @@ ExtEditor::fillCommandCandidates(std::string prefix)
     sendLookupTable();
     return true;
 }
+
+bool
+ExtEditor::fillCommand(std::string command_name, const char * argument){
+    lua_command_t * command = ibus_engine_plugin_lookup_command(m_lua_plugin, command_name.c_str());
+    if ( NULL == command )
+        return false;
+
+    int result_num = ibus_engine_plugin_call(m_lua_plugin, command->lua_function_name, argument);
+
+
+        
+
+    return true;
+}
+
 
 void
 ExtEditor::clearLookupTable()
