@@ -54,7 +54,7 @@ int print_lua_call_result(IBusEnginePlugin * plugin, size_t num){
 }
 
 int do_lua_call(IBusEnginePlugin * plugin, const char * command_name, const char * argument){
-  lua_command_t * command;
+  const lua_command_t * command;
   size_t num;
 
   g_return_if_fail(2 == strlen(command_name));

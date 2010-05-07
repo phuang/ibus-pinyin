@@ -22,8 +22,8 @@ typedef struct{
 } lua_command_candidate_t;
 
 typedef struct{
-  char * lua_function_name;
-  char * description;
+  const char * lua_function_name;
+  const char * description;
   /*< private, skip it, and register it into Special Table directly with * wildcard. >*/
   /*
    * list of input_trigger_strings;
