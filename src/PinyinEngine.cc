@@ -9,7 +9,6 @@
 #include "DoublePinyinEditor.h"
 #include "PinyinEngine.h"
 #include "HalfFullConverter.h"
-#include "SimpTradConverter.h"
 #include "Config.h"
 #include "Text.h"
 #include "Util.h"
