@@ -7,7 +7,8 @@ namespace PY {
  */
 
 ExtEditor::ExtEditor (PinyinProperties & props)
-    : Editor (props)
+    : Editor (props),
+      m_mode(LABEL_NONE)
 {
     m_lua_plugin = ibus_engine_plugin_new();
 
@@ -44,15 +45,63 @@ ExtEditor::processKeyEvent (guint keyval, guint keycode, guint modifiers)
     if ( modifiers )
         return FALSE;
 
+    //handle backspace here.
+    //handle page/cursor up/down here.
+    //handle label key select here.
+
     /* Remember the input string. */
-    switch (keyval){
-    case IBUS_a ... IBUS_z:
+    switch(m_input.length()){
+    case 0: //Empty input string.
+        {
+            g_return_val_if_fail( 'i' == keyval, FALSE);
+            if ( 'i' == keyval )
+                m_input += keyval;
+            //move to updateStateFromInput.
+            m_mode = LABEL_NONE;
+        }
         break;
-    case IBUS_0 ... IBUS_9:
-    case IBUS_KP_0 ... IBUS_KP_9:
+    case 1 ... 2: // Only contains 'i' in input string.
+        {      
+            g_return_val_if_fail( 'i' == m_input[0], FALSE);
+            if ( isalnum(keyval) )
+                m_input += keyval;
+            //move to updateStateFromInput.
+            if ( isalpha(m_input[1]))
+                m_mode = LABEL_LIST_COMMANDS;
+            else if ( isdigit(m_input[1]) ){
+                m_mode = LABEL_LIST_NUMBERS;
+            }
+        }
+        break;
+    default: //Here is the appended argment.
+        {
+            g_return_val_if_fail( 'i' == m_input[0], FALSE);
+            if (isprint(keyval))
+                m_input += keyval;
+
+            //move to updateStateFromInput.
+            if ( isalpha(m_input[1])) {
+                std::string command_name = m_input.substr(1,2);
+
+                const lua_command_t * command = ibus_engine_plugin_lookup_command(m_lua_plugin, command_name.c_str());
+                if ( NULL == command)
+                    return FALSE;
+
+                std::string label = command->leading;
+
+                if ( "digit" == label )
+                    m_mode = LABEL_LIST_DIGIT;
+                else if ( "alpha" == label )
+                    m_mode = LABEL_LIST_ALPHA;
+                else
+                    m_mode = LABEL_LIST_NONE;
+            }else if ( isdigit(m_input[1])) {
+                //Generate Chinese number in updateStateFromInput.
+                g_assert(LABEL_LIST_NUMBERS == m_mode);
+            }
+        }
         break;
     }
-
     /* Deal other staff with updateStateFromInput(). */
     updateStateFromInput();
     return FALSE;

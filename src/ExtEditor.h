@@ -16,6 +16,7 @@ namespace PY {
 
 enum ExtEditorLabelMode{
     LABEL_NONE,
+    LABEL_LIST_NUMBERS,
     LABEL_LIST_COMMANDS,
     LABEL_LIST_NONE,
     LABEL_LIST_DIGIT,
@@ -54,6 +55,7 @@ private:
     void updatePreeditText();
     void updateAuxiliaryText();
 
+    ExtEditorLabelMode m_mode;
     Pointer<IBusEnginePlugin> m_lua_plugin;
 
     std::string m_input;
