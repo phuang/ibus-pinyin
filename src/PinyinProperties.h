@@ -1,9 +1,9 @@
 #ifndef __PY_PINYIN_PROPERTIES_H_
 #define __PY_PINYIN_PROPERTIES_H_
 
-#include <ibus.h>
-#include <sigc++/sigc++.h>
 #include <libintl.h>
+#include <ibus.h>
+#include "Signal.h"
 #include "Text.h"
 #include "Property.h"
 #include "Config.h"
@@ -26,15 +26,16 @@ public:
     gboolean modeSimp (void) { return m_mode_simp; }
     PropList & properties (void) { return m_props; }
 
-    sigc::signal<void, Property &> signalUpdateProperty  (void) {
+    signal <void (Property &)> & signalUpdateProperty  (void) {
         return m_signal_update_property;
     }
 
 private:
-    sigc::signal<void, Property &> m_signal_update_property;
     void updateProperty (Property & prop) {
-        m_signal_update_property.emit (prop);
+        m_signal_update_property (prop);
     }
+
+    signal <void (Property &)> m_signal_update_property;
 
 private:
     gboolean    m_mode_chinese;

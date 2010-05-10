@@ -4,8 +4,6 @@
 
 namespace PY {
 
-Database PhraseEditor::m_database;
-
 PhraseEditor::PhraseEditor (PinyinProperties & props)
     : m_candidates (32),
       m_selected_phrases (8),
@@ -24,33 +22,14 @@ PhraseEditor::~PhraseEditor (void)
 gboolean
 PhraseEditor::update (const PinyinArray &pinyin)
 {
-    /* the length of pinyin must not bigger than MAX_PHRASE_LEN */
-    g_assert (pinyin.length () <= MAX_PHRASE_LEN);
-#if 0
-    gboolean diff = FALSE;
-
-    if (m_cursor > pinyin.length ()) {
-        diff = TRUE;
-    }
-    else {
-        for (gint i = m_cursor - 1; i >= 0; i--) {
-            if (m_pinyin[i] != pinyin[i]) {
-                diff = TRUE;
-                break;
-            }
-        }
-    }
-
-    if (diff == FALSE){
-        return FALSE;
-    }
-#endif
+    /* the size of pinyin must not bigger than MAX_PHRASE_LEN */
+    g_assert (pinyin.size () <= MAX_PHRASE_LEN);
 
     m_pinyin = pinyin;
     m_cursor = 0;
 
     /* FIXME, should not remove all phrases1 */
-    m_selected_phrases.removeAll ();
+    m_selected_phrases.clear ();
     m_selected_string.truncate (0);
     updateCandidates ();
     return TRUE;
@@ -59,7 +38,7 @@ PhraseEditor::update (const PinyinArray &pinyin)
 gboolean
 PhraseEditor::resetCandidate (guint i)
 {
-    m_database.remove (m_candidates[i]);
+    Database::instance ().remove (m_candidates[i]);
 
     updateCandidates ();
     return TRUE;
@@ -68,19 +47,21 @@ PhraseEditor::resetCandidate (guint i)
 gboolean
 PhraseEditor::selectCandidate (guint i)
 {
-    if (G_UNLIKELY (i >= m_candidates.length ()))
+    if (G_UNLIKELY (i >= m_candidates.size ()))
         return FALSE;
 
     if (G_LIKELY (i == 0)) {
-        m_selected_phrases << m_candidate_0_phrases;
+        m_selected_phrases.insert (m_selected_phrases.end (),
+                                   m_candidate_0_phrases.begin (),
+                                   m_candidate_0_phrases.end ());
         if (G_LIKELY (m_props.modeSimp ()))
             m_selected_string << m_candidates[0].phrase;
         else
             SimpTradConverter::simpToTrad (m_candidates[0].phrase, m_selected_string);
-        m_cursor = m_pinyin.length ();
+        m_cursor = m_pinyin.size ();
     }
     else {
-        m_selected_phrases << m_candidates[i];
+        m_selected_phrases.push_back (m_candidates[i]);
         if (G_LIKELY (m_props.modeSimp ()))
             m_selected_string << m_candidates[i].phrase;
         else
@@ -95,29 +76,26 @@ PhraseEditor::selectCandidate (guint i)
 void
 PhraseEditor::updateCandidates (void)
 {
-    gboolean retval;
-
-    m_candidates.removeAll ();
+    m_candidates.clear ();
+    m_query.reset ();
     updateTheFirstCandidate ();
 
-    if (G_UNLIKELY (m_pinyin.length () == 0))
+    if (G_UNLIKELY (m_pinyin.size () == 0))
         return;
 
-    if (G_LIKELY (m_candidate_0_phrases.length () > 1)) {
-        m_candidates.resize (1);
-        m_candidates[0].reset ();
-        for (guint i = 0; i < m_candidate_0_phrases.length (); i++)
-            m_candidates[0] += m_candidate_0_phrases[i];
+    if (G_LIKELY (m_candidate_0_phrases.size () > 1)) {
+        Phrase phrase;
+        phrase.reset ();
+        for (guint i = 0; i < m_candidate_0_phrases.size (); i++)
+            phrase += m_candidate_0_phrases[i];
+        m_candidates.push_back (phrase);
     }
-    guint len = m_pinyin.length () - m_cursor;
-    for (; len > 0; len--) {
-        retval = m_database.query (m_pinyin,
-                                   m_cursor,
-                                   len,
-                                   -1,
-                                   Config::option (),
-                                   m_candidates);
-    }
+
+    m_query.reset (new Query (m_pinyin,
+                              m_cursor,
+                              m_pinyin.size () - m_cursor,
+                              Config::option ()));
+    fillCandidates ();
 }
 
 void
@@ -125,32 +103,24 @@ PhraseEditor::updateTheFirstCandidate (void)
 {
     guint begin;
     guint end;
-    gboolean retval;
 
-    m_candidate_0_phrases.removeAll ();
+    m_candidate_0_phrases.clear ();
 
-    if (G_UNLIKELY (m_pinyin.length () == 0))
+    if (G_UNLIKELY (m_pinyin.size () == 0))
         return;
 
     begin = m_cursor;
-    end = m_pinyin.length ();
+    end = m_pinyin.size ();
 
     while (begin != end) {
-        for (guint i = end; i > begin; i--) {
-            retval = m_database.query (m_pinyin,
-                                       begin,
-                                       i - begin,
-                                       1,
-                                       Config::option (),
-                                       m_candidate_0_phrases);
-            if (G_LIKELY (retval > 0)) {
-                begin = i;
-                break;
-            }
-        }
-        if (retval <= 0)
-            g_debug ("%s", m_pinyin[begin]->text);
-        g_assert (retval > 0);
+        gint ret;
+        Query query (m_pinyin,
+                     begin,
+                     end - begin,
+                     Config::option ());
+        ret = query.fill (m_candidate_0_phrases, 1);
+        g_assert (ret == 1);
+        begin += m_candidate_0_phrases.back ().len;
     }
 }
 

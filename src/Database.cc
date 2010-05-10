@@ -1,10 +1,10 @@
 /* vim:set et sts=4: */
-#include <string.h>
+#include <cstring>
+#include <cstdio>
+#include <cstdlib>
+#include <cstdarg>
 #include <glib.h>
 #include <sqlite3.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdarg.h>
 #include "Database.h"
 #include "Util.h"
 
@@ -20,6 +20,153 @@ namespace PY {
 
 #define DB_PREFETCH_LEN     (6)
 
+Database Database::m_instance;
+
+class Conditions : public std::vector<std::string> {
+public:
+    Conditions (void) : std::vector<std::string> (1) {}
+
+    void double_ (void) {
+        gint i = size ();
+        do {
+            push_back (at (--i));
+        } while (i > 0);
+    }
+
+    void triple (void) {
+        gint i = size ();
+        do {
+            const std::string & value = std::vector<std::string>::at (--i);
+            push_back (value);
+            push_back (value);
+        } while (i > 0);
+    }
+
+    void appendVPrintf (gint begin, gint end, const gchar *fmt, va_list args) {
+        gchar str[64];
+        g_vsnprintf (str, sizeof(str), fmt, args);
+        for (gint i = begin; i < end; i++) {
+            at (i) += str;
+        }
+    }
+
+    void appendPrintf (gint begin, gint end, const gchar *fmt, ...) {
+        va_list args;
+        va_start (args, fmt);
+        appendVPrintf (begin, end, fmt, args);
+        va_end (args);
+    }
+};
+
+class SQLStmt {
+public:
+    SQLStmt (sqlite3 *db)
+        : m_db (db), m_stmt (NULL) {
+        g_assert (m_db != NULL);
+    }
+
+    ~SQLStmt () {
+        if (m_stmt != NULL) {
+            if (sqlite3_finalize (m_stmt) != SQLITE_OK) {
+                g_warning ("destroy sqlite stmt failed!");
+            }
+        }
+    }
+
+    gboolean prepare (const String &sql) {
+        if (sqlite3_prepare (m_db,
+                             sql.c_str (),
+                             sql.size (),
+                             &m_stmt,
+                             NULL) != SQLITE_OK) {
+            g_warning ("parse sql failed!\n %s", sql.c_str ());
+            return FALSE;
+        }
+
+        return TRUE;
+    }
+
+    gboolean step (void) {
+        switch (sqlite3_step (m_stmt)) {
+        case SQLITE_ROW:
+            return TRUE;
+        case SQLITE_DONE:
+            return FALSE;
+        default:
+            g_warning ("sqlites step error!");
+            return FALSE;
+        }
+    }
+
+    const gchar *columnText (guint col) {
+        return (const gchar *) sqlite3_column_text (m_stmt, col);
+    }
+
+    gint columnInt (guint col) {
+        return sqlite3_column_int (m_stmt, col);
+    }
+
+private:
+    sqlite3 *m_db;
+    sqlite3_stmt *m_stmt;
+};
+
+Query::Query (const PinyinArray    & pinyin,
+              guint                  pinyin_begin,
+              guint                  pinyin_len,
+              guint                  option)
+    : m_pinyin (pinyin),
+      m_pinyin_begin (pinyin_begin),
+      m_pinyin_len (pinyin_len),
+      m_option (option)
+{
+    g_assert (m_pinyin.size () >= pinyin_begin + pinyin_len);
+}
+
+Query::~Query (void)
+{
+}
+
+gint
+Query::fill (PhraseArray &phrases, gint count)
+{
+    gint row = 0;
+
+    while (m_pinyin_len > 0) {
+        if (G_LIKELY (m_stmt.get () == NULL)) {
+            m_stmt = Database::instance ().query (m_pinyin, m_pinyin_begin, m_pinyin_len, -1, m_option);
+            g_assert (m_stmt.get () != NULL);
+        }
+
+        while (m_stmt->step ()) {
+            Phrase phrase;
+
+            g_strlcpy (phrase.phrase,
+                       m_stmt->columnText (DB_COLUMN_PHRASE),
+                       sizeof (phrase.phrase));
+            phrase.freq = m_stmt->columnInt (DB_COLUMN_FREQ);
+            phrase.user_freq = m_stmt->columnInt (DB_COLUMN_USER_FREQ);
+            phrase.len = m_pinyin_len;
+
+            for (guint i = 0, column = DB_COLUMN_S0; i < m_pinyin_len; i++) {
+                phrase.pinyin_id[i][0] = m_stmt->columnInt (column++);
+                phrase.pinyin_id[i][1] = m_stmt->columnInt (column++);
+            }
+
+            phrases.push_back (phrase);
+            row ++;
+            if (G_UNLIKELY (row == count)) {
+                return row;
+            }
+        }
+
+        m_stmt.reset ();
+        m_pinyin_len --;
+    }
+
+    return row;
+}
+
 Database::Database (void)
     : m_db (NULL)
 {
@@ -29,8 +176,9 @@ Database::Database (void)
 Database::~Database (void)
 {
     if (m_db) {
-        sqlite3_close (m_db);
-        m_db = NULL;
+        if (sqlite3_close (m_db) != SQLITE_OK) {
+            g_warning ("close sqlite database failed!");
+        }
     }
 }
 
@@ -39,7 +187,7 @@ Database::executeSQL (const gchar *sql)
 {
     gchar *errmsg;
     if (sqlite3_exec (m_db, sql, NULL, NULL, &errmsg) != SQLITE_OK) {
-        g_debug ("%s: %s", errmsg, sql);
+        g_warning ("%s: %s", errmsg, sql);
         sqlite3_free (errmsg);
         return FALSE;
     }
@@ -60,24 +208,25 @@ Database::init (void)
         PKGDATADIR"/db/open-phrase.db",
         PKGDATADIR"/db/android.db",
         "main.db",
-        NULL
     };
 
     guint i;
-    for (i = 0; maindb[i] != NULL; i++) {
+    for (i = 0; i < G_N_ELEMENTS (maindb); i++) {
         if (!g_file_test(maindb[i], G_FILE_TEST_IS_REGULAR))
             continue;
         if (sqlite3_open_v2 (maindb[i], &m_db,
-            SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE, NULL) == SQLITE_OK)
+            SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE, NULL) == SQLITE_OK) {
+            g_message ("Use database %s", maindb[i]);
             break;
+        }
     }
 
-    if (maindb[i] == NULL) {
+    if (i == G_N_ELEMENTS (maindb)) {
         g_warning ("can not open main database");
         goto _failed;
     }
 
-    m_sql.erase (0);
+    m_sql.clear ();
 
 #if 1
     /* Set synchronous=OFF, write user database will become much faster.
@@ -110,13 +259,13 @@ Database::init (void)
     m_buffer << G_DIR_SEPARATOR_S << "user-1.3.db";
     retval = initUserDatabase (m_buffer);
     if (!retval) {
-        g_warning ("Can not open user database %s", (const gchar *)m_buffer);
+        g_warning ("Can not open user database %s", m_buffer.c_str ());
         if (!initUserDatabase (":memory:"))
             goto _failed;
     }
 
     /* prefetch some tables */
-    prefetch ();
+    // prefetch ();
 
     return TRUE;
 
@@ -186,47 +335,14 @@ _failed:
 void
 Database::prefetch (void)
 {
-    m_sql.erase (0);
+    m_sql.clear ();
     for (guint i = 0; i < DB_PREFETCH_LEN; i++)
         m_sql << "SELECT * FROM py_phrase_" << i << ";\n";
+
+    // g_debug ("prefetching ...");
     executeSQL (m_sql);
+    // g_debug ("done");
 }
-
-gint
-Database::query (const PinyinArray &pinyin,
-                 guint              m,
-                 guint              option,
-                 PhraseArray       &result)
-{
-    gint len;
-    gint i;
-    gint row;
-    gint ret;
-
-    len = MIN (pinyin.length (), MAX_PHRASE_LEN);
-
-    row = 0;
-    for (i = len; i > 0; i--) {
-        if (m < 0) {
-            ret = query (pinyin, 0, i, -1, option, result);
-            if (ret < 0)
-                return ret;
-            row += ret;
-        }
-        else {
-            ret = query (pinyin, 0, i, m - result.length (), option, result);
-            if (ret < 0)
-                return ret;
-            row += ret;
-            if (result.length () >= m)
-                break;
-        }
-    }
-    return row;
-}
-
-
-
 
 inline static gboolean
 pinyin_option_check_sheng (guint option, gint id, gint fid)
@@ -292,25 +408,19 @@ pinyin_option_check_yun (guint option, gint id, gint fid)
     }
 }
 
-gint
+SQLStmtPtr
 Database::query (const PinyinArray &pinyin,
                  guint              pinyin_begin,
                  guint              pinyin_len,
                  gint               m,
-                 guint              option,
-                 PhraseArray       &result)
+                 guint              option)
 {
-    if (G_UNLIKELY (pinyin_begin > pinyin.length ()))
-        pinyin_begin = pinyin.length ();
-
-    if (G_UNLIKELY (pinyin_len > pinyin.length () - pinyin_begin))
-        pinyin_len = pinyin.length () - pinyin_begin;
-
-    if (G_UNLIKELY (pinyin_len > MAX_PHRASE_LEN))
-        return -1;
+    g_assert (pinyin_begin < pinyin.size ());
+    g_assert (pinyin_len <= pinyin.size () - pinyin_begin);
+    g_assert (pinyin_len <= MAX_PHRASE_LEN);
 
     /* prepare sql */
-    m_conditions.reset ();
+    Conditions conditions;
 
     for (guint i = 0; i < pinyin_len; i++) {
         const Pinyin *p;
@@ -321,129 +431,106 @@ Database::query (const PinyinArray &pinyin,
         fs2 = pinyin_option_check_sheng (option, p->sheng_id, p->fsheng_id_2);
 
         if (G_LIKELY (i > 0))
-            m_conditions.appendPrintf (0, m_conditions.length (),
+            conditions.appendPrintf (0, conditions.size (),
                                        " AND ");
 
-        if (fs1 || fs2) {
+        if (G_UNLIKELY (fs1 || fs2)) {
             if (G_LIKELY (i < DB_INDEX_SIZE)) {
                 if (fs1 && fs2 == 0) {
-                    m_conditions._double ();
-                    m_conditions.appendPrintf (0, m_conditions.length ()  >> 1,
+                    conditions.double_ ();
+                    conditions.appendPrintf (0, conditions.size ()  >> 1,
                                                "s%d=%d", i, p->sheng_id);
-                    m_conditions.appendPrintf (m_conditions.length () >> 1, m_conditions.length (),
+                    conditions.appendPrintf (conditions.size () >> 1, conditions.size (),
                                                "s%d=%d", i, p->fsheng_id);
                 }
                 else if (fs1 == 0 && fs2) {
-                    m_conditions._double ();
-                    m_conditions.appendPrintf (0, m_conditions.length ()  >> 1,
+                    conditions.double_ ();
+                    conditions.appendPrintf (0, conditions.size ()  >> 1,
                                                "s%d=%d", i, p->sheng_id);
-                    m_conditions.appendPrintf (m_conditions.length () >> 1, m_conditions.length (),
+                    conditions.appendPrintf (conditions.size () >> 1, conditions.size (),
                                                "s%d=%d", i, p->fsheng_id_2);
                 }
                 else {
-                    gint len = m_conditions.length ();
-                    m_conditions.triple ();
-                    m_conditions.appendPrintf (0, len,
+                    gint len = conditions.size ();
+                    conditions.triple ();
+                    conditions.appendPrintf (0, len,
                                                "s%d=%d", i, p->sheng_id);
-                    m_conditions.appendPrintf (len, len << 1,
+                    conditions.appendPrintf (len, len << 1,
                                                "s%d=%d", i, p->fsheng_id);
-                    m_conditions.appendPrintf (len << 1, m_conditions.length (),
+                    conditions.appendPrintf (len << 1, conditions.size (),
                                                "s%d=%d", i, p->fsheng_id_2);
                 }
             }
             else {
                 if (fs1 && fs2 == 0) {
-                    m_conditions.appendPrintf (0, m_conditions.length (),
+                    conditions.appendPrintf (0, conditions.size (),
                                                "s%d IN (%d,%d)", i, p->sheng_id, p->fsheng_id);
                 }
                 else if (fs1 == 0 && fs2) {
-                    m_conditions.appendPrintf (0, m_conditions.length (),
+                    conditions.appendPrintf (0, conditions.size (),
                                                "s%d IN (%d,%d)", i, p->sheng_id, p->fsheng_id_2);
                 }
                 else {
-                    m_conditions.appendPrintf (0, m_conditions.length (),
+                    conditions.appendPrintf (0, conditions.size (),
                                                "s%d IN (%d,%d,%d)", i, p->sheng_id, p->fsheng_id, p->fsheng_id_2);
                 }
             }
         }
         else {
-            m_conditions.appendPrintf (0, m_conditions.length (),
+            conditions.appendPrintf (0, conditions.size (),
                                        "s%d=%d", i, p->sheng_id);
         }
 
         if (p->yun_id != PINYIN_ID_ZERO) {
             if (pinyin_option_check_yun (option, p->yun_id, p->fyun_id)) {
                 if (G_LIKELY (i < DB_INDEX_SIZE)) {
-                    m_conditions._double ();
-                    m_conditions.appendPrintf (0, m_conditions.length ()  >> 1,
+                    conditions.double_ ();
+                    conditions.appendPrintf (0, conditions.size ()  >> 1,
                                                " AND y%d=%d", i, p->yun_id);
-                    m_conditions.appendPrintf (m_conditions.length () >> 1, m_conditions.length (),
+                    conditions.appendPrintf (conditions.size () >> 1, conditions.size (),
                                                " and y%d=%d", i, p->fyun_id);
                 }
                 else {
-                    m_conditions.appendPrintf (0, m_conditions.length (),
+                    conditions.appendPrintf (0, conditions.size (),
                                                " AND y%d IN (%d,%d)", i, p->yun_id, p->fyun_id);
                 }
             }
             else {
-                m_conditions.appendPrintf (0, m_conditions.length (),
+                conditions.appendPrintf (0, conditions.size (),
                                            " AND y%d=%d", i, p->yun_id);
             }
         }
     }
 
 
-    m_buffer.erase (0);
-    for (guint i = 0; i < m_conditions.length (); i++) {
+    m_buffer.clear ();
+    for (guint i = 0; i < conditions.size (); i++) {
         if (G_UNLIKELY (i == 0))
-            m_buffer << "  (" << m_conditions[i].c_str() << ")\n";
+            m_buffer << "  (" << conditions[i] << ")\n";
         else
-            m_buffer << "  OR (" << m_conditions[i].c_str() << ")\n";
+            m_buffer << "  OR (" << conditions[i] << ")\n";
     }
 
-    m_sql.printf ("SELECT * FROM ("
-                  "SELECT 0 AS user_freq, * FROM main.py_phrase_%d WHERE %s UNION ALL "
-                  "SELECT * FROM userdb.py_phrase_%d WHERE %s) "
-                  "GROUP BY phrase ORDER BY user_freq DESC, freq DESC ",
-                  pinyin_len - 1, (const gchar *) m_buffer, pinyin_len - 1, (const gchar *)m_buffer);
+    m_sql.clear ();
+    gint id = pinyin_len - 1;
+    m_sql << "SELECT * FROM ("
+                "SELECT 0 AS user_freq, * FROM main.py_phrase_" << id << " WHERE " << m_buffer<< " UNION ALL "
+                "SELECT * FROM userdb.py_phrase_" << id << " WHERE " << m_buffer << ") "
+                    "GROUP BY phrase ORDER BY user_freq DESC, freq DESC";
     if (m > 0)
-        m_sql << "LIMIT " << m;
+        m_sql << " LIMIT " << m;
 #if 0
-    g_debug ("sql =\n%s", (const gchar *)m_sql);
+    g_debug ("sql =\n%s", m_sql.c_str ());
 #endif
 
     /* query database */
-    sqlite3_stmt *stmt;
-    if (sqlite3_prepare (m_db,
-                         (const gchar *) m_sql,
-                         -1,
-                         &stmt,
-                         NULL) != SQLITE_OK) {
-        g_debug ("parse sql failed!\n %s", (const gchar *)m_sql);
-        return -1;
+    SQLStmtPtr stmt (new SQLStmt (m_db));
+
+    if (!stmt->prepare (m_sql)) {
+        stmt.reset ();
     }
 
-    gint row = 0;
-    while (sqlite3_step (stmt) == SQLITE_ROW) {
-        Phrase p;
-
-        g_strlcpy (p.phrase,
-                   (gchar *) sqlite3_column_text (stmt, DB_COLUMN_PHRASE),
-                   sizeof (p.phrase));
-        p.freq = sqlite3_column_int (stmt, DB_COLUMN_FREQ);
-        p.user_freq = sqlite3_column_int (stmt, DB_COLUMN_USER_FREQ);
-        p.len = pinyin_len;
-
-        for (guint i = 0; i < pinyin_len; i++) {
-            p.pinyin_id[i][0] = sqlite3_column_int (stmt, (i << 1) + DB_COLUMN_S0);
-            p.pinyin_id[i][1] = sqlite3_column_int (stmt, (i << 1) + DB_COLUMN_S0 + 1);
-        }
-        result << p;
-        row ++;
-    }
-
-    sqlite3_finalize (stmt);
-    return row;
+    return stmt;
 }
 
 inline void
@@ -485,11 +572,11 @@ Database::commit (const PhraseArray  &phrases)
     Phrase phrase = {""};
 
     m_sql = "BEGIN TRANSACTION;\n";
-    for (guint i = 0; i < phrases.length (); i++) {
+    for (guint i = 0; i < phrases.size (); i++) {
         phrase += phrases[i];
         phraseSql (phrases[i], m_sql);
     }
-    if (phrases.length () > 1)
+    if (phrases.size () > 1)
         phraseSql (phrase, m_sql);
     m_sql << "COMMIT;\n";
 

@@ -13,29 +13,30 @@ public:
         : Editor (props),
           m_quote (TRUE),
           m_double_quote (TRUE),
-          m_prev_commited_char (0) {}
+          m_prev_committed_char (0) {}
 
     gboolean processKeyEvent (guint keyval, guint keycode, guint modifiers);
     void reset (void);
+
+    void setPrevCommittedChar (gunichar ch) {
+        m_prev_committed_char = ch;
+    }
 
 private:
     void commit (gchar ch) {
         gchar str[2] = {ch, 0};
         StaticText text (str);
         commitText (text);
-        m_prev_commited_char = ch;
     }
 
     void commit (gunichar ch) {
         Text text (ch);
         commitText (text);
-        m_prev_commited_char = ch;
     }
 
     void commit (const gchar *str) {
         StaticText text (str);
         commitText (text);
-        m_prev_commited_char = 0;
     }
 
     void commit (const String &str) {
@@ -47,7 +48,7 @@ private:
 private:
     gboolean m_quote;
     gboolean m_double_quote;
-    gunichar m_prev_commited_char;
+    gunichar m_prev_committed_char;
     
 };
 

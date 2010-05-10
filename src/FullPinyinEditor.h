@@ -33,7 +33,6 @@ protected:
     gboolean moveCursorToBegin (void);
     gboolean moveCursorToEnd (void);
 
-private:
     void updatePinyin (void);
 
 };

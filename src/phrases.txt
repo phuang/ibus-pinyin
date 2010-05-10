@@ -1,0 +1,78 @@
+; ibus 拼音输入法--自定义短语配置文件
+; 
+; 说明：
+;   **注意**
+;       修改后请重新启动输入法
+;       或者运行下面命令：pkill -x -u $USERNAME ibus-engine-pinyin
+;   格式：
+;       英文字符串=短语
+;       英文字符串=#动态短语
+;   动态短语：
+;       函数            含义            举例
+;       ${year}         年(4位)         2006、2008
+;       ${year_yy}      年(2位)         06、08
+;       ${month}        月              12、8、3
+;       ${month_mm}     月              12、08、03
+;       ${day}          日              3、13、22
+;       ${day_dd}       日              03、13、22
+;       ${weekday}      星期            0、1、2、5、6
+;       ${fullhour}     时(24小时制)    02、08、13、23
+;       ${halfhour}     时(12小时制)    02、08、01、11
+;       ${ampm}         AM、PM(英)      AM、PM（大写）
+;       ${minute}       分              02、08、15、28
+;       ${second}       秒              02、08、15、28
+;       ${year_cn}      年(中文4位)     二〇〇六
+;       ${year_yy_cn}   年(中文2位)     〇六
+;       ${month_cn}     月(中文)        十二、八、三
+;       ${day_cn}       日(中文)        三、十三、二十二
+;       ${weekday_cn}   星期(中文)      日、一、二、五、六
+;       ${fullhour_cn}  月(中文24时制)  二、八、十三、二十三
+;       ${halfhour_cn}  时(中文12时制)  二、八、一、十一
+;       ${ampm_cn}      上午下午(中文)  上午、下午
+;       ${minute_cn}    分(中文)        零二、零八、十五、二十八
+;       ${second_cn}    秒(中文)        零二、零八、十五、二十八
+
+aazhi=AA制
+agu=A股
+bchao=B超
+bgu=B股
+bichao=B超
+bsn=╭∩╮（︶︿︶）╭∩╮鄙视你！
+ceo=首席执行官
+cpan=C盘
+cyuyan=C语言
+dna=脱氧核糖核酸
+dpan=D盘
+gps=全球定位系统
+haha=^_^
+haha=o(∩∩)o...哈哈
+hehe=:-)
+hgu=H股
+icka=IC卡
+ipdianhua=IP电话
+ipdizhi=IP地址
+ipka=IP卡
+kalaok=卡拉OK
+pcji=PC机
+qiruiqq=奇瑞QQ
+qqhao=QQ号
+simka=SIM卡
+tixu=T恤
+tixushan=T恤衫
+txingtai=T型台
+txu=T恤
+upan=U盘
+xixi=(*^__^*) 嘻嘻……
+xshexian=X射线
+
+; 动态短语
+rq=#${year}年${month}月${day}日
+rq=#${year_cn}年${month_cn}月${day_cn}日
+rq=#${year}-${month}-${day}
+sj=#${fullhour}时${minute}分${second}秒
+sj=#${fullhour}:${minute}:${second}
+xq=#星期${weekday_cn}
+lb=#礼拜${weekday_cn}
+
+; 暂时不支持
+; nl=#农历${lunardate}

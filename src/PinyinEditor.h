@@ -6,10 +6,13 @@
 #include "Database.h"
 #include "PinyinParser.h"
 #include "PhraseEditor.h"
+#include "SpecialPhraseTable.h"
 
 namespace PY {
 
 #define MAX_PINYIN_LEN 64
+
+class SpecialPhraseTable;
 
 class PinyinEditor : public Editor {
 public:
@@ -23,10 +26,10 @@ public:
     virtual void cursorUp (void);
     virtual void cursorDown (void);
     virtual void update (void);
-    virtual void candidateClicked (guint index, guint button, guint state);
-#if 0
     virtual void reset (void);
-#endif
+    virtual void candidateClicked (guint index, guint button, guint state);
+    virtual void updateAuxiliaryTextBefore (String &buffer);
+    virtual void updateAuxiliaryTextAfter (String &buffer);
 protected:
 
     gboolean processPinyin (guint keyval, guint keycode, guint modifiers);
@@ -37,12 +40,29 @@ protected:
     gboolean processOthers (guint keyval, guint keycode, guint modifiers);
 
     void updatePreeditText (void);
-    void updatePreeditTextInTypingMode (void);
-    void updatePreeditTextInEditingMode (void);
     void updateAuxiliaryText (void);
     void updateLookupTable (void);
+    gboolean fillLookupTableByPage (void);
 
-    void updatePhraseEditor (void);
+    void updatePhraseEditor (void) { m_phrase_editor.update (m_pinyin); }
+
+    gboolean updateSpecialPhrases (void) {
+        if (!m_selected_special_phrase.empty ())
+            return FALSE;
+
+        guint size = m_special_phrases.size ();
+        guint begin = m_phrase_editor.cursorInChar ();
+        guint end = m_cursor;
+
+        m_special_phrases.clear ();
+        if (begin < end) {
+            SpecialPhraseTable::instance ().lookup (
+                m_text.substr (begin, m_cursor - begin),
+                m_special_phrases);
+        }
+
+        return size != m_special_phrases.size () || size != 0;
+    }
 
     gboolean selectCandidate (guint i);
     gboolean selectCandidateInPage (guint i);
@@ -55,7 +75,7 @@ protected:
     const String & text (void) const { return m_text; }
     const gchar * textAfterPinyin (void) const { return (const gchar *)m_text + m_pinyin_len; }
     const gchar * textAfterPinyin (guint i) const {
-        g_assert (i <= m_pinyin.length ());
+        g_assert (i <= m_pinyin.size ());
         if ( G_UNLIKELY (i == 0))
             return m_text;
         i--;
@@ -63,10 +83,10 @@ protected:
     }
     const gchar * textAfterCursor (void) const { return (const gchar *)m_text + m_cursor; }
     guint cursor (void) const { return m_cursor; }
-    gboolean isEmpty (void) const { return m_buffer.isEmpty (); }
+    gboolean empty (void) const { return m_buffer.empty (); }
     const PinyinArray & pinyin (void) const { return m_pinyin; }
     guint pinyinLength (void) const { return m_pinyin_len; }
-    operator gboolean (void) const { return !isEmpty (); }
+    operator gboolean (void) const { return ! empty (); }
 
     /* virtual functions */
     virtual gboolean insert (gint ch) = 0;
@@ -85,11 +105,10 @@ protected:
     PinyinArray m_pinyin;       // pinyin array
     guint       m_pinyin_len;   // pinyin length in char
     String      m_buffer;       // temp buffer
-    PhraseEditor m_phrase_editor;
     LookupTable m_lookup_table;
-
-protected:
-    static PinyinParser m_parser;
+    PhraseEditor m_phrase_editor;
+    std::vector<std::string> m_special_phrases;
+    std::string m_selected_special_phrase;
 };
 };
 

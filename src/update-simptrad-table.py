@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 from ZhConversion import *
 from valid_hanzi import *
+from sctc import *
 
 def convert(s, d, n):
     out = u""
@@ -22,20 +23,33 @@ def filter_more(records, n):
     hanm = filter(lambda (k, v): convert(k, hand, n) != v, records)
     return hanm + han
 
+def filter_func(args):
+    k, v = args
+    # length is not equal or length > 6
+    if len(k) != len(v) or len(k) > 6:
+        return False
+    # k includes invalid hanzi
+    if not all(c in valid_hanzi for c in k):
+        return False
+    # v includes invalid hanzi
+    if not all(c in valid_hanzi for c in v):
+        return False
+
+    # # check chars in k and v
+    # for c1, c2 in zip(k, v):
+    #     if c1 == c2:
+    #         continue
+    #     if c2 not in S_2_T.get(c1, []):
+    #         return False
+    return True
+
 def get_records():
     records = zh2Hant.items()
 
-    # remove invalid hanzi
-    records = filter(lambda (k, v): all([c in valid_hanzi for c in k]) and  all([c in valid_hanzi for c in v]), records)
-
-    # remove if length is not equal
-    records = filter(lambda (k, v): len(k) == len(v), records)
-
-    # remove if length > 4
-    records = filter(lambda (k, v): len(k) <= 6, records)
+    records = filter(filter_func, records)
 
     maxlen = max(map(lambda (k,v): len(k), records))
-    for i in range(1,  maxlen - 1, 1):
+    for i in range(1,  maxlen - 1):
         records = filter_more(records, i)
 
     records.sort()
@@ -43,7 +57,7 @@ def get_records():
 
 def main():
 
-    print "const wchar_t *simp_to_trad[][2] = {"
+    print "const wchar_t * const simp_to_trad[][2] = {"
     maxlen, records = get_records()
     for s, ts in records:
         print '    { L"%s", L"%s" },' % (s.encode("utf8"), ts.encode("utf8"))

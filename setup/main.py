@@ -2,7 +2,11 @@ import gtk
 import ibus
 import locale
 import os
+import version
 import gettext
+from xdg import BaseDirectory
+
+_ = lambda a : gettext.dgettext("ibus-pinyin", a)
 
 class PreferencesDialog:
     def __init__(self):
@@ -21,8 +25,11 @@ class PreferencesDialog:
         self.__init_pinyin()
         self.__init_init_state()
         self.__init_others()
+        self.__init_ui()
         self.__init_correct_pinyin()
         self.__init_fuzzy_pinyin()
+        self.__init_dictionary()
+        self.__init_about()
 
     def __init_pinyin(self):
         # pinyin
@@ -31,6 +38,7 @@ class PreferencesDialog:
         self.__double_pinyin = self.__builder.get_object("DoublePinyin")
         self.__double_pinyin_schema = self.__builder.get_object("DoublePinyinSchema")
         self.__double_pinyin_schema_label = self.__builder.get_object("labelDoublePinyinSchema")
+        self.__double_pinyin_show_raw = self.__builder.get_object("DoublePinyinShowRaw")
 
         renderer = gtk.CellRendererText()
         self.__double_pinyin_schema.pack_start(renderer)
@@ -41,11 +49,11 @@ class PreferencesDialog:
         self.__full_pinyin.set_active(not self.__get_value("DoublePinyin", False))
         self.__double_pinyin_schema.set_active(self.__get_value("DoublePinyinSchema", 0))
         if self.__full_pinyin.get_active():
-            self.__incomplete_pinyin.set_sensitive(True)
+            # self.__incomplete_pinyin.set_sensitive(True)
             self.__double_pinyin_schema.set_sensitive(False)
             self.__double_pinyin_schema_label.set_sensitive(False)
         else:
-            self.__incomplete_pinyin.set_sensitive(False)
+            # self.__incomplete_pinyin.set_sensitive(False)
             self.__double_pinyin_schema.set_sensitive(True)
             self.__double_pinyin_schema_label.set_sensitive(True)
 
@@ -59,15 +67,17 @@ class PreferencesDialog:
             self.__set_value("DoublePinyin", val)
             self.__double_pinyin_schema.set_sensitive(val)
             self.__double_pinyin_schema_label.set_sensitive(val)
+            self.__double_pinyin_show_raw.set_sensitive(val)
 
         def __double_pinyin_schema_changed_cb(widget):
             self.__set_value("DoublePinyinSchema", widget.get_active())
 
         # connect signals
-        self.__full_pinyin.connect("toggled", __full_pinyin_toggled_cb)
+        # self.__full_pinyin.connect("toggled", __full_pinyin_toggled_cb)
         self.__double_pinyin.connect("toggled", __double_pinyin_toggled_cb)
         self.__incomplete_pinyin.connect("toggled", self.__toggled_cb, "IncompletePinyin")
         self.__double_pinyin_schema.connect("changed", __double_pinyin_schema_changed_cb)
+        self.__double_pinyin_show_raw.connect("toggled", self.__toggled_cb, "DoublePinyinShowRaw")
 
     def __init_init_state(self):
         # init state
@@ -93,40 +103,49 @@ class PreferencesDialog:
         self.__init_simp.connect("toggled", self.__toggled_cb, "InitSimplifiedChinese")
 
     def __init_others(self):
-        #others
-        self.__lookup_table_page_size = self.__builder.get_object("LookupTablePageSize")
-
+        # others
         self.__shift_select_candidate = self.__builder.get_object("ShiftSelectCandidate")
         self.__minus_equal_page = self.__builder.get_object("MinusEqualPage")
         self.__comma_period_page = self.__builder.get_object("CommaPeriodPage")
         self.__auto_commit = self.__builder.get_object("AutoCommit")
-        self.__trad_candidate = self.__builder.get_object("TradCandidate")
-        self.__half_width_puncts = self.__builder.get_object("HalfWidthPuncts")
 
         # read values
-        self.__lookup_table_page_size.set_value(self.__get_value("LookupTablePageSize", 5))
         self.__shift_select_candidate.set_active(self.__get_value("ShiftSelectCandidate", False))
         self.__minus_equal_page.set_active(self.__get_value("MinusEqualPage", True))
         self.__comma_period_page.set_active(self.__get_value("CommaPeriodPage", True))
         self.__auto_commit.set_active(self.__get_value("AutoCommit", False))
+
+        # connect signals
+        self.__shift_select_candidate.connect("toggled", self.__toggled_cb, "ShiftSelectCandidate")
+        self.__minus_equal_page.connect("toggled", self.__toggled_cb, "MinusEqualPage")
+        self.__comma_period_page.connect("toggled", self.__toggled_cb, "CommaPeriodPage")
+        self.__auto_commit.connect("toggled", self.__toggled_cb, "AutoCommit")
+
+    def __init_ui(self):
+        # UI
+        self.__lookup_table_page_size = self.__builder.get_object("LookupTablePageSize")
+        self.__lookup_table_orientation = self.__builder.get_object("LookupTableOrientation")
+        self.__trad_candidate = self.__builder.get_object("TradCandidate")
+
+        renderer = gtk.CellRendererText()
+        self.__lookup_table_orientation.pack_start(renderer)
+        self.__lookup_table_orientation.set_attributes(renderer, text=0)
+
+        # read values
+        self.__lookup_table_orientation.set_active(self.__get_value("LookupTableOrientation", 0))
+        self.__lookup_table_page_size.set_value(self.__get_value("LookupTablePageSize", 5))
         self.__trad_candidate.set_active(self.__get_value("TradCandidate", False))
-        self.__half_width_puncts.set_text(self.__get_value("HalfWidthPuncts", "+-*/=%"))
 
         # connect signals
         def __lookup_table_page_size_changed_cb(adjustment):
             self.__set_value("LookupTablePageSize", int(adjustment.get_value()))
 
-        self.__shift_select_candidate.connect("toggled", self.__toggled_cb, "ShiftSelectCandidate")
-        self.__minus_equal_page.connect("toggled", self.__toggled_cb, "MinusEqualPage")
-        self.__comma_period_page.connect("toggled", self.__toggled_cb, "CommaPeriodPage")
-        self.__auto_commit.connect("toggled", self.__toggled_cb, "AutoCommit")
-        self.__trad_candidate.connect("toggled", self.__toggled_cb, "TradCandidate")
-        self.__lookup_table_page_size.connect("value-changed", __lookup_table_page_size_changed_cb)
+        def __lookup_table_orientation_changed_cb(widget):
+            self.__set_value("LookupTableOrientation", widget.get_active())
 
-        def __entry_activate_cb(widget, name):
-            text = widget.get_text()
-            self.__set_value(name, text)
-        self.__half_width_puncts.connect("activate", __entry_activate_cb, "HalfWidthPuncts")
+        self.__lookup_table_orientation.connect("changed", __lookup_table_orientation_changed_cb)
+        self.__lookup_table_page_size.connect("value-changed", __lookup_table_page_size_changed_cb)
+        self.__trad_candidate.connect("toggled", self.__toggled_cb, "TradCandidate")
 
     def __init_correct_pinyin(self):
         # auto correct
@@ -138,7 +157,7 @@ class PreferencesDialog:
             ("CorrectPinyin_UEI_UI", True),
             ("CorrectPinyin_UEN_UN", True),
             ("CorrectPinyin_UE_VE", True),
-            ("CorrectPinyin_VE_UE", True),
+            ("CorrectPinyin_V_U", True),
         ]
 
         def __correct_pinyin_toggled_cb(widget):
@@ -204,6 +223,34 @@ class PreferencesDialog:
         for name, defval in self.__fuzzy_pinyin_widgets:
             widget = self.__builder.get_object(name)
             widget.connect("toggled", self.__toggled_cb, name)
+
+    def __init_dictionary(self):
+        # dictionary
+        self.__special_phrases = self.__builder.get_object("SpecialPhrases")
+        self.__edit_special_phrases = self.__builder.get_object("EditSpecialPhrases")
+
+        # read values
+        self.__special_phrases.set_active(self.__get_value("SpecialPhrases", True))
+
+        def __edit_special_phrases_clicked_cb(widget):
+            from xdg import BaseDirectory
+            import shutil
+            path = os.path.join(BaseDirectory.xdg_config_home, "ibus", "pinyin")
+            os.path.exists(path) or os.makedirs(path)
+            path = os.path.join(path, "phrases.txt")
+            if not os.path.exists(path):
+                datadir = os.getenv("IBUS_DATAROOTDIR") or "/usr/share"
+                src = os.path.join(datadir, "ibus-pinyin", "phrases.txt")
+                shutil.copyfile(src, path)
+            os.system("xdg-open %s" % path)
+
+        # connect signals
+        self.__special_phrases.connect("toggled", self.__toggled_cb, "SpecialPhrases")
+        self.__edit_special_phrases.connect("clicked", __edit_special_phrases_clicked_cb)
+
+    def __init_about(self):
+        self.__name_version = self.__builder.get_object("NameVersion")
+        self.__name_version.set_markup(_("<big><b>IBus Pinyin %s</b></big>") % version.get_version())
 
     def __changed_cb(self, widget, name):
         self.__set_value(name, widget.get_active())

@@ -1,9 +1,9 @@
 #ifndef __PY_STRING_H_
 #define __PY_STRING_H_
+
 #include <glib.h>
 #include <stdarg.h>
 #include <string>
-
 
 namespace PY {
 
@@ -58,10 +58,6 @@ public:
         return *this;
     }
 
-    gboolean isEmpty (void) const {
-        return empty ();
-    }
-
     gsize utf8Length (void) const {
         return g_utf8_strlen (c_str(), -1);
     }
@@ -99,6 +95,10 @@ public:
         return *this;
     }
 
+    String & operator<< (const std::string &str) {
+        return operator<< (str.c_str ());
+    }
+
     String & operator<< (const String &str) {
         return operator<< ((const gchar *)str);
     }
@@ -113,7 +113,7 @@ public:
     }
 
     operator gboolean (void) const {
-        return ! isEmpty ();
+        return ! empty ();
     }
 };
 

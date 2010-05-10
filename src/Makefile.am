@@ -51,14 +51,15 @@ ibus_engine_c_sources = \
 	PinyinParser.cc \
 	PinyinProperties.cc \
 	SimpTradConverter.cc \
-	SpecialTable.cc \
+	DynamicSpecialPhrase.cc \
+	SpecialPhrase.cc \
+	SpecialPhraseTable.cc \
 	$(NULL)
 ibus_engine_built_h_sources = \
 	PinyinParserTable.h \
 	SimpTradConverterTable.h \
 	$(NULL)
 ibus_engine_h_sources = \
-	Array.h \
 	Bus.h \
 	Config.h \
 	CustomPhrase.h \
@@ -71,8 +72,8 @@ ibus_engine_h_sources = \
 	FallbackEditor.h \
 	FullPinyinEditor.h \
 	HalfFullConverter.h \
-	HashTable.h \
 	LookupTable.h \
+	Object.h \
 	Phrase.h \
 	PhraseArray.h \
 	PhraseEditor.h \
@@ -83,17 +84,19 @@ ibus_engine_h_sources = \
 	PinyinParserTable.h \
 	PinyinProperties.h \
 	Pointer.h \
+	Property.h \
 	RawEditor.h \
 	Regex.h \
-	Property.h \
+	Signal.h \
 	SimpTradConverter.h \
 	SimpTradConverterTable.h \
-	SpecialTable.h \
+	SpecialPhrase.h \
+	DynamicSpecialPhrase.h \
+	SpecialPhraseTable.h \
 	String.h \
 	Text.h \
 	Types.h \
 	Util.h \
-	WideString.h \
 	$(NULL)
 ibus_engine_pinyin_SOURCES = \
 	$(ibus_engine_c_sources) \
@@ -104,8 +107,7 @@ ibus_engine_pinyin_SOURCES = \
 ibus_engine_pinyin_CXXFLAGS = \
 	@IBUS_CFLAGS@ \
 	@SQLITE_CFLAGS@ \
-	@UUID_CFLAGS@ \
-	@SIGC_CFLAGS@ \
+	@BOOST_CPPFLAGS@ \
 	-DGETTEXT_PACKAGE=\"@GETTEXT_PACKAGE@\" \
 	-DPKGDATADIR=\"$(pkgdatadir)\" \
 	-DLIBEXECDIR=\"$(libexecdir)\" \
@@ -113,19 +115,31 @@ ibus_engine_pinyin_CXXFLAGS = \
 ibus_engine_pinyin_LDADD = \
 	@IBUS_LIBS@ \
 	@SQLITE_LIBS@ \
-	@UUID_LIBS@ \
-	@SIGC_LIBS@ \
 	$(NULL)
+
+if HAVE_LIBUUID
+ibus_engine_pinyin_CXXFLAGS += $(LIBUUID_CFLAGS)
+ibus_engine_pinyin_LDADD += $(LIBUUID_LIBS)
+endif
+
+# if HAVE_BOOST_SIGNALS2
+# # do nothing
+# else
+# ibus_engine_pinyin_CXXFLAGS += $(LIBUUID_CFLAGS)
+# ibus_engine_pinyin_LDADD += \
+# 	$(BOOST_SIGNALS_LDFLAGS) \
+# 	$(BOOST_SIGNALS_LIBS) \
+# 	$(NULL)
+# endif
 
 BUILT_SOURCES = \
 	$(ibus_engine_built_c_sources) \
 	$(ibus_engine_built_h_sources) \
 	$(NULL)
 
-# db_DATA = \
-# 	py.db \
-# 	$(NULL)
-# dbdir = $(pkgdatadir)
+pkgdata_DATA = \
+	phrases.txt \
+	$(NULL)
 
 component_DATA = \
 	pinyin.xml \
@@ -134,36 +148,12 @@ componentdir = @datadir@/ibus/component
 
 EXTRA_DIST = \
 	pinyin.xml.in \
+	phrases.txt \
 	$(NULL)
 
 CLEANFILES = \
 	pinyin.xml \
-	$(NULL)
-
-check_PROGRAMS =
-
-# check_PROGRAMS += test-parser
-# test_parser_SOURCES = \
-# 	PinyinParser.cc \
-# 	Table.h \
-# 	$(NULL)
-# test_parser_CFLAGS = \
-# 	$(AM_CFLAGS) \
-# 	-DTEST \
-# 	$(NULL)
-# 
-# check_PROGRAMS += test-pydatabase
-# test_pydatabase_SOURCES = \
-# 	Database.cc \
-# 	Database.h \
-# 	$(NULL)
-# test_pydatabase_CFLAGS = \
-# 	$(AM_CFLAGS) \
-# 	-DTEST \
-# 	$(NULL)
-
-TESTS = \
-	$(check_PROGRAMS) \
+	ZhConversion.* \
 	$(NULL)
 
 PinyinParserTable.h:
@@ -171,8 +161,14 @@ PinyinParserTable.h:
 
 SimpTradConverterTable.h:
 	$(PYTHON) $(srcdir)/update-simptrad-table.py > $@
+update-simptrad-table:
+	$(RM) ZhConversion.php ZhConversion.py SimpTradConverterTable.h
+	$(MAKE) ZhConversion.php
+	$(MAKE) ZhConversion.py
+	$(MAKE) SimpTradConverterTable.h
 
 pinyin.xml: pinyin.xml.in
+	$(AM_V_GEN) \
 	( \
 		libexecdir=${libexecdir}; \
 		pkgdatadir=${pkgdatadir}; \
@@ -181,12 +177,16 @@ pinyin.xml: pinyin.xml.in
 	) > $@
 
 test: ibus-engine-pinyin
-	$(ENV) G_DEBUG=fatal_warnings \
-	$(builddir)/ibus-engine-pinyin
+	$(ENV) \
+		G_DEBUG=fatal_criticals \
+		$(builddir)/ibus-engine-pinyin
+
+# test: ibus-engine-pinyin
+# 	$(ENV) G_DEBUG=fatal_warnings \
+# 	$(builddir)/ibus-engine-pinyin
 
 ZhConversion.php:
-	wget 'http://svn.wikimedia.org/viewvc/mediawiki/trunk/phase3/includes/ZhConversion.php?view=co&content-type=text%2Fplain' \
-		-O $@
+	svn cat http://svn.wikimedia.org/svnroot/mediawiki/trunk/phase3/includes/ZhConversion.php > $@
 
 ZhConversion.py: ZhConversion.php
 	php php_2_py.php > $@

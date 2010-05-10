@@ -26,11 +26,12 @@ public:
     }
 
     void reset (gboolean need_update = TRUE) {
+        m_prev_pressed_key = IBUS_VoidSymbol;
         m_input_mode = MODE_INIT;
         for (gint i = 0; i < MODE_LAST; i++) {
             m_editors[i]->reset ();
         }
-        m_fallback_editor.reset ();
+        m_fallback_editor->reset ();
     }
 
 
@@ -49,7 +50,7 @@ private:
 
 private:
     void showSetupDialog (void);
-    void connectEditorSignals (Editor *editor);
+    void connectEditorSignals (EditorPtr editor);
 
 private:
     void slotCommitText (Text & text);
@@ -74,8 +75,8 @@ private:
 
     enum {
         MODE_INIT = 0,          // init mode
-    #if 0
         MODE_RAW,               // raw mode
+    #if 0
         MODE_ENGLISH,           // press v into English input mode
         MODE_STROKE,            // press u into stroke input mode
     #endif
@@ -83,8 +84,8 @@ private:
         MODE_LAST,
     } m_input_mode;
 
-    Editor *m_editors[MODE_LAST];
-    FallbackEditor m_fallback_editor;
+    EditorPtr m_editors[MODE_LAST];
+    EditorPtr m_fallback_editor;
 };
 
 };

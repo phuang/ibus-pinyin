@@ -1,8 +1,8 @@
 /* vim:set et sts=4: */
 
-#include <ibus.h>
-#include <string.h>
 #include <libintl.h>
+#include <string>
+#include <ibus.h>
 #include "RawEditor.h"
 #include "ExtEditor.h"
 #include "FullPinyinEditor.h"
@@ -21,40 +21,46 @@ namespace PY {
 /* constructor */
 PinyinEngine::PinyinEngine (IBusEngine *engine)
     : m_engine (engine),
-      m_prev_pressed_key (0),
+      m_prev_pressed_key (IBUS_VoidSymbol),
       m_input_mode (MODE_INIT),
-      m_fallback_editor (m_props)
+      m_fallback_editor (new FallbackEditor (m_props))
 {
     gint i;
     /* create editors */
     if (Config::doublePinyin ())
-        m_editors[MODE_INIT] = new DoublePinyinEditor (m_props);
+        m_editors[MODE_INIT].reset (new DoublePinyinEditor (m_props));
     else
-        m_editors[MODE_INIT] = new FullPinyinEditor (m_props);
+        m_editors[MODE_INIT].reset (new FullPinyinEditor (m_props));
 
-    m_editors[MODE_EXTENSION] = new ExtEditor (m_props);
+    m_editors[MODE_RAW].reset (new RawEditor (m_props));
+    m_editors[MODE_EXTENSION].reset (new ExtEditor (m_props));
 
-    m_props.signalUpdateProperty ().connect (sigc::mem_fun (*this, &PinyinEngine::slotUpdateProperty));
+    m_props.signalUpdateProperty ().connect (bind (&PinyinEngine::slotUpdateProperty, this, _1));
 
     for (i = MODE_INIT; i < MODE_LAST; i++) {
         connectEditorSignals (m_editors[i]);
     }
 
-    connectEditorSignals (&m_fallback_editor);
+    connectEditorSignals (m_fallback_editor);
 }
 
 /* destructor */
 PinyinEngine::~PinyinEngine (void)
 {
-    for (gint i = 0; i < MODE_LAST; i++) {
-        delete m_editors[i];
-    }
 }
+
+
+#define CASHM_MASK       \
+    (IBUS_CONTROL_MASK | \
+    IBUS_MOD1_MASK |     \
+    IBUS_SUPER_MASK |    \
+    IBUS_HYPER_MASK |    \
+    IBUS_META_MASK)
 
 gboolean
 PinyinEngine::processKeyEvent (guint keyval, guint keycode, guint modifiers)
 {
-    gboolean retval;
+    gboolean retval = FALSE;
 
     /* check Shift + Release hotkey,
      * and then ignore other Release key event */
@@ -63,20 +69,57 @@ PinyinEngine::processKeyEvent (guint keyval, guint keycode, guint modifiers)
          * and no other key event between the press and release ket event*/
         if (m_prev_pressed_key == keyval) {
             if (keyval == IBUS_Shift_L || keyval == IBUS_Shift_R) {
+                if (!m_editors[MODE_INIT]->text ().empty ())
+                    m_editors[MODE_INIT]->reset ();
                 m_props.toggleModeChinese ();
             }
         }
-        m_prev_pressed_key = 0;
         return TRUE;
     }
 
-    retval = m_props.modeChinese () && m_editors[m_input_mode]->processKeyEvent (keyval, keycode, modifiers);
+    if (m_props.modeChinese ()) {
+        if (m_input_mode == MODE_INIT &&
+            ((modifiers & CASHM_MASK) == 0)) {
+            const String & text = m_editors[MODE_INIT]->text ();
+            if (text.empty ()) {
+            #if 0
+                if (keyval == IBUS_i) {
+                    m_input_mode = MODE_EXTENSION;
+                }
+            #endif
+            }
+            else {
+                if (m_prev_pressed_key != IBUS_period) {
+                    if ((keyval == IBUS_at || keyval == IBUS_colon)) {
+                        m_input_mode = MODE_RAW;
+                        m_editors[MODE_RAW]->setText (text, text.length ());
+                        m_editors[MODE_INIT]->reset ();
+                    }
+                }
+                else {
+                    if ((keyval >= IBUS_a && keyval <= IBUS_z) ||
+                        (keyval >= IBUS_A && keyval <= IBUS_Z)) {
+                        String tmp = text;
+                        tmp += ".";
+                        m_input_mode = MODE_RAW;
+                        m_editors[MODE_RAW]->setText (tmp, tmp.length ());
+                        m_editors[MODE_INIT]->reset ();
+                    }
+                }
+            }
+        }
+        retval = m_editors[m_input_mode]->processKeyEvent (keyval, keycode, modifiers);
+        if (G_UNLIKELY (retval &&
+                        m_input_mode != MODE_INIT &&
+                        m_editors[m_input_mode]->text ().empty ()))
+            m_input_mode = MODE_INIT;
+    }
 
     if (G_UNLIKELY (!retval))
-        retval = m_fallback_editor.processKeyEvent (keyval, keycode, modifiers);
+        retval = m_fallback_editor->processKeyEvent (keyval, keycode, modifiers);
 
     /* store ignored key event by editors */
-    m_prev_pressed_key = retval ? 0 : keyval;
+    m_prev_pressed_key = retval ? IBUS_VoidSymbol : keyval;
 
     return retval;
 }
@@ -86,16 +129,16 @@ PinyinEngine::focusIn (void)
 {
     /* reset pinyin editor */
     if (Config::doublePinyin ()) {
-        if (dynamic_cast <DoublePinyinEditor *> (m_editors[MODE_INIT]) == NULL)
-            delete m_editors[MODE_INIT];
-        m_editors[MODE_INIT] = new DoublePinyinEditor (m_props);
-        connectEditorSignals (m_editors[MODE_INIT]);
+        if (dynamic_cast <DoublePinyinEditor *> (m_editors[MODE_INIT].get ()) == NULL) {
+            m_editors[MODE_INIT].reset (new DoublePinyinEditor (m_props));
+            connectEditorSignals (m_editors[MODE_INIT]);
+        }
     }
     else {
-        if (dynamic_cast <FullPinyinEditor *> (m_editors[MODE_INIT]) == NULL)
-            delete m_editors[MODE_INIT];
-        m_editors[MODE_INIT] = new FullPinyinEditor (m_props);
-        connectEditorSignals (m_editors[MODE_INIT]);
+        if (dynamic_cast <FullPinyinEditor *> (m_editors[MODE_INIT].get ()) == NULL) {
+            m_editors[MODE_INIT].reset (new FullPinyinEditor (m_props));
+            connectEditorSignals (m_editors[MODE_INIT]);
+        }
     }
     ibus_engine_register_properties (m_engine, m_props.properties ());
 }
@@ -134,7 +177,7 @@ PinyinEngine::showSetupDialog (void)
 gboolean
 PinyinEngine::propertyActivate (const gchar *prop_name, guint prop_state)
 {
-    const static StaticString setup ("setup");
+    const static std::string setup ("setup");
     if (m_props.propertyActivate (prop_name, prop_state)) {
         return TRUE;
     }
@@ -155,6 +198,12 @@ void
 PinyinEngine::slotCommitText (Text & text)
 {
     ibus_engine_commit_text (m_engine, text);
+    if (m_input_mode != MODE_INIT)
+        m_input_mode = MODE_INIT;
+    if (text.text ())
+        static_cast<FallbackEditor*> (m_fallback_editor.get ())->setPrevCommittedChar (*text.text ());
+    else
+        static_cast<FallbackEditor*> (m_fallback_editor.get ())->setPrevCommittedChar (0);
 }
 
 void
@@ -224,34 +273,33 @@ PinyinEngine::slotUpdateProperty (Property & prop)
 }
 
 void
-PinyinEngine::connectEditorSignals (Editor *editor)
+PinyinEngine::connectEditorSignals (EditorPtr editor)
 {
     editor->signalCommitText ().connect (
-        sigc::mem_fun (*this, &PinyinEngine::slotCommitText));
+        bind (&PinyinEngine::slotCommitText, this, _1));
 
     editor->signalUpdatePreeditText ().connect (
-        sigc::mem_fun (*this, &PinyinEngine::slotUpdatePreeditText));
+        bind (&PinyinEngine::slotUpdatePreeditText, this, _1, _2, _3));
     editor->signalShowPreeditText ().connect (
-        sigc::mem_fun (*this, &PinyinEngine::slotShowPreeditText));
+        bind (&PinyinEngine::slotShowPreeditText, this));
     editor->signalHidePreeditText ().connect (
-        sigc::mem_fun (*this, &PinyinEngine::slotHidePreeditText));
+        bind (&PinyinEngine::slotHidePreeditText, this));
 
     editor->signalUpdateAuxiliaryText ().connect (
-        sigc::mem_fun (*this, &PinyinEngine::slotUpdateAuxiliaryText));
+        bind (&PinyinEngine::slotUpdateAuxiliaryText, this, _1, _2));
     editor->signalShowAuxiliaryText ().connect (
-        sigc::mem_fun (*this, &PinyinEngine::slotShowAuxiliaryText));
+        bind (&PinyinEngine::slotShowAuxiliaryText, this));
     editor->signalHideAuxiliaryText ().connect (
-        sigc::mem_fun (*this, &PinyinEngine::slotHideAuxiliaryText));
+        bind (&PinyinEngine::slotHideAuxiliaryText, this));
 
     editor->signalUpdateLookupTable ().connect (
-        sigc::mem_fun (*this, &PinyinEngine::slotUpdateLookupTable));
+        bind (&PinyinEngine::slotUpdateLookupTable, this, _1, _2));
     editor->signalUpdateLookupTableFast ().connect (
-        sigc::mem_fun (*this, &PinyinEngine::slotUpdateLookupTableFast));
+        bind (&PinyinEngine::slotUpdateLookupTableFast, this, _1, _2));
     editor->signalShowLookupTable ().connect (
-        sigc::mem_fun (*this, &PinyinEngine::slotShowLookupTable));
+        bind (&PinyinEngine::slotShowLookupTable, this));
     editor->signalHideLookupTable ().connect (
-        sigc::mem_fun (*this, &PinyinEngine::slotHideLookupTable));
-
+        bind (&PinyinEngine::slotHideLookupTable, this));
 }
 
 };

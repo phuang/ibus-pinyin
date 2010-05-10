@@ -33,11 +33,13 @@ $(DBTAR):
 	wget http://ibus.googlecode.com/files/$(DBTAR)
 
 stamp-db: $(DBTAR)
-	tar jxvfm $(DBTAR)
-	mv db/main.db db/$(db_file)
+	$(AM_V_GEN) \
+	tar jxfm $(DBTAR); \
+	mv db/main.db db/$(db_file); \
 	touch $@
 
 $(main_db_DATA): stamp-db
+	$(AM_V_GEN)
 
 CLEANFILES = \
 	stamp-db \

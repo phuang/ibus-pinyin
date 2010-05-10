@@ -27,10 +27,14 @@ public:
     /* override virtual functions */
     gboolean processKeyEvent (guint keyval, guint keycode, guint modifiers);
     void reset (void);
+    void updateAuxiliaryTextAfter (String &buffer);
+
+protected:
+    gboolean updatePinyin (gboolean all);
 
 private:
-    void updatePinyin (void);
-    const Pinyin *isPinyin (gchar i, gchar j);
+    const Pinyin *isPinyin (gint i, gint j);
+    const Pinyin *isPinyin (gint i);
 
 };
 

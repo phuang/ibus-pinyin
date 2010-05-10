@@ -1,7 +1,7 @@
 /* vim:set et sts=4: */
 
+#include <cstring>
 #include <ibus.h>
-#include <string.h>
 #include "Engine.h"
 #include "PinyinEngine.h"
 
@@ -26,7 +26,7 @@ struct _IBusPinyinEngine {
     IBusEngine parent;
 
     /* members */
-    PinyinEngine *engine;
+    PinyinEngine engine;
 };
 
 struct _IBusPinyinEngineClass {
@@ -54,8 +54,9 @@ static void     ibus_engine_set_cursor_location (IBusEngine             *engine,
                                                  gint                    y,
                                                  gint                    w,
                                                  gint                    h);
-static void ibus_pinyin_engine_set_capabilities (IBusEngine             *engine,
-                                                guint                   caps);
+static void     ibus_pinyin_engine_set_capabilities
+                                                (IBusEngine             *engine,
+                                                 guint                   caps);
 #endif
 
 static void     ibus_pinyin_engine_page_up      (IBusEngine             *engine);
@@ -78,34 +79,7 @@ static void ibus_pinyin_engine_property_hide    (IBusEngine             *engine,
                                                  const gchar            *prop_name);
 #endif
 
-static IBusEngineClass *parent_class = NULL;
-
-GType
-ibus_pinyin_engine_get_type (void)
-{
-    static GType type = 0;
-
-    static const GTypeInfo type_info = {
-        sizeof (IBusPinyinEngineClass),
-        (GBaseInitFunc) NULL,
-        (GBaseFinalizeFunc) NULL,
-        (GClassInitFunc) ibus_pinyin_engine_class_init,
-        NULL,
-        NULL,
-        sizeof (IBusPinyinEngine),
-        0,
-        (GInstanceInitFunc) ibus_pinyin_engine_init,
-    };
-
-    if (type == 0) {
-        type = g_type_register_static (IBUS_TYPE_ENGINE,
-                                       "IBusPinyinEngine",
-                                       &type_info,
-                                       (GTypeFlags) 0);
-    }
-
-    return type;
-}
+G_DEFINE_TYPE (IBusPinyinEngine, ibus_pinyin_engine, IBUS_TYPE_ENGINE)
 
 static void
 ibus_pinyin_engine_class_init (IBusPinyinEngineClass *klass)
@@ -113,8 +87,6 @@ ibus_pinyin_engine_class_init (IBusPinyinEngineClass *klass)
     // GObjectClass *object_class = G_OBJECT_CLASS (klass);
     IBusObjectClass *ibus_object_class = IBUS_OBJECT_CLASS (klass);
     IBusEngineClass *engine_class = IBUS_ENGINE_CLASS (klass);
-
-    parent_class = (IBusEngineClass *) g_type_class_peek_parent (klass);
 
     ibus_object_class->destroy = (IBusObjectDestroyFunc) ibus_pinyin_engine_destroy;
 
@@ -143,17 +115,14 @@ ibus_pinyin_engine_init (IBusPinyinEngine *pinyin)
 {
     if (g_object_is_floating (pinyin))
         g_object_ref_sink (pinyin);  // make engine sink
-    pinyin->engine = new PinyinEngine (IBUS_ENGINE (pinyin));
+    new (& (pinyin->engine)) PinyinEngine (IBUS_ENGINE (pinyin));
 }
 
 static void
 ibus_pinyin_engine_destroy (IBusPinyinEngine *pinyin)
 {
-    if (pinyin->engine) {
-        delete pinyin->engine;
-        pinyin->engine = NULL;
-    }
-    IBUS_OBJECT_CLASS (parent_class)->destroy ((IBusObject *)pinyin);
+    pinyin->engine.~PinyinEngine ();
+    ((IBusObjectClass *) ibus_pinyin_engine_parent_class)->destroy ((IBusObject *)pinyin);
 }
 
 static gboolean
@@ -163,7 +132,7 @@ ibus_pinyin_engine_process_key_event (IBusEngine     *engine,
                                       guint           modifiers)
 {
     IBusPinyinEngine *pinyin = (IBusPinyinEngine *) engine;
-    return pinyin->engine->processKeyEvent (keyval, keycode, modifiers);
+    return pinyin->engine.processKeyEvent (keyval, keycode, modifiers);
 }
 
 static void
@@ -172,7 +141,7 @@ ibus_pinyin_engine_property_activate (IBusEngine    *engine,
                                       guint          prop_state)
 {
     IBusPinyinEngine *pinyin = (IBusPinyinEngine *) engine;
-    pinyin->engine->propertyActivate (prop_name, prop_state);
+    pinyin->engine.propertyActivate (prop_name, prop_state);
 }
 static void
 ibus_pinyin_engine_candidate_clicked (IBusEngine *engine,
@@ -181,7 +150,7 @@ ibus_pinyin_engine_candidate_clicked (IBusEngine *engine,
                                       guint       state)
 {
     IBusPinyinEngine *pinyin = (IBusPinyinEngine *) engine;
-    pinyin->engine->candidateClicked (index, button, state);
+    pinyin->engine.candidateClicked (index, button, state);
 }
 
 #define FUNCTION(name, Name)                                        \
@@ -189,8 +158,9 @@ ibus_pinyin_engine_candidate_clicked (IBusEngine *engine,
     ibus_pinyin_engine_##name (IBusEngine *engine)                  \
     {                                                               \
         IBusPinyinEngine *pinyin = (IBusPinyinEngine *) engine;     \
-        pinyin->engine->Name ();                                    \
-        parent_class->name (engine);                                \
+        pinyin->engine.Name ();                                    \
+        ((IBusEngineClass *) ibus_pinyin_engine_parent_class)       \
+            ->name (engine);                                        \
     }
 FUNCTION(focus_in,    focusIn)
 FUNCTION(focus_out,   focusOut)

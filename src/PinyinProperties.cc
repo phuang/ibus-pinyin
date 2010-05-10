@@ -1,4 +1,4 @@
-#include "Util.h"
+#include <string>
 #include "PinyinProperties.h"
 
 namespace PY {
@@ -9,70 +9,45 @@ PinyinProperties::PinyinProperties (void)
     : m_mode_chinese (Config::initChinese ()),
       m_mode_full (Config::initFull ()),
       m_mode_full_punct (Config::initFullPunct ()),
-      m_mode_simp (Config::initSimpChinese ())
+      m_mode_simp (Config::initSimpChinese ()),
+      m_prop_chinese ("mode.chinese",
+                PROP_TYPE_NORMAL,
+                StaticText ("CN"),
+                m_mode_chinese ?
+                    PKGDATADIR"/icons/chinese.svg" :
+                    PKGDATADIR"/icons/english.svg",
+                StaticText (_("Chinese"))),
+      m_prop_full ("mode.full",
+                PROP_TYPE_NORMAL,
+                StaticText (m_mode_full ? "Ａａ" : "Aa"),
+                m_mode_full ?
+                    PKGDATADIR"/icons/full.svg" :
+                    PKGDATADIR"/icons/half.svg",
+                StaticText (_("Full/Half width"))),
+      m_prop_full_punct ("mode.full_punct",
+                PROP_TYPE_NORMAL,
+                StaticText (m_mode_full_punct ? "，。" : ",."),
+                m_mode_full_punct ?
+                    PKGDATADIR"/icons/full-punct.svg" :
+                    PKGDATADIR"/icons/half-punct.svg",
+                StaticText (_("Full/Half width punctuation"))),
+      m_prop_simp ( "mode.simp",
+                PROP_TYPE_NORMAL,
+                StaticText (m_mode_simp ? "简" : "繁"),
+                m_mode_simp ?
+                    PKGDATADIR"/icons/simp-chinese.svg" :
+                    PKGDATADIR"/icons/trad-chinese.svg",
+                StaticText (_("Simplfied/Traditional Chinese"))),
+      m_prop_setup ("setup",
+                PROP_TYPE_NORMAL,
+                StaticText (_("Pinyin preferences")),
+                "ibus-setup",
+                StaticText (_("Pinyin preferences")))
 {
-    /* create properties */
-    m_prop_chinese = ibus_property_new ("mode.chinese",
-                                        PROP_TYPE_NORMAL,
-                                        StaticText ("CN"),
-                                        m_mode_chinese ?
-                                            PKGDATADIR"/icons/chinese.svg" :
-                                            PKGDATADIR"/icons/english.svg",
-                                        StaticText (_("Chinese")),
-                                        TRUE,
-                                        TRUE,
-                                        PROP_STATE_UNCHECKED,
-                                        NULL);
     m_props.append (m_prop_chinese);
-
-    m_prop_full = ibus_property_new ("mode.full",
-                                     PROP_TYPE_NORMAL,
-                                     StaticText (m_mode_full? "Ａａ" : "Aa"),
-                                     m_mode_full ?
-                                        PKGDATADIR"/icons/full.svg" :
-                                        PKGDATADIR"/icons/half.svg",
-                                     StaticText (_("Full/Half width")),
-                                     TRUE,
-                                     TRUE,
-                                     PROP_STATE_UNCHECKED,
-                                     NULL);
     m_props.append (m_prop_full);
-
-    m_prop_full_punct = ibus_property_new ("mode.full_punct",
-                                           PROP_TYPE_NORMAL,
-                                           StaticText (m_mode_full_punct ? "，。" : ",."),
-                                           m_mode_full_punct ?
-                                                PKGDATADIR"/icons/full-punct.svg" :
-                                                PKGDATADIR"/icons/half-punct.svg",
-                                           StaticText (_("Full/Half width punctuation")),
-                                           TRUE,
-                                           TRUE,
-                                           PROP_STATE_UNCHECKED,
-                                           NULL);
     m_props.append (m_prop_full_punct);
-
-    m_prop_simp = ibus_property_new ("mode.simp",
-                                      PROP_TYPE_NORMAL,
-                                      StaticText (m_mode_simp ? "简" : "繁"),
-                                      m_mode_simp ?
-                                        PKGDATADIR"/icons/simp-chinese.svg" :
-                                        PKGDATADIR"/icons/trad-chinese.svg",
-                                      StaticText (_("Simplfied/Traditional Chinese")),
-                                      TRUE,
-                                      TRUE,
-                                      PROP_STATE_UNCHECKED,
-                                      NULL);
     m_props.append (m_prop_simp);
-
-    m_prop_setup = ibus_property_new ("setup",
-                                      PROP_TYPE_NORMAL,
-                                      StaticText (_("Pinyin preferences")),
-                                      "ibus-setup",
-                                      StaticText (_("Pinyin preferences")),
-                                      TRUE,
-                                      TRUE,
-                                      PROP_STATE_UNCHECKED,
-                                      NULL);
     m_props.append (m_prop_setup);
 
 }
@@ -126,10 +101,10 @@ PinyinProperties::toggleModeSimp (void)
 
 gboolean
 PinyinProperties::propertyActivate (const gchar *prop_name, guint prop_state) {
-    const static StaticString mode_chinese ("mode.chinese");
-    const static StaticString mode_full ("mode.full");
-    const static StaticString mode_full_punct ("mode.full_punct");
-    const static StaticString mode_simp ("mode.simp");
+    const static std::string mode_chinese ("mode.chinese");
+    const static std::string mode_full ("mode.full");
+    const static std::string mode_full_punct ("mode.full_punct");
+    const static std::string mode_simp ("mode.simp");
 
     if (mode_chinese == prop_name) {
         toggleModeChinese ();

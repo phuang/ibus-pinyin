@@ -15,21 +15,7 @@ FullPinyinEditor::~FullPinyinEditor (void)
 void
 FullPinyinEditor::reset (void)
 {
-    gboolean retval = FALSE;
-    if (m_cursor != 0) {
-        m_cursor = 0;
-        retval = TRUE;
-    }
-
-    if (m_text.length () != 0) {
-        m_text.truncate (0);
-        retval = TRUE;
-    }
-
-    if (retval) {
-        updatePinyin ();
-        update ();
-    }
+    PinyinEditor::reset ();
 }
 
 gboolean
@@ -37,21 +23,27 @@ FullPinyinEditor::insert (gint ch)
 {
     /* is full */
     if (G_UNLIKELY (m_text.length () >= MAX_PINYIN_LEN))
-        return FALSE;
+        return TRUE;
 
     m_text.insert (m_cursor++, ch);
 
-    if (G_UNLIKELY ((Config::option () & PINYIN_INCOMPLETE_PINYIN) == 0)) {
+    if (G_UNLIKELY (!(Config::option () & PINYIN_INCOMPLETE_PINYIN))) {
+        updateSpecialPhrases ();
+        updatePinyin ();
+    }
+    else if (G_LIKELY (m_cursor <= m_pinyin_len + 2)) {
+        updateSpecialPhrases ();
         updatePinyin ();
     }
     else {
-        if (G_LIKELY ((m_cursor - 1 == m_pinyin_len) ||
-                      (m_cursor - 2 == m_pinyin_len &&
-                       m_text[m_pinyin_len] == '\''))) {
-            updatePinyin ();
+        if (updateSpecialPhrases ()) {
+            update ();
+        }
+        else {
+            updatePreeditText ();
+            updateAuxiliaryText ();
         }
     }
-    update ();
     return TRUE;
 }
 
@@ -64,8 +56,8 @@ FullPinyinEditor::removeCharBefore (void)
     m_cursor --;
     m_text.erase (m_cursor, 1);
 
+    updateSpecialPhrases ();
     updatePinyin ();
-    update ();
 
     return TRUE;
 }
@@ -77,7 +69,8 @@ FullPinyinEditor::removeCharAfter (void)
         return FALSE;
 
     m_text.erase (m_cursor, 1);
-    update ();
+    updatePreeditText ();
+    updateAuxiliaryText ();
 
     return TRUE;
 }
@@ -97,11 +90,12 @@ FullPinyinEditor::removeWordBefore (void)
         const Pinyin & p = *m_pinyin.back ();
         cursor = m_cursor - p.len;
         m_pinyin_len -= p.len;
-        m_pinyin.pop ();
+        m_pinyin.pop_back ();
     }
 
     m_text.erase (cursor, m_cursor - cursor);
     m_cursor = cursor;
+    updateSpecialPhrases ();
     updatePhraseEditor ();
     update ();
     return TRUE;
@@ -114,7 +108,8 @@ FullPinyinEditor::removeWordAfter (void)
         return FALSE;
 
     m_text.erase (m_cursor, -1);
-    update ();
+    updatePreeditText ();
+    updateAuxiliaryText ();
     return TRUE;
 }
 
@@ -125,8 +120,9 @@ FullPinyinEditor::moveCursorLeft (void)
         return FALSE;
 
     m_cursor --;
+    updateSpecialPhrases ();
     updatePinyin ();
-    update ();
+
     return TRUE;
 }
 
@@ -137,8 +133,9 @@ FullPinyinEditor::moveCursorRight (void)
         return FALSE;
 
     m_cursor ++;
+
+    updateSpecialPhrases ();
     updatePinyin ();
-    update ();
 
     return TRUE;
 }
@@ -157,7 +154,9 @@ FullPinyinEditor::moveCursorLeftByWord (void)
     const Pinyin & p = *m_pinyin.back ();
     m_cursor -= p.len;
     m_pinyin_len -= p.len;
-    m_pinyin.pop ();
+    m_pinyin.pop_back ();
+
+    updateSpecialPhrases ();
     updatePhraseEditor ();
     update ();
 
@@ -177,8 +176,10 @@ FullPinyinEditor::moveCursorToBegin (void)
         return FALSE;
 
     m_cursor = 0;
-    m_pinyin.removeAll ();
+    m_pinyin.clear ();
     m_pinyin_len = 0;
+
+    updateSpecialPhrases ();
     updatePhraseEditor ();
     update ();
 
@@ -192,8 +193,8 @@ FullPinyinEditor::moveCursorToEnd (void)
         return FALSE;
 
     m_cursor = m_text.length ();
-    updatePinyin  ();
-    update ();
+    updateSpecialPhrases ();
+    updatePinyin ();
 
     return TRUE;
 }
@@ -201,19 +202,20 @@ FullPinyinEditor::moveCursorToEnd (void)
 void
 FullPinyinEditor::updatePinyin (void)
 {
-    if (G_UNLIKELY (m_text.isEmpty ())) {
-        m_pinyin.removeAll ();
+    if (G_UNLIKELY (m_text.empty ())) {
+        m_pinyin.clear ();
         m_pinyin_len = 0;
     }
     else {
-        m_pinyin_len = m_parser.parse (m_text,              // text
-                                       m_cursor,            // text length
-                                       Config::option (),   // option
-                                       m_pinyin,            // result
-                                       MAX_PHRASE_LEN);     // max result length
+        m_pinyin_len = PinyinParser::parse (m_text,              // text
+                                            m_cursor,            // text length
+                                            Config::option (),   // option
+                                            m_pinyin,            // result
+                                            MAX_PHRASE_LEN);     // max result length
     }
 
     updatePhraseEditor ();
+    update ();
 }
 
 };

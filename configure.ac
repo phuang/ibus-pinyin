@@ -19,10 +19,10 @@
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 # if not 1, append datestamp to the version number.
-m4_define([ibus_released], [0])
+m4_define([ibus_released], [1])
 m4_define([ibus_major_version], [1])
-m4_define([ibus_minor_version], [2])
-m4_define([ibus_micro_version], [99])
+m4_define([ibus_minor_version], [3])
+m4_define([ibus_micro_version], [5])
 m4_define(ibus_maybe_datestamp,
     m4_esyscmd([if test x]ibus_released[ != x1; then date +.%Y%m%d | tr -d '\n\r'; fi]))
 
@@ -35,6 +35,7 @@ AC_GNU_SOURCE
 
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_MACRO_DIR([m4])
+m4_ifdef([AM_SILENT_RULES],[AM_SILENT_RULES([yes])])
 
 # define PACKAGE_VERSION_* variables
 AS_VERSION
@@ -59,16 +60,51 @@ PKG_CHECK_MODULES(IBUS, [
 PKG_CHECK_MODULES(SQLITE, [
     sqlite3
 ])
+AC_PATH_PROG(SQLITE3, sqlite3)
 
 # check uuid
-PKG_CHECK_MODULES(UUID, [
-    uuid
+AC_CHECK_FUNCS([uuid_create], [], [
+    PKG_CHECK_MODULES(LIBUUID, uuid, [
+        # uuid.pc exist
+        AC_DEFINE(HAVE_LIBUUID, 1, [Define if found libuuid])
+        HAVE_LIBUUID=yes
+    ], [
+        # uuid.pc does not exist
+        uuid_old_LIBS=$LIBS
+        AC_CHECK_HEADERS(uuid/uuid.h, [
+            AC_SEARCH_LIBS(uuid_generate, uuid, [
+                test x"$ac_cv_search_uuid_generate" != x"none required" && LIBUUID_LIBS=$ac_cv_search_uuid_generate
+                AC_DEFINE(HAVE_LIBUUID, 1, [Define if found libuuid])
+                HAVE_LIBUUID=yes
+            ], [
+                AC_MSG_ERROR([Can not find uuid_create and uuid_generate in libc or libuuid])
+            ])
+        ], [
+            AC_MSG_ERROR([Can not find uuid_create and uuid_generate in libc or libuuid])
+        ])
+        LIBS=$uuid_old_LIBS
+    ])
 ])
 
-# check uuid
-PKG_CHECK_MODULES(SIGC, [
-    sigc++-2.0
-])
+AM_CONDITIONAL(HAVE_LIBUUID, test x"$HAVE_LIBUUID" = x"yes")
+
+# check boost
+BOOST_REQUIRE([1.39])
+BOOST_FIND_HEADER([boost/signals2.hpp])
+# BOOST_FIND_HEADER([boost/signals2.hpp], [
+#     HAVE_BOOST_SIGNALS2=no
+#     BOOST_SIGNALS([s])
+# ], [
+#     AC_DEFINE(HAVE_BOOST_SIGNALS2_HPP, 1, [Define if found boost.signals2])
+#     HAVE_BOOST_SGINALS2=yes
+# ])
+# 
+# AM_CONDITIONAL(HAVE_BOOST_SIGNALS2, test x"$HAVE_BOOST_SIGNALS2" = x"yes")
+# 
+# check sigc
+# PKG_CHECK_MODULES(SIGC, [
+#     sigc++-2.0
+# ])
 
 # check env
 AC_PATH_PROG(ENV, env)
@@ -110,6 +146,7 @@ src/Makefile
 src/pinyin.xml.in
 setup/Makefile
 setup/ibus-setup-pinyin
+setup/version.py
 data/Makefile
 data/db/Makefile
 data/db/android/Makefile

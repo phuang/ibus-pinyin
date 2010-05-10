@@ -20,6 +20,7 @@
 
 setup_pinyin_PYTHON = \
 	main.py \
+	version.py \
 	ibus-pinyin-preferences.ui \
 	$(NULL)
 setup_pinyindir = $(datadir)/ibus-pinyin/setup
@@ -31,6 +32,7 @@ CLEANFILES = \
 	$(NULL)
 
 EXTRA_DIST = \
+	version.py.in \
 	ibus-setup-pinyin.in \
 	$(NULL)
 

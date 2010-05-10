@@ -2,15 +2,12 @@
 #ifndef __PY_PHRASE_H_
 #define __PY_PHRASE_H_
 
-#include <string.h>
 #include "Types.h"
 
 namespace PY {
 
-
-typedef struct _Phrase Phrase;
-struct _Phrase {
-    gchar phrase[(MAX_PHRASE_LEN + 1) * MAX_UTF8_LEN];
+struct Phrase {
+    gchar phrase[MAX_UTF8_LEN * (MAX_PHRASE_LEN + 1)];
     guint  freq;
     guint  user_freq;
     guint  pinyin_id[MAX_PHRASE_LEN][2];
@@ -23,7 +20,7 @@ struct _Phrase {
         len = 0;
     }
 
-    gboolean isEmpty (void) const {
+    gboolean empty (void) const {
         return len == 0;
     }
 

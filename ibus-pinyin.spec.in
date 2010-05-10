@@ -16,22 +16,36 @@ BuildRequires:  libtool
 BuildRequires:  pkgconfig
 BuildRequires:  sqlite-devel
 BuildRequires:  libuuid-devel
-BuildRequires:  ibus-devel >= 1.2.0
+BuildRequires:  boost-devel >= 1.39
+BuildRequires:  ibus-devel >= 1.3
 
 # Requires(post): sqlite
 
 Requires:   ibus >= 1.2.0
+Requires:   ibus-pinyin-db = %{version}-%{release}
 
 %description
 The Chinese Pinyin input method for IBus platform.
 
-%package    open-phrase
+%package    db-open-phrase
 Summary:    The open phrase database for ibus Pinyin
 Group:      System Environment/Libraries
+BuildArch:  noarch
+Provides:   ibus-pinyin-db
 Requires(post): sqlite
 
-%description open-phrase
+%description db-open-phrase
 The open phrase database for ibus Pinyin engine.
+
+%package    db-android
+Summary:    The android phrase database for ibus Pinyin
+Group:      System Environment/Libraries
+BuildArch:  noarch
+Provides:   ibus-pinyin-db
+Requires(post): sqlite
+
+%description db-android
+The android phrase database for ibus Pinyin engine.
 
 %prep
 %setup -q
@@ -56,25 +70,32 @@ rm -rf $RPM_BUILD_ROOT
 # cd %{_datadir}/ibus-pinyin/db
 # sqlite3 android.db ".read create_index.sql"
 
-%post open-phrase
+%post db-open-phrase
 # cd %{_datadir}/ibus-pinyin/db
 # sqlite3 open-phrase.db ".read create_index.sql"
+
+%post db-android
+# cd %{_datadir}/ibus-pinyin/db
+# sqlite3 android.db ".read create_index.sql"
 
 %files -f %{name}.lang
 %defattr(-,root,root,-)
 %doc AUTHORS COPYING README
 %{_libexecdir}/ibus-engine-pinyin
 %{_libexecdir}/ibus-setup-pinyin
+%{_datadir}/@PACKAGE@/phrases.txt
 %{_datadir}/@PACKAGE@/icons
 %{_datadir}/@PACKAGE@/setup
 %{_datadir}/@PACKAGE@/db/create_index.sql
-%{_datadir}/@PACKAGE@/db/android.db
 %dir %{_datadir}/@PACKAGE@
 %dir %{_datadir}/@PACKAGE@/db
 %{_datadir}/ibus/component/*
 
-%files open-phrase
+%files db-open-phrase
 %{_datadir}/@PACKAGE@/db/open-phrase.db
+
+%files db-android
+%{_datadir}/@PACKAGE@/db/android.db
 
 %changelog
 * Fri Aug 08 2008 Peng Huang <shawn.p.huang@gmail.com> - @VERSION@-1

@@ -1,6 +1,7 @@
 /* vim:set et sts=4: */
-#include <string.h>
-#include <stdlib.h>
+
+#include <cstring>
+#include <cstdlib>
 #include <glib.h>
 #include "PinyinParser.h"
 
@@ -31,7 +32,7 @@ py_cmp (const void *p1, const void *p2)
     const gchar *str = (const gchar *) p1;
     const Pinyin *py = (const Pinyin *) p2;
 
-    return strcmp (str, py->text);
+    return std::strcmp (str, py->text);
 }
 
 static const Pinyin *
@@ -50,22 +51,22 @@ is_pinyin (const gchar *p,
         return NULL;
 
     if (G_LIKELY (len > 0)) {
-        strncpy (buf, p, len);
+        std::strncpy (buf, p, len);
         buf[len] = 0;
-        result = (const Pinyin *) bsearch (buf, pinyin_table, G_N_ELEMENTS (pinyin_table),
+        result = (const Pinyin *) std::bsearch (buf, pinyin_table, G_N_ELEMENTS (pinyin_table),
                                             sizeof (Pinyin), py_cmp);
         if (check_flags (result, option))
             return result;
         return NULL;
     }
 
-    len = strnlen (p, 6);
-    len = MIN (len, end - p);
-    strncpy (buf, p, len);
+    /* len < 0 */
+    len = MIN (6, end - p);
+    std::strncpy (buf, p, len);
 
     for (; len > 0; len --) {
         buf[len] = 0;
-        result = (const Pinyin *) bsearch (buf, pinyin_table, G_N_ELEMENTS (pinyin_table),
+        result = (const Pinyin *) std::bsearch (buf, pinyin_table, G_N_ELEMENTS (pinyin_table),
                                             sizeof (Pinyin), py_cmp);
         if (G_UNLIKELY (check_flags (result, option))) {
             return result;
@@ -82,7 +83,11 @@ sp_cmp (const void *p1,
     const Pinyin **pys = (const Pinyin **) p1;
     const Pinyin **e = (const Pinyin **) p2;
 
-    return ((pys[0] - e[0]) << 16) + (pys[1] - e[1]);
+    int retval = pys[0] - e[0];
+
+    if (retval != 0)
+        return retval;
+    return pys[1] - e[1];
 }
 
 static const Pinyin **
@@ -91,7 +96,7 @@ need_resplit(const Pinyin *p1,
 {
     const Pinyin * pys[] = {p1, p2};
 
-    return (const Pinyin **) bsearch (pys, special_table, G_N_ELEMENTS (special_table),
+    return (const Pinyin **) std::bsearch (pys, special_table, G_N_ELEMENTS (special_table),
                                         sizeof (special_table[0]), sp_cmp);
 }
 
@@ -109,10 +114,10 @@ PinyinParser::parse (const String   &pinyin,
     const Pinyin *prev_py;
     gchar prev_c;
 
-    result.removeAll ();
+    result.clear ();
 
     if (G_UNLIKELY (len < 0))
-        len = pinyin.length ();
+        len = pinyin.size ();
 
     p = pinyin;
     end = p + len;
@@ -120,7 +125,7 @@ PinyinParser::parse (const String   &pinyin,
     prev_py = NULL;
 
     prev_c = 0;
-    for (; p < end && result.length () < max; ) {
+    for (; p < end && result.size () < max; ) {
         switch (prev_c) {
         case 'r':
         case 'n':
@@ -149,7 +154,7 @@ PinyinParser::parse (const String   &pinyin,
 
                         if (((new_py2 != NULL) && (new_py2->len > 1 )) &&
                             (py == NULL || new_py2->len > py->len + 1)) {
-                            PinyinSegment & segment = result[result.length () - 1];
+                            PinyinSegment & segment = result[result.size () - 1];
                             segment.pinyin = new_py1;
                             segment.len = new_py1->len;
                             py = new_py2;
@@ -163,7 +168,7 @@ PinyinParser::parse (const String   &pinyin,
 
                     pp = need_resplit (prev_py, py);
                     if (pp != NULL) {
-                        PinyinSegment & segment = result[result.length () - 1];
+                        PinyinSegment & segment = result[result.size () - 1];
                         segment.pinyin = pp[2];
                         segment.len = pp[2]->len;
                         py = pp[3];
@@ -204,7 +209,8 @@ PinyinParser::parse (const String   &pinyin,
     return p - (const gchar *)pinyin;
 }
 
-static const gchar *id_map[] = {
+static const gchar * const
+id_map[] = {
     "", "b", "c", "ch",
     "d", "f", "g", "h",
     "j", "k", "l", "m",
@@ -217,17 +223,35 @@ static const gchar *id_map[] = {
     "ie", "in", "ing", "iong", "iu",
     "o", "ong", "ou",
     "u", "ua", "uai", "uan", "uang",
-    "ue", "ui", "un", "uo", "v"
+    0, /* it should be ue or ve */
+    "ui", "un", "uo", "v"
 };
 
 const Pinyin *
 PinyinParser::isPinyin (gint sheng, gint yun, guint option)
 {
     const Pinyin *result;
-    gchar buf[8];
+    gchar buf[16];
 
-    g_strlcpy (buf, id_map[sheng], sizeof (buf));
-    g_strlcat (buf, id_map[yun], sizeof (buf));
+    std::strcpy (buf, id_map[sheng]);
+
+    if (yun == PINYIN_ID_UE) {
+        /* append ue or ve base on sheng */
+        switch (sheng) {
+        case PINYIN_ID_J:
+        case PINYIN_ID_Q:
+        case PINYIN_ID_X:
+        case PINYIN_ID_Y:
+            std::strcat (buf, "ue");
+            break;
+        default:
+            std::strcat (buf, "ve");
+            break;
+        }
+    }
+    else {
+        std::strcat (buf, id_map[yun]);
+    }
 
     result = (const Pinyin *) bsearch (buf, pinyin_table, G_N_ELEMENTS (pinyin_table),
                                             sizeof (Pinyin), py_cmp);

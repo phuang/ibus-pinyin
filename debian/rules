@@ -9,14 +9,6 @@
 # Uncomment this to turn on verbose mode.
 #export DH_VERBOSE=1
 
-DIST=$(shell lsb_release -i -s)
-
-ifeq "$(DIST)" "Ubuntu"
-	DEB_DH_BUILDDEB_ARGS := -- -Zlzma
-else
-	DEB_DH_BUILDDEB_ARGS := -- -Zbzip2
-endif
-
 DEBIAN_VERSION = $(shell dpkg-parsechangelog | egrep '^Version: ' | sed s/"Version: "//)
 UPSTREAM_VERSION = $(shell echo $(DEBIAN_VERSION) | sed s/+.-.*//)
 
@@ -46,7 +38,6 @@ build: build-stamp
 
 build-stamp:  config.status 
 	dh_testdir
-	cp /usr/share/pinyin-database/pinyin-database-1.2.99.tar.bz2 data/
 	$(MAKE)
 	touch $@
 
@@ -57,8 +48,8 @@ clean:
 
 	# Add here commands to clean up after the build process.
 	[ ! -f Makefile ] || $(MAKE) distclean
-	rm -f config.sub config.guess
-	rm -rf data/db
+	rm -f config.sub config.guess config.log
+	rm -f data/db/android/*.pyc
 
 	dh_clean 
 
@@ -71,8 +62,11 @@ install-stamp: build
 
 	$(MAKE) DESTDIR=$(CURDIR)/debian/ibus-pinyin install
 	rm -f $(CURDIR)/debian/ibus-pinyin/usr/share/ibus-pinyin/db/COPYING
-	mkdir -p $(CURDIR)/debian/ibus-pinyin-data/usr/share/ibus-pinyin/
-	mv $(CURDIR)/debian/ibus-pinyin/usr/share/ibus-pinyin/db $(CURDIR)/debian/ibus-pinyin-data/usr/share/ibus-pinyin/
+	mkdir -p $(CURDIR)/debian/ibus-pinyin-db-android/usr/share/ibus-pinyin/
+	mv $(CURDIR)/debian/ibus-pinyin/usr/share/ibus-pinyin/db $(CURDIR)/debian/ibus-pinyin-db-android/usr/share/ibus-pinyin/
+	rm -f $(CURDIR)/debian/ibus-pinyin-db-android/usr/share/ibus-pinyin/db/create_index.sql
+	mkdir -p $(CURDIR)/debian/ibus-pinyin-db-open-phrase/usr/share/ibus-pinyin/db
+	ln -s /usr/share/pinyin-database/main.db $(CURDIR)/debian/ibus-pinyin-db-open-phrase/usr/share/ibus-pinyin/db/open-phrase.db
 	touch $@
 
 # Build architecture-independent files here.
@@ -110,7 +104,7 @@ binary-indep: install
 	dh_installdeb -i
 	dh_gencontrol -i
 	dh_md5sums -i
-	dh_builddeb -i $(DEB_DH_BUILDDEB_ARGS)
+	dh_builddeb -i
 
 binary: binary-indep binary-arch
 .PHONY: build clean binary-indep binary-arch binary install

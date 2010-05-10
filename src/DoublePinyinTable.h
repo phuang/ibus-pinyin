@@ -1,9 +1,14 @@
+#ifndef __DOUBLE_PINYIN_TABLE_H_
+#define __DOUBLE_PINYIN_TABLE_H_
+
+#define PINYIN_ID_AEO PINYIN_ID_ZERO
+
 static const gint double_pinyin_mspy_sheng[] = {
-    PINYIN_ID_VOID, // A
+    PINYIN_ID_AEO,  // A
     PINYIN_ID_B,    // B
     PINYIN_ID_C,    // C
     PINYIN_ID_D,    // D
-    PINYIN_ID_VOID, // E
+    PINYIN_ID_AEO,  // E
     PINYIN_ID_F,    // F
     PINYIN_ID_G,    // G
     PINYIN_ID_H,    // H
@@ -57,11 +62,11 @@ static const gint double_pinyin_mspy_yun[][2] = {
     { PINYIN_ID_ING,  PINYIN_ID_VOID }, // ;
 };
 static const gint double_pinyin_zrm_sheng[] = {
-    PINYIN_ID_VOID, // A
+    PINYIN_ID_AEO,  // A
     PINYIN_ID_B,    // B
     PINYIN_ID_C,    // C
     PINYIN_ID_D,    // D
-    PINYIN_ID_VOID, // E
+    PINYIN_ID_AEO,  // E
     PINYIN_ID_F,    // F
     PINYIN_ID_G,    // G
     PINYIN_ID_H,    // H
@@ -177,7 +182,7 @@ static const gint double_pinyin_zgpy_sheng[] = {
     PINYIN_ID_B,    // B
     PINYIN_ID_C,    // C
     PINYIN_ID_D,    // D
-    PINYIN_ID_VOID, // E
+    PINYIN_ID_AEO,  // E
     PINYIN_ID_F,    // F
     PINYIN_ID_G,    // G
     PINYIN_ID_H,    // H
@@ -235,7 +240,7 @@ static const gint double_pinyin_pyjj_sheng[] = {
     PINYIN_ID_B,    // B
     PINYIN_ID_C,    // C
     PINYIN_ID_D,    // D
-    PINYIN_ID_VOID, // E
+    PINYIN_ID_AEO,  // E
     PINYIN_ID_F,    // F
     PINYIN_ID_G,    // G
     PINYIN_ID_H,    // H
@@ -289,6 +294,12 @@ static const gint double_pinyin_pyjj_yun[][2] = {
     { PINYIN_ID_VOID, PINYIN_ID_VOID }, // ;
 };
 
+#define DOUBLE_PINYIN_MSPY  (0)
+#define DOUBLE_PINYIN_ZRM   (1)
+#define DOUBLE_PINYIN_ABC   (2)
+#define DOUBLE_PINYIN_ZGPY  (3)
+#define DOUBLE_PINYIN_PYJJ  (4)
+
 static const struct {
     const gint  (&sheng)[27];
     const gint  (&yun)[27][2];
@@ -299,3 +310,5 @@ static const struct {
     { double_pinyin_zgpy_sheng, double_pinyin_zgpy_yun},
     { double_pinyin_pyjj_sheng, double_pinyin_pyjj_yun},
 };
+
+#endif

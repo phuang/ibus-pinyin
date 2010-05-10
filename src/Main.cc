@@ -1,5 +1,8 @@
 /* vim:set et sts=4: */
 
+#ifdef HAVE_CONFIG_H
+#  include "config.h"
+#endif
 #include <ibus.h>
 #include <stdlib.h>
 #include <locale.h>
@@ -20,7 +23,7 @@ static gboolean verbose = FALSE;
 
 static const GOptionEntry entries[] =
 {
-    { "ibus", 'i', 0, G_OPTION_ARG_NONE, &ibus, "component is executed by ibus", NULL },
+    { "ibus",    'i', 0, G_OPTION_ARG_NONE, &ibus, "component is executed by ibus", NULL },
     { "verbose", 'v', 0, G_OPTION_ARG_NONE, &verbose, "verbose", NULL },
     { NULL },
 };
@@ -50,20 +53,20 @@ start_component (void)
 
     Config config (bus);
 
-    g_signal_connect (bus, "disconnected", G_CALLBACK (ibus_disconnected_cb), NULL);
+    g_signal_connect ((IBusBus *)bus, "disconnected", G_CALLBACK (ibus_disconnected_cb), NULL);
 
     component = ibus_component_new ("org.freedesktop.IBus.Pinyin",
                                     N_("Pinyin input method"),
-                                    "0.1.0",
+                                    VERSION,
                                     "GPL",
                                     "Peng Huang <shawn.p.huang@gmail.com>",
                                     "http://code.google.com/p/ibus/",
                                     "",
                                     "ibus-pinyin");
     ibus_component_add_engine (component,
-                               ibus_engine_desc_new ("pinyin",
-                                                     N_("Pinyin"),
-                                                     N_("Pinyin input method"),
+                               ibus_engine_desc_new ("pinyin-debug",
+                                                     N_("Pinyin (debug)"),
+                                                     N_("Pinyin input method (debug)"),
                                                      "zh_CN",
                                                      "GPL",
                                                      "Peng Huang <shawn.p.huang@gmail.com>",
@@ -72,12 +75,12 @@ start_component (void)
 
     factory = ibus_factory_new (ibus_bus_get_connection (bus));
 
-    ibus_factory_add_engine (factory, "pinyin", IBUS_TYPE_PINYIN_ENGINE);
-
     if (ibus) {
+        ibus_factory_add_engine (factory, "pinyin", IBUS_TYPE_PINYIN_ENGINE);
         ibus_bus_request_name (bus, "org.freedesktop.IBus.Pinyin", 0);
     }
     else {
+        ibus_factory_add_engine (factory, "pinyin-debug", IBUS_TYPE_PINYIN_ENGINE);
         ibus_bus_register_component (bus, component);
     }
 

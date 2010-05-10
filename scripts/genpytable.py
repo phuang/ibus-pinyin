@@ -1,4 +1,5 @@
 # vim:set et sts=4:
+# -*- coding: utf-8 -*-
 
 from pydict import *
 
@@ -16,13 +17,48 @@ shengmu_list.remove("")
 shengmu_list.sort()
 
 auto_correct = [
+    # "correct", "wrong"
     ("ng", "gn"),
     ("ng", "mg"),
     ("iu", "iou"),
     ("ui", "uei"),
     ("un", "uen"),
-    ("ue", "ve"),
-    ("ve", "ue")]
+#    ("ue", "ve"),
+    ("ve", "ue")
+]
+
+auto_correct_ext = [
+    # "correct", "wrong", flag
+    ("ju", "jv", "PINYIN_CORRECT_V_TO_U"),
+    ("qu", "qv", "PINYIN_CORRECT_V_TO_U"),
+    ("xu", "xv", "PINYIN_CORRECT_V_TO_U"),
+    ("yu", "yv", "PINYIN_CORRECT_V_TO_U"),
+
+    ("jue", "jve", "PINYIN_CORRECT_V_TO_U"),
+    ("que", "qve", "PINYIN_CORRECT_V_TO_U"),
+    ("xue", "xve", "PINYIN_CORRECT_V_TO_U"),
+    ("yue", "yve", "PINYIN_CORRECT_V_TO_U"),
+
+    ("juan", "jvan", "PINYIN_CORRECT_V_TO_U"),
+    ("quan", "qvan", "PINYIN_CORRECT_V_TO_U"),
+    ("xuan", "xvan", "PINYIN_CORRECT_V_TO_U"),
+    ("yuan", "yvan", "PINYIN_CORRECT_V_TO_U"),
+
+    ("jun", "jvn", "PINYIN_CORRECT_V_TO_U"),
+    ("qun", "qvn", "PINYIN_CORRECT_V_TO_U"),
+    ("xun", "xvn", "PINYIN_CORRECT_V_TO_U"),
+    ("yun", "yvn", "PINYIN_CORRECT_V_TO_U"),
+
+    ("juang", "jvang", "PINYIN_FUZZY_UANG_UAN | PINYIN_CORRECT_V_TO_U"),
+    ("quang", "qvang", "PINYIN_FUZZY_UANG_UAN | PINYIN_CORRECT_V_TO_U"),
+    ("xuang", "xvang", "PINYIN_FUZZY_UANG_UAN | PINYIN_CORRECT_V_TO_U"),
+    ("yuang", "yvang", "PINYIN_FUZZY_UANG_UAN | PINYIN_CORRECT_V_TO_U"),
+
+    ("jun", "jven", "PINYIN_CORRECT_UEN_TO_UN | PINYIN_CORRECT_V_TO_U"),
+    ("qun", "qven", "PINYIN_CORRECT_UEN_TO_UN | PINYIN_CORRECT_V_TO_U"),
+    ("xun", "xven", "PINYIN_CORRECT_UEN_TO_UN | PINYIN_CORRECT_V_TO_U"),
+    ("yun", "yven", "PINYIN_CORRECT_UEN_TO_UN | PINYIN_CORRECT_V_TO_U"),
+]
 
 fuzzy_shengmu = [
     ("c", "ch"),
@@ -39,7 +75,7 @@ fuzzy_shengmu = [
     ("r", "l"),
     ("k", "g"),
     ("g", "k"),
-    ]
+]
 
 fuzzy_yunmu = [
     ("an", "ang"),
@@ -52,7 +88,7 @@ fuzzy_yunmu = [
     ("iang", "ian"),
     ("uan", "uang"),
     ("uang", "uan"),
-    ]
+]
 
 def get_sheng_yun(pinyin):
     if pinyin == None:
@@ -114,6 +150,10 @@ def get_pinyin():
                 wp = p.replace(c, w)
                 s, y = get_sheng_yun(p)
                 yield wp, s, y, len(wp), [flag]
+
+    for c, w, flag in auto_correct_ext:
+        s, y = get_sheng_yun(c)
+        yield w, s, y, len(w), [flag]
 
     for s1, s2 in fuzzy_shengmu:
         flag = "PINYIN_FUZZY_%s_%s" % (s1.upper(), s2.upper())
@@ -179,7 +219,7 @@ def get_pinyin_with_fuzzy():
             (fs2 and fs2 + fy2 not in pinyin_list):
             fy2 = ""
 
-        yield text, s, y, s, y, fs1, fy1, fs2, fy2, l, flags
+        yield text, s, y, fs1, fy1, fs2, fy2, l, flags
 
 
 def gen_header():
@@ -225,7 +265,7 @@ def union_dups(a):
             n[r[:-1]] = r[-1]
     na = []
     for k, flags in n.items():
-        na.append (tuple(list(k) + [" | ".join(flags) if flags else 0]))
+        na.append (tuple(list(k) + [" | ".join(flags) if flags else "0"]))
     na.sort()
     return na
 
@@ -235,12 +275,19 @@ def gen_tables():
     pinyins = union_dups(pinyins)
 
     print 'static const Pinyin pinyin_table[] = {'
-    for i, p in enumerate(pinyins):
-        args = (i, ) + tuple(['"%s"' % s for s in p[:3]]) + tuple(["PINYIN_ID_%s" % s.upper() if s else "PINYIN_ID_ZERO" for s in p[3:9]]) + p[9:-1] + (str(p[-1]), )
+    for i, (text, s, y, fs1, fy1, fs2, fy2, l, flags)  in enumerate(pinyins):
+        s_id = "PINYIN_ID_%s" % s.upper() if s else "PINYIN_ID_ZERO"
+        y_id = "PINYIN_ID_%s" % y.upper() if y else "PINYIN_ID_ZERO"
+        fs1_id = "PINYIN_ID_%s" % fs1.upper() if fs1 else "PINYIN_ID_ZERO"
+        fy1_id = "PINYIN_ID_%s" % fy1.upper() if fy1 else "PINYIN_ID_ZERO"
+        fs2_id = "PINYIN_ID_%s" % fs2.upper() if fs2 else "PINYIN_ID_ZERO"
+        fy2_id = "PINYIN_ID_%s" % fy2.upper() if fy2 else "PINYIN_ID_ZERO"
+
+        # args = (i, ) + tuple(['"%s"' % s for s in p[:3]]) + tuple(["PINYIN_ID_%s" % s.upper() if s else "PINYIN_ID_ZERO" for s in p[3:9]]) + p[9:-1] + (str(p[-1]), )
         print '''    {  /* %d */
-        text        : %s,
-        sheng       : %s,
-        yun         : %s,
+        text        : "%s",
+        sheng       : "%s",
+        yun         : "%s",
         sheng_id    : %s,
         yun_id      : %s,
         fsheng_id   : %s,
@@ -249,15 +296,15 @@ def gen_tables():
         fyun_id_2   : %s,
         len         : %d,
         flags       : %s
-    },''' % args
+    },''' % (i, text, s, y.replace("v", "ü"), s_id, y_id, fs1_id, fy1_id, fs2_id, fy2_id, l, flags)
 
     print '};'
     print
 
     return pinyins
 
-def get_all_special():
-    for p in pinyin_list:
+def get_all_special(pinyins):
+    for p in pinyins:
         if p[-1] in ["n", "g", "r"]:
             for yun in yunmu_list:
                 if yun not in pinyin_list:
@@ -289,11 +336,12 @@ def get_max_freq_1(db, p1):
         return r[0] if r[0] else 0
     return 0
 
-def compaired_special():
+def compaired_special(pinyins):
     import sqlite3
-    db = sqlite3.connect("main.db")
+    db = sqlite3.connect("open-phrase.db")
+    # db = sqlite3.connect("main.db")
 
-    for p1, p2, p3, p4 in get_all_special():
+    for p1, p2, p3, p4 in get_all_special(pinyins):
         if p3 not in pinyin_list or p4 not in pinyin_list:
             continue
         if p1 not in pinyin_list or p2 not in pinyin_list:
@@ -332,7 +380,7 @@ def gen_special_table(pinyins):
     for i in xrange(0, len(pinyins)):
         _dict[pinyins[i][0]] = i
 
-    l = list(compaired_special())
+    l = list(compaired_special(_dict.keys()))
     l.sort()
     print 'static const Pinyin *special_table[][4] = {'
     for r in l:

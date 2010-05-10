@@ -3,9 +3,7 @@
 #define __PY_DATABASE_H__
 
 #include <sqlite3.h>
-#include <string>
-#include <vector>
-#include <sstream>
+#include <boost/shared_ptr.hpp>
 #include "String.h"
 #include "Types.h"
 #include "PinyinArray.h"
@@ -13,72 +11,47 @@
 
 namespace PY {
 
-using namespace std;
+class SQLStmt;
+typedef boost::shared_ptr<SQLStmt> SQLStmtPtr;
 
-class Conditions : public vector<string> {
+class Database;
+
+class Query {
 public:
-    Conditions (void) :
-        vector<string> (32),
-        m_length (0) {
-        reset ();
-    }
-    ~Conditions (void) {
-    }
-    guint length (void) { return m_length; }
-    void reset (void) {
-        m_length = 1;
-        operator[](0) = "";
-    }
-    void _double (void) {
-        for (gint i = m_length - 1; i >= 0; i--) {
-            (*this)[m_length + i] = (*this)[i];
-        }
-        m_length = m_length + m_length;
-    }
-    void triple (void) {
-        for (gint i = m_length - 1; i >= 0; i--) {
-            operator[](m_length + i) = operator[]((m_length << 1) + i) = operator[](i);
-        }
-        m_length = m_length + m_length + m_length;
-    }
-    void appendVPrintf (gint begin, gint end, const gchar *fmt, va_list args) {
-        gchar str[64];
-        g_vsnprintf (str, sizeof(str), fmt, args);
-        for (gint i = begin; i < end; i++) {
-            operator[](i) += str;
-        }
-    }
-    void appendPrintf (gint begin, gint end, const gchar *fmt, ...) {
-        va_list args;
-        va_start (args, fmt);
-        appendVPrintf (begin, end, fmt, args);
-        va_end (args);
-    }
-private:
-    guint m_length;
-};
+    Query (const PinyinArray    & pinyin,
+           guint                  pinyin_begin,
+           guint                  pinyin_len,
+           guint                  option);
+    ~Query (void);
+    gint fill (PhraseArray &phrases, gint count);
 
+private:
+    const PinyinArray & m_pinyin;
+    guint m_pinyin_begin;
+    guint m_pinyin_len;
+    guint m_option;
+    SQLStmtPtr m_stmt;
+};
+typedef boost::shared_ptr<Query> QueryPtr;
 
 class Database {
-public:
+private:
     Database ();
     ~Database ();
-    gint query (const PinyinArray   & pinyin,
-                guint                 m,
-                guint                 option,
-                PhraseArray         & result);
 
-    gint query (const PinyinArray   & pinyin,
-                guint                 pinyin_begin,
-                guint                 pinyin_len,
-                gint                  m,
-                guint                 option,
-                PhraseArray         & result);
+public:
+    SQLStmtPtr query (const PinyinArray   & pinyin,
+                      guint                 pinyin_begin,
+                      guint                 pinyin_len,
+                      gint                  m,
+                      guint                 option);
     void commit (const PhraseArray  & phrases);
     void remove (const Phrase & phrase);
 
     void conditionsDouble (void);
     void conditionsTriple (void);
+
+    static Database & instance (void) {return m_instance; }
 
 private:
     gboolean init (void);
@@ -90,9 +63,12 @@ private:
 
 private:
     sqlite3 *m_db;              /* sqlite3 database */
-    String m_sql;               /* sql stmt */
-    String m_buffer;            /* temp buffer */
-    Conditions m_conditions;    /* select conditions */
+
+    String m_sql;        /* sql stmt */
+    String m_buffer;     /* temp buffer */
+
+private:
+    static Database m_instance;
 };
 
 

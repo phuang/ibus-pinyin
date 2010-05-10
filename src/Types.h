@@ -67,57 +67,56 @@ namespace PY {
 #define PINYIN_ID_V     (56)
 #define PINYIN_ID_NG    PINYIN_ID_VOID
 
-#define PINYIN_INCOMPLETE_PINYIN    (1 << 0)
+#define PINYIN_INCOMPLETE_PINYIN    (1U << 0)
 
-#define PINYIN_CORRECT_GN_TO_NG     (1 << 1)
-#define PINYIN_CORRECT_MG_TO_NG     (1 << 2)
-#define PINYIN_CORRECT_IOU_TO_IU    (1 << 3)
-#define PINYIN_CORRECT_UEI_TO_UI    (1 << 4)
-#define PINYIN_CORRECT_UEN_TO_UN    (1 << 5)
-#define PINYIN_CORRECT_UE_TO_VE     (1 << 6)
-#define PINYIN_CORRECT_VE_TO_UE     (1 << 7)
+#define PINYIN_CORRECT_GN_TO_NG     (1U << 1)
+#define PINYIN_CORRECT_MG_TO_NG     (1U << 2)
+#define PINYIN_CORRECT_IOU_TO_IU    (1U << 3)
+#define PINYIN_CORRECT_UEI_TO_UI    (1U << 4)
+#define PINYIN_CORRECT_UEN_TO_UN    (1U << 5)
+#define PINYIN_CORRECT_UE_TO_VE     (1U << 6)
+#define PINYIN_CORRECT_V_TO_U       (1U << 7)
 #define PINYIN_CORRECT_ALL          (0x000000fe)
 
-#define PINYIN_FUZZY_C_CH           (1 << 8)
-#define PINYIN_FUZZY_CH_C           (1 << 9)
-#define PINYIN_FUZZY_Z_ZH           (1 << 10)
-#define PINYIN_FUZZY_ZH_Z           (1 << 11)
-#define PINYIN_FUZZY_S_SH           (1 << 12)
-#define PINYIN_FUZZY_SH_S           (1 << 13)
-#define PINYIN_FUZZY_L_N            (1 << 14)
-#define PINYIN_FUZZY_N_L            (1 << 15)
-#define PINYIN_FUZZY_F_H            (1 << 16)
-#define PINYIN_FUZZY_H_F            (1 << 17)
-#define PINYIN_FUZZY_L_R            (1 << 18)
-#define PINYIN_FUZZY_R_L            (1 << 19)
-#define PINYIN_FUZZY_K_G            (1 << 20)
-#define PINYIN_FUZZY_G_K            (1 << 21)
+#define PINYIN_FUZZY_C_CH           (1U << 8)
+#define PINYIN_FUZZY_CH_C           (1U << 9)
+#define PINYIN_FUZZY_Z_ZH           (1U << 10)
+#define PINYIN_FUZZY_ZH_Z           (1U << 11)
+#define PINYIN_FUZZY_S_SH           (1U << 12)
+#define PINYIN_FUZZY_SH_S           (1U << 13)
+#define PINYIN_FUZZY_L_N            (1U << 14)
+#define PINYIN_FUZZY_N_L            (1U << 15)
+#define PINYIN_FUZZY_F_H            (1U << 16)
+#define PINYIN_FUZZY_H_F            (1U << 17)
+#define PINYIN_FUZZY_L_R            (1U << 18)
+#define PINYIN_FUZZY_R_L            (1U << 19)
+#define PINYIN_FUZZY_K_G            (1U << 20)
+#define PINYIN_FUZZY_G_K            (1U << 21)
 
-#define PINYIN_FUZZY_AN_ANG         (1 << 22)
-#define PINYIN_FUZZY_ANG_AN         (1 << 23)
-#define PINYIN_FUZZY_EN_ENG         (1 << 24)
-#define PINYIN_FUZZY_ENG_EN         (1 << 25)
-#define PINYIN_FUZZY_IN_ING         (1 << 26)
-#define PINYIN_FUZZY_ING_IN         (1 << 27)
-#define PINYIN_FUZZY_IAN_IANG       (1 << 28)
-#define PINYIN_FUZZY_IANG_IAN       (1 << 29)
-#define PINYIN_FUZZY_UAN_UANG       (1 << 30)
-#define PINYIN_FUZZY_UANG_UAN       (1 << 31)
+#define PINYIN_FUZZY_AN_ANG         (1U << 22)
+#define PINYIN_FUZZY_ANG_AN         (1U << 23)
+#define PINYIN_FUZZY_EN_ENG         (1U << 24)
+#define PINYIN_FUZZY_ENG_EN         (1U << 25)
+#define PINYIN_FUZZY_IN_ING         (1U << 26)
+#define PINYIN_FUZZY_ING_IN         (1U << 27)
+#define PINYIN_FUZZY_IAN_IANG       (1U << 28)
+#define PINYIN_FUZZY_IANG_IAN       (1U << 29)
+#define PINYIN_FUZZY_UAN_UANG       (1U << 30)
+#define PINYIN_FUZZY_UANG_UAN       (1U << 31)
 #define PINYIN_FUZZY_ALL            (0xffffff00)
 
-typedef struct _Pinyin Pinyin;
-struct _Pinyin {
-    const char *text;
-    const char *sheng;
-    const char *yun;
-    const char  sheng_id;
-    const char  yun_id;
-    const char  fsheng_id;
-    const char  fyun_id;
-    const char  fsheng_id_2;
-    const char  fyun_id_2;
-    const int   len;
-    const int   flags;
+struct Pinyin {
+    const gchar *text;
+    const gchar *sheng;
+    const gchar *yun;
+    const gchar  sheng_id;
+    const gchar  yun_id;
+    const gchar  fsheng_id;
+    const gchar  fyun_id;
+    const gchar  fsheng_id_2;
+    const gchar  fyun_id_2;
+    const guint  len;
+    const guint  flags;
 };
 
 #define MAX_UTF8_LEN 6
