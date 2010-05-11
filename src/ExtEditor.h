@@ -21,6 +21,7 @@ enum ExtEditorLabelMode{
     LABEL_LIST_NONE,
     LABEL_LIST_DIGIT,
     LABEL_LIST_ALPHA,
+    LABEL_LIST_SINGLE,
     LABEL_LAST,
 };
 
@@ -57,7 +58,7 @@ private:
 
     ExtEditorLabelMode m_mode;
     Pointer<IBusEnginePlugin> m_lua_plugin;
-    int m_cursor_pos;
+    size_t m_cursor_pos;
 
     std::string m_input;
     std::string m_preedit_text;

@@ -58,25 +58,17 @@ ExtEditor::processKeyEvent (guint keyval, guint keycode, guint modifiers)
         {
             g_return_val_if_fail( 'i' == keyval, FALSE);
             if ( 'i' == keyval ) {
-                m_input.insert(m_cursor_pos, keyval);
+                m_input.insert(m_cursor_pos, 1, keyval);
                 m_cursor_pos++;
             }
-            //move to updateStateFromInput.
-            m_mode = LABEL_NONE;
         }
         break;
     case 1 ... 2: // Only contains 'i' in input string.
         {      
             g_return_val_if_fail( 'i' == m_input[0], FALSE);
             if ( isalnum(keyval) ) {
-                m_input.insert(m_cursor_pos, keyval);
+                m_input.insert(m_cursor_pos, 1, keyval);
                 m_cursor_pos++;
-            }
-            //move to updateStateFromInput.
-            if ( isalpha(m_input[1]))
-                m_mode = LABEL_LIST_COMMANDS;
-            else if ( isdigit(m_input[1]) ){
-                m_mode = LABEL_LIST_NUMBERS;
             }
         }
         break;
@@ -84,29 +76,8 @@ ExtEditor::processKeyEvent (guint keyval, guint keycode, guint modifiers)
         {
             g_return_val_if_fail( 'i' == m_input[0], FALSE);
             if (isprint(keyval)){
-                m_input.insert(m_cursor_pos, keyval);
+                m_input.insert(m_cursor_pos, 1, keyval);
                 m_cursor_pos++;
-            }
-
-            //move to updateStateFromInput.
-            if ( isalpha(m_input[1])) {
-                std::string command_name = m_input.substr(1,2);
-
-                const lua_command_t * command = ibus_engine_plugin_lookup_command(m_lua_plugin, command_name.c_str());
-                if ( NULL == command)
-                    return FALSE;
-
-                std::string label = command->leading;
-
-                if ( "digit" == label )
-                    m_mode = LABEL_LIST_DIGIT;
-                else if ( "alpha" == label )
-                    m_mode = LABEL_LIST_ALPHA;
-                else
-                    m_mode = LABEL_LIST_NONE;
-            }else if ( isdigit(m_input[1])) {
-                //Generate Chinese number in updateStateFromInput.
-                g_assert(LABEL_LIST_NUMBERS == m_mode);
             }
         }
         break;
@@ -156,6 +127,18 @@ ExtEditor::updateStateFromInput()
 {
     /* Do parse and candidates update here. */
     /* prefix i double check here. */
+    if ( !m_input.length() )
+        return false;
+    if ( ! 'i' == m_input[0] ){
+        g_warning("i is expected in m_input string.\n");
+        return false;
+    }
+
+    m_mode = LABEL_LIST_COMMANDS;
+    if ( 1 == m_input.length() ){
+        fillCommandCandidates();
+        return true;
+    }
     /* Check m_input len, and update auxiliary string meanwhile.
      * 1. only "i", dispatch to fillCommandCandidates(void).
      * 2. "i" with one charactor,
@@ -163,6 +146,42 @@ ExtEditor::updateStateFromInput()
      * 3. "i" with two charactor or more,
      *      dispatch to fillCommand(std::string, const char * argument).
      */
+
+    if ( isalpha(m_input[1])){
+        m_mode = LABEL_LIST_COMMANDS;
+        if ( m_input.length() == 2){
+            fillCommandCandidates(m_input.substr(1,1).c_str());
+            return true;
+        } else if ( m_input.length() == 3) {
+            std::string command_name = m_input.substr(1,2);
+
+            const lua_command_t * command = ibus_engine_plugin_lookup_command(m_lua_plugin, command_name.c_str());
+            if ( NULL == command) {
+                m_mode = LABEL_NONE;
+                clearLookupTable();
+                m_lookup_table.clear();
+                sendLookupTable();
+                return false;
+            }
+
+            std::string label = command->leading;
+
+            if ( "digit" == label )
+                m_mode = LABEL_LIST_DIGIT;
+            else if ( "alpha" == label )
+                m_mode = LABEL_LIST_ALPHA;
+            else
+                m_mode = LABEL_LIST_NONE;
+
+            //fillCommandCandidates(...).(list or single value.)
+        }
+    }
+    else if ( isdigit(m_input[1]) ){
+        m_mode = LABEL_LIST_NUMBERS;
+        //Generate Chinese number.
+        //fillChineseNumber(). (Label use digit.)
+    }
+
     return true;
 }
 
