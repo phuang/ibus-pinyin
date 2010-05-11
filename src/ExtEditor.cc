@@ -8,7 +8,8 @@ namespace PY {
 
 ExtEditor::ExtEditor (PinyinProperties & props)
     : Editor (props),
-      m_mode(LABEL_NONE)
+      m_mode(LABEL_NONE),
+      m_cursor_pos(0)
 {
     m_lua_plugin = ibus_engine_plugin_new();
 
@@ -49,13 +50,17 @@ ExtEditor::processKeyEvent (guint keyval, guint keycode, guint modifiers)
     //handle page/cursor up/down here.
     //handle label key select here.
 
+    m_cursor_pos = std::min(m_cursor_pos, m_input.length());
+
     /* Remember the input string. */
-    switch(m_input.length()){
+    switch(m_cursor_pos){
     case 0: //Empty input string.
         {
             g_return_val_if_fail( 'i' == keyval, FALSE);
-            if ( 'i' == keyval )
-                m_input += keyval;
+            if ( 'i' == keyval ) {
+                m_input.insert(m_cursor_pos, keyval);
+                m_cursor_pos++;
+            }
             //move to updateStateFromInput.
             m_mode = LABEL_NONE;
         }
@@ -63,8 +68,10 @@ ExtEditor::processKeyEvent (guint keyval, guint keycode, guint modifiers)
     case 1 ... 2: // Only contains 'i' in input string.
         {      
             g_return_val_if_fail( 'i' == m_input[0], FALSE);
-            if ( isalnum(keyval) )
-                m_input += keyval;
+            if ( isalnum(keyval) ) {
+                m_input.insert(m_cursor_pos, keyval);
+                m_cursor_pos++;
+            }
             //move to updateStateFromInput.
             if ( isalpha(m_input[1]))
                 m_mode = LABEL_LIST_COMMANDS;
@@ -76,8 +83,10 @@ ExtEditor::processKeyEvent (guint keyval, guint keycode, guint modifiers)
     default: //Here is the appended argment.
         {
             g_return_val_if_fail( 'i' == m_input[0], FALSE);
-            if (isprint(keyval))
-                m_input += keyval;
+            if (isprint(keyval)){
+                m_input.insert(m_cursor_pos, keyval);
+                m_cursor_pos++;
+            }
 
             //move to updateStateFromInput.
             if ( isalpha(m_input[1])) {
