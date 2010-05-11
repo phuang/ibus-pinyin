@@ -35,7 +35,6 @@
 libexec_PROGRAMS = ibus-engine-pinyin
 ibus_engine_c_sources = \
 	Config.cc \
-	CustomPhrase.cc \
 	Database.cc \
 	DoublePinyinEditor.cc \
 	Editor.cc \
@@ -62,7 +61,6 @@ ibus_engine_built_h_sources = \
 ibus_engine_h_sources = \
 	Bus.h \
 	Config.h \
-	CustomPhrase.h \
 	Database.h \
 	DoublePinyinEditor.h \
 	DoublePinyinTable.h \
