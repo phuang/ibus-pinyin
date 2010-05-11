@@ -67,7 +67,7 @@ dnl strip `\n' with backquotes, not the `\r'.  This results in
 dnl boost_cv_lib_version='1_37\r' for instance, which breaks
 dnl everything else.
 dnl Cannot use 'dnl' after [$4] because a trailing dnl may break AC_CACHE_CHECK
-(eval "$ac_cpp conftest.$ac_ext") 2>&AS_MESSAGE_LOG_FD |
+(eval "$ac_cpp $CXXFLAGS conftest.$ac_ext") 2>&AS_MESSAGE_LOG_FD |
   tr -d '\r' |
   $SED -n -e "$1" >conftest.i 2>&1],
   [$3],

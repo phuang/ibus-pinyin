@@ -12,3 +12,6 @@ Added. We have to re-generate this file on host OS (i.e. Ubuntu) every time when
 Modified "android.db:" rule so that the create_db.py, which depends on too many python modules such as python-sqlite, script is never used on build-time.
 We use the pre-processed file, rawdict_utf16_65105_freq.sql, instead.
 
+- m4/boost.m4
+
+Pass $CXXFLAGS to $ac_cpp to make cross-compilation of ibus-pinyin easy.
