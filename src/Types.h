@@ -107,7 +107,7 @@ namespace PY {
 
 struct Pinyin {
     const gchar *text;
-    const gchar *bopomofo;
+    const wchar_t *bopomofo;
     const gchar *sheng;
     const gchar *yun;
     const gchar  sheng_id;

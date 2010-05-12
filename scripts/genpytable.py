@@ -311,7 +311,7 @@ def gen_table():
         # args = (i, ) + tuple(['"%s"' % s for s in p[:3]]) + tuple(["PINYIN_ID_%s" % s.upper() if s else "PINYIN_ID_ZERO" for s in p[3:9]]) + p[9:-1] + (str(p[-1]), )
         print '''    {  /* %d */
         text        : "%s",
-        bopomofo    : "%s",
+        bopomofo    : L"%s",
         sheng       : "%s",
         yun         : "%s",
         sheng_id    : %s,
