@@ -13,7 +13,7 @@ ExtEditor::ExtEditor (PinyinProperties & props)
 {
     m_lua_plugin = ibus_engine_plugin_new();
 
-    loadLuaScript("./lua/base.lua");
+    loadLuaScript("../lua/base.lua");
 
     m_input = "";
     m_lookup_table.clear();
@@ -188,20 +188,7 @@ ExtEditor::updateStateFromInput()
 bool
 ExtEditor::fillCommandCandidates()
 {
-
-    /* try to replace this with fillCommandCandidates("") call. */
-    clearLookupTable();
-
-    /* fill candidates here. */
-    const GArray * commands = ibus_engine_plugin_get_available_commands(m_lua_plugin);
-    for ( int i = 0; i < commands->len; ++i){
-        lua_command_t * command = &g_array_index(commands, lua_command_t, i);
-        m_lookup_table.appendLabel(Text(command->command_name));
-        m_lookup_table.appendCandidate(Text(command->description));
-    }
-
-    sendLookupTable();
-    return true;
+    return fillCommandCandidates("");
 }
 
 bool
