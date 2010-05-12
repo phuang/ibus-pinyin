@@ -83,7 +83,7 @@ PinyinEngine::processKeyEvent (guint keyval, guint keycode, guint modifiers)
             ((modifiers & CASHM_MASK) == 0)) {
             const String & text = m_editors[MODE_INIT]->text ();
             if (text.empty ()) {
-            #if 0
+            #if 1
                 if (keyval == IBUS_i) {
                     m_input_mode = MODE_EXTENSION;
                 }
