@@ -8,14 +8,14 @@ namespace PY {
 
 ExtEditor::ExtEditor (PinyinProperties & props)
     : Editor (props),
-      m_mode(LABEL_NONE),
-      m_cursor_pos(0)
+      m_mode(LABEL_NONE)
 {
     m_lua_plugin = ibus_engine_plugin_new();
 
     loadLuaScript("../lua/base.lua");
 
-    m_input = "";
+    m_text = "";
+    m_cursor = 0;
     m_lookup_table.clear();
 }
 
@@ -50,34 +50,34 @@ ExtEditor::processKeyEvent (guint keyval, guint keycode, guint modifiers)
     //handle page/cursor up/down here.
     //handle label key select here.
 
-    m_cursor_pos = std::min(m_cursor_pos, m_input.length());
+    m_cursor = std::min(m_cursor, (guint)m_text.length());
 
     /* Remember the input string. */
-    switch(m_cursor_pos){
+    switch(m_cursor){
     case 0: //Empty input string.
         {
             g_return_val_if_fail( 'i' == keyval, FALSE);
             if ( 'i' == keyval ) {
-                m_input.insert(m_cursor_pos, 1, keyval);
-                m_cursor_pos++;
+                m_text.insert(m_cursor, keyval);
+                m_cursor++;
             }
         }
         break;
     case 1 ... 2: // Only contains 'i' in input string.
         {      
-            g_return_val_if_fail( 'i' == m_input[0], FALSE);
+            g_return_val_if_fail( 'i' == m_text[0], FALSE);
             if ( isalnum(keyval) ) {
-                m_input.insert(m_cursor_pos, 1, keyval);
-                m_cursor_pos++;
+                m_text.insert(m_cursor, keyval);
+                m_cursor++;
             }
         }
         break;
     default: //Here is the appended argment.
         {
-            g_return_val_if_fail( 'i' == m_input[0], FALSE);
+            g_return_val_if_fail( 'i' == m_text[0], FALSE);
             if (isprint(keyval)){
-                m_input.insert(m_cursor_pos, 1, keyval);
-                m_cursor_pos++;
+                m_text.insert(m_cursor, keyval);
+                m_cursor++;
             }
         }
         break;
@@ -127,19 +127,19 @@ ExtEditor::updateStateFromInput()
 {
     /* Do parse and candidates update here. */
     /* prefix i double check here. */
-    if ( !m_input.length() )
+    if ( !m_text.length() )
         return false;
-    if ( ! 'i' == m_input[0] ){
+    if ( ! 'i' == m_text[0] ){
         g_warning("i is expected in m_input string.\n");
         return false;
     }
 
     m_mode = LABEL_LIST_COMMANDS;
-    if ( 1 == m_input.length() ){
+    if ( 1 == m_text.length() ){
         fillCommandCandidates();
         return true;
     }
-    /* Check m_input len, and update auxiliary string meanwhile.
+    /* Check m_text len, and update auxiliary string meanwhile.
      * 1. only "i", dispatch to fillCommandCandidates(void).
      * 2. "i" with one charactor,
      *      dispatch to fillCommandCandidates(std::string).
@@ -147,13 +147,13 @@ ExtEditor::updateStateFromInput()
      *      dispatch to fillCommand(std::string, const char * argument).
      */
 
-    if ( isalpha(m_input[1])){
+    if ( isalpha(m_text[1])){
         m_mode = LABEL_LIST_COMMANDS;
-        if ( m_input.length() == 2){
-            fillCommandCandidates(m_input.substr(1,1).c_str());
+        if ( m_text.length() == 2){
+            fillCommandCandidates(m_text.substr(1,1).c_str());
             return true;
-        } else if ( m_input.length() == 3) {
-            std::string command_name = m_input.substr(1,2);
+        } else if ( m_text.length() == 3) {
+            std::string command_name = m_text.substr(1,2);
 
             const lua_command_t * command = ibus_engine_plugin_lookup_command(m_lua_plugin, command_name.c_str());
             if ( NULL == command) {
@@ -176,7 +176,7 @@ ExtEditor::updateStateFromInput()
             //fillCommandCandidates(...).(list or single value.)
         }
     }
-    else if ( isdigit(m_input[1]) ){
+    else if ( isdigit(m_text[1]) ){
         m_mode = LABEL_LIST_NUMBERS;
         //Generate Chinese number.
         //fillChineseNumber(). (Label use digit.)

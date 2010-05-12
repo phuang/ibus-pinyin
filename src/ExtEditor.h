@@ -58,9 +58,7 @@ private:
 
     ExtEditorLabelMode m_mode;
     Pointer<IBusEnginePlugin> m_lua_plugin;
-    size_t m_cursor_pos;
 
-    std::string m_input;
     std::string m_preedit_text;
     std::string m_auxiliary_text;
 
