@@ -309,7 +309,7 @@ static const Pinyin pinyin_table[] = {
     },
     {  /* 22 */
         text        : "biang",
-        bopomofo    : "",
+        bopomofo    : "ㄅㄧㄤ",
         sheng       : "b",
         yun         : "iang",
         sheng_id    : PINYIN_ID_B,
@@ -1107,7 +1107,7 @@ static const Pinyin pinyin_table[] = {
     },
     {  /* 79 */
         text        : "cuai",
-        bopomofo    : "",
+        bopomofo    : "ㄘㄨㄞ",
         sheng       : "c",
         yun         : "uai",
         sheng_id    : PINYIN_ID_C,
@@ -1135,7 +1135,7 @@ static const Pinyin pinyin_table[] = {
     },
     {  /* 81 */
         text        : "cuang",
-        bopomofo    : "",
+        bopomofo    : "ㄘㄨㄤ",
         sheng       : "c",
         yun         : "uang",
         sheng_id    : PINYIN_ID_C,
@@ -1457,7 +1457,7 @@ static const Pinyin pinyin_table[] = {
     },
     {  /* 104 */
         text        : "diang",
-        bopomofo    : "",
+        bopomofo    : "ㄉㄧㄤ",
         sheng       : "d",
         yun         : "iang",
         sheng_id    : PINYIN_ID_D,
@@ -1667,7 +1667,7 @@ static const Pinyin pinyin_table[] = {
     },
     {  /* 119 */
         text        : "duang",
-        bopomofo    : "",
+        bopomofo    : "ㄉㄨㄤ",
         sheng       : "d",
         yun         : "uang",
         sheng_id    : PINYIN_ID_D,
@@ -1849,7 +1849,7 @@ static const Pinyin pinyin_table[] = {
     },
     {  /* 132 */
         text        : "fai",
-        bopomofo    : "",
+        bopomofo    : "ㄈㄞ",
         sheng       : "f",
         yun         : "ai",
         sheng_id    : PINYIN_ID_F,
@@ -1905,7 +1905,7 @@ static const Pinyin pinyin_table[] = {
     },
     {  /* 136 */
         text        : "fao",
-        bopomofo    : "",
+        bopomofo    : "ㄈㄠ",
         sheng       : "f",
         yun         : "ao",
         sheng_id    : PINYIN_ID_F,
@@ -2017,7 +2017,7 @@ static const Pinyin pinyin_table[] = {
     },
     {  /* 144 */
         text        : "fong",
-        bopomofo    : "",
+        bopomofo    : "ㄈㄨㄥ",
         sheng       : "f",
         yun         : "ong",
         sheng_id    : PINYIN_ID_F,
@@ -2059,7 +2059,7 @@ static const Pinyin pinyin_table[] = {
     },
     {  /* 147 */
         text        : "fua",
-        bopomofo    : "",
+        bopomofo    : "ㄈㄨㄚ",
         sheng       : "f",
         yun         : "ua",
         sheng_id    : PINYIN_ID_F,
@@ -2073,7 +2073,7 @@ static const Pinyin pinyin_table[] = {
     },
     {  /* 148 */
         text        : "fuai",
-        bopomofo    : "",
+        bopomofo    : "ㄈㄨㄞ",
         sheng       : "f",
         yun         : "uai",
         sheng_id    : PINYIN_ID_F,
@@ -2087,7 +2087,7 @@ static const Pinyin pinyin_table[] = {
     },
     {  /* 149 */
         text        : "fuan",
-        bopomofo    : "",
+        bopomofo    : "ㄈㄨㄢ",
         sheng       : "f",
         yun         : "uan",
         sheng_id    : PINYIN_ID_F,
@@ -2101,7 +2101,7 @@ static const Pinyin pinyin_table[] = {
     },
     {  /* 150 */
         text        : "fuang",
-        bopomofo    : "",
+        bopomofo    : "ㄈㄨㄤ",
         sheng       : "f",
         yun         : "uang",
         sheng_id    : PINYIN_ID_F,
@@ -2143,7 +2143,7 @@ static const Pinyin pinyin_table[] = {
     },
     {  /* 153 */
         text        : "fui",
-        bopomofo    : "",
+        bopomofo    : "ㄈㄨㄟ",
         sheng       : "f",
         yun         : "ui",
         sheng_id    : PINYIN_ID_F,
@@ -2157,7 +2157,7 @@ static const Pinyin pinyin_table[] = {
     },
     {  /* 154 */
         text        : "fun",
-        bopomofo    : "",
+        bopomofo    : "ㄈㄨㄣ",
         sheng       : "f",
         yun         : "un",
         sheng_id    : PINYIN_ID_F,
@@ -2171,7 +2171,7 @@ static const Pinyin pinyin_table[] = {
     },
     {  /* 155 */
         text        : "fuo",
-        bopomofo    : "",
+        bopomofo    : "ㄈㄨㄛ",
         sheng       : "f",
         yun         : "uo",
         sheng_id    : PINYIN_ID_F,
@@ -2801,7 +2801,7 @@ static const Pinyin pinyin_table[] = {
     },
     {  /* 200 */
         text        : "ho",
-        bopomofo    : "",
+        bopomofo    : "ㄏㄛ",
         sheng       : "h",
         yun         : "o",
         sheng_id    : PINYIN_ID_H,
@@ -3319,7 +3319,7 @@ static const Pinyin pinyin_table[] = {
     },
     {  /* 237 */
         text        : "juang",
-        bopomofo    : "",
+        bopomofo    : "ㄐㄩㄤ",
         sheng       : "j",
         yun         : "uang",
         sheng_id    : PINYIN_ID_J,
@@ -4369,7 +4369,7 @@ static const Pinyin pinyin_table[] = {
     },
     {  /* 312 */
         text        : "luang",
-        bopomofo    : "",
+        bopomofo    : "ㄌㄨㄤ",
         sheng       : "l",
         yun         : "uang",
         sheng_id    : PINYIN_ID_L,
@@ -4425,7 +4425,7 @@ static const Pinyin pinyin_table[] = {
     },
     {  /* 316 */
         text        : "lui",
-        bopomofo    : "",
+        bopomofo    : "ㄌㄨㄟ",
         sheng       : "l",
         yun         : "ui",
         sheng_id    : PINYIN_ID_L,
@@ -4719,7 +4719,7 @@ static const Pinyin pinyin_table[] = {
     },
     {  /* 337 */
         text        : "miang",
-        bopomofo    : "",
+        bopomofo    : "ㄇㄧㄤ",
         sheng       : "m",
         yun         : "iang",
         sheng_id    : PINYIN_ID_M,
@@ -5279,7 +5279,7 @@ static const Pinyin pinyin_table[] = {
     },
     {  /* 377 */
         text        : "no",
-        bopomofo    : "",
+        bopomofo    : "ㄋㄛ",
         sheng       : "n",
         yun         : "o",
         sheng_id    : PINYIN_ID_N,
@@ -5377,7 +5377,7 @@ static const Pinyin pinyin_table[] = {
     },
     {  /* 384 */
         text        : "nuang",
-        bopomofo    : "",
+        bopomofo    : "ㄋㄨㄤ",
         sheng       : "n",
         yun         : "uang",
         sheng_id    : PINYIN_ID_N,
@@ -5713,7 +5713,7 @@ static const Pinyin pinyin_table[] = {
     },
     {  /* 408 */
         text        : "piang",
-        bopomofo    : "",
+        bopomofo    : "ㄆㄧㄤ",
         sheng       : "p",
         yun         : "iang",
         sheng_id    : PINYIN_ID_P,
@@ -6133,7 +6133,7 @@ static const Pinyin pinyin_table[] = {
     },
     {  /* 438 */
         text        : "quang",
-        bopomofo    : "",
+        bopomofo    : "ㄑㄩㄤ",
         sheng       : "q",
         yun         : "uang",
         sheng_id    : PINYIN_ID_Q,
@@ -6287,7 +6287,7 @@ static const Pinyin pinyin_table[] = {
     },
     {  /* 449 */
         text        : "ra",
-        bopomofo    : "",
+        bopomofo    : "ㄖㄚ",
         sheng       : "r",
         yun         : "a",
         sheng_id    : PINYIN_ID_R,
@@ -6315,7 +6315,7 @@ static const Pinyin pinyin_table[] = {
     },
     {  /* 451 */
         text        : "rai",
-        bopomofo    : "",
+        bopomofo    : "ㄖㄞ",
         sheng       : "r",
         yun         : "ai",
         sheng_id    : PINYIN_ID_R,
@@ -6413,7 +6413,7 @@ static const Pinyin pinyin_table[] = {
     },
     {  /* 458 */
         text        : "rei",
-        bopomofo    : "",
+        bopomofo    : "ㄖㄟ",
         sheng       : "r",
         yun         : "ei",
         sheng_id    : PINYIN_ID_R,
@@ -6483,7 +6483,7 @@ static const Pinyin pinyin_table[] = {
     },
     {  /* 463 */
         text        : "ria",
-        bopomofo    : "",
+        bopomofo    : "ㄖㄧㄚ",
         sheng       : "r",
         yun         : "ia",
         sheng_id    : PINYIN_ID_R,
@@ -6497,7 +6497,7 @@ static const Pinyin pinyin_table[] = {
     },
     {  /* 464 */
         text        : "rian",
-        bopomofo    : "",
+        bopomofo    : "ㄖㄧㄢ",
         sheng       : "r",
         yun         : "ian",
         sheng_id    : PINYIN_ID_R,
@@ -6511,7 +6511,7 @@ static const Pinyin pinyin_table[] = {
     },
     {  /* 465 */
         text        : "riang",
-        bopomofo    : "",
+        bopomofo    : "ㄖㄧㄤ",
         sheng       : "r",
         yun         : "iang",
         sheng_id    : PINYIN_ID_R,
@@ -6525,7 +6525,7 @@ static const Pinyin pinyin_table[] = {
     },
     {  /* 466 */
         text        : "riao",
-        bopomofo    : "",
+        bopomofo    : "ㄖㄧㄠ",
         sheng       : "r",
         yun         : "iao",
         sheng_id    : PINYIN_ID_R,
@@ -6539,7 +6539,7 @@ static const Pinyin pinyin_table[] = {
     },
     {  /* 467 */
         text        : "rie",
-        bopomofo    : "",
+        bopomofo    : "ㄖㄧㄝ",
         sheng       : "r",
         yun         : "ie",
         sheng_id    : PINYIN_ID_R,
@@ -6553,7 +6553,7 @@ static const Pinyin pinyin_table[] = {
     },
     {  /* 468 */
         text        : "rin",
-        bopomofo    : "",
+        bopomofo    : "ㄖㄧㄣ",
         sheng       : "r",
         yun         : "in",
         sheng_id    : PINYIN_ID_R,
@@ -6567,7 +6567,7 @@ static const Pinyin pinyin_table[] = {
     },
     {  /* 469 */
         text        : "ring",
-        bopomofo    : "",
+        bopomofo    : "ㄖㄧㄥ",
         sheng       : "r",
         yun         : "ing",
         sheng_id    : PINYIN_ID_R,
@@ -6595,7 +6595,7 @@ static const Pinyin pinyin_table[] = {
     },
     {  /* 471 */
         text        : "riu",
-        bopomofo    : "",
+        bopomofo    : "ㄖㄧㄡ",
         sheng       : "r",
         yun         : "iu",
         sheng_id    : PINYIN_ID_R,
@@ -6609,7 +6609,7 @@ static const Pinyin pinyin_table[] = {
     },
     {  /* 472 */
         text        : "ro",
-        bopomofo    : "",
+        bopomofo    : "ㄖㄛ",
         sheng       : "r",
         yun         : "o",
         sheng_id    : PINYIN_ID_R,
@@ -6707,7 +6707,7 @@ static const Pinyin pinyin_table[] = {
     },
     {  /* 479 */
         text        : "ruang",
-        bopomofo    : "",
+        bopomofo    : "ㄖㄨㄤ",
         sheng       : "r",
         yun         : "uang",
         sheng_id    : PINYIN_ID_R,
@@ -6805,7 +6805,7 @@ static const Pinyin pinyin_table[] = {
     },
     {  /* 486 */
         text        : "rv",
-        bopomofo    : "",
+        bopomofo    : "ㄖㄩ",
         sheng       : "r",
         yun         : "ü",
         sheng_id    : PINYIN_ID_R,
@@ -6819,7 +6819,7 @@ static const Pinyin pinyin_table[] = {
     },
     {  /* 487 */
         text        : "rve",
-        bopomofo    : "",
+        bopomofo    : "ㄖㄩㄝ",
         sheng       : "r",
         yun         : "üe",
         sheng_id    : PINYIN_ID_R,
@@ -6973,7 +6973,7 @@ static const Pinyin pinyin_table[] = {
     },
     {  /* 498 */
         text        : "sei",
-        bopomofo    : "",
+        bopomofo    : "ㄙㄟ",
         sheng       : "s",
         yun         : "ei",
         sheng_id    : PINYIN_ID_S,
@@ -7239,7 +7239,7 @@ static const Pinyin pinyin_table[] = {
     },
     {  /* 517 */
         text        : "shong",
-        bopomofo    : "",
+        bopomofo    : "ㄕㄨㄥ",
         sheng       : "sh",
         yun         : "ong",
         sheng_id    : PINYIN_ID_SH,
@@ -7519,7 +7519,7 @@ static const Pinyin pinyin_table[] = {
     },
     {  /* 537 */
         text        : "sua",
-        bopomofo    : "",
+        bopomofo    : "ㄙㄨㄚ",
         sheng       : "s",
         yun         : "ua",
         sheng_id    : PINYIN_ID_S,
@@ -7533,7 +7533,7 @@ static const Pinyin pinyin_table[] = {
     },
     {  /* 538 */
         text        : "suai",
-        bopomofo    : "",
+        bopomofo    : "ㄙㄨㄞ",
         sheng       : "s",
         yun         : "uai",
         sheng_id    : PINYIN_ID_S,
@@ -7561,7 +7561,7 @@ static const Pinyin pinyin_table[] = {
     },
     {  /* 540 */
         text        : "suang",
-        bopomofo    : "",
+        bopomofo    : "ㄙㄨㄤ",
         sheng       : "s",
         yun         : "uang",
         sheng_id    : PINYIN_ID_S,
@@ -7799,7 +7799,7 @@ static const Pinyin pinyin_table[] = {
     },
     {  /* 557 */
         text        : "ten",
-        bopomofo    : "",
+        bopomofo    : "ㄊㄣ",
         sheng       : "t",
         yun         : "en",
         sheng_id    : PINYIN_ID_T,
@@ -7855,7 +7855,7 @@ static const Pinyin pinyin_table[] = {
     },
     {  /* 561 */
         text        : "tiang",
-        bopomofo    : "",
+        bopomofo    : "ㄊㄧㄤ",
         sheng       : "t",
         yun         : "iang",
         sheng_id    : PINYIN_ID_T,
@@ -7925,7 +7925,7 @@ static const Pinyin pinyin_table[] = {
     },
     {  /* 566 */
         text        : "tin",
-        bopomofo    : "",
+        bopomofo    : "ㄊㄧㄣ",
         sheng       : "t",
         yun         : "in",
         sheng_id    : PINYIN_ID_T,
@@ -8037,7 +8037,7 @@ static const Pinyin pinyin_table[] = {
     },
     {  /* 574 */
         text        : "tuang",
-        bopomofo    : "",
+        bopomofo    : "ㄊㄨㄤ",
         sheng       : "t",
         yun         : "uang",
         sheng_id    : PINYIN_ID_T,
@@ -8597,7 +8597,7 @@ static const Pinyin pinyin_table[] = {
     },
     {  /* 614 */
         text        : "xuang",
-        bopomofo    : "",
+        bopomofo    : "ㄒㄩㄤ",
         sheng       : "x",
         yun         : "uang",
         sheng_id    : PINYIN_ID_X,
@@ -9017,7 +9017,7 @@ static const Pinyin pinyin_table[] = {
     },
     {  /* 644 */
         text        : "yuang",
-        bopomofo    : "",
+        bopomofo    : "ㄧㄩㄤ",
         sheng       : "y",
         yun         : "uang",
         sheng_id    : PINYIN_ID_Y,
@@ -9871,7 +9871,7 @@ static const Pinyin pinyin_table[] = {
     },
     {  /* 705 */
         text        : "zua",
-        bopomofo    : "",
+        bopomofo    : "ㄗㄨㄚ",
         sheng       : "z",
         yun         : "ua",
         sheng_id    : PINYIN_ID_Z,
@@ -9885,7 +9885,7 @@ static const Pinyin pinyin_table[] = {
     },
     {  /* 706 */
         text        : "zuai",
-        bopomofo    : "",
+        bopomofo    : "ㄗㄨㄞ",
         sheng       : "z",
         yun         : "uai",
         sheng_id    : PINYIN_ID_Z,
@@ -9913,7 +9913,7 @@ static const Pinyin pinyin_table[] = {
     },
     {  /* 708 */
         text        : "zuang",
-        bopomofo    : "",
+        bopomofo    : "ㄗㄨㄤ",
         sheng       : "z",
         yun         : "uang",
         sheng_id    : PINYIN_ID_Z,
@@ -9997,7 +9997,7 @@ static const Pinyin pinyin_table[] = {
     },
 };
 
-static const Pinyin * bopomofo_table[] = {
+static const Pinyin *bopomofo_table[] = {
     &pinyin_table[7],    // "ㄅ" => "b"
     &pinyin_table[8],    // "ㄅㄚ" => "ba"
     &pinyin_table[29],   // "ㄅㄛ" => "bo"
@@ -10013,6 +10013,7 @@ static const Pinyin * bopomofo_table[] = {
     &pinyin_table[23],   // "ㄅㄧㄠ" => "biao"
     &pinyin_table[21],   // "ㄅㄧㄢ" => "bian"
     &pinyin_table[27],   // "ㄅㄧㄣ" => "bin"
+    &pinyin_table[22],   // "ㄅㄧㄤ" => "biang"
     &pinyin_table[28],   // "ㄅㄧㄥ" => "bing"
     &pinyin_table[30],   // "ㄅㄨ" => "bu"
     &pinyin_table[393],  // "ㄆ" => "p"
@@ -10031,6 +10032,7 @@ static const Pinyin * bopomofo_table[] = {
     &pinyin_table[409],  // "ㄆㄧㄠ" => "piao"
     &pinyin_table[407],  // "ㄆㄧㄢ" => "pian"
     &pinyin_table[413],  // "ㄆㄧㄣ" => "pin"
+    &pinyin_table[408],  // "ㄆㄧㄤ" => "piang"
     &pinyin_table[414],  // "ㄆㄧㄥ" => "ping"
     &pinyin_table[417],  // "ㄆㄨ" => "pu"
     &pinyin_table[321],  // "ㄇ" => "m"
@@ -10051,19 +10053,30 @@ static const Pinyin * bopomofo_table[] = {
     &pinyin_table[345],  // "ㄇㄧㄡ" => "miu"
     &pinyin_table[336],  // "ㄇㄧㄢ" => "mian"
     &pinyin_table[342],  // "ㄇㄧㄣ" => "min"
+    &pinyin_table[337],  // "ㄇㄧㄤ" => "miang"
     &pinyin_table[343],  // "ㄇㄧㄥ" => "ming"
     &pinyin_table[348],  // "ㄇㄨ" => "mu"
     &pinyin_table[129],  // "ㄈ" => "f"
     &pinyin_table[130],  // "ㄈㄚ" => "fa"
     &pinyin_table[143],  // "ㄈㄛ" => "fo"
     &pinyin_table[137],  // "ㄈㄜ" => "fe"
+    &pinyin_table[132],  // "ㄈㄞ" => "fai"
     &pinyin_table[139],  // "ㄈㄟ" => "fei"
+    &pinyin_table[136],  // "ㄈㄠ" => "fao"
     &pinyin_table[145],  // "ㄈㄡ" => "fou"
     &pinyin_table[134],  // "ㄈㄢ" => "fan"
     &pinyin_table[141],  // "ㄈㄣ" => "fen"
     &pinyin_table[135],  // "ㄈㄤ" => "fang"
     &pinyin_table[142],  // "ㄈㄥ" => "feng"
     &pinyin_table[146],  // "ㄈㄨ" => "fu"
+    &pinyin_table[147],  // "ㄈㄨㄚ" => "fua"
+    &pinyin_table[155],  // "ㄈㄨㄛ" => "fuo"
+    &pinyin_table[148],  // "ㄈㄨㄞ" => "fuai"
+    &pinyin_table[153],  // "ㄈㄨㄟ" => "fui"
+    &pinyin_table[149],  // "ㄈㄨㄢ" => "fuan"
+    &pinyin_table[154],  // "ㄈㄨㄣ" => "fun"
+    &pinyin_table[150],  // "ㄈㄨㄤ" => "fuang"
+    &pinyin_table[144],  // "ㄈㄨㄥ" => "fong"
     &pinyin_table[87],   // "ㄉ" => "d"
     &pinyin_table[88],   // "ㄉㄚ" => "da"
     &pinyin_table[95],   // "ㄉㄜ" => "de"
@@ -10082,12 +10095,14 @@ static const Pinyin * bopomofo_table[] = {
     &pinyin_table[112],  // "ㄉㄧㄡ" => "diu"
     &pinyin_table[103],  // "ㄉㄧㄢ" => "dian"
     &pinyin_table[109],  // "ㄉㄧㄣ" => "din"
+    &pinyin_table[104],  // "ㄉㄧㄤ" => "diang"
     &pinyin_table[110],  // "ㄉㄧㄥ" => "ding"
     &pinyin_table[117],  // "ㄉㄨ" => "du"
     &pinyin_table[124],  // "ㄉㄨㄛ" => "duo"
     &pinyin_table[122],  // "ㄉㄨㄟ" => "dui"
     &pinyin_table[118],  // "ㄉㄨㄢ" => "duan"
     &pinyin_table[123],  // "ㄉㄨㄣ" => "dun"
+    &pinyin_table[119],  // "ㄉㄨㄤ" => "duang"
     &pinyin_table[115],  // "ㄉㄨㄥ" => "dong"
     &pinyin_table[546],  // "ㄊ" => "t"
     &pinyin_table[547],  // "ㄊㄚ" => "ta"
@@ -10096,21 +10111,26 @@ static const Pinyin * bopomofo_table[] = {
     &pinyin_table[553],  // "ㄊㄠ" => "tao"
     &pinyin_table[571],  // "ㄊㄡ" => "tou"
     &pinyin_table[551],  // "ㄊㄢ" => "tan"
+    &pinyin_table[557],  // "ㄊㄣ" => "ten"
     &pinyin_table[552],  // "ㄊㄤ" => "tang"
     &pinyin_table[558],  // "ㄊㄥ" => "teng"
     &pinyin_table[559],  // "ㄊㄧ" => "ti"
     &pinyin_table[563],  // "ㄊㄧㄝ" => "tie"
     &pinyin_table[562],  // "ㄊㄧㄠ" => "tiao"
     &pinyin_table[560],  // "ㄊㄧㄢ" => "tian"
+    &pinyin_table[566],  // "ㄊㄧㄣ" => "tin"
+    &pinyin_table[561],  // "ㄊㄧㄤ" => "tiang"
     &pinyin_table[567],  // "ㄊㄧㄥ" => "ting"
     &pinyin_table[572],  // "ㄊㄨ" => "tu"
     &pinyin_table[579],  // "ㄊㄨㄛ" => "tuo"
     &pinyin_table[577],  // "ㄊㄨㄟ" => "tui"
     &pinyin_table[573],  // "ㄊㄨㄢ" => "tuan"
     &pinyin_table[578],  // "ㄊㄨㄣ" => "tun"
+    &pinyin_table[574],  // "ㄊㄨㄤ" => "tuang"
     &pinyin_table[570],  // "ㄊㄨㄥ" => "tong"
     &pinyin_table[349],  // "ㄋ" => "n"
     &pinyin_table[350],  // "ㄋㄚ" => "na"
+    &pinyin_table[377],  // "ㄋㄛ" => "no"
     &pinyin_table[357],  // "ㄋㄜ" => "ne"
     &pinyin_table[352],  // "ㄋㄞ" => "nai"
     &pinyin_table[359],  // "ㄋㄟ" => "nei"
@@ -10133,6 +10153,7 @@ static const Pinyin * bopomofo_table[] = {
     &pinyin_table[388],  // "ㄋㄨㄛ" => "nuo"
     &pinyin_table[383],  // "ㄋㄨㄢ" => "nuan"
     &pinyin_table[387],  // "ㄋㄨㄣ" => "nun"
+    &pinyin_table[384],  // "ㄋㄨㄤ" => "nuang"
     &pinyin_table[380],  // "ㄋㄨㄥ" => "nong"
     &pinyin_table[389],  // "ㄋㄩ" => "nv"
     &pinyin_table[390],  // "ㄋㄩㄝ" => "nve"
@@ -10159,8 +10180,10 @@ static const Pinyin * bopomofo_table[] = {
     &pinyin_table[302],  // "ㄌㄧㄥ" => "ling"
     &pinyin_table[310],  // "ㄌㄨ" => "lu"
     &pinyin_table[318],  // "ㄌㄨㄛ" => "luo"
+    &pinyin_table[316],  // "ㄌㄨㄟ" => "lui"
     &pinyin_table[311],  // "ㄌㄨㄢ" => "luan"
     &pinyin_table[317],  // "ㄌㄨㄣ" => "lun"
+    &pinyin_table[312],  // "ㄌㄨㄤ" => "luang"
     &pinyin_table[308],  // "ㄌㄨㄥ" => "long"
     &pinyin_table[319],  // "ㄌㄩ" => "lv"
     &pinyin_table[320],  // "ㄌㄩㄝ" => "lve"
@@ -10206,6 +10229,7 @@ static const Pinyin * bopomofo_table[] = {
     &pinyin_table[263],  // "ㄎㄨㄥ" => "kong"
     &pinyin_table[186],  // "ㄏ" => "h"
     &pinyin_table[187],  // "ㄏㄚ" => "ha"
+    &pinyin_table[200],  // "ㄏㄛ" => "ho"
     &pinyin_table[194],  // "ㄏㄜ" => "he"
     &pinyin_table[189],  // "ㄏㄞ" => "hai"
     &pinyin_table[196],  // "ㄏㄟ" => "hei"
@@ -10238,6 +10262,7 @@ static const Pinyin * bopomofo_table[] = {
     &pinyin_table[238],  // "ㄐㄩㄝ" => "jue"
     &pinyin_table[236],  // "ㄐㄩㄢ" => "juan"
     &pinyin_table[240],  // "ㄐㄩㄣ" => "jun"
+    &pinyin_table[237],  // "ㄐㄩㄤ" => "juang"
     &pinyin_table[232],  // "ㄐㄩㄥ" => "jiong"
     &pinyin_table[418],  // "ㄑ" => "q"
     &pinyin_table[419],  // "ㄑㄧ" => "qi"
@@ -10253,6 +10278,7 @@ static const Pinyin * bopomofo_table[] = {
     &pinyin_table[439],  // "ㄑㄩㄝ" => "que"
     &pinyin_table[437],  // "ㄑㄩㄢ" => "quan"
     &pinyin_table[441],  // "ㄑㄩㄣ" => "qun"
+    &pinyin_table[438],  // "ㄑㄩㄤ" => "quang"
     &pinyin_table[433],  // "ㄑㄩㄥ" => "qiong"
     &pinyin_table[594],  // "ㄒ" => "x"
     &pinyin_table[595],  // "ㄒㄧ" => "xi"
@@ -10268,6 +10294,7 @@ static const Pinyin * bopomofo_table[] = {
     &pinyin_table[615],  // "ㄒㄩㄝ" => "xue"
     &pinyin_table[613],  // "ㄒㄩㄢ" => "xuan"
     &pinyin_table[617],  // "ㄒㄩㄣ" => "xun"
+    &pinyin_table[614],  // "ㄒㄩㄤ" => "xuang"
     &pinyin_table[609],  // "ㄒㄩㄥ" => "xiong"
     &pinyin_table[682],  // "ㄓ" => "zhi"
     &pinyin_table[669],  // "ㄓㄚ" => "zha"
@@ -10326,20 +10353,36 @@ static const Pinyin * bopomofo_table[] = {
     &pinyin_table[524],  // "ㄕㄨㄢ" => "shuan"
     &pinyin_table[529],  // "ㄕㄨㄣ" => "shun"
     &pinyin_table[525],  // "ㄕㄨㄤ" => "shuang"
+    &pinyin_table[517],  // "ㄕㄨㄥ" => "shong"
     &pinyin_table[462],  // "ㄖ" => "ri"
+    &pinyin_table[449],  // "ㄖㄚ" => "ra"
+    &pinyin_table[472],  // "ㄖㄛ" => "ro"
     &pinyin_table[456],  // "ㄖㄜ" => "re"
+    &pinyin_table[451],  // "ㄖㄞ" => "rai"
+    &pinyin_table[458],  // "ㄖㄟ" => "rei"
     &pinyin_table[455],  // "ㄖㄠ" => "rao"
     &pinyin_table[476],  // "ㄖㄡ" => "rou"
     &pinyin_table[453],  // "ㄖㄢ" => "ran"
     &pinyin_table[460],  // "ㄖㄣ" => "ren"
     &pinyin_table[454],  // "ㄖㄤ" => "rang"
     &pinyin_table[461],  // "ㄖㄥ" => "reng"
+    &pinyin_table[463],  // "ㄖㄧㄚ" => "ria"
+    &pinyin_table[467],  // "ㄖㄧㄝ" => "rie"
+    &pinyin_table[466],  // "ㄖㄧㄠ" => "riao"
+    &pinyin_table[471],  // "ㄖㄧㄡ" => "riu"
+    &pinyin_table[464],  // "ㄖㄧㄢ" => "rian"
+    &pinyin_table[468],  // "ㄖㄧㄣ" => "rin"
+    &pinyin_table[465],  // "ㄖㄧㄤ" => "riang"
+    &pinyin_table[469],  // "ㄖㄧㄥ" => "ring"
     &pinyin_table[477],  // "ㄖㄨ" => "ru"
     &pinyin_table[485],  // "ㄖㄨㄛ" => "ruo"
     &pinyin_table[483],  // "ㄖㄨㄟ" => "rui"
     &pinyin_table[478],  // "ㄖㄨㄢ" => "ruan"
     &pinyin_table[484],  // "ㄖㄨㄣ" => "run"
+    &pinyin_table[479],  // "ㄖㄨㄤ" => "ruang"
     &pinyin_table[475],  // "ㄖㄨㄥ" => "rong"
+    &pinyin_table[486],  // "ㄖㄩ" => "rv"
+    &pinyin_table[487],  // "ㄖㄩㄝ" => "rve"
     &pinyin_table[699],  // "ㄗ" => "zi"
     &pinyin_table[655],  // "ㄗㄚ" => "za"
     &pinyin_table[662],  // "ㄗㄜ" => "ze"
@@ -10352,10 +10395,13 @@ static const Pinyin * bopomofo_table[] = {
     &pinyin_table[660],  // "ㄗㄤ" => "zang"
     &pinyin_table[667],  // "ㄗㄥ" => "zeng"
     &pinyin_table[704],  // "ㄗㄨ" => "zu"
+    &pinyin_table[705],  // "ㄗㄨㄚ" => "zua"
     &pinyin_table[713],  // "ㄗㄨㄛ" => "zuo"
+    &pinyin_table[706],  // "ㄗㄨㄞ" => "zuai"
     &pinyin_table[711],  // "ㄗㄨㄟ" => "zui"
     &pinyin_table[707],  // "ㄗㄨㄢ" => "zuan"
     &pinyin_table[712],  // "ㄗㄨㄣ" => "zun"
+    &pinyin_table[708],  // "ㄗㄨㄤ" => "zuang"
     &pinyin_table[702],  // "ㄗㄨㄥ" => "zong"
     &pinyin_table[73],   // "ㄘ" => "ci"
     &pinyin_table[32],   // "ㄘㄚ" => "ca"
@@ -10369,14 +10415,17 @@ static const Pinyin * bopomofo_table[] = {
     &pinyin_table[43],   // "ㄘㄥ" => "ceng"
     &pinyin_table[78],   // "ㄘㄨ" => "cu"
     &pinyin_table[86],   // "ㄘㄨㄛ" => "cuo"
+    &pinyin_table[79],   // "ㄘㄨㄞ" => "cuai"
     &pinyin_table[84],   // "ㄘㄨㄟ" => "cui"
     &pinyin_table[80],   // "ㄘㄨㄢ" => "cuan"
     &pinyin_table[85],   // "ㄘㄨㄣ" => "cun"
+    &pinyin_table[81],   // "ㄘㄨㄤ" => "cuang"
     &pinyin_table[76],   // "ㄘㄨㄥ" => "cong"
     &pinyin_table[531],  // "ㄙ" => "si"
     &pinyin_table[489],  // "ㄙㄚ" => "sa"
     &pinyin_table[496],  // "ㄙㄜ" => "se"
     &pinyin_table[491],  // "ㄙㄞ" => "sai"
+    &pinyin_table[498],  // "ㄙㄟ" => "sei"
     &pinyin_table[495],  // "ㄙㄠ" => "sao"
     &pinyin_table[535],  // "ㄙㄡ" => "sou"
     &pinyin_table[493],  // "ㄙㄢ" => "san"
@@ -10384,10 +10433,13 @@ static const Pinyin * bopomofo_table[] = {
     &pinyin_table[494],  // "ㄙㄤ" => "sang"
     &pinyin_table[501],  // "ㄙㄥ" => "seng"
     &pinyin_table[536],  // "ㄙㄨ" => "su"
+    &pinyin_table[537],  // "ㄙㄨㄚ" => "sua"
     &pinyin_table[545],  // "ㄙㄨㄛ" => "suo"
+    &pinyin_table[538],  // "ㄙㄨㄞ" => "suai"
     &pinyin_table[543],  // "ㄙㄨㄟ" => "sui"
     &pinyin_table[539],  // "ㄙㄨㄢ" => "suan"
     &pinyin_table[544],  // "ㄙㄨㄣ" => "sun"
+    &pinyin_table[540],  // "ㄙㄨㄤ" => "suang"
     &pinyin_table[534],  // "ㄙㄨㄥ" => "song"
     &pinyin_table[0],    // "ㄚ" => "a"
     &pinyin_table[391],  // "ㄛ" => "o"
@@ -10410,6 +10462,7 @@ static const Pinyin * bopomofo_table[] = {
     &pinyin_table[635],  // "ㄧㄣ" => "yin"
     &pinyin_table[629],  // "ㄧㄤ" => "yang"
     &pinyin_table[636],  // "ㄧㄥ" => "ying"
+    &pinyin_table[644],  // "ㄧㄩㄤ" => "yuang"
     &pinyin_table[593],  // "ㄨ" => "wu"
     &pinyin_table[581],  // "ㄨㄚ" => "wa"
     &pinyin_table[592],  // "ㄨㄛ" => "wo"
@@ -10425,6 +10478,7 @@ static const Pinyin * bopomofo_table[] = {
     &pinyin_table[647],  // "ㄩㄣ" => "yun"
     &pinyin_table[640],  // "ㄩㄥ" => "yong"
 };
+
 static const Pinyin *special_table[][4] = {
     { &pinyin_table[4],    &pinyin_table[0],    &pinyin_table[0],    &pinyin_table[350],  }, /* an a => a na */
     { &pinyin_table[4],    &pinyin_table[2],    &pinyin_table[0],    &pinyin_table[352],  }, /* an ai => a nai */

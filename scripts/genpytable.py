@@ -222,6 +222,28 @@ def get_pinyin_with_fuzzy():
 
         bopomofo = pinyin_bopomofo_map.get(text, "")
 
+        if bopomofo == "":
+            if all([f.startswith("PINYIN_FUZZY_") for f in flags[0].split(" | ")]):
+                #if it is fuzzy pinyin or normal pinyin
+                if s in sheng_yun_bopomofo_map and y in sheng_yun_bopomofo_map:
+                    if isinstance(sheng_yun_bopomofo_map[s], str):
+                        bopomofo = sheng_yun_bopomofo_map[s]
+                    else:
+                        if y in sheng_yun_bopomofo_map[s][1][0]:
+                            bopomofo += sheng_yun_bopomofo_map[s][1][1]
+                        else:
+                            bopomofo += sheng_yun_bopomofo_map[s][0]
+
+                    if isinstance(sheng_yun_bopomofo_map[y], str):
+                        bopomofo += sheng_yun_bopomofo_map[y]
+                    else:
+                        if s in sheng_yun_bopomofo_map[y][1][0]:
+                            bopomofo += sheng_yun_bopomofo_map[y][1][1]
+                        else:
+                            bopomofo += sheng_yun_bopomofo_map[y][0]
+                else:
+                    print text
+
         yield text, bopomofo, s, y, fs1, fy1, fs2, fy2, l, flags
 
 
@@ -315,6 +337,7 @@ def gen_bopomofo_table(pinyins):
         if p[1]:
             print '    %-20s %s' % ('&pinyin_table[%d],' % i, '// "%s" => "%s"' % (p[1], p[0]))
     print '};'
+    print
 
 def get_all_special(pinyins):
     for p in pinyins:
