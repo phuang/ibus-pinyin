@@ -84,7 +84,7 @@ ExtEditor::processKeyEvent (guint keyval, guint keycode, guint modifiers)
     }
     /* Deal other staff with updateStateFromInput(). */
     updateStateFromInput();
-    return FALSE;
+    return TRUE;
 }
 
 void
