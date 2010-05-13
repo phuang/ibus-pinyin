@@ -2,6 +2,7 @@
 
 #include <libintl.h>
 #include <string>
+#include <cstdlib>
 #include <ibus.h>
 #include "RawEditor.h"
 #include "ExtEditor.h"
@@ -23,15 +24,25 @@ PinyinEngine::PinyinEngine (IBusEngine *engine)
     : m_engine (engine),
       m_prev_pressed_key (IBUS_VoidSymbol),
       m_input_mode (MODE_INIT),
+      m_bopomofo (FALSE),
       m_fallback_editor (new FallbackEditor (m_props))
 {
     gint i;
+
+    /* Is it bopomofo engine */
+    m_bopomofo = std::strcmp (ibus_engine_get_name (engine), "bopomofo") == 0 ||
+                 std::strcmp (ibus_engine_get_name (engine), "bopomofo-debug") == 0;
+
     /* create editors */
-    if (Config::doublePinyin ())
-        //m_editors[MODE_INIT].reset (new DoublePinyinEditor (m_props));
+    if (!m_bopomofo) {
+        if (Config::doublePinyin ())
+            m_editors[MODE_INIT].reset (new DoublePinyinEditor (m_props));
+        else
+            m_editors[MODE_INIT].reset (new FullPinyinEditor (m_props));
+    }
+    else {
         m_editors[MODE_INIT].reset (new BopomofoEditor (m_props));
-    else
-        m_editors[MODE_INIT].reset (new FullPinyinEditor (m_props));
+    }
 
     m_editors[MODE_RAW].reset (new RawEditor (m_props));
     m_editors[MODE_EXTENSION].reset (new ExtEditor (m_props));
@@ -129,21 +140,21 @@ void
 PinyinEngine::focusIn (void)
 {
     /* reset pinyin editor */
-    if (Config::doublePinyin ()) {
-        //if (dynamic_cast <DoublePinyinEditor *> (m_editors[MODE_INIT].get ()) == NULL) {
-        //    m_editors[MODE_INIT].reset (new DoublePinyinEditor (m_props));
-        if (dynamic_cast <BopomofoEditor *> (m_editors[MODE_INIT].get ()) == NULL) {
-            m_editors[MODE_INIT].reset (new BopomofoEditor (m_props));
-            connectEditorSignals (m_editors[MODE_INIT]);
+    if (!m_bopomofo) {
+        if (Config::doublePinyin ()) {
+            if (dynamic_cast <DoublePinyinEditor *> (m_editors[MODE_INIT].get ()) == NULL) {
+                m_editors[MODE_INIT].reset (new DoublePinyinEditor (m_props));
+                connectEditorSignals (m_editors[MODE_INIT]);
+            }
         }
-    }
-    else {
-        if (dynamic_cast <FullPinyinEditor *> (m_editors[MODE_INIT].get ()) == NULL) {
-            m_editors[MODE_INIT].reset (new FullPinyinEditor (m_props));
-            connectEditorSignals (m_editors[MODE_INIT]);
+        else {
+            if (dynamic_cast <FullPinyinEditor *> (m_editors[MODE_INIT].get ()) == NULL) {
+                m_editors[MODE_INIT].reset (new FullPinyinEditor (m_props));
+                connectEditorSignals (m_editors[MODE_INIT]);
+            }
         }
+        ibus_engine_register_properties (m_engine, m_props.properties ());
     }
-    ibus_engine_register_properties (m_engine, m_props.properties ());
 }
 
 

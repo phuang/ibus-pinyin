@@ -84,6 +84,8 @@ private:
         MODE_LAST,
     } m_input_mode;
 
+    gboolean m_bopomofo;
+
     EditorPtr m_editors[MODE_LAST];
     EditorPtr m_fallback_editor;
 };

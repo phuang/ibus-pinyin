@@ -10,6 +10,7 @@ namespace PY {
 	(PY::ibus_pinyin_engine_get_type ())
 
 GType   ibus_pinyin_engine_get_type    (void);
+
 };
 
 #endif

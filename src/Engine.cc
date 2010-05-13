@@ -36,6 +36,10 @@ struct _IBusPinyinEngineClass {
 /* functions prototype */
 static void     ibus_pinyin_engine_class_init   (IBusPinyinEngineClass  *klass);
 static void     ibus_pinyin_engine_init         (IBusPinyinEngine       *pinyin);
+static GObject* ibus_pinyin_engine_constructor  (GType                   type,
+                                                 guint                   n_construct_params,
+                                                 GObjectConstructParam  *construct_params);
+
 static void     ibus_pinyin_engine_destroy      (IBusPinyinEngine       *pinyin);
 static gboolean ibus_pinyin_engine_process_key_event
                                                 (IBusEngine             *engine,
@@ -84,10 +88,11 @@ G_DEFINE_TYPE (IBusPinyinEngine, ibus_pinyin_engine, IBUS_TYPE_ENGINE)
 static void
 ibus_pinyin_engine_class_init (IBusPinyinEngineClass *klass)
 {
-    // GObjectClass *object_class = G_OBJECT_CLASS (klass);
+    GObjectClass *object_class = G_OBJECT_CLASS (klass);
     IBusObjectClass *ibus_object_class = IBUS_OBJECT_CLASS (klass);
     IBusEngineClass *engine_class = IBUS_ENGINE_CLASS (klass);
 
+    object_class->constructor = ibus_pinyin_engine_constructor;
     ibus_object_class->destroy = (IBusObjectDestroyFunc) ibus_pinyin_engine_destroy;
 
     engine_class->process_key_event = ibus_pinyin_engine_process_key_event;
@@ -115,7 +120,22 @@ ibus_pinyin_engine_init (IBusPinyinEngine *pinyin)
 {
     if (g_object_is_floating (pinyin))
         g_object_ref_sink (pinyin);  // make engine sink
-    new (& (pinyin->engine)) PinyinEngine (IBUS_ENGINE (pinyin));
+}
+
+static GObject*
+ibus_pinyin_engine_constructor (GType                  type,
+                                guint                  n_construct_params,
+                                GObjectConstructParam *construct_params)
+{
+    IBusPinyinEngine *engine;
+
+    engine = (IBusPinyinEngine *) G_OBJECT_CLASS (ibus_pinyin_engine_parent_class)->constructor (
+                                                           type,
+                                                           n_construct_params,
+                                                           construct_params);
+    new (& (engine->engine)) PinyinEngine (IBUS_ENGINE (engine));
+
+    return (GObject *) engine;
 }
 
 static void

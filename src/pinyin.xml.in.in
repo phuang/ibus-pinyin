@@ -22,6 +22,17 @@
 			<description>Pinyin input method</description>
 			<rank>99</rank>
 		</engine>
+		<engine>
+			<name>bopomofo</name>
+			<language>zh</language>
+			<license>GPL</license>
+			<author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
+			<icon>${pkgdatadir}/icons/ibus-pinyin.svg</icon>
+			<layout>us</layout>
+			<longname>Bopomofo</longname>
+			<description>Bopomofo input method</description>
+			<rank>99</rank>
+		</engine>
 	</engines>
 
 </component>

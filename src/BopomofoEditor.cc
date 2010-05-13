@@ -287,7 +287,7 @@ BopomofoEditor::updateAuxiliaryText (void)
 
     updateAuxiliaryTextBefore (m_buffer);
 
-    for (String::iterator i = m_text.begin();i!=m_text.end();i++) {
+    for (String::iterator i = m_text.begin(); i != m_text.end(); i++) {
         if (m_cursor == i - m_text.begin())
             m_buffer << '|';
         m_buffer.appendUnichar(bopomofo_char[keyvalToBopomofo(*i)]);

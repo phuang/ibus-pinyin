@@ -72,15 +72,26 @@ start_component (void)
                                                      "Peng Huang <shawn.p.huang@gmail.com>",
                                                      PKGDATADIR"/icons/ibus-pinyin.svg",
                                                      "us"));
+    ibus_component_add_engine (component,
+                               ibus_engine_desc_new ("bopomofo-debug",
+                                                     N_("Bopomofo (debug)"),
+                                                     N_("Bopomofo input method (debug)"),
+                                                     "zh_CN",
+                                                     "GPL",
+                                                     "Peng Huang <shawn.p.huang@gmail.com>",
+                                                     PKGDATADIR"/icons/ibus-pinyin.svg",  // TODO: need a new icon
+                                                     "us"));
 
     factory = ibus_factory_new (ibus_bus_get_connection (bus));
 
     if (ibus) {
         ibus_factory_add_engine (factory, "pinyin", IBUS_TYPE_PINYIN_ENGINE);
+        ibus_factory_add_engine (factory, "bopomofo", IBUS_TYPE_PINYIN_ENGINE);
         ibus_bus_request_name (bus, "org.freedesktop.IBus.Pinyin", 0);
     }
     else {
         ibus_factory_add_engine (factory, "pinyin-debug", IBUS_TYPE_PINYIN_ENGINE);
+        ibus_factory_add_engine (factory, "bopomofo-debug", IBUS_TYPE_PINYIN_ENGINE);
         ibus_bus_register_component (bus, component);
     }
 
