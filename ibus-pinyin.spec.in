@@ -35,7 +35,7 @@ Provides:   ibus-pinyin-db
 Requires(post): sqlite
 
 %description db-open-phrase
-The open phrase database for ibus Pinyin engine.
+The phrase database for ibus Pinyin from open-phrase project.
 
 %package    db-android
 Summary:    The android phrase database for ibus Pinyin
@@ -45,7 +45,7 @@ Provides:   ibus-pinyin-db
 Requires(post): sqlite
 
 %description db-android
-The android phrase database for ibus Pinyin engine.
+The phrase database for ibus Pinyin from android project.
 
 %prep
 %setup -q
