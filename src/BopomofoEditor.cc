@@ -26,11 +26,11 @@ BopomofoEditor::insert (gint ch)
     if (G_UNLIKELY (m_text.length () >= MAX_PINYIN_LEN))
         return TRUE;
 
-    gint key = get_bopomofo_keyboard_map(ch);
+    gint key = keyvalToBopomofo(ch);
     if (key >= BOPOMOFO_TONE_2 && key <= BOPOMOFO_TONE_5) {
         if (m_cursor == 0)
             return TRUE;  /* invalid format: tone should not be the first character */
-        key = get_bopomofo_keyboard_map(m_text.c_str()[m_cursor - 1]);
+        key = keyvalToBopomofo(m_text.c_str()[m_cursor - 1]);
         if (key >= BOPOMOFO_TONE_2 && key <= BOPOMOFO_TONE_5)
             return TRUE;  /* invalid format: two tone character should not be together  */
     }
@@ -260,10 +260,10 @@ BopomofoEditor::updatePinyin (void)
     else {
         bopomofo.clear();
         for(String::iterator i = m_text.begin();i != m_text.end(); ++i) {
-            bopomofo += bopomofo_char[get_bopomofo_keyboard_map(*i)];
+            bopomofo += bopomofo_char[keyvalToBopomofo(*i)];
         }
 
-        m_pinyin_len = PinyinParser::parse_bopomofo(bopomofo,            // bopomofo
+        m_pinyin_len = PinyinParser::parseBopomofo(bopomofo,            // bopomofo
                                                     m_cursor,            // text length
                                                     Config::option (),   // option
                                                     m_pinyin,            // result
@@ -290,7 +290,7 @@ BopomofoEditor::updateAuxiliaryText (void)
     for (String::iterator i = m_text.begin();i!=m_text.end();i++) {
         if (m_cursor == i - m_text.begin())
             m_buffer << '|';
-        m_buffer.appendUnichar(bopomofo_char[get_bopomofo_keyboard_map(*i)]);
+        m_buffer.appendUnichar(bopomofo_char[keyvalToBopomofo(*i)]);
     }
     if (m_cursor == m_text.length())
         m_buffer << '|';
@@ -322,7 +322,7 @@ BopomofoEditor::commit (void)
     }
 
     while (*p != '\0') {
-        m_buffer.appendUnichar ((gunichar)bopomofo_char[get_bopomofo_keyboard_map(*p++)]);
+        m_buffer.appendUnichar ((gunichar)bopomofo_char[keyvalToBopomofo(*p++)]);
     }
 
     m_phrase_editor.commit ();
@@ -333,8 +333,6 @@ BopomofoEditor::commit (void)
 void
 BopomofoEditor::updatePreeditText (void)
 {
-    PinyinEditor::updatePreeditText();
-#if 0
     /* preedit text = selected phrases + highlight candidate + rest text */
     if (G_UNLIKELY (m_phrase_editor.empty () && m_text.empty ())) {
         hidePreeditText ();
@@ -379,22 +377,26 @@ BopomofoEditor::updatePreeditText (void)
                     edit_end = m_buffer.utf8Length ();
 
                     /* append rest text */
-                    m_buffer << textAfterPinyin (edit_end);
+                    if (m_cursor >= MAX_PHRASE_LEN) {
+                        for (const gchar *p=m_text.c_str() + MAX_PHRASE_LEN; *p ;++p) {
+                            m_buffer.appendUnichar(bopomofo_char[keyvalToBopomofo(*p)]);
+                        }
+                    }
                 }
                 else {
-                    guint candidate_end = edit_begin + candidate.len;
-                    m_buffer << m_pinyin[edit_begin]->sheng << m_pinyin[edit_begin]->yun;
-
-                    for (guint i = edit_begin + 1; i < candidate_end; i++) {
-                        m_buffer << ' ' << m_pinyin[i]->sheng << m_pinyin[i]->yun;
+                    for (const gchar *p=m_text.c_str(); *p ;++p) {
+                        if (p - m_text.c_str() == m_cursor)
+                            m_buffer << ' ';
+                        m_buffer.appendUnichar(bopomofo_char[keyvalToBopomofo(*p)]);
                     }
-                    m_buffer << ' ' << textAfterPinyin (candidate_end);
                     edit_end = m_buffer.utf8Length ();
                 }
             }
         }
         else {
-            m_buffer << textAfterPinyin ();
+            for (const gchar *p=m_text.c_str() + m_pinyin_len; *p ;++p) {
+                m_buffer.appendUnichar(bopomofo_char[keyvalToBopomofo(*p)]);
+            }
         }
     }
 
@@ -410,7 +412,6 @@ BopomofoEditor::updatePreeditText (void)
                                         edit_begin, edit_end);
     }
     Editor::updatePreeditText (preedit_text, edit_begin, TRUE);
-#endif
 }
 
 };

@@ -42,7 +42,7 @@ protected:
 
     gboolean processBopomofo (guint keyval, guint keycode, guint modifiers);
 
-    gint get_bopomofo_keyboard_map(gint ch) {
+    gint keyvalToBopomofo(gint ch) {
         switch(ch){
         case IBUS_1: return BOPOMOFO_B;
         case IBUS_q: return BOPOMOFO_P;

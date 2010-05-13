@@ -400,7 +400,7 @@ PinyinEditor::updatePreeditText (void)
                     for (guint i = edit_begin + 1; i < candidate_end; i++) {
                         m_buffer << ' ' << m_pinyin[i]->sheng << m_pinyin[i]->yun;
                     }
-                    m_buffer << ' ' << textAfterPinyin (candidate_end);
+                    m_buffer << '|' << textAfterPinyin (candidate_end);
                     edit_end = m_buffer.utf8Length ();
                 }
             }

@@ -280,7 +280,7 @@ PinyinParser::isBopomofoToneChar (const wchar_t ch)
 }
 
 guint
-PinyinParser::parse_bopomofo (const std::wstring   &bopomofo,
+PinyinParser::parseBopomofo (const std::wstring   &bopomofo,
                              gint            len,
                              guint           option,
                              PinyinArray    &result,
@@ -320,6 +320,8 @@ PinyinParser::parse_bopomofo (const std::wstring   &bopomofo,
             if (G_UNLIKELY (bs_res != NULL))
                 break;
         }
+        if (G_UNLIKELY (bs_res == NULL))
+            break;
         result.append(*bs_res,bpmf - bopomofo.begin() ,(*bs_res)->len);
         bpmf += i;
     }
