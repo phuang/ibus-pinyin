@@ -16,6 +16,13 @@ public:
                         PinyinArray  &result,      // store pinyin in result
                         guint         max);        // max length of the result
     static const Pinyin * isPinyin (gint sheng, gint yun, guint option);
+    static guint parse_bopomofo (const std::wstring   &bopomofo,
+                                 gint            len,
+                                 guint           option,
+                                 PinyinArray    &result,
+                                 guint           max);
+    static gboolean isBopomofoToneChar (const wchar_t ch);
+
 };
 };
 #endif

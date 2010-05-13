@@ -11438,4 +11438,3 @@ static const Pinyin *special_table[][4] = {
     { &pinyin_table[712],  &pinyin_table[125],  &pinyin_table[704],  &pinyin_table[357],  }, /* zun e => zu ne */
     { &pinyin_table[712],  &pinyin_table[126],  &pinyin_table[704],  &pinyin_table[359],  }, /* zun ei => zu nei */
 };
-

@@ -7,8 +7,10 @@
 #include "ExtEditor.h"
 #include "FullPinyinEditor.h"
 #include "DoublePinyinEditor.h"
+#include "BopomofoEditor.h"
 #include "PinyinEngine.h"
 #include "HalfFullConverter.h"
+#include "SimpTradConverter.h"
 #include "Config.h"
 #include "Text.h"
 #include "Util.h"
@@ -27,7 +29,8 @@ PinyinEngine::PinyinEngine (IBusEngine *engine)
     gint i;
     /* create editors */
     if (Config::doublePinyin ())
-        m_editors[MODE_INIT].reset (new DoublePinyinEditor (m_props));
+        //m_editors[MODE_INIT].reset (new DoublePinyinEditor (m_props));
+        m_editors[MODE_INIT].reset (new BopomofoEditor (m_props));
     else
         m_editors[MODE_INIT].reset (new FullPinyinEditor (m_props));
 
@@ -128,8 +131,10 @@ PinyinEngine::focusIn (void)
 {
     /* reset pinyin editor */
     if (Config::doublePinyin ()) {
-        if (dynamic_cast <DoublePinyinEditor *> (m_editors[MODE_INIT].get ()) == NULL) {
-            m_editors[MODE_INIT].reset (new DoublePinyinEditor (m_props));
+        //if (dynamic_cast <DoublePinyinEditor *> (m_editors[MODE_INIT].get ()) == NULL) {
+        //    m_editors[MODE_INIT].reset (new DoublePinyinEditor (m_props));
+        if (dynamic_cast <BopomofoEditor *> (m_editors[MODE_INIT].get ()) == NULL) {
+            m_editors[MODE_INIT].reset (new BopomofoEditor (m_props));
             connectEditorSignals (m_editors[MODE_INIT]);
         }
     }
