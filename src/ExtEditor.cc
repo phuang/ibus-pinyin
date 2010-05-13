@@ -220,8 +220,10 @@ ExtEditor::fillCommand(std::string command_name, const char * argument){
 
     int result_num = ibus_engine_plugin_call(m_lua_plugin, command->lua_function_name, argument);
 
+    if ( 1 == result_num )
+        m_mode = LABEL_LIST_SINGLE;
 
-        
+    
 
     return true;
 }
@@ -245,6 +247,29 @@ ExtEditor::sendLookupTable()
         hideLookupTable ();
     }
 }
+
+void
+ExtEditor::updatePreeditText(){
+    if( G_UNLIKELY(m_preedit_text.empty()) ){
+        hidePreeditText ();
+        return;
+    }
+
+    StaticText preedit_text(m_preedit_text);
+    Editor::updatePreeditText(preedit_text, m_cursor, TRUE);
+}
+
+void
+ExtEditor::updateAuxiliaryText(){
+    if( G_UNLIKELY(m_auxiliary_text.empty()) ){
+        hideAuxiliaryText ();
+        return;
+    }
+
+    StaticText aux_text (m_auxiliary_text);
+    Editor::updateAuxiliaryText (aux_text, TRUE);
+}
+
 
 };
 
