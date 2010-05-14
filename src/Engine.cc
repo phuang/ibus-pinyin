@@ -4,6 +4,7 @@
 #include <ibus.h>
 #include "Engine.h"
 #include "PinyinEngine.h"
+#include "BopomofoEngine.h"
 
 namespace PY {
 /* code of engine class of GObject */
@@ -26,7 +27,7 @@ struct _IBusPinyinEngine {
     IBusEngine parent;
 
     /* members */
-    PinyinEngine engine;
+    Engine *engine;
 };
 
 struct _IBusPinyinEngineClass {
@@ -128,20 +129,28 @@ ibus_pinyin_engine_constructor (GType                  type,
                                 GObjectConstructParam *construct_params)
 {
     IBusPinyinEngine *engine;
+    const gchar *name;
 
     engine = (IBusPinyinEngine *) G_OBJECT_CLASS (ibus_pinyin_engine_parent_class)->constructor (
                                                            type,
                                                            n_construct_params,
                                                            construct_params);
-    new (& (engine->engine)) PinyinEngine (IBUS_ENGINE (engine));
+    name = ibus_engine_get_name ((IBusEngine *) engine);
 
+    if (name && 
+        (std::strcmp (name, "bopomofo") == 0 || std::strcmp (name, "bopomofo-debug") == 0)) {
+        engine->engine = new BopomofoEngine (IBUS_ENGINE (engine));
+    }
+    else {
+        engine->engine = new PinyinEngine (IBUS_ENGINE (engine));
+    }
     return (GObject *) engine;
 }
 
 static void
 ibus_pinyin_engine_destroy (IBusPinyinEngine *pinyin)
 {
-    pinyin->engine.~PinyinEngine ();
+    delete pinyin->engine;
     ((IBusObjectClass *) ibus_pinyin_engine_parent_class)->destroy ((IBusObject *)pinyin);
 }
 
@@ -152,7 +161,7 @@ ibus_pinyin_engine_process_key_event (IBusEngine     *engine,
                                       guint           modifiers)
 {
     IBusPinyinEngine *pinyin = (IBusPinyinEngine *) engine;
-    return pinyin->engine.processKeyEvent (keyval, keycode, modifiers);
+    return pinyin->engine->processKeyEvent (keyval, keycode, modifiers);
 }
 
 static void
@@ -161,7 +170,7 @@ ibus_pinyin_engine_property_activate (IBusEngine    *engine,
                                       guint          prop_state)
 {
     IBusPinyinEngine *pinyin = (IBusPinyinEngine *) engine;
-    pinyin->engine.propertyActivate (prop_name, prop_state);
+    pinyin->engine->propertyActivate (prop_name, prop_state);
 }
 static void
 ibus_pinyin_engine_candidate_clicked (IBusEngine *engine,
@@ -170,7 +179,7 @@ ibus_pinyin_engine_candidate_clicked (IBusEngine *engine,
                                       guint       state)
 {
     IBusPinyinEngine *pinyin = (IBusPinyinEngine *) engine;
-    pinyin->engine.candidateClicked (index, button, state);
+    pinyin->engine->candidateClicked (index, button, state);
 }
 
 #define FUNCTION(name, Name)                                        \
@@ -178,7 +187,7 @@ ibus_pinyin_engine_candidate_clicked (IBusEngine *engine,
     ibus_pinyin_engine_##name (IBusEngine *engine)                  \
     {                                                               \
         IBusPinyinEngine *pinyin = (IBusPinyinEngine *) engine;     \
-        pinyin->engine.Name ();                                    \
+        pinyin->engine->Name ();                                    \
         ((IBusEngineClass *) ibus_pinyin_engine_parent_class)       \
             ->name (engine);                                        \
     }
@@ -192,6 +201,10 @@ FUNCTION(page_down,   pageDown)
 FUNCTION(cursor_up,   cursorUp)
 FUNCTION(cursor_down, cursorDown)
 #undef FUNCTION
+
+Engine::~Engine (void)
+{
+}
 
 };
 

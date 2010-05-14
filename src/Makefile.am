@@ -35,6 +35,7 @@
 libexec_PROGRAMS = ibus-engine-pinyin
 ibus_engine_c_sources = \
 	BopomofoEditor.cc \
+	BopomofoEngine.cc \
 	Config.cc \
 	Database.cc \
 	DoublePinyinEditor.cc \
@@ -56,12 +57,13 @@ ibus_engine_c_sources = \
 	SpecialPhraseTable.cc \
 	$(NULL)
 ibus_engine_built_h_sources = \
-	Bopomofo.h \
 	PinyinParserTable.h \
 	SimpTradConverterTable.h \
 	$(NULL)
 ibus_engine_h_sources = \
+	Bopomofo.h \
 	BopomofoEditor.h \
+	BopomofoEngine.h \
 	Bus.h \
 	Config.h \
 	Database.h \
