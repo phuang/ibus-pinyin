@@ -26,16 +26,7 @@ BopomofoEditor::insert (gint ch)
     if (G_UNLIKELY (m_text.length () >= MAX_PINYIN_LEN))
         return TRUE;
 
-    gint key = keyvalToBopomofo(ch);
-    if (key >= BOPOMOFO_TONE_2 && key <= BOPOMOFO_TONE_5) {
-        if (m_cursor == 0)
-            return TRUE;  /* invalid format: tone should not be the first character */
-        key = keyvalToBopomofo(m_text.c_str()[m_cursor - 1]);
-        if (key >= BOPOMOFO_TONE_2 && key <= BOPOMOFO_TONE_5)
-            return TRUE;  /* invalid format: two tone character should not be together  */
-    }
-
-    m_text.insert (m_cursor++, ch);
+    m_text.insert (m_cursor++, keyvalToBopomofo(ch));
 
     if (G_UNLIKELY (!(Config::option () & PINYIN_INCOMPLETE_PINYIN))) {
         updateSpecialPhrases ();
