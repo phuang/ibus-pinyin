@@ -20,6 +20,7 @@ public:
 
 protected:
     std::wstring bopomofo;
+    gboolean m_select_mode;
 
     virtual void updatePinyin (void);
     virtual void updateAuxiliaryText (void);
@@ -40,6 +41,9 @@ protected:
     gboolean moveCursorToBegin (void);
     gboolean moveCursorToEnd (void);
 
+    gboolean processSpace (guint keyval, guint keycode, guint modifiers);
+    gboolean processNumber (guint keyval, guint keycode, guint modifiers);
+    gboolean processNumberWithShift (guint keyval, guint keycode, guint modifiers);
     gboolean processBopomofo (guint keyval, guint keycode, guint modifiers);
 
     gint keyvalToBopomofo(gint ch) {

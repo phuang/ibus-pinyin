@@ -2,11 +2,22 @@
 #include "BopomofoEditor.h"
 #include "SimpTradConverter.h"
 
+#define CMSHM_MASK              \
+        (IBUS_CONTROL_MASK |    \
+         IBUS_MOD1_MASK |       \
+         IBUS_SUPER_MASK |      \
+         IBUS_HYPER_MASK |      \
+         IBUS_META_MASK)
+
+#define CMSHM_FILTER(modifiers)  \
+    (modifiers & (CMSHM_MASK))
+
 namespace PY {
 
 BopomofoEditor::BopomofoEditor (PinyinProperties & props)
     : PinyinEditor (props)
 {
+    m_select_mode = FALSE;
 }
 
 BopomofoEditor::~BopomofoEditor (void)
@@ -16,6 +27,7 @@ BopomofoEditor::~BopomofoEditor (void)
 void
 BopomofoEditor::reset (void)
 {
+    m_select_mode = FALSE;
     PinyinEditor::reset ();
 }
 
@@ -26,7 +38,7 @@ BopomofoEditor::insert (gint ch)
     if (G_UNLIKELY (m_text.length () >= MAX_PINYIN_LEN))
         return TRUE;
 
-    m_text.insert (m_cursor++, keyvalToBopomofo(ch));
+    m_text.insert (m_cursor++, ch);
 
     if (G_UNLIKELY (!(Config::option () & PINYIN_INCOMPLETE_PINYIN))) {
         updateSpecialPhrases ();
@@ -200,9 +212,131 @@ BopomofoEditor::moveCursorToEnd (void)
     return TRUE;
 }
 
+inline gboolean
+BopomofoEditor::processSpace (guint keyval, guint keycode, guint modifiers)
+{
+    if (!m_text)
+        return FALSE;
+    if (CMSHM_FILTER (modifiers) != 0)
+        return TRUE;
+    if (m_lookup_table.size () != 0) {
+        selectCandidate (m_lookup_table.cursorPos ());
+    }
+    else {
+        commit ();
+    }
+    return TRUE;
+}
+
+gboolean
+BopomofoEditor::processNumber (guint keyval, guint keycode, guint modifiers)
+{
+    guint i;
+
+    if (!m_text)
+        return FALSE;
+
+    m_select_mode = TRUE;
+
+    switch (keyval) {
+    case IBUS_0:
+    case IBUS_KP_0:
+        i = 9;
+        break;
+    case IBUS_1 ... IBUS_9:
+        i = keyval - IBUS_1;
+        break;
+    case IBUS_KP_1 ... IBUS_KP_9:
+        i = keyval - IBUS_KP_1;
+        break;
+    default:
+        return FALSE;
+        g_return_val_if_reached (FALSE);
+    }
+
+    selectCandidateInPage (i);
+
+    return TRUE;
+}
+
+gboolean
+BopomofoEditor::processNumberWithShift (guint keyval, guint keycode, guint modifiers)
+{
+    guint i;
+
+    if (!m_text)
+        return FALSE;
+    if (G_UNLIKELY((modifiers & IBUS_SHIFT_MASK) == 0))
+        return FALSE;
+
+    m_select_mode = TRUE;
+
+    switch (keyval) {
+    case IBUS_exclam:
+        i = 0;
+        break;
+    case IBUS_at:
+        i = 1;
+        break;
+    case IBUS_numbersign:
+        i = 2;
+        break;
+    case IBUS_dollar:
+        i = 3;
+        break;
+    case IBUS_percent:
+        i = 4;
+        break;
+    case IBUS_asciicircum:
+        i = 5;
+        break;
+    case IBUS_ampersand:
+        i = 6;
+        break;
+    case IBUS_asterisk:
+        i = 7;
+        break;
+    case IBUS_parenleft:
+        i = 8;
+        break;
+    case IBUS_parenright:
+        i = 9;
+        break;
+    default:
+        g_return_val_if_reached (FALSE);
+    }
+
+    selectCandidateInPage (i);
+
+    return TRUE;
+}
+
+inline gboolean
+BopomofoEditor::processBopomofo (guint keyval, guint keycode, guint modifiers)
+{
+    if (G_UNLIKELY (CMSHM_FILTER(modifiers) != 0))
+        return m_text ? TRUE : FALSE;
+
+    m_select_mode = FALSE;
+
+    return insert (keyval);
+}
+
 gboolean
 BopomofoEditor::processKeyEvent (guint keyval, guint keycode, guint modifiers)
 {
+    modifiers &= (IBUS_SHIFT_MASK |
+                  IBUS_CONTROL_MASK |
+                  IBUS_MOD1_MASK |
+                  IBUS_SUPER_MASK |
+                  IBUS_HYPER_MASK |
+                  IBUS_META_MASK |
+                  IBUS_LOCK_MASK);
+
+    if (m_select_mode == TRUE && keyval >= IBUS_0 && keyval <= IBUS_9) {
+        return processNumber (keyval, keycode, modifiers);
+    }
+
     switch (keyval) {
     /* Bopomofo */
     case IBUS_a ... IBUS_z:
@@ -214,31 +348,55 @@ BopomofoEditor::processKeyEvent (guint keyval, guint keycode, guint modifiers)
     case IBUS_minus:
         return processBopomofo (keyval, keycode, modifiers);
 
+    case IBUS_KP_0 ... IBUS_KP_9:
+        return processNumber (keyval, keycode, modifiers);
+
+    case IBUS_exclam:
+    case IBUS_at:
+    case IBUS_numbersign:
+    case IBUS_dollar:
+    case IBUS_percent:
+    case IBUS_asciicircum:
+    case IBUS_ampersand:
+    case IBUS_asterisk:
+    case IBUS_parenleft:
+    case IBUS_parenright:
+        return processNumberWithShift (keyval, keycode, modifiers);
+
+    case IBUS_space:
+        m_select_mode = TRUE;
+        return processSpace (keyval, keycode, modifiers);
+
+    case IBUS_Up:
+    case IBUS_KP_Up:
+    case IBUS_Down:
+    case IBUS_KP_Down:
+    case IBUS_Page_Up:
+    case IBUS_KP_Page_Up:
+    case IBUS_Page_Down:
+    case IBUS_KP_Page_Down:
+    case IBUS_Tab:
+        m_select_mode = TRUE;
+        return PinyinEditor::processKeyEvent (keyval, keycode, modifiers);
+
+    case IBUS_BackSpace:
+    case IBUS_Delete:
+    case IBUS_KP_Delete:
+    case IBUS_Left:
+    case IBUS_KP_Left:
+    case IBUS_Right:
+    case IBUS_KP_Right:
+    case IBUS_Home:
+    case IBUS_KP_Home:
+    case IBUS_End:
+    case IBUS_KP_End:
+        m_select_mode = FALSE;
+        return PinyinEditor::processKeyEvent (keyval, keycode, modifiers);
+
     default:
         return PinyinEditor::processKeyEvent (keyval, keycode, modifiers);
     }
-}
 
-#define CMSHM_MASK              \
-        (IBUS_CONTROL_MASK |    \
-         IBUS_MOD1_MASK |       \
-         IBUS_SUPER_MASK |      \
-         IBUS_HYPER_MASK |      \
-         IBUS_META_MASK)
-
-#define CMSHM_FILTER(modifiers)  \
-    (modifiers & (CMSHM_MASK))
-
-/**
- * process bopomofo
- */
-inline gboolean
-BopomofoEditor::processBopomofo (guint keyval, guint keycode, guint modifiers)
-{
-    if (G_UNLIKELY (CMSHM_FILTER(modifiers) != 0))
-        return m_text ? TRUE : FALSE;
-
-    return insert (keyval);
 }
 
 void
@@ -254,7 +412,7 @@ BopomofoEditor::updatePinyin (void)
             bopomofo += bopomofo_char[keyvalToBopomofo(*i)];
         }
 
-        m_pinyin_len = PinyinParser::parseBopomofo(bopomofo,            // bopomofo
+        m_pinyin_len = PinyinParser::parseBopomofo (bopomofo,            // bopomofo
                                                     m_cursor,            // text length
                                                     Config::option (),   // option
                                                     m_pinyin,            // result
@@ -278,7 +436,13 @@ BopomofoEditor::updateAuxiliaryText (void)
 
     updateAuxiliaryTextBefore (m_buffer);
 
-    for (String::iterator i = m_text.begin(); i != m_text.end(); i++) {
+    for (guint i = m_phrase_editor.cursor (); i < m_pinyin.size (); ++i) {
+        if (G_LIKELY (i != m_phrase_editor.cursor ()))
+            m_buffer << ',';
+        m_buffer << (gunichar *)m_pinyin[i]->bopomofo;
+    }
+
+    for (String::iterator i = m_text.begin() + m_pinyin_len; i != m_text.end(); i++) {
         if (m_cursor == i - m_text.begin())
             m_buffer << '|';
         m_buffer.appendUnichar(bopomofo_char[keyvalToBopomofo(*i)]);

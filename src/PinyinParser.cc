@@ -317,10 +317,10 @@ PinyinParser::parseBopomofo (const std::wstring   &bopomofo,
                                                   G_N_ELEMENTS (bopomofo_table),
                                                   sizeof(bopomofo_table[0]),
                                                   bopomofo_cmp);
-            if (G_UNLIKELY (bs_res != NULL))
+            if (bs_res != NULL && check_flags (*bs_res, option))
                 break;
         }
-        if (G_UNLIKELY (bs_res == NULL))
+        if (!(bs_res != NULL && check_flags (*bs_res, option)))
             break;
         result.append(*bs_res,bpmf - bopomofo.begin() ,(*bs_res)->len);
         bpmf += i;
