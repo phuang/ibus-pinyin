@@ -79,7 +79,7 @@ start_component (void)
                                                      "zh_CN",
                                                      "GPL",
                                                      "Peng Huang <shawn.p.huang@gmail.com>",
-                                                     PKGDATADIR"/icons/ibus-pinyin.svg",  // TODO: need a new icon
+                                                     PKGDATADIR"/icons/ibus-bopomofo.svg",
                                                      "us"));
 
     factory = ibus_factory_new (ibus_bus_get_connection (bus));
