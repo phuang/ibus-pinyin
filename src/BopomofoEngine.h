@@ -65,6 +65,7 @@ private:
 
     enum {
         MODE_INIT = 0,          // init mode
+        MODE_PUNCT,             // punct mode
         MODE_RAW,               // raw mode
     #if 0
         MODE_ENGLISH,           // press v into English input mode

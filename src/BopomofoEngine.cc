@@ -5,6 +5,7 @@
 #include <cstdlib>
 #include <ibus.h>
 #include "RawEditor.h"
+#include "PunctEditor.h"
 #include "ExtEditor.h"
 #include "FullPinyinEditor.h"
 #include "DoublePinyinEditor.h"
@@ -30,6 +31,7 @@ BopomofoEngine::BopomofoEngine (IBusEngine *engine)
 
     /* create editors */
     m_editors[MODE_INIT].reset (new BopomofoEditor (m_props));
+    m_editors[MODE_PUNCT].reset (new PunctEditor (m_props));
 
     m_editors[MODE_RAW].reset (new RawEditor (m_props));
     m_editors[MODE_EXTENSION].reset (new ExtEditor (m_props));
@@ -77,6 +79,15 @@ BopomofoEngine::processKeyEvent (guint keyval, guint keycode, guint modifiers)
     }
 
     if (m_props.modeChinese ()) {
+        if (G_UNLIKELY (m_input_mode == MODE_INIT &&
+                        m_editors[MODE_INIT]->text ().empty () &&
+                        (modifiers & CASHM_MASK) == 0) &&
+                        keyval == IBUS_grave) {
+            /* if BopomofoEditor is empty and get a grave key,
+             * switch current editor to PunctEditor */
+            m_input_mode = MODE_PUNCT;
+        }
+
         retval = m_editors[m_input_mode]->processKeyEvent (keyval, keycode, modifiers);
         if (G_UNLIKELY (retval &&
                         m_input_mode != MODE_INIT &&

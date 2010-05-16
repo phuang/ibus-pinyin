@@ -51,6 +51,7 @@ ibus_engine_c_sources = \
 	PinyinEngine.cc \
 	PinyinParser.cc \
 	PinyinProperties.cc \
+	PunctEditor.cc \
 	SimpTradConverter.cc \
 	DynamicSpecialPhrase.cc \
 	SpecialPhrase.cc \
@@ -88,6 +89,7 @@ ibus_engine_h_sources = \
 	PinyinProperties.h \
 	Pointer.h \
 	Property.h \
+	PunctEditor.h \
 	RawEditor.h \
 	Regex.h \
 	Signal.h \
