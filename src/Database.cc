@@ -514,7 +514,7 @@ Database::query (const PinyinArray &pinyin,
     m_sql.clear ();
     gint id = pinyin_len - 1;
     m_sql << "SELECT * FROM ("
-                "SELECT 0 AS user_freq, * FROM main.py_phrase_" << id << " WHERE " << m_buffer<< " UNION ALL "
+                "SELECT 0 AS user_freq, * FROM main.py_phrase_" << id << " WHERE " << m_buffer << " UNION ALL "
                 "SELECT * FROM userdb.py_phrase_" << id << " WHERE " << m_buffer << ") "
                     "GROUP BY phrase ORDER BY user_freq DESC, freq DESC";
     if (m > 0)
@@ -554,9 +554,11 @@ Database::phraseSql (const Phrase & p, String & sql)
         << " VALUES(" << 0                  /* user_freq */
         << ",\"" << p.phrase << '"'         /* phrase */
         << ','   << p.freq;                 /* freq */
-        for (guint i = 0; i < p.len; i++) {
-            sql << ',' << p.pinyin_id[i][0] << ',' << p.pinyin_id[i][1];
-        }
+
+    for (guint i = 0; i < p.len; i++) {
+        sql << ',' << p.pinyin_id[i][0] << ',' << p.pinyin_id[i][1];
+    }
+
     sql << ");\n";
 
     sql << "UPDATE userdb.py_phrase_" << p.len - 1
