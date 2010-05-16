@@ -60,6 +60,9 @@ PunctEditor::processPunct (guint keyval, guint keycode, guint modifiers)
         return FALSE;
     }
 
+    if (m_text.length () >= 2)
+        return TRUE;
+
     switch (keyval) {
     case IBUS_grave:        /* ` */
     case IBUS_asciitilde:   /* ~ */
@@ -112,9 +115,6 @@ PunctEditor::processKeyEvent (guint keyval, guint keycode, guint modifiers)
                   IBUS_HYPER_MASK |
                   IBUS_META_MASK |
                   IBUS_LOCK_MASK);
-
-    if (processPunct(keyval,keycode,modifiers) == TRUE)
-        return TRUE;
 
     switch (keyval) {
     case IBUS_space:
@@ -175,7 +175,7 @@ PunctEditor::processKeyEvent (guint keyval, guint keycode, guint modifiers)
         pageDown ();
         return TRUE;
     default:
-        return Editor::processKeyEvent (keyval, keycode, modifiers);
+        return processPunct(keyval, keycode, modifiers);
     }
 }
 

@@ -70,7 +70,7 @@ start_component (void)
                                                      "zh_CN",
                                                      "GPL",
                                                      "Peng Huang <shawn.p.huang@gmail.com>",
-                                                     PKGDATADIR"/icons/ibus-pinyin.svg",
+                                                     PKGDATADIR "/icons/ibus-pinyin.svg",
                                                      "us"));
     ibus_component_add_engine (component,
                                ibus_engine_desc_new ("bopomofo-debug",
@@ -79,7 +79,7 @@ start_component (void)
                                                      "zh_CN",
                                                      "GPL",
                                                      "Peng Huang <shawn.p.huang@gmail.com>",
-                                                     PKGDATADIR"/icons/ibus-bopomofo.svg",
+                                                     PKGDATADIR "/icons/ibus-bopomofo.svg",
                                                      "us"));
 
     factory = ibus_factory_new (ibus_bus_get_connection (bus));
