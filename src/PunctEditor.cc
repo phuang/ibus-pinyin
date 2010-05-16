@@ -113,8 +113,6 @@ PunctEditor::processKeyEvent (guint keyval, guint keycode, guint modifiers)
                   IBUS_META_MASK |
                   IBUS_LOCK_MASK);
 
-    printf("%d %d %d\n",keyval,keycode,modifiers);
-
     if (processPunct(keyval,keycode,modifiers) == TRUE)
         return TRUE;
 
@@ -379,7 +377,7 @@ punct_cmp (const void *p1, const void *p2)
 {
     const gchar *s1 = (gchar *) p1;
     const gchar *s2 = **(gchar ***) p2;
-    return strcmp(s1,s2);
+    return std::strcmp (s1, s2);
 }
 
 void
@@ -439,11 +437,11 @@ PunctEditor::updateAuxiliaryText (void)
 
     m_buffer.clear();
     for (String::iterator i = m_text.begin(); i!=m_text.end(); ++i) {
-        if (i - m_text.begin() == m_cursor)
+        if (i - m_text.begin() == (gint) m_cursor)
             m_buffer << '|';
         m_buffer << *i;
     }
-    if (m_text.end() - m_text.begin() == m_cursor)
+    if (m_text.end() - m_text.begin() == (gint) m_cursor)
         m_buffer << '|';
 
     StaticText aux_text (m_buffer);
