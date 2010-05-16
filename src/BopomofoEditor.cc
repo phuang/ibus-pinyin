@@ -443,7 +443,7 @@ BopomofoEditor::updateAuxiliaryText (void)
     }
 
     for (String::iterator i = m_text.begin() + m_pinyin_len; i != m_text.end(); i++) {
-        if (m_cursor == i - m_text.begin())
+        if (m_cursor == (guint)(i - m_text.begin ()))
             m_buffer << '|';
         m_buffer.appendUnichar(bopomofo_char[keyvalToBopomofo(*i)]);
     }
@@ -539,8 +539,8 @@ BopomofoEditor::updatePreeditText (void)
                     }
                 }
                 else {
-                    for (const gchar *p=m_text.c_str(); *p ;++p) {
-                        if (p - m_text.c_str() == m_cursor)
+                    for (const gchar *p = m_text.c_str(); *p; ++p) {
+                        if ((guint) (p - m_text.c_str ()) == m_cursor)
                             m_buffer << ' ';
                         m_buffer.appendUnichar(bopomofo_char[keyvalToBopomofo(*p)]);
                     }
