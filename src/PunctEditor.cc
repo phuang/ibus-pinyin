@@ -1,5 +1,5 @@
-#include "PunctEditor.h"
 #include <cstdio>
+#include "PunctEditor.h"
 
 #define CMSHM_MASK              \
         (IBUS_CONTROL_MASK |    \
@@ -192,9 +192,7 @@ PunctEditor::pageUp (void)
 void
 PunctEditor::pageDown (void)
 {
-    if (G_LIKELY(
-            (m_lookup_table.pageDown ()) ||
-            (fillLookupTableByPage () && m_lookup_table.pageDown ()))) {
+    if (G_LIKELY (m_lookup_table.pageDown ())) {
         updateLookupTableFast (m_lookup_table, TRUE);
         updatePreeditText ();
         updateAuxiliaryText ();
@@ -214,12 +212,6 @@ PunctEditor::cursorUp (void)
 void
 PunctEditor::cursorDown (void)
 {
-    if (G_LIKELY (
-            (m_lookup_table.cursorPos () == m_lookup_table.size () - 1) &&
-            (fillLookupTableByPage () == FALSE))) {
-        return;
-    }
-
     if (G_LIKELY (m_lookup_table.cursorDown ())) {
         updateLookupTableFast (m_lookup_table, TRUE);
         updatePreeditText ();
@@ -397,7 +389,7 @@ PunctEditor::getPunctCandidates (void)
     if (brs == NULL)
         return;
 
-    for (res = (*brs) + 1 ;*res != NULL; ++res ) {
+    for (res = (*brs) + 1; *res != NULL; ++res) {
         m_punct_candidates.push_back(*res);
     }
 }
@@ -436,7 +428,7 @@ PunctEditor::updateAuxiliaryText (void)
     }
 
     m_buffer.clear();
-    for (String::iterator i = m_text.begin(); i!=m_text.end(); ++i) {
+    for (String::iterator i = m_text.begin(); i != m_text.end(); ++i) {
         if (i - m_text.begin() == (gint) m_cursor)
             m_buffer << '|';
         m_buffer << *i;
