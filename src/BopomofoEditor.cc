@@ -15,9 +15,9 @@
 namespace PY {
 
 BopomofoEditor::BopomofoEditor (PinyinProperties & props)
-    : PinyinEditor (props)
+    : PinyinEditor (props),
+      m_select_mode (FALSE)
 {
-    m_select_mode = FALSE;
 }
 
 BopomofoEditor::~BopomofoEditor (void)
@@ -251,7 +251,6 @@ BopomofoEditor::processNumber (guint keyval, guint keycode, guint modifiers)
         break;
     default:
         return FALSE;
-        g_return_val_if_reached (FALSE);
     }
 
     selectCandidateInPage (i);
@@ -303,7 +302,7 @@ BopomofoEditor::processNumberWithShift (guint keyval, guint keycode, guint modif
         i = 9;
         break;
     default:
-        g_return_val_if_reached (FALSE);
+        return FALSE;
     }
 
     selectCandidateInPage (i);
@@ -316,6 +315,9 @@ BopomofoEditor::processBopomofo (guint keyval, guint keycode, guint modifiers)
 {
     if (G_UNLIKELY (CMSHM_FILTER(modifiers) != 0))
         return m_text ? TRUE : FALSE;
+
+    if (keyvalToBopomofo(keyval) == BOPOMOFO_ZERO)
+        return FALSE;
 
     m_select_mode = FALSE;
 
@@ -333,35 +335,17 @@ BopomofoEditor::processKeyEvent (guint keyval, guint keycode, guint modifiers)
                   IBUS_META_MASK |
                   IBUS_LOCK_MASK);
 
-    if (m_select_mode == TRUE && keyval >= IBUS_0 && keyval <= IBUS_9) {
-        return processNumber (keyval, keycode, modifiers);
-    }
+    if (m_select_mode == TRUE && processNumber (keyval, keycode, modifiers) == TRUE)
+        return TRUE;
+    if (processNumberWithShift (keyval, keycode, modifiers) == TRUE)
+        return TRUE;
+    if (processBopomofo(keyval, keycode ,modifiers))
+        return TRUE;
 
     switch (keyval) {
     /* Bopomofo */
-    case IBUS_a ... IBUS_z:
-    case IBUS_0 ... IBUS_9:
-    case IBUS_comma:
-    case IBUS_period:
-    case IBUS_slash:
-    case IBUS_semicolon:
-    case IBUS_minus:
-        return processBopomofo (keyval, keycode, modifiers);
-
     case IBUS_KP_0 ... IBUS_KP_9:
         return processNumber (keyval, keycode, modifiers);
-
-    case IBUS_exclam:
-    case IBUS_at:
-    case IBUS_numbersign:
-    case IBUS_dollar:
-    case IBUS_percent:
-    case IBUS_asciicircum:
-    case IBUS_ampersand:
-    case IBUS_asterisk:
-    case IBUS_parenleft:
-    case IBUS_parenright:
-        return processNumberWithShift (keyval, keycode, modifiers);
 
     case IBUS_space:
         m_select_mode = TRUE;
