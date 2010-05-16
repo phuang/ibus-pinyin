@@ -59,6 +59,7 @@ ibus_engine_c_sources = \
 	$(NULL)
 ibus_engine_built_h_sources = \
 	PinyinParserTable.h \
+	PunctTable.h \
 	SimpTradConverterTable.h \
 	$(NULL)
 ibus_engine_h_sources = \
@@ -164,8 +165,12 @@ CLEANFILES = \
 PinyinParserTable.h:
 	$(PYTHON) $(top_srcdir)/scripts/genpytable.py > $@
 
+PunctTable.h:
+	$(PYTHON) $(top_srcdir)/scripts/genpuncttable.py > $@
+
 SimpTradConverterTable.h:
 	$(PYTHON) $(srcdir)/update-simptrad-table.py > $@
+
 update-simptrad-table:
 	$(RM) ZhConversion.php ZhConversion.py SimpTradConverterTable.h
 	$(MAKE) ZhConversion.php
