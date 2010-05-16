@@ -2,6 +2,8 @@
 
 namespace PY {
 
+#include "PunctTable.h"
+
 PunctEditor::PunctEditor (PinyinProperties & props)
     : Editor (props)
 {
