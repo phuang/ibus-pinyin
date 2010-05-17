@@ -134,9 +134,12 @@ ExtEditor::updateStateFromInput()
         return false;
     }
 
+    m_auxiliary_text = "i";
+
     m_mode = LABEL_LIST_COMMANDS;
     if ( 1 == m_text.length() ){
         fillCommandCandidates();
+        updateAuxiliaryText();
         return true;
     }
     /* Check m_text len, and update auxiliary string meanwhile.
@@ -151,9 +154,16 @@ ExtEditor::updateStateFromInput()
         m_mode = LABEL_LIST_COMMANDS;
         if ( m_text.length() == 2){
             fillCommandCandidates(m_text.substr(1,1).c_str());
+
+            m_auxiliary_text += " ";
+            m_auxiliary_text += m_text.substr(1, 1);
+            updateAuxiliaryText();
             return true;
-        } else if ( m_text.length() == 3) {
+        } else if ( m_text.length() >= 3) {
             std::string command_name = m_text.substr(1,2);
+
+            m_auxiliary_text += " ";
+            m_auxiliary_text += m_text.substr(1,2);
 
             const lua_command_t * command = ibus_engine_plugin_lookup_command(m_lua_plugin, command_name.c_str());
             if ( NULL == command) {
@@ -161,6 +171,7 @@ ExtEditor::updateStateFromInput()
                 clearLookupTable();
                 m_lookup_table.clear();
                 sendLookupTable();
+                updateAuxiliaryText();
                 return false;
             }
 
@@ -173,7 +184,17 @@ ExtEditor::updateStateFromInput()
             else
                 m_mode = LABEL_LIST_NONE;
 
-            //fillCommandCandidates(...).(list or single value.)
+            const char * argment = NULL;
+            std::string arg = "";
+            if (m_text.length() > 3) {
+                arg = m_text.substr(3);
+                argment = arg.c_str();
+                m_auxiliary_text += "";
+                m_auxiliary_text += argment;
+            }
+
+            fillCommand(command_name, argment);
+            updateAuxiliaryText();
         }
     }
     else if ( isdigit(m_text[1]) ){
@@ -223,8 +244,30 @@ ExtEditor::fillCommand(std::string command_name, const char * argument){
     if ( 1 == result_num )
         m_mode = LABEL_LIST_SINGLE;
 
-    
+    clearLookupTable();
 
+    //Generate labels according to m_mode
+    if ( LABEL_LIST_DIGIT == m_mode ) {
+        //skip codes, as this is the default behavior of lookup table.
+#if 0
+        for ( int i = 1; i <= 9; ++i) {
+            m_lookup_table.appendLabel( Text(i + '0') );
+        }
+        m_lookup_table.appendLabel( Text ('0') );
+#endif
+    }
+
+    if ( LABEL_LIST_ALPHA == m_mode) {
+        for ( int i = 1; i <= 10; ++i )
+            m_lookup_table.appendLabel( Text(i - 1 + 'a') );
+    }
+
+    if ( LABEL_LIST_NONE == m_mode || LABEL_LIST_SINGLE == m_mode) {
+        for ( int i = 1; i <= 10; ++i)
+            m_lookup_table.appendLabel(Text(""));
+    }
+
+    sendLookupTable();
     return true;
 }
 
