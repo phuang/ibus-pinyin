@@ -1,7 +1,7 @@
 Name:       @PACKAGE_NAME@
 Version:    @PACKAGE_VERSION@
 Release:    1%{?dist}
-Summary:    The Chinese Pinyin engine for IBus input platform
+Summary:    The Chinese Pinyin and Bopomofo engines for IBus input platform
 License:    GPLv2+
 Group:      System Environment/Libraries
 URL:        http://code.google.com/p/ibus
@@ -25,7 +25,7 @@ Requires:   ibus >= 1.2.0
 Requires:   ibus-pinyin-db = %{version}-%{release}
 
 %description
-The Chinese Pinyin input method for IBus platform.
+The Chinese Pinyin and Bopomof input methods for IBus platform.
 
 %package    db-open-phrase
 Summary:    The open phrase database for ibus Pinyin
@@ -35,17 +35,17 @@ Provides:   ibus-pinyin-db
 Requires(post): sqlite
 
 %description db-open-phrase
-The open phrase database for ibus Pinyin engine.
+The open phrase database for ibus Pinyin and Bopomofo engines.
 
 %package    db-android
-Summary:    The android phrase database for ibus Pinyin
+Summary:    The android phrase database for ibus Pinyin and Bopomofo
 Group:      System Environment/Libraries
 BuildArch:  noarch
 Provides:   ibus-pinyin-db
 Requires(post): sqlite
 
 %description db-android
-The android phrase database for ibus Pinyin engine.
+The android phrase database for ibus Pinyin and Bopomofo engines.
 
 %prep
 %setup -q
