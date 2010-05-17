@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from pydict import *
+from bopomofo import *
 
 def str_cmp(a, b):
     if len(a) == len(b):
@@ -219,7 +220,31 @@ def get_pinyin_with_fuzzy():
             (fs2 and fs2 + fy2 not in pinyin_list):
             fy2 = ""
 
-        yield text, s, y, fs1, fy1, fs2, fy2, l, flags
+        bopomofo = pinyin_bopomofo_map.get(text, "")
+
+        if bopomofo == "":
+            if all([f.startswith("PINYIN_FUZZY_") for f in flags[0].split(" | ")]):
+                #if it is fuzzy pinyin or normal pinyin
+                if s in sheng_yun_bopomofo_map and y in sheng_yun_bopomofo_map:
+                    if isinstance(sheng_yun_bopomofo_map[s], str):
+                        bopomofo = sheng_yun_bopomofo_map[s]
+                    else:
+                        if y in sheng_yun_bopomofo_map[s][1][0]:
+                            bopomofo += sheng_yun_bopomofo_map[s][1][1]
+                        else:
+                            bopomofo += sheng_yun_bopomofo_map[s][0]
+
+                    if isinstance(sheng_yun_bopomofo_map[y], str):
+                        bopomofo += sheng_yun_bopomofo_map[y]
+                    else:
+                        if s in sheng_yun_bopomofo_map[y][1][0]:
+                            bopomofo += sheng_yun_bopomofo_map[y][1][1]
+                        else:
+                            bopomofo += sheng_yun_bopomofo_map[y][0]
+                else:
+                    print text
+
+        yield text, bopomofo, s, y, fs1, fy1, fs2, fy2, l, flags
 
 
 def gen_header():
@@ -269,13 +294,13 @@ def union_dups(a):
     na.sort()
     return na
 
-def gen_tables():
+def gen_table():
 
     pinyins = list(get_pinyin_with_fuzzy())
     pinyins = union_dups(pinyins)
 
     print 'static const Pinyin pinyin_table[] = {'
-    for i, (text, s, y, fs1, fy1, fs2, fy2, l, flags)  in enumerate(pinyins):
+    for i, (text, bopomofo, s, y, fs1, fy1, fs2, fy2, l, flags)  in enumerate(pinyins):
         s_id = "PINYIN_ID_%s" % s.upper() if s else "PINYIN_ID_ZERO"
         y_id = "PINYIN_ID_%s" % y.upper() if y else "PINYIN_ID_ZERO"
         fs1_id = "PINYIN_ID_%s" % fs1.upper() if fs1 else "PINYIN_ID_ZERO"
@@ -286,6 +311,7 @@ def gen_tables():
         # args = (i, ) + tuple(['"%s"' % s for s in p[:3]]) + tuple(["PINYIN_ID_%s" % s.upper() if s else "PINYIN_ID_ZERO" for s in p[3:9]]) + p[9:-1] + (str(p[-1]), )
         print '''    {  /* %d */
         text        : "%s",
+        bopomofo    : L"%s",
         sheng       : "%s",
         yun         : "%s",
         sheng_id    : %s,
@@ -296,12 +322,22 @@ def gen_tables():
         fyun_id_2   : %s,
         len         : %d,
         flags       : %s
-    },''' % (i, text, s, y.replace("v", "ü"), s_id, y_id, fs1_id, fy1_id, fs2_id, fy2_id, l, flags)
+    },''' % (i, text, bopomofo, s, y.replace("v", "ü"), s_id, y_id, fs1_id, fy1_id, fs2_id, fy2_id, l, flags)
 
     print '};'
     print
 
     return pinyins
+
+def gen_bopomofo_table(pinyins):
+    bopomofo_table = [ (i, p) for i, p in enumerate(pinyins)]
+    bopomofo_table.sort(lambda a, b: cmp(a[1][1], b[1][1]))
+    print 'static const Pinyin *bopomofo_table[] = {'
+    for i, p in bopomofo_table:
+        if p[1]:
+            print '    %-20s %s' % ('&pinyin_table[%d],' % i, '// "%s" => "%s"' % (p[1], p[0]))
+    print '};'
+    print
 
 def get_all_special(pinyins):
     for p in pinyins:
@@ -394,8 +430,9 @@ def gen_special_table(pinyins):
 def main():
     # gen_header()
     # gen_macros()
-    pinyins = gen_tables()
+    pinyins = gen_table()
     # gen_full_pinyin_table (pinyins)
+    gen_bopomofo_table(pinyins)
     gen_special_table(pinyins)
     # gen_option_check("pinyin_option_check_sheng", fuzzy_shengmu)
     # gen_option_check("pinyin_option_check_yun", fuzzy_yunmu)

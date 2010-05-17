@@ -39,37 +39,15 @@ protected:
     gboolean processSpace (guint keyval, guint keycode, guint modifiers);
     gboolean processOthers (guint keyval, guint keycode, guint modifiers);
 
-    void updatePreeditText (void);
-    void updateAuxiliaryText (void);
-    void updateLookupTable (void);
     gboolean fillLookupTableByPage (void);
 
     void updatePhraseEditor (void) { m_phrase_editor.update (m_pinyin); }
-
-    gboolean updateSpecialPhrases (void) {
-        if (!m_selected_special_phrase.empty ())
-            return FALSE;
-
-        guint size = m_special_phrases.size ();
-        guint begin = m_phrase_editor.cursorInChar ();
-        guint end = m_cursor;
-
-        m_special_phrases.clear ();
-        if (begin < end) {
-            SpecialPhraseTable::instance ().lookup (
-                m_text.substr (begin, m_cursor - begin),
-                m_special_phrases);
-        }
-
-        return size != m_special_phrases.size () || size != 0;
-    }
-
+    gboolean updateSpecialPhrases (void);
     gboolean selectCandidate (guint i);
     gboolean selectCandidateInPage (guint i);
     gboolean resetCandidate (guint i);
     gboolean resetCandidateInPage (guint i);
 
-    void commit (void);
     void commit (const gchar *str);
 
     const String & text (void) const { return m_text; }
@@ -89,6 +67,10 @@ protected:
     operator gboolean (void) const { return ! empty (); }
 
     /* virtual functions */
+    virtual void updatePreeditText (void);
+    virtual void updateAuxiliaryText (void);
+    virtual void updateLookupTable (void);
+    virtual void commit (void);
     virtual gboolean insert (gint ch) = 0;
     virtual gboolean removeCharBefore (void) = 0;
     virtual gboolean removeCharAfter (void) = 0;

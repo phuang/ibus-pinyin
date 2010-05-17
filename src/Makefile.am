@@ -34,6 +34,8 @@
 
 libexec_PROGRAMS = ibus-engine-pinyin
 ibus_engine_c_sources = \
+	BopomofoEditor.cc \
+	BopomofoEngine.cc \
 	Config.cc \
 	Database.cc \
 	DoublePinyinEditor.cc \
@@ -49,6 +51,7 @@ ibus_engine_c_sources = \
 	PinyinEngine.cc \
 	PinyinParser.cc \
 	PinyinProperties.cc \
+	PunctEditor.cc \
 	SimpTradConverter.cc \
 	DynamicSpecialPhrase.cc \
 	SpecialPhrase.cc \
@@ -56,9 +59,13 @@ ibus_engine_c_sources = \
 	$(NULL)
 ibus_engine_built_h_sources = \
 	PinyinParserTable.h \
+	PunctTable.h \
 	SimpTradConverterTable.h \
 	$(NULL)
 ibus_engine_h_sources = \
+	Bopomofo.h \
+	BopomofoEditor.h \
+	BopomofoEngine.h \
 	Bus.h \
 	Config.h \
 	Database.h \
@@ -83,6 +90,8 @@ ibus_engine_h_sources = \
 	PinyinProperties.h \
 	Pointer.h \
 	Property.h \
+	PunctEditor.h \
+	PunctTable.h \
 	RawEditor.h \
 	Regex.h \
 	Signal.h \
@@ -157,8 +166,12 @@ CLEANFILES = \
 PinyinParserTable.h:
 	$(PYTHON) $(top_srcdir)/scripts/genpytable.py > $@
 
+PunctTable.h:
+	$(PYTHON) $(top_srcdir)/scripts/genpuncttable.py > $@
+
 SimpTradConverterTable.h:
 	$(PYTHON) $(srcdir)/update-simptrad-table.py > $@
+
 update-simptrad-table:
 	$(RM) ZhConversion.php ZhConversion.py SimpTradConverterTable.h
 	$(MAKE) ZhConversion.php

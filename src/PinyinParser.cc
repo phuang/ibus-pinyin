@@ -7,6 +7,7 @@
 
 namespace PY {
 
+#include "Bopomofo.h"
 #include "PinyinParserTable.h"
 
 static gboolean
@@ -260,5 +261,72 @@ PinyinParser::isPinyin (gint sheng, gint yun, guint option)
     return NULL;
 }
 
+static int
+bopomofo_cmp (const void *p1, const void *p2)
+{
+    const wchar_t *s1 = (wchar_t *) p1;
+    const Pinyin *s2 = *(const Pinyin **) p2;
+
+    return std::wcscmp (s1,s2->bopomofo);
+}
+
+gboolean
+PinyinParser::isBopomofoToneChar (const wchar_t ch)
+{
+    return ch == bopomofo_char[BOPOMOFO_TONE_2]
+        || ch == bopomofo_char[BOPOMOFO_TONE_3]
+        || ch == bopomofo_char[BOPOMOFO_TONE_4]
+        || ch == bopomofo_char[BOPOMOFO_TONE_5];
+}
+
+guint
+PinyinParser::parseBopomofo (const std::wstring   &bopomofo,
+                             gint            len,
+                             guint           option,
+                             PinyinArray    &result,
+                             guint           max)
+{
+    std::wstring::const_iterator bpmf = bopomofo.begin();
+    const std::wstring::const_iterator end = bpmf + len;
+    const Pinyin **bs_res;
+    wchar_t buf[MAX_BOPOMOFO_LEN + 1];
+    gint i,j;
+
+    result.clear ();
+
+    if (G_UNLIKELY (len < 0))
+        len = bopomofo.length();
+
+    for (; bpmf < end && result.size () < max; ) {
+        for (i = MAX_BOPOMOFO_LEN; i>0; i--){
+            if (bpmf + i > end)
+                continue;
+
+            for (j=0;j<i;j++){
+                wchar_t key = *(bpmf+j);
+
+                if (j == i-1 && isBopomofoToneChar(key)) {
+                    break; /* ignore tone */
+                }
+
+                buf[j] = key;
+            }
+
+            buf[j] = '\0';
+            bs_res = (const Pinyin **) std::bsearch (buf, bopomofo_table,
+                                                  G_N_ELEMENTS (bopomofo_table),
+                                                  sizeof(bopomofo_table[0]),
+                                                  bopomofo_cmp);
+            if (bs_res != NULL && check_flags (*bs_res, option))
+                break;
+        }
+        if (!(bs_res != NULL && check_flags (*bs_res, option)))
+            break;
+        result.append(*bs_res,bpmf - bopomofo.begin() ,(*bs_res)->len);
+        bpmf += i;
+    }
+
+    return bpmf - bopomofo.begin();
 };
 
+};

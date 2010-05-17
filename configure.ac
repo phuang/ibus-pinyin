@@ -19,7 +19,7 @@
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 # if not 1, append datestamp to the version number.
-m4_define([ibus_released], [1])
+m4_define([ibus_released], [0])
 m4_define([ibus_major_version], [1])
 m4_define([ibus_minor_version], [3])
 m4_define([ibus_micro_version], [5])

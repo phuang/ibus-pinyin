@@ -1,16 +1,16 @@
 /* vim:set et sts=4: */
-#ifndef __PY_PINYIN_ENGINE_H__
-#define __PY_PINYIN_ENGINE_H__
+#ifndef __PY_BOPOMOFO_ENGINE_H__
+#define __PY_BOPOMOFO_ENGINE_H__
 
 #include "Engine.h"
 #include "PinyinProperties.h"
 
 namespace PY {
 
-class PinyinEngine : public Engine {
+class BopomofoEngine : public Engine {
 public:
-    PinyinEngine (IBusEngine *engine);
-    ~PinyinEngine (void);
+    BopomofoEngine (IBusEngine *engine);
+    ~BopomofoEngine (void);
 
     gboolean processKeyEvent (guint keyval, guint keycode, guint modifiers);
     void focusIn (void);
@@ -66,6 +66,7 @@ private:
 
     enum {
         MODE_INIT = 0,          // init mode
+        MODE_PUNCT,             // punct mode
         MODE_RAW,               // raw mode
     #if 0
         MODE_ENGLISH,           // press v into English input mode

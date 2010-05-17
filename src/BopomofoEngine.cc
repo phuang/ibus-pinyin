@@ -5,11 +5,12 @@
 #include <cstdlib>
 #include <ibus.h>
 #include "RawEditor.h"
+#include "PunctEditor.h"
 #include "ExtEditor.h"
 #include "FullPinyinEditor.h"
 #include "DoublePinyinEditor.h"
 #include "BopomofoEditor.h"
-#include "PinyinEngine.h"
+#include "BopomofoEngine.h"
 #include "HalfFullConverter.h"
 #include "Config.h"
 #include "Text.h"
@@ -20,7 +21,7 @@
 namespace PY {
 
 /* constructor */
-PinyinEngine::PinyinEngine (IBusEngine *engine)
+BopomofoEngine::BopomofoEngine (IBusEngine *engine)
     : Engine (engine),
       m_prev_pressed_key (IBUS_VoidSymbol),
       m_input_mode (MODE_INIT),
@@ -28,15 +29,14 @@ PinyinEngine::PinyinEngine (IBusEngine *engine)
 {
     gint i;
 
-    if (Config::doublePinyin ())
-        m_editors[MODE_INIT].reset (new DoublePinyinEditor (m_props));
-    else
-        m_editors[MODE_INIT].reset (new FullPinyinEditor (m_props));
+    /* create editors */
+    m_editors[MODE_INIT].reset (new BopomofoEditor (m_props));
+    m_editors[MODE_PUNCT].reset (new PunctEditor (m_props));
 
     m_editors[MODE_RAW].reset (new RawEditor (m_props));
     m_editors[MODE_EXTENSION].reset (new ExtEditor (m_props));
 
-    m_props.signalUpdateProperty ().connect (bind (&PinyinEngine::slotUpdateProperty, this, _1));
+    m_props.signalUpdateProperty ().connect (bind (&BopomofoEngine::slotUpdateProperty, this, _1));
 
     for (i = MODE_INIT; i < MODE_LAST; i++) {
         connectEditorSignals (m_editors[i]);
@@ -46,7 +46,7 @@ PinyinEngine::PinyinEngine (IBusEngine *engine)
 }
 
 /* destructor */
-PinyinEngine::~PinyinEngine (void)
+BopomofoEngine::~BopomofoEngine (void)
 {
 }
 
@@ -59,7 +59,7 @@ PinyinEngine::~PinyinEngine (void)
     IBUS_META_MASK)
 
 gboolean
-PinyinEngine::processKeyEvent (guint keyval, guint keycode, guint modifiers)
+BopomofoEngine::processKeyEvent (guint keyval, guint keycode, guint modifiers)
 {
     gboolean retval = FALSE;
 
@@ -79,36 +79,15 @@ PinyinEngine::processKeyEvent (guint keyval, guint keycode, guint modifiers)
     }
 
     if (m_props.modeChinese ()) {
-        if (m_input_mode == MODE_INIT &&
-            ((modifiers & CASHM_MASK) == 0)) {
-            const String & text = m_editors[MODE_INIT]->text ();
-            if (text.empty ()) {
-            #if 0
-                if (keyval == IBUS_i) {
-                    m_input_mode = MODE_EXTENSION;
-                }
-            #endif
-            }
-            else {
-                if (m_prev_pressed_key != IBUS_period) {
-                    if ((keyval == IBUS_at || keyval == IBUS_colon)) {
-                        m_input_mode = MODE_RAW;
-                        m_editors[MODE_RAW]->setText (text, text.length ());
-                        m_editors[MODE_INIT]->reset ();
-                    }
-                }
-                else {
-                    if ((keyval >= IBUS_a && keyval <= IBUS_z) ||
-                        (keyval >= IBUS_A && keyval <= IBUS_Z)) {
-                        String tmp = text;
-                        tmp += ".";
-                        m_input_mode = MODE_RAW;
-                        m_editors[MODE_RAW]->setText (tmp, tmp.length ());
-                        m_editors[MODE_INIT]->reset ();
-                    }
-                }
-            }
+        if (G_UNLIKELY (m_input_mode == MODE_INIT &&
+                        m_editors[MODE_INIT]->text ().empty () &&
+                        (modifiers & CASHM_MASK) == 0) &&
+                        keyval == IBUS_grave) {
+            /* if BopomofoEditor is empty and get a grave key,
+             * switch current editor to PunctEditor */
+            m_input_mode = MODE_PUNCT;
         }
+
         retval = m_editors[m_input_mode]->processKeyEvent (keyval, keycode, modifiers);
         if (G_UNLIKELY (retval &&
                         m_input_mode != MODE_INIT &&
@@ -126,56 +105,43 @@ PinyinEngine::processKeyEvent (guint keyval, guint keycode, guint modifiers)
 }
 
 void
-PinyinEngine::focusIn (void)
+BopomofoEngine::focusIn (void)
 {
-    if (Config::doublePinyin ()) {
-        if (dynamic_cast <DoublePinyinEditor *> (m_editors[MODE_INIT].get ()) == NULL) {
-            m_editors[MODE_INIT].reset (new DoublePinyinEditor (m_props));
-            connectEditorSignals (m_editors[MODE_INIT]);
-        }
-    }
-    else {
-        if (dynamic_cast <FullPinyinEditor *> (m_editors[MODE_INIT].get ()) == NULL) {
-            m_editors[MODE_INIT].reset (new FullPinyinEditor (m_props));
-            connectEditorSignals (m_editors[MODE_INIT]);
-        }
-    }
     registerProperties (m_props.properties ());
 }
 
-
 void
-PinyinEngine::pageUp (void)
+BopomofoEngine::pageUp (void)
 {
     m_editors[m_input_mode]->pageUp ();
 }
 
 void
-PinyinEngine::pageDown (void)
+BopomofoEngine::pageDown (void)
 {
     m_editors[m_input_mode]->pageDown ();
 }
 
 void
-PinyinEngine::cursorUp (void)
+BopomofoEngine::cursorUp (void)
 {
     m_editors[m_input_mode]->cursorUp ();
 }
 
 void
-PinyinEngine::cursorDown (void)
+BopomofoEngine::cursorDown (void)
 {
     m_editors[m_input_mode]->cursorDown ();
 }
 
 inline void
-PinyinEngine::showSetupDialog (void)
+BopomofoEngine::showSetupDialog (void)
 {
     g_spawn_command_line_async (LIBEXECDIR"/ibus-setup-pinyin", NULL);
 }
 
 gboolean
-PinyinEngine::propertyActivate (const gchar *prop_name, guint prop_state)
+BopomofoEngine::propertyActivate (const gchar *prop_name, guint prop_state)
 {
     const static std::string setup ("setup");
     if (m_props.propertyActivate (prop_name, prop_state)) {
@@ -189,13 +155,13 @@ PinyinEngine::propertyActivate (const gchar *prop_name, guint prop_state)
 }
 
 void
-PinyinEngine::candidateClicked (guint index, guint button, guint state)
+BopomofoEngine::candidateClicked (guint index, guint button, guint state)
 {
     m_editors[m_input_mode]->candidateClicked (index, button, state);
 }
 
 void
-PinyinEngine::slotCommitText (Text & text)
+BopomofoEngine::slotCommitText (Text & text)
 {
     commitText (text);
     if (m_input_mode != MODE_INIT)
@@ -207,99 +173,99 @@ PinyinEngine::slotCommitText (Text & text)
 }
 
 void
-PinyinEngine::slotUpdatePreeditText (Text & text, guint cursor, gboolean visible)
+BopomofoEngine::slotUpdatePreeditText (Text & text, guint cursor, gboolean visible)
 {
     updatePreeditText (text, cursor, visible);
 }
 
 void
-PinyinEngine::slotShowPreeditText (void)
+BopomofoEngine::slotShowPreeditText (void)
 {
     showPreeditText ();
 }
 
 void
-PinyinEngine::slotHidePreeditText (void)
+BopomofoEngine::slotHidePreeditText (void)
 {
     hidePreeditText ();
 }
 
 void
-PinyinEngine::slotUpdateAuxiliaryText (Text & text, gboolean visible)
+BopomofoEngine::slotUpdateAuxiliaryText (Text & text, gboolean visible)
 {
     updateAuxiliaryText (text, visible);
 }
 
 void
-PinyinEngine::slotShowAuxiliaryText (void)
+BopomofoEngine::slotShowAuxiliaryText (void)
 {
     showAuxiliaryText ();
 }
 
 void
-PinyinEngine::slotHideAuxiliaryText (void)
+BopomofoEngine::slotHideAuxiliaryText (void)
 {
     hideAuxiliaryText ();
 }
 
 void
-PinyinEngine::slotUpdateLookupTable (LookupTable & table, gboolean visible)
+BopomofoEngine::slotUpdateLookupTable (LookupTable & table, gboolean visible)
 {
     updateLookupTable (table, visible);
 }
 
 void
-PinyinEngine::slotUpdateLookupTableFast (LookupTable & table, gboolean visible)
+BopomofoEngine::slotUpdateLookupTableFast (LookupTable & table, gboolean visible)
 {
     updateLookupTableFast (table, visible);
 }
 
 void
-PinyinEngine::slotShowLookupTable (void)
+BopomofoEngine::slotShowLookupTable (void)
 {
     showLookupTable ();
 }
 
 void
-PinyinEngine::slotHideLookupTable (void)
+BopomofoEngine::slotHideLookupTable (void)
 {
     hideLookupTable ();
 }
 
 void
-PinyinEngine::slotUpdateProperty (Property & prop)
+BopomofoEngine::slotUpdateProperty (Property & prop)
 {
     updateProperty (prop);
 }
 
 void
-PinyinEngine::connectEditorSignals (EditorPtr editor)
+BopomofoEngine::connectEditorSignals (EditorPtr editor)
 {
     editor->signalCommitText ().connect (
-        bind (&PinyinEngine::slotCommitText, this, _1));
+        bind (&BopomofoEngine::slotCommitText, this, _1));
 
     editor->signalUpdatePreeditText ().connect (
-        bind (&PinyinEngine::slotUpdatePreeditText, this, _1, _2, _3));
+        bind (&BopomofoEngine::slotUpdatePreeditText, this, _1, _2, _3));
     editor->signalShowPreeditText ().connect (
-        bind (&PinyinEngine::slotShowPreeditText, this));
+        bind (&BopomofoEngine::slotShowPreeditText, this));
     editor->signalHidePreeditText ().connect (
-        bind (&PinyinEngine::slotHidePreeditText, this));
+        bind (&BopomofoEngine::slotHidePreeditText, this));
 
     editor->signalUpdateAuxiliaryText ().connect (
-        bind (&PinyinEngine::slotUpdateAuxiliaryText, this, _1, _2));
+        bind (&BopomofoEngine::slotUpdateAuxiliaryText, this, _1, _2));
     editor->signalShowAuxiliaryText ().connect (
-        bind (&PinyinEngine::slotShowAuxiliaryText, this));
+        bind (&BopomofoEngine::slotShowAuxiliaryText, this));
     editor->signalHideAuxiliaryText ().connect (
-        bind (&PinyinEngine::slotHideAuxiliaryText, this));
+        bind (&BopomofoEngine::slotHideAuxiliaryText, this));
 
     editor->signalUpdateLookupTable ().connect (
-        bind (&PinyinEngine::slotUpdateLookupTable, this, _1, _2));
+        bind (&BopomofoEngine::slotUpdateLookupTable, this, _1, _2));
     editor->signalUpdateLookupTableFast ().connect (
-        bind (&PinyinEngine::slotUpdateLookupTableFast, this, _1, _2));
+        bind (&BopomofoEngine::slotUpdateLookupTableFast, this, _1, _2));
     editor->signalShowLookupTable ().connect (
-        bind (&PinyinEngine::slotShowLookupTable, this));
+        bind (&BopomofoEngine::slotShowLookupTable, this));
     editor->signalHideLookupTable ().connect (
-        bind (&PinyinEngine::slotHideLookupTable, this));
+        bind (&BopomofoEngine::slotHideLookupTable, this));
 }
 
 };
