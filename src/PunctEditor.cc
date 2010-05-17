@@ -125,6 +125,10 @@ PunctEditor::processKeyEvent (guint keyval, guint keycode, guint modifiers)
         commit ();
         return TRUE;
 
+    case IBUS_Escape:
+        reset ();
+        return TRUE;
+
     case IBUS_BackSpace:
         removeCharBefore ();
         return TRUE;
