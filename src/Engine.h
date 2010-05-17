@@ -11,7 +11,6 @@
 #include "Config.h"
 #include "Editor.h"
 #include "FallbackEditor.h"
-#include "PinyinProperties.h"
 
 namespace PY {
 

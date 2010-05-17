@@ -3,6 +3,7 @@
 #define __PY_BOPOMOFO_ENGINE_H__
 
 #include "Engine.h"
+#include "PinyinProperties.h"
 
 namespace PY {
 

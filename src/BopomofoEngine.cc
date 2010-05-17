@@ -107,6 +107,7 @@ BopomofoEngine::processKeyEvent (guint keyval, guint keycode, guint modifiers)
 void
 BopomofoEngine::focusIn (void)
 {
+    registerProperties (m_props.properties ());
 }
 
 void
