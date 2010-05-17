@@ -91,6 +91,7 @@ ibus_engine_h_sources = \
 	Pointer.h \
 	Property.h \
 	PunctEditor.h \
+	PunctTable.h \
 	RawEditor.h \
 	Regex.h \
 	Signal.h \
