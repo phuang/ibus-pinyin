@@ -1,5 +1,4 @@
 src/Config.cc
-src/CustomPhrase.cc
 src/Database.cc
 src/DoublePinyinEditor.cc
 src/DynamicSpecialPhrase.cc
