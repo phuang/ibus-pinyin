@@ -278,7 +278,7 @@ ExtEditor::fillCommand(std::string command_name, const char * argument){
             result += "]";
         }
 
-        ibus_engine_plugin_free((lua_command_candidate_t *)candidate);
+        ibus_engine_plugin_free_candidate((lua_command_candidate_t *)candidate);
         m_lookup_table.appendCandidate(Text(result));
     }else if (result_num > 1){
         GArray * candidates = ibus_engine_plugin_get_retvals(m_lua_plugin);
@@ -295,7 +295,7 @@ ExtEditor::fillCommand(std::string command_name, const char * argument){
                 result += candidate->help;
                 result += "]";
             }
-            ibus_engine_plugin_free((lua_command_candidate_t *)candidate);
+            ibus_engine_plugin_free_candidate((lua_command_candidate_t *)candidate);
             m_lookup_table.appendCandidate(Text(result));
         }
         g_array_free(candidates, TRUE);
