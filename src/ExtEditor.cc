@@ -249,12 +249,6 @@ ExtEditor::fillCommand(std::string command_name, const char * argument){
     //Generate labels according to m_mode
     if ( LABEL_LIST_DIGIT == m_mode ) {
         //skip codes, as this is the default behavior of lookup table.
-#if 0
-        for ( int i = 1; i <= 9; ++i) {
-            m_lookup_table.appendLabel( Text(i + '0') );
-        }
-        m_lookup_table.appendLabel( Text ('0') );
-#endif
     }
 
     if ( LABEL_LIST_ALPHA == m_mode) {
@@ -265,6 +259,46 @@ ExtEditor::fillCommand(std::string command_name, const char * argument){
     if ( LABEL_LIST_NONE == m_mode || LABEL_LIST_SINGLE == m_mode) {
         for ( int i = 1; i <= 10; ++i)
             m_lookup_table.appendLabel(Text(""));
+    }
+
+    //Generate candidates
+    const lua_command_candidate_t * candidate = NULL;
+    std::string result;
+    if ( 1 == result_num ){
+        candidate = ibus_engine_plugin_get_retval(m_lua_plugin);
+        result = "";
+        if ( candidate->content ){
+            result = candidate->content;
+        }
+        if ( candidate->suggest && candidate-> help ){
+            result += candidate->suggest;
+            result += " ";
+            result += "[";
+            result += candidate->help;
+            result += "]";
+        }
+
+        ibus_engine_plugin_free((lua_command_candidate_t *)candidate);
+        m_lookup_table.appendCandidate(Text(result));
+    }else if (result_num > 1){
+        GArray * candidates = ibus_engine_plugin_get_retvals(m_lua_plugin);
+        for ( int i = 0; i < result_num; ++i){
+            candidate = g_array_index(candidates, lua_command_candidate_t *, i);
+            result = "";
+            if ( candidate->content ){
+                result = candidate->content;
+            }
+            if ( candidate->suggest && candidate-> help ){
+                result += candidate->suggest;
+                result += " ";
+                result += "[";
+                result += candidate->help;
+                result += "]";
+            }
+            ibus_engine_plugin_free((lua_command_candidate_t *)candidate);
+            m_lookup_table.appendCandidate(Text(result));
+        }
+        g_array_free(candidates, TRUE);
     }
 
     sendLookupTable();
