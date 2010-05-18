@@ -283,7 +283,7 @@ GArray * ibus_engine_plugin_get_retvals(IBusEnginePlugin * plugin){
   return result;
 }
 
-void ibus_engine_plugin_free(lua_command_candidate_t * candidate){
+void ibus_engine_plugin_free_candidate(lua_command_candidate_t * candidate){
   g_free((gpointer)candidate->content);
   g_free((gpointer)candidate->suggest);
   g_free((gpointer)candidate->help);

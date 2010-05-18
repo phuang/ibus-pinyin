@@ -109,5 +109,5 @@ const lua_command_candidate_t * ibus_engine_plugin_get_retval(IBusEnginePlugin *
  */
 GArray * ibus_engine_plugin_get_retvals(IBusEnginePlugin * plugin);
 
-void ibus_engine_plugin_free(lua_command_candidate_t * candidate);
+void ibus_engine_plugin_free_candidate(lua_command_candidate_t * candidate);
 #endif
