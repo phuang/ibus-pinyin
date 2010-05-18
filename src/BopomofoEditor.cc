@@ -265,7 +265,7 @@ BopomofoEditor::processNumberWithShift (guint keyval, guint keycode, guint modif
 
     if (!m_text)
         return FALSE;
-    if (G_UNLIKELY((modifiers & IBUS_SHIFT_MASK) == 0))
+    if (G_UNLIKELY ((modifiers & IBUS_SHIFT_MASK) == 0))
         return FALSE;
 
     m_select_mode = TRUE;
@@ -316,7 +316,7 @@ BopomofoEditor::processBopomofo (guint keyval, guint keycode, guint modifiers)
     if (G_UNLIKELY (CMSHM_FILTER(modifiers) != 0))
         return m_text ? TRUE : FALSE;
 
-    if (keyvalToBopomofo(keyval) == BOPOMOFO_ZERO)
+    if (keyvalToBopomofo (keyval) == BOPOMOFO_ZERO)
         return FALSE;
 
     m_select_mode = FALSE;
@@ -339,7 +339,7 @@ BopomofoEditor::processKeyEvent (guint keyval, guint keycode, guint modifiers)
         return TRUE;
     if (processNumberWithShift (keyval, keycode, modifiers) == TRUE)
         return TRUE;
-    if (processBopomofo(keyval, keycode ,modifiers))
+    if (processBopomofo (keyval, keycode ,modifiers))
         return TRUE;
 
     switch (keyval) {
@@ -392,8 +392,8 @@ BopomofoEditor::updatePinyin (void)
     }
     else {
         bopomofo.clear();
-        for(String::iterator i = m_text.begin();i != m_text.end(); ++i) {
-            bopomofo += bopomofo_char[keyvalToBopomofo(*i)];
+        for(String::iterator i = m_text.begin (); i != m_text.end (); ++i) {
+            bopomofo += bopomofo_char[keyvalToBopomofo (*i)];
         }
 
         m_pinyin_len = PinyinParser::parseBopomofo (bopomofo,            // bopomofo
@@ -436,12 +436,12 @@ BopomofoEditor::updateAuxiliaryText (void)
         }
     }
 
-    for (String::iterator i = m_text.begin() + m_pinyin_len; i != m_text.end(); i++) {
+    for (String::iterator i = m_text.begin () + m_pinyin_len; i != m_text.end (); i++) {
         if (m_cursor == (guint)(i - m_text.begin ()))
             m_buffer << '|';
-        m_buffer.appendUnichar(bopomofo_char[keyvalToBopomofo(*i)]);
+        m_buffer.appendUnichar (bopomofo_char[keyvalToBopomofo (*i)]);
     }
-    if (m_cursor == m_text.length())
+    if (m_cursor == m_text.length ())
         m_buffer << '|';
 
     updateAuxiliaryTextAfter (m_buffer);
@@ -471,7 +471,7 @@ BopomofoEditor::commit (void)
     }
 
     while (*p != '\0') {
-        m_buffer.appendUnichar ((gunichar)bopomofo_char[keyvalToBopomofo(*p++)]);
+        m_buffer.appendUnichar ((gunichar)bopomofo_char[keyvalToBopomofo (*p++)]);
     }
 
     m_phrase_editor.commit ();
@@ -531,18 +531,18 @@ BopomofoEditor::updatePreeditText (void)
                     }
                 }
                 else {
-                    for (const gchar *p = m_text.c_str(); *p; ++p) {
+                    for (const gchar *p = m_text.c_str (); *p; ++p) {
                         if ((guint) (p - m_text.c_str ()) == m_cursor)
                             m_buffer << ' ';
-                        m_buffer.appendUnichar(bopomofo_char[keyvalToBopomofo(*p)]);
+                        m_buffer.appendUnichar (bopomofo_char[keyvalToBopomofo (*p)]);
                     }
                     edit_end = m_buffer.utf8Length ();
                 }
             }
         }
         else {
-            for (const gchar *p=m_text.c_str() + m_pinyin_len; *p ;++p) {
-                m_buffer.appendUnichar(bopomofo_char[keyvalToBopomofo(*p)]);
+            for (const gchar *p=m_text.c_str () + m_pinyin_len; *p ; ++p) {
+                m_buffer.appendUnichar (bopomofo_char[keyvalToBopomofo (*p)]);
             }
         }
     }

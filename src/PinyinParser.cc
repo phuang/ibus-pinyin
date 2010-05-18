@@ -280,32 +280,32 @@ PinyinParser::isBopomofoToneChar (const wchar_t ch)
 }
 
 guint
-PinyinParser::parseBopomofo (const std::wstring   &bopomofo,
-                             gint            len,
-                             guint           option,
-                             PinyinArray    &result,
-                             guint           max)
+PinyinParser::parseBopomofo (const std::wstring &bopomofo,
+                             gint                len,
+                             guint               option,
+                             PinyinArray        &result,
+                             guint               max)
 {
     std::wstring::const_iterator bpmf = bopomofo.begin();
     const std::wstring::const_iterator end = bpmf + len;
     const Pinyin **bs_res;
     wchar_t buf[MAX_BOPOMOFO_LEN + 1];
-    guint i,j;
+    guint i, j;
 
     result.clear ();
 
     if (G_UNLIKELY (len < 0))
-        len = bopomofo.length();
+        len = bopomofo.length ();
 
-    for (; bpmf < end && result.size () < max; ) {
-        for (i = MAX_BOPOMOFO_LEN; i>0; i--){
+    for (; bpmf < end && result.size () < max;) {
+        for (i = MAX_BOPOMOFO_LEN; i > 0; i--){
             if (bpmf + i > end)
                 continue;
 
-            for (j=0;j<i;j++){
-                wchar_t key = *(bpmf+j);
+            for (j = 0; j < i; j++){
+                wchar_t key = *(bpmf + j);
 
-                if (j == i-1 && isBopomofoToneChar(key)) {
+                if (j == i - 1 && isBopomofoToneChar (key)) {
                     break; /* ignore tone */
                 }
 
@@ -313,20 +313,22 @@ PinyinParser::parseBopomofo (const std::wstring   &bopomofo,
             }
 
             buf[j] = '\0';
-            bs_res = (const Pinyin **) std::bsearch (buf, bopomofo_table,
-                                                  G_N_ELEMENTS (bopomofo_table),
-                                                  sizeof(bopomofo_table[0]),
-                                                  bopomofo_cmp);
+            bs_res = (const Pinyin **) std::bsearch (buf,
+                                                     bopomofo_table,
+                                                     G_N_ELEMENTS (bopomofo_table),
+                                                     sizeof (bopomofo_table[0]),
+                                                     bopomofo_cmp);
             if (bs_res != NULL && check_flags (*bs_res, option))
                 break;
         }
         if (!(bs_res != NULL && check_flags (*bs_res, option)))
             break;
-        result.append(*bs_res,bpmf - bopomofo.begin() ,i);
+
+        result.append(*bs_res, bpmf - bopomofo.begin (), i);
         bpmf += i;
     }
 
-    return bpmf - bopomofo.begin();
+    return bpmf - bopomofo.begin ();
 };
 
 };
