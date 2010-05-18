@@ -290,7 +290,7 @@ PinyinParser::parseBopomofo (const std::wstring   &bopomofo,
     const std::wstring::const_iterator end = bpmf + len;
     const Pinyin **bs_res;
     wchar_t buf[MAX_BOPOMOFO_LEN + 1];
-    gint i,j;
+    guint i,j;
 
     result.clear ();
 
@@ -322,7 +322,7 @@ PinyinParser::parseBopomofo (const std::wstring   &bopomofo,
         }
         if (!(bs_res != NULL && check_flags (*bs_res, option)))
             break;
-        result.append(*bs_res,bpmf - bopomofo.begin() ,(*bs_res)->len);
+        result.append(*bs_res,bpmf - bopomofo.begin() ,i);
         bpmf += i;
     }
 
