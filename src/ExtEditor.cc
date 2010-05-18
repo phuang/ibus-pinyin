@@ -224,8 +224,11 @@ ExtEditor::fillCommandCandidates(std::string prefix)
     for ( int i = 0; i < commands->len; ++i){
         lua_command_t * command = &g_array_index(commands, lua_command_t, i);
         if ( strncmp(prefix_str, command->command_name, len) == 0){
-            m_lookup_table.appendLabel(Text(command->command_name));
-            m_lookup_table.appendCandidate(Text(command->description));
+            std::string candidate = command->command_name;
+            candidate += ".";
+            candidate += command->description;
+            m_lookup_table.appendLabel(Text(""));
+            m_lookup_table.appendCandidate(Text(candidate));
         }
     }
 
