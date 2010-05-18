@@ -15,7 +15,8 @@
 			<name>pinyin</name>
 			<language>zh</language>
 			<license>GPL</license>
-			<author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
+			<author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;
+BYVoid &lt;byvoid1@gmail.com&gt;</author>
 			<icon>${pkgdatadir}/icons/ibus-pinyin.svg</icon>
 			<layout>us</layout>
 			<longname>Pinyin</longname>

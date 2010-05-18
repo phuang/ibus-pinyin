@@ -69,7 +69,8 @@ start_component (void)
                                                      N_("Pinyin input method (debug)"),
                                                      "zh_CN",
                                                      "GPL",
-                                                     "Peng Huang <shawn.p.huang@gmail.com>",
+                                                     "Peng Huang <shawn.p.huang@gmail.com>\n"
+                                                     "BYVoid <byvoid1@gmail.com>",
                                                      PKGDATADIR "/icons/ibus-pinyin.svg",
                                                      "us"));
     ibus_component_add_engine (component,
