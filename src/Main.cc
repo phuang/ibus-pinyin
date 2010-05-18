@@ -78,6 +78,7 @@ start_component (void)
                                                      N_("Bopomofo input method (debug)"),
                                                      "zh_CN",
                                                      "GPL",
+                                                     "BYVoid <byvoid1@gmail.com>\n"
                                                      "Peng Huang <shawn.p.huang@gmail.com>",
                                                      PKGDATADIR "/icons/ibus-bopomofo.svg",
                                                      "us"));
