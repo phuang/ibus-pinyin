@@ -1,3 +1,37 @@
+/* drop indexes */
+DROP INDEX IF EXISTS index_0_0;
+DROP INDEX IF EXISTS index_1_0;
+DROP INDEX IF EXISTS index_1_1;
+DROP INDEX IF EXISTS index_2_0;
+DROP INDEX IF EXISTS index_2_1;
+DROP INDEX IF EXISTS index_3_0;
+DROP INDEX IF EXISTS index_3_1;
+DROP INDEX IF EXISTS index_4_0;
+DROP INDEX IF EXISTS index_4_1;
+DROP INDEX IF EXISTS index_5_0;
+DROP INDEX IF EXISTS index_5_1;
+DROP INDEX IF EXISTS index_6_0;
+DROP INDEX IF EXISTS index_6_1;
+DROP INDEX IF EXISTS index_7_0;
+DROP INDEX IF EXISTS index_7_1;
+DROP INDEX IF EXISTS index_8_0;
+DROP INDEX IF EXISTS index_8_1;
+DROP INDEX IF EXISTS index_9_0;
+DROP INDEX IF EXISTS index_9_1;
+DROP INDEX IF EXISTS index_10_0;
+DROP INDEX IF EXISTS index_10_1;
+DROP INDEX IF EXISTS index_11_0;
+DROP INDEX IF EXISTS index_11_1;
+DROP INDEX IF EXISTS index_12_0;
+DROP INDEX IF EXISTS index_12_1;
+DROP INDEX IF EXISTS index_13_0;
+DROP INDEX IF EXISTS index_13_1;
+DROP INDEX IF EXISTS index_14_0;
+DROP INDEX IF EXISTS index_14_1;
+DROP INDEX IF EXISTS index_15_0;
+DROP INDEX IF EXISTS index_15_1;
+
+/* create indexes */
 CREATE INDEX index_0_0 ON py_phrase_0(s0, y0);
 CREATE INDEX index_1_0 ON py_phrase_1(s0, y0, s1, y1);
 CREATE INDEX index_1_1 ON py_phrase_1(s0, s1, y1);
@@ -29,3 +63,6 @@ CREATE INDEX index_14_0 ON py_phrase_14(s0, y0, s1, y1, s2, y2);
 CREATE INDEX index_14_1 ON py_phrase_14(s0, s1, s2, y2);
 CREATE INDEX index_15_0 ON py_phrase_15(s0, y0, s1, y1, s2, y2);
 CREATE INDEX index_15_1 ON py_phrase_15(s0, s1, s2, y2);
+
+/* optimize database */
+VACUUM;

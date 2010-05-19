@@ -21,6 +21,7 @@
 
 icons_DATA = \
 	ibus-pinyin.svg \
+	ibus-bopomofo.svg \
 	chinese.svg \
 	english.svg \
 	full.svg \
