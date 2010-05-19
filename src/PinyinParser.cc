@@ -127,6 +127,11 @@ PinyinParser::parse (const String   &pinyin,
 
     prev_c = 0;
     for (; p < end && result.size () < max; ) {
+        if (G_UNLIKELY (*p == '\'')) {
+            prev_c = '\'';
+            p++;
+            continue;
+        }
         switch (prev_c) {
         case 'r':
         case 'n':
@@ -194,11 +199,6 @@ PinyinParser::parse (const String   &pinyin,
         p += py->len;
         prev_c = py->text[py->len - 1];
         prev_py = py;
-
-        if (G_UNLIKELY (*p == '\'')) {
-            prev_c = '\'';
-            p++;
-        }
     }
 
     if (G_UNLIKELY (p == (const gchar *)pinyin))
