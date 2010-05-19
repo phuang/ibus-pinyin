@@ -493,7 +493,7 @@ PunctEditor::fillLookupTable (void)
 
     for (std::vector<const gchar *>::iterator it = m_punct_candidates.begin ();
          it != m_punct_candidates.end (); it++) {
-        Text text (*it);
+        StaticText text (*it);
         // text.appendAttribute (IBUS_ATTR_TYPE_FOREGROUND, 0x004466, 0, -1);
         m_lookup_table.appendCandidate (text);
     }
