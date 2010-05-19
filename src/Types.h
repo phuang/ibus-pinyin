@@ -110,13 +110,13 @@ struct Pinyin {
     const wchar_t *bopomofo;
     const gchar *sheng;
     const gchar *yun;
-    const gchar  sheng_id;
-    const gchar  yun_id;
-    const gchar  fsheng_id;
-    const gchar  fyun_id;
-    const gchar  fsheng_id_2;
-    const gchar  fyun_id_2;
-    const guint  len;
+    const guint8 sheng_id;
+    const guint8 yun_id;
+    const guint8 fsheng_id;
+    const guint8 fyun_id;
+    const guint8 fsheng_id_2;
+    const guint8 fyun_id_2;
+    const guint len;
     const guint  flags;
 };
 
