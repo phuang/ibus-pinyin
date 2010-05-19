@@ -46,18 +46,7 @@ private:
     void connectEditorSignals (EditorPtr editor);
 
 private:
-    void slotCommitText (Text & text);
-    void slotUpdatePreeditText (Text & text, guint cursor, gboolean visible);
-    void slotShowPreeditText (void);
-    void slotHidePreeditText (void);
-    void slotUpdateAuxiliaryText (Text & text, gboolean visible);
-    void slotShowAuxiliaryText (void);
-    void slotHideAuxiliaryText (void);
-    void slotUpdateLookupTable (LookupTable &table, gboolean visible);
-    void slotUpdateLookupTableFast (LookupTable &table, gboolean visible);
-    void slotShowLookupTable (void);
-    void slotHideLookupTable (void);
-    void slotUpdateProperty (Property & prop);
+    void commitText (Text & text);
 
 private:
     PinyinProperties m_props;

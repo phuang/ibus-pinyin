@@ -35,7 +35,7 @@ BopomofoEngine::BopomofoEngine (IBusEngine *engine)
     m_editors[MODE_RAW].reset (new RawEditor (m_props));
     m_editors[MODE_EXTENSION].reset (new ExtEditor (m_props));
 
-    m_props.signalUpdateProperty ().connect (bind (&BopomofoEngine::slotUpdateProperty, this, _1));
+    m_props.signalUpdateProperty ().connect (bind (&BopomofoEngine::updateProperty, this, _1));
 
     for (i = MODE_INIT; i < MODE_LAST; i++) {
         connectEditorSignals (m_editors[i]);
@@ -160,9 +160,9 @@ BopomofoEngine::candidateClicked (guint index, guint button, guint state)
 }
 
 void
-BopomofoEngine::slotCommitText (Text & text)
+BopomofoEngine::commitText (Text & text)
 {
-    commitText (text);
+    Engine::commitText (text);
     if (m_input_mode != MODE_INIT)
         m_input_mode = MODE_INIT;
     if (text.text ())
@@ -172,99 +172,33 @@ BopomofoEngine::slotCommitText (Text & text)
 }
 
 void
-BopomofoEngine::slotUpdatePreeditText (Text & text, guint cursor, gboolean visible)
-{
-    updatePreeditText (text, cursor, visible);
-}
-
-void
-BopomofoEngine::slotShowPreeditText (void)
-{
-    showPreeditText ();
-}
-
-void
-BopomofoEngine::slotHidePreeditText (void)
-{
-    hidePreeditText ();
-}
-
-void
-BopomofoEngine::slotUpdateAuxiliaryText (Text & text, gboolean visible)
-{
-    updateAuxiliaryText (text, visible);
-}
-
-void
-BopomofoEngine::slotShowAuxiliaryText (void)
-{
-    showAuxiliaryText ();
-}
-
-void
-BopomofoEngine::slotHideAuxiliaryText (void)
-{
-    hideAuxiliaryText ();
-}
-
-void
-BopomofoEngine::slotUpdateLookupTable (LookupTable & table, gboolean visible)
-{
-    updateLookupTable (table, visible);
-}
-
-void
-BopomofoEngine::slotUpdateLookupTableFast (LookupTable & table, gboolean visible)
-{
-    updateLookupTableFast (table, visible);
-}
-
-void
-BopomofoEngine::slotShowLookupTable (void)
-{
-    showLookupTable ();
-}
-
-void
-BopomofoEngine::slotHideLookupTable (void)
-{
-    hideLookupTable ();
-}
-
-void
-BopomofoEngine::slotUpdateProperty (Property & prop)
-{
-    updateProperty (prop);
-}
-
-void
 BopomofoEngine::connectEditorSignals (EditorPtr editor)
 {
     editor->signalCommitText ().connect (
-        bind (&BopomofoEngine::slotCommitText, this, _1));
+        bind (&BopomofoEngine::commitText, this, _1));
 
     editor->signalUpdatePreeditText ().connect (
-        bind (&BopomofoEngine::slotUpdatePreeditText, this, _1, _2, _3));
+        bind (&BopomofoEngine::updatePreeditText, this, _1, _2, _3));
     editor->signalShowPreeditText ().connect (
-        bind (&BopomofoEngine::slotShowPreeditText, this));
+        bind (&BopomofoEngine::showPreeditText, this));
     editor->signalHidePreeditText ().connect (
-        bind (&BopomofoEngine::slotHidePreeditText, this));
+        bind (&BopomofoEngine::hidePreeditText, this));
 
     editor->signalUpdateAuxiliaryText ().connect (
-        bind (&BopomofoEngine::slotUpdateAuxiliaryText, this, _1, _2));
+        bind (&BopomofoEngine::updateAuxiliaryText, this, _1, _2));
     editor->signalShowAuxiliaryText ().connect (
-        bind (&BopomofoEngine::slotShowAuxiliaryText, this));
+        bind (&BopomofoEngine::showAuxiliaryText, this));
     editor->signalHideAuxiliaryText ().connect (
-        bind (&BopomofoEngine::slotHideAuxiliaryText, this));
+        bind (&BopomofoEngine::hideAuxiliaryText, this));
 
     editor->signalUpdateLookupTable ().connect (
-        bind (&BopomofoEngine::slotUpdateLookupTable, this, _1, _2));
+        bind (&BopomofoEngine::updateLookupTable, this, _1, _2));
     editor->signalUpdateLookupTableFast ().connect (
-        bind (&BopomofoEngine::slotUpdateLookupTableFast, this, _1, _2));
+        bind (&BopomofoEngine::updateLookupTableFast, this, _1, _2));
     editor->signalShowLookupTable ().connect (
-        bind (&BopomofoEngine::slotShowLookupTable, this));
+        bind (&BopomofoEngine::showLookupTable, this));
     editor->signalHideLookupTable ().connect (
-        bind (&BopomofoEngine::slotHideLookupTable, this));
+        bind (&BopomofoEngine::hideLookupTable, this));
 }
 
 };

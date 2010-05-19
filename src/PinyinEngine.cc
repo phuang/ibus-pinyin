@@ -37,7 +37,7 @@ PinyinEngine::PinyinEngine (IBusEngine *engine)
     m_editors[MODE_RAW].reset (new RawEditor (m_props));
     m_editors[MODE_EXTENSION].reset (new ExtEditor (m_props));
 
-    m_props.signalUpdateProperty ().connect (bind (&PinyinEngine::slotUpdateProperty, this, _1));
+    m_props.signalUpdateProperty ().connect (bind (&PinyinEngine::updateProperty, this, _1));
 
     for (i = MODE_INIT; i < MODE_LAST; i++) {
         connectEditorSignals (m_editors[i]);
@@ -201,9 +201,9 @@ PinyinEngine::candidateClicked (guint index, guint button, guint state)
 }
 
 void
-PinyinEngine::slotCommitText (Text & text)
+PinyinEngine::commitText (Text & text)
 {
-    commitText (text);
+    Engine::commitText (text);
     if (m_input_mode != MODE_INIT)
         m_input_mode = MODE_INIT;
     if (text.text ())
@@ -213,99 +213,33 @@ PinyinEngine::slotCommitText (Text & text)
 }
 
 void
-PinyinEngine::slotUpdatePreeditText (Text & text, guint cursor, gboolean visible)
-{
-    updatePreeditText (text, cursor, visible);
-}
-
-void
-PinyinEngine::slotShowPreeditText (void)
-{
-    showPreeditText ();
-}
-
-void
-PinyinEngine::slotHidePreeditText (void)
-{
-    hidePreeditText ();
-}
-
-void
-PinyinEngine::slotUpdateAuxiliaryText (Text & text, gboolean visible)
-{
-    updateAuxiliaryText (text, visible);
-}
-
-void
-PinyinEngine::slotShowAuxiliaryText (void)
-{
-    showAuxiliaryText ();
-}
-
-void
-PinyinEngine::slotHideAuxiliaryText (void)
-{
-    hideAuxiliaryText ();
-}
-
-void
-PinyinEngine::slotUpdateLookupTable (LookupTable & table, gboolean visible)
-{
-    updateLookupTable (table, visible);
-}
-
-void
-PinyinEngine::slotUpdateLookupTableFast (LookupTable & table, gboolean visible)
-{
-    updateLookupTableFast (table, visible);
-}
-
-void
-PinyinEngine::slotShowLookupTable (void)
-{
-    showLookupTable ();
-}
-
-void
-PinyinEngine::slotHideLookupTable (void)
-{
-    hideLookupTable ();
-}
-
-void
-PinyinEngine::slotUpdateProperty (Property & prop)
-{
-    updateProperty (prop);
-}
-
-void
 PinyinEngine::connectEditorSignals (EditorPtr editor)
 {
     editor->signalCommitText ().connect (
-        bind (&PinyinEngine::slotCommitText, this, _1));
+        bind (&PinyinEngine::commitText, this, _1));
 
     editor->signalUpdatePreeditText ().connect (
-        bind (&PinyinEngine::slotUpdatePreeditText, this, _1, _2, _3));
+        bind (&PinyinEngine::updatePreeditText, this, _1, _2, _3));
     editor->signalShowPreeditText ().connect (
-        bind (&PinyinEngine::slotShowPreeditText, this));
+        bind (&PinyinEngine::showPreeditText, this));
     editor->signalHidePreeditText ().connect (
-        bind (&PinyinEngine::slotHidePreeditText, this));
+        bind (&PinyinEngine::hidePreeditText, this));
 
     editor->signalUpdateAuxiliaryText ().connect (
-        bind (&PinyinEngine::slotUpdateAuxiliaryText, this, _1, _2));
+        bind (&PinyinEngine::updateAuxiliaryText, this, _1, _2));
     editor->signalShowAuxiliaryText ().connect (
-        bind (&PinyinEngine::slotShowAuxiliaryText, this));
+        bind (&PinyinEngine::showAuxiliaryText, this));
     editor->signalHideAuxiliaryText ().connect (
-        bind (&PinyinEngine::slotHideAuxiliaryText, this));
+        bind (&PinyinEngine::hideAuxiliaryText, this));
 
     editor->signalUpdateLookupTable ().connect (
-        bind (&PinyinEngine::slotUpdateLookupTable, this, _1, _2));
+        bind (&PinyinEngine::updateLookupTable, this, _1, _2));
     editor->signalUpdateLookupTableFast ().connect (
-        bind (&PinyinEngine::slotUpdateLookupTableFast, this, _1, _2));
+        bind (&PinyinEngine::updateLookupTableFast, this, _1, _2));
     editor->signalShowLookupTable ().connect (
-        bind (&PinyinEngine::slotShowLookupTable, this));
+        bind (&PinyinEngine::showLookupTable, this));
     editor->signalHideLookupTable ().connect (
-        bind (&PinyinEngine::slotHideLookupTable, this));
+        bind (&PinyinEngine::hideLookupTable, this));
 }
 
 };
