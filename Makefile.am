@@ -27,6 +27,8 @@ SUBDIRS = \
 	$(NULL)
 
 DISTCHECK_CONFIGURE_FLAGS = \
+	CFLAGS='-g3 -O3 -Wall' \
+	CXXFLAGS='-g3 -O3 -Wall' \
 	--enable-db-android \
 	--enable-db-open-phrase \
 	$(NULL)
