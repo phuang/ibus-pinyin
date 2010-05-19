@@ -32,13 +32,18 @@ PunctEditor::insert (gchar ch)
             g_assert (m_cursor == 0);
             m_text.insert (m_cursor++, ch);
             m_punct_mode = MODE_INIT;
-            updatePunctCandidates (ch);
+            updatePunctCandidates (0);
+            m_selected_puncts.clear ();
+            m_selected_puncts.insert (m_selected_puncts.begin (), m_punct_candidates[0]);
             update ();
         }
         break;
     case MODE_INIT:
-        m_text.clear ();
-        m_cursor = 0;
+        {
+            m_text.clear ();
+            m_selected_puncts.clear ();
+            m_cursor = 0;
+        }
     case MODE_NORMAL:
         {
             m_text.insert (m_cursor, ch);
@@ -65,12 +70,7 @@ PunctEditor::processSpace (guint keyval, guint keycode, guint modifiers)
         return FALSE;
     if (CMSHM_FILTER (modifiers) != 0)
         return TRUE;
-    if (m_lookup_table.size () != 0) {
-        selectCandidate (m_lookup_table.cursorPos ());
-    }
-    else {
-        commit ();
-    }
+    commit ();
     return TRUE;
 }
 
@@ -148,7 +148,7 @@ PunctEditor::processKeyEvent (guint keyval, guint keycode, guint modifiers)
 
     case IBUS_Return:
     case IBUS_KP_Enter:
-        commit ();
+        commit (m_text);
         return TRUE;
 
     case IBUS_Escape:
@@ -267,9 +267,19 @@ PunctEditor::moveCursorLeft (void)
     if (G_UNLIKELY (m_cursor == 0))
         return FALSE;
     m_cursor --;
-    if (m_cursor > 0) {
+    if (m_cursor == 0)  {
+        m_punct_candidates.clear ();
+        fillLookupTable ();
+    }
+    else {
         updatePunctCandidates (m_text[m_cursor - 1]);
-        m_selected_puncts[m_cursor - 1] = m_punct_candidates[m_lookup_table.cursorPos ()];
+        /* restore cursor pos */
+        std::vector<const gchar *>::iterator it;
+        it = std::find (m_punct_candidates.begin (),
+                        m_punct_candidates.end (),
+                        m_selected_puncts[m_cursor - 1]);
+        g_assert (it != m_punct_candidates.end ());
+        m_lookup_table.setCursorPos (it - m_punct_candidates.begin ());
     }
     update();
     return TRUE;
@@ -407,31 +417,45 @@ PunctEditor::commit (const gchar *str)
 void
 PunctEditor::commit (void)
 {
-    commit ((const gchar *) m_text);
-    reset();
+    m_buffer.clear ();
+    for (std::vector<const gchar *>::iterator it = m_selected_puncts.begin ();
+         it != m_selected_puncts.end (); it++) {
+        m_buffer << *it;
+    }
+
+    reset ();
+    commit (m_buffer);
 }
 
 inline gboolean
 PunctEditor::selectCandidate (guint i)
 {
-    m_buffer.clear ();
-
     switch (m_punct_mode) {
     case MODE_INIT:
-        m_buffer << m_selected_puncts[m_lookup_table.cursorPos ()];
-        break;
-    case MODE_NORMAL:
-        for (std::vector<const gchar *>::iterator it = m_selected_puncts.begin ();
-             it != m_selected_puncts.end (); it++) {
-            m_buffer << *it;
+        {
+            g_assert (m_cursor == 1);
+            m_lookup_table.setCursorPos (i);
+            m_selected_puncts[m_cursor - 1] = m_punct_candidates[i];
+            commit ();
+            return TRUE;
         }
-        break;
+    case MODE_NORMAL:
+        {
+            m_lookup_table.setCursorPos (i);
+            m_selected_puncts[m_cursor - 1] = m_punct_candidates[i];
+
+            /* if it is the last punct, commit the result */
+            if (m_cursor == m_text.length ()) {
+                commit ();
+            }
+            else {
+                moveCursorRight ();
+            }
+            return TRUE;
+        }
     default:
         g_assert_not_reached ();
     }
-
-    reset();
-    commit ((const gchar *) m_buffer);
 
     return FALSE;
 }
@@ -530,16 +554,22 @@ PunctEditor::updateAuxiliaryText (void)
         break;
     case MODE_NORMAL:
         {
-            m_buffer.clear ();
-            for (String::iterator i = m_text.begin (); i != m_text.end (); ++i) {
-                if (i - m_text.begin () == (gint) m_cursor)
-                    m_buffer << '|';
-                m_buffer << *i;
+            if (m_cursor == 0) {
+                hideAuxiliaryText ();
             }
-            if (m_text.end () - m_text.begin () == (gint) m_cursor)
-                m_buffer << '|';
-            StaticText aux_text (m_buffer);
-            Editor::updateAuxiliaryText (aux_text, TRUE);
+            else {
+                m_buffer.clear ();
+                for (String::iterator i = m_text.begin (); i != m_text.end (); ++i) {
+                    if (i - m_text.begin () == (gint) m_cursor)
+                        m_buffer << '|';
+                    m_buffer << *i;
+                }
+                if (m_text.end () - m_text.begin () == (gint) m_cursor)
+                    m_buffer << '|';
+
+                StaticText aux_text (m_buffer);
+                Editor::updateAuxiliaryText (aux_text, TRUE);
+            }
         }
         break;
     default:
