@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ibus-pinyin 1.2.99\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-05-18 20:04+0800\n"
+"POT-Creation-Date: 2010-05-19 13:31+0800\n"
 "PO-Revision-Date: 2009-09-20 16:05+8\n"
 "Last-Translator: Peng Huang <shawn.p.huang@gmail.com>\n"
 "Language-Team: Peng Huang <shawn.p.huang@gmail.com>\n"
@@ -27,11 +27,11 @@ msgstr "拼音（调试）"
 msgid "Pinyin input method (debug)"
 msgstr "拼音输入法（调试）"
 
-#: ../src/Main.cc:77
+#: ../src/Main.cc:78
 msgid "Bopomofo (debug)"
 msgstr "注音（调试）"
 
-#: ../src/Main.cc:78
+#: ../src/Main.cc:79
 msgid "Bopomofo input method (debug)"
 msgstr "注音输入法（调试）"
 
@@ -82,10 +82,8 @@ msgid "<b>UI</b>"
 msgstr "<b>外观</b>"
 
 #: ../setup/ibus-pinyin-preferences.ui.h:8
-msgid ""
-"<small>Copyright &#xA9; 2009 Peng Huang &lt;shawn.p.huang@gmail.com&gt;</"
-"small>"
-msgstr "<small>版权所有 © 2009 黄鹏 &lt;shawn.p.huang@gmail.com&gt;</small>"
+msgid "<small>Copyright (c) 2009-2010 Peng Huang</small>"
+msgstr "<small>版权所有 (c) 2009-2010 黄鹏</small>"
 
 #: ../setup/ibus-pinyin-preferences.ui.h:9
 msgid "ABC"
@@ -266,6 +264,13 @@ msgstr "[Shift]键选词"
 #: ../setup/ibus-pinyin-preferences.ui.h:55
 msgid "http://ibus.googlecode.com"
 msgstr "http://ibus.googlecode.com"
+
+#, fuzzy
+#~ msgid ""
+#~ "<small>Copyright &#xA9; 2009\n"
+#~ "Peng Huang &lt;shawn.p.huang@gmail.com&gt;,\n"
+#~ "BYVoid &lt;byvoid1@gmail.com&gt;</small>"
+#~ msgstr "<small>版权所有 © 2009 黄鹏 &lt;shawn.p.huang@gmail.com&gt;</small>"
 
 #~ msgid "Enable automatic commit phrase."
 #~ msgstr "启动自动上词。"

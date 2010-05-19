@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-05-18 20:04+0800\n"
+"POT-Creation-Date: 2010-05-19 13:31+0800\n"
 "PO-Revision-Date: 2009-10-14 09:44+0300\n"
 "Last-Translator: Alexey Kotlyarov <koterpillar@gmail.com>\n"
 "Language-Team: Russian\n"
@@ -31,11 +31,11 @@ msgstr "Пиньинь"
 msgid "Pinyin input method (debug)"
 msgstr "Метод ввода пиньинь"
 
-#: ../src/Main.cc:77
+#: ../src/Main.cc:78
 msgid "Bopomofo (debug)"
 msgstr ""
 
-#: ../src/Main.cc:78
+#: ../src/Main.cc:79
 #, fuzzy
 msgid "Bopomofo input method (debug)"
 msgstr "Метод ввода пиньинь"
@@ -90,11 +90,8 @@ msgid "<b>UI</b>"
 msgstr "<b>Другие</b>"
 
 #: ../setup/ibus-pinyin-preferences.ui.h:8
-msgid ""
-"<small>Copyright &#xA9; 2009 Peng Huang &lt;shawn.p.huang@gmail.com&gt;</"
-"small>"
+msgid "<small>Copyright (c) 2009-2010 Peng Huang</small>"
 msgstr ""
-"<small>Copyright &#xA9; 2009 Хуан Пэн &lt;shawn.p.huang@gmail.com&gt;</small>"
 
 #: ../setup/ibus-pinyin-preferences.ui.h:9
 msgid "ABC"
@@ -276,6 +273,15 @@ msgstr "Использовать [Shift] для выбора кандидато�
 #: ../setup/ibus-pinyin-preferences.ui.h:55
 msgid "http://ibus.googlecode.com"
 msgstr "http://ibus.googlecode.com"
+
+#, fuzzy
+#~ msgid ""
+#~ "<small>Copyright &#xA9; 2009\n"
+#~ "Peng Huang &lt;shawn.p.huang@gmail.com&gt;,\n"
+#~ "BYVoid &lt;byvoid1@gmail.com&gt;</small>"
+#~ msgstr ""
+#~ "<small>Copyright &#xA9; 2009 Хуан Пэн &lt;shawn.p.huang@gmail.com&gt;</"
+#~ "small>"
 
 #~ msgid "Enable automatic commit phrase."
 #~ msgstr "Подтверждать набранную фразу при вводе знаков препинания."

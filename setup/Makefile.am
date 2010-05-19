@@ -1,8 +1,8 @@
 # vim:set noet ts=4:
 #
-# ibus-pinyin - The PinYin engine for IBus
+# ibus-pinyin - The Chinese PinYin engine for IBus
 #
-# Copyright (c) 2007-2008 Peng Huang <shawn.p.huang@gmail.com>
+# Copyright (c) 2008-2010 Peng Huang <shawn.p.huang@gmail.com>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by

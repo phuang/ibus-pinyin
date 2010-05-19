@@ -1375,9 +1375,7 @@
                         <child>
                           <object class="GtkLabel" id="label15">
                             <property name="visible">True</property>
-                            <property name="label" translatable="yes">&lt;small&gt;Copyright &#xA9; 2009
-Peng Huang &amp;lt;shawn.p.huang@gmail.com&amp;gt;,
-BYVoid &amp;lt;byvoid1@gmail.com&amp;gt;&lt;/small&gt;</property>
+                            <property name="label" translatable="yes">&lt;small&gt;Copyright (c) 2009-2010 Peng Huang&lt;/small&gt;</property>
                             <property name="use_markup">True</property>
                             <property name="wrap">True</property>
                             <property name="selectable">True</property>
