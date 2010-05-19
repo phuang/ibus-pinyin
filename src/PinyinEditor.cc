@@ -628,7 +628,7 @@ PinyinEditor::update (void)
     updateAuxiliaryText ();
 }
 
-inline void
+void
 PinyinEditor::commit (const gchar *str)
 {
     StaticText text(str);
@@ -703,7 +703,7 @@ PinyinEditor::selectCandidate (guint i)
     return FALSE;
 }
 
-inline gboolean
+gboolean
 PinyinEditor::selectCandidateInPage (guint i)
 {
     guint page_size = m_lookup_table.pageSize ();
