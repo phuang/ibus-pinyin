@@ -26,6 +26,7 @@ public:
     gboolean cursorDown (void) { return ibus_lookup_table_cursor_down (*this); }
 
     void setPageSize (guint size) { ibus_lookup_table_set_page_size (*this, size); }
+    void setCursorPos (guint pos) { ibus_lookup_table_set_cursor_pos (*this, pos); }
     void setOrientation (gint orientation) { ibus_lookup_table_set_orientation (*this, orientation); }
     void clear (void) { ibus_lookup_table_clear (*this); }
 

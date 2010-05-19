@@ -17,7 +17,7 @@ namespace PY {
 
 PunctEditor::PunctEditor (PinyinProperties & props)
     : Editor (props),
-      m_punct_mode (FALSE),
+      m_punct_mode (MODE_DISABLE),
       m_lookup_table (Config::pageSize ())
 {
 }
@@ -25,8 +25,36 @@ PunctEditor::PunctEditor (PinyinProperties & props)
 gboolean
 PunctEditor::insert (gchar ch)
 {
-    m_text.insert (m_cursor++, ch);
-    update ();
+    switch (m_punct_mode) {
+    case MODE_DISABLE:
+        {
+            g_assert (ch == IBUS_grave);
+            g_assert (m_cursor == 0);
+            m_text.insert (m_cursor++, ch);
+            m_punct_mode = MODE_INIT;
+            updatePunctCandidates (ch);
+            update ();
+        }
+        break;
+    case MODE_INIT:
+        m_text.clear ();
+        m_cursor = 0;
+    case MODE_NORMAL:
+        {
+            m_text.insert (m_cursor, ch);
+            updatePunctCandidates (ch);
+            m_punct_mode = MODE_NORMAL;
+            if (m_punct_candidates.size () > 0) {
+                m_selected_puncts.insert (m_selected_puncts.begin () + m_cursor, m_punct_candidates[0]);
+            }
+            m_cursor ++;
+            update ();
+        }
+        break;
+    default:
+        g_assert_not_reached ();
+    }
+
     return TRUE;
 }
 
@@ -52,16 +80,14 @@ PunctEditor::processPunct (guint keyval, guint keycode, guint modifiers)
     if (CMSHM_FILTER (modifiers) != 0)
         return TRUE;
 
-    if (m_punct_mode == FALSE) {
+    if (m_punct_mode == MODE_DISABLE) {
         if (keyval == IBUS_grave) {
-            m_punct_mode = TRUE;
-            return insert('`');
+            insert (keyval);
+            return TRUE;
         }
-        return FALSE;
     }
 
-    if (m_text.length () >= 2)
-        return TRUE;
+    g_assert (m_punct_mode == MODE_INIT || m_punct_mode == MODE_NORMAL);
 
     switch (keyval) {
     case IBUS_grave:        /* ` */
@@ -99,7 +125,7 @@ PunctEditor::processPunct (guint keyval, guint keycode, guint modifiers)
     case IBUS_0...IBUS_9:
     case IBUS_a...IBUS_z:
     case IBUS_A...IBUS_Z:
-        return insert(keyval);
+        return insert (keyval);
     default:
         return FALSE;
     }
@@ -187,6 +213,9 @@ void
 PunctEditor::pageUp (void)
 {
     if (G_LIKELY (m_lookup_table.pageUp ())) {
+        if (m_punct_mode == MODE_NORMAL) {
+            m_selected_puncts[m_cursor - 1] = m_punct_candidates[m_lookup_table.cursorPos ()];
+        }
         updateLookupTableFast (m_lookup_table, TRUE);
         updatePreeditText ();
         updateAuxiliaryText ();
@@ -197,6 +226,9 @@ void
 PunctEditor::pageDown (void)
 {
     if (G_LIKELY (m_lookup_table.pageDown ())) {
+        if (m_punct_mode == MODE_NORMAL) {
+            m_selected_puncts[m_cursor - 1] = m_punct_candidates[m_lookup_table.cursorPos ()];
+        }
         updateLookupTableFast (m_lookup_table, TRUE);
         updatePreeditText ();
         updateAuxiliaryText ();
@@ -207,6 +239,9 @@ void
 PunctEditor::cursorUp (void)
 {
     if (G_LIKELY (m_lookup_table.cursorUp ())) {
+        if (m_punct_mode == MODE_NORMAL) {
+            m_selected_puncts[m_cursor - 1] = m_punct_candidates[m_lookup_table.cursorPos ()];
+        }
         updateLookupTableFast (m_lookup_table, TRUE);
         updatePreeditText ();
         updateAuxiliaryText ();
@@ -217,6 +252,9 @@ void
 PunctEditor::cursorDown (void)
 {
     if (G_LIKELY (m_lookup_table.cursorDown ())) {
+        if (m_punct_mode == MODE_NORMAL) {
+            m_selected_puncts[m_cursor - 1] = m_punct_candidates[m_lookup_table.cursorPos ()];
+        }
         updateLookupTableFast (m_lookup_table, TRUE);
         updatePreeditText ();
         updateAuxiliaryText ();
@@ -229,6 +267,10 @@ PunctEditor::moveCursorLeft (void)
     if (G_UNLIKELY (m_cursor == 0))
         return FALSE;
     m_cursor --;
+    if (m_cursor > 0) {
+        updatePunctCandidates (m_text[m_cursor - 1]);
+        m_selected_puncts[m_cursor - 1] = m_punct_candidates[m_lookup_table.cursorPos ()];
+    }
     update();
     return TRUE;
 }
@@ -239,6 +281,16 @@ PunctEditor::moveCursorRight (void)
     if (G_UNLIKELY (m_cursor == m_text.length ()))
         return FALSE;
     m_cursor ++;
+    updatePunctCandidates (m_text[m_cursor - 1]);
+
+    /* restore cursor pos */
+    std::vector<const gchar *>::iterator it;
+    it = std::find (m_punct_candidates.begin (),
+                    m_punct_candidates.end (),
+                    m_selected_puncts[m_cursor - 1]);
+    g_assert (it != m_punct_candidates.end ());
+    m_lookup_table.setCursorPos (it - m_punct_candidates.begin ());
+
     update();
     return TRUE;
 }
@@ -248,8 +300,12 @@ PunctEditor::moveCursorToBegin (void)
 {
     if (G_UNLIKELY (m_cursor == 0))
         return FALSE;
+
+    g_assert (m_punct_mode == MODE_NORMAL);
     m_cursor = 0;
+    m_punct_candidates.clear ();
     update ();
+
     return TRUE;
 }
 
@@ -258,7 +314,19 @@ PunctEditor::moveCursorToEnd (void)
 {
     if (G_UNLIKELY (m_cursor == m_text.length ()))
         return FALSE;
+
+    g_assert (m_punct_mode == MODE_NORMAL);
     m_cursor = m_text.length ();
+    updatePunctCandidates (m_text[m_cursor - 1]);
+
+    /* restore cursor pos */
+    std::vector<const gchar *>::iterator it;
+    it = std::find (m_punct_candidates.begin (),
+                    m_punct_candidates.end (),
+                    m_selected_puncts[m_cursor - 1]);
+    g_assert (it != m_punct_candidates.end ());
+    m_lookup_table.setCursorPos (it - m_punct_candidates.begin ());
+
     update();
     return TRUE;
 }
@@ -270,9 +338,27 @@ PunctEditor::removeCharBefore (void)
         return FALSE;
 
     m_cursor --;
+    m_selected_puncts.erase (m_selected_puncts.begin () + m_cursor);
     m_text.erase (m_cursor, 1);
-    if (m_text.empty())
-        m_punct_mode = FALSE;
+    if (m_text.empty()) {
+        reset ();
+    }
+    else {
+        if (m_cursor > 0) {
+
+            updatePunctCandidates (m_text[m_cursor - 1]);
+            /* restore cursor pos */
+            std::vector<const gchar *>::iterator it;
+            it = std::find (m_punct_candidates.begin (),
+                            m_punct_candidates.end (),
+                            m_selected_puncts[m_cursor - 1]);
+            g_assert (it != m_punct_candidates.end ());
+            m_lookup_table.setCursorPos (it - m_punct_candidates.begin ());
+        }
+        else {
+            m_punct_candidates.clear ();
+        }
+    }
 
     update();
 
@@ -284,10 +370,11 @@ PunctEditor::removeCharAfter (void)
 {
     if (G_UNLIKELY (m_cursor == m_text.length ()))
         return FALSE;
-
+    m_selected_puncts.erase (m_selected_puncts.begin () + m_cursor);
     m_text.erase (m_cursor, 1);
-    if (m_text.empty())
-        m_punct_mode = FALSE;
+    if (m_text.empty()) {
+        reset ();
+    }
 
     update();
 
@@ -297,7 +384,10 @@ PunctEditor::removeCharAfter (void)
 void
 PunctEditor::reset (void)
 {
-    m_punct_mode = FALSE;
+    m_punct_mode = MODE_DISABLE;
+    m_selected_puncts.clear ();
+    m_punct_candidates.clear ();
+    fillLookupTable ();
     Editor::reset ();
 }
 
@@ -317,7 +407,7 @@ PunctEditor::commit (const gchar *str)
 void
 PunctEditor::commit (void)
 {
-    commit ((const gchar *)m_text);
+    commit ((const gchar *) m_text);
     reset();
 }
 
@@ -325,9 +415,24 @@ inline gboolean
 PunctEditor::selectCandidate (guint i)
 {
     m_buffer.clear ();
-    m_buffer << m_punct_candidates[i];
+
+    switch (m_punct_mode) {
+    case MODE_INIT:
+        m_buffer << m_selected_puncts[m_lookup_table.cursorPos ()];
+        break;
+    case MODE_NORMAL:
+        for (std::vector<const gchar *>::iterator it = m_selected_puncts.begin ();
+             it != m_selected_puncts.end (); it++) {
+            m_buffer << *it;
+        }
+        break;
+    default:
+        g_assert_not_reached ();
+    }
+
     reset();
     commit ((const gchar *) m_buffer);
+
     return FALSE;
 }
 
@@ -339,6 +444,7 @@ PunctEditor::selectCandidateInPage (guint i)
 
     if (G_UNLIKELY (i >= page_size))
         return FALSE;
+
     i += (cursor_pos / page_size) * page_size;
 
     return selectCandidate (i);
@@ -353,13 +459,23 @@ PunctEditor::update (void)
 }
 
 void
-PunctEditor::updateLookupTable (void)
+PunctEditor::fillLookupTable (void)
 {
     m_lookup_table.clear ();
     m_lookup_table.setPageSize (Config::pageSize ());
     m_lookup_table.setOrientation (Config::orientation ());
 
-    fillLookupTableByPage ();
+    for (std::vector<const gchar *>::iterator it = m_punct_candidates.begin ();
+         it != m_punct_candidates.end (); it++) {
+        Text text (*it);
+        text.appendAttribute (IBUS_ATTR_TYPE_FOREGROUND, 0x004466, 0, -1);
+        m_lookup_table.appendCandidate (text);
+    }
+}
+
+void
+PunctEditor::updateLookupTable (void)
+{
     if (m_lookup_table.size ()) {
         Editor::updateLookupTable (m_lookup_table, TRUE);
     }
@@ -371,22 +487,21 @@ PunctEditor::updateLookupTable (void)
 static int
 punct_cmp (const void *p1, const void *p2)
 {
-    const gchar *s1 = (gchar *) p1;
+    const gint s1 = (gint)(glong) p1;
     const gchar *s2 = **(gchar ***) p2;
-    return std::strcmp (s1, s2);
+    return s1 - s2[0];
 }
 
 void
-PunctEditor::getPunctCandidates (void)
+PunctEditor::updatePunctCandidates (gchar ch)
 {
     const gchar *** brs;
     const gchar ** res;
+
     m_punct_candidates.clear();
 
-    if (m_text.empty())
-        return;
-
-    brs = (const gchar ***) std::bsearch (m_text.c_str() + 1, punct_table,
+    brs = (const gchar ***) std::bsearch ((void *) ch,
+                                          punct_table,
                                           G_N_ELEMENTS (punct_table),
                                           sizeof(punct_table[0]),
                                           punct_cmp);
@@ -394,85 +509,76 @@ PunctEditor::getPunctCandidates (void)
         return;
 
     for (res = (*brs) + 1; *res != NULL; ++res) {
-        m_punct_candidates.push_back(*res);
+        m_punct_candidates.push_back (*res);
     }
-}
-
-gboolean
-PunctEditor::fillLookupTableByPage (void)
-{
-    guint filled_nr = m_lookup_table.size ();
-    guint page_size = m_lookup_table.pageSize ();
-    guint candidates_count;
-
-    getPunctCandidates();
-    candidates_count = m_punct_candidates.size();
-
-    guint need_nr = MIN (page_size, candidates_count - filled_nr);
-    g_assert (need_nr >= 0);
-    if (need_nr == 0) {
-        return FALSE;
-    }
-
-    for (guint i = filled_nr; i < filled_nr + need_nr; i++) {
-        Text text (m_punct_candidates[i]);
-        text.appendAttribute (IBUS_ATTR_TYPE_FOREGROUND, 0x004466, 0, -1);
-        m_lookup_table.appendCandidate (text);
-    }
-
-    return TRUE;
+    fillLookupTable ();
 }
 
 void
 PunctEditor::updateAuxiliaryText (void)
 {
-    if (G_UNLIKELY (m_punct_mode == FALSE)) {
+    switch (m_punct_mode) {
+    case MODE_DISABLE:
         hideAuxiliaryText ();
-        return;
+        break;
+    case MODE_INIT:
+        {
+            m_buffer = "`";
+            StaticText aux_text (m_buffer);
+            Editor::updateAuxiliaryText (aux_text, TRUE);
+        }
+        break;
+    case MODE_NORMAL:
+        {
+            m_buffer.clear ();
+            for (String::iterator i = m_text.begin (); i != m_text.end (); ++i) {
+                if (i - m_text.begin () == (gint) m_cursor)
+                    m_buffer << '|';
+                m_buffer << *i;
+            }
+            if (m_text.end () - m_text.begin () == (gint) m_cursor)
+                m_buffer << '|';
+            StaticText aux_text (m_buffer);
+            Editor::updateAuxiliaryText (aux_text, TRUE);
+        }
+        break;
+    default:
+        g_assert_not_reached ();
     }
-
-    m_buffer.clear();
-    for (String::iterator i = m_text.begin(); i != m_text.end(); ++i) {
-        if (i - m_text.begin() == (gint) m_cursor)
-            m_buffer << '|';
-        m_buffer << *i;
-    }
-    if (m_text.end() - m_text.begin() == (gint) m_cursor)
-        m_buffer << '|';
-
-    StaticText aux_text (m_buffer);
-    Editor::updateAuxiliaryText (aux_text, TRUE);
 }
 
 void
 PunctEditor::updatePreeditText (void)
 {
-    if (G_UNLIKELY (m_punct_mode == FALSE )) {
+    switch (m_punct_mode) {
+    case MODE_DISABLE:
         hidePreeditText ();
-        return;
+        break;
+    case MODE_INIT:
+        {
+            m_buffer = m_punct_candidates[m_lookup_table.cursorPos ()];
+            StaticText preedit_text (m_buffer);
+            /* underline */
+            preedit_text.appendAttribute (IBUS_ATTR_TYPE_UNDERLINE, IBUS_ATTR_UNDERLINE_SINGLE, 0, -1);
+            Editor::updatePreeditText (preedit_text, m_cursor, TRUE);
+        }
+        break;
+    case MODE_NORMAL:
+        {
+            m_buffer.clear ();
+            for (std::vector<const gchar *>::iterator it = m_selected_puncts.begin ();
+                 it != m_selected_puncts.end (); it++) {
+                m_buffer << *it;
+            }
+            StaticText preedit_text (m_buffer);
+            /* underline */
+            preedit_text.appendAttribute (IBUS_ATTR_TYPE_UNDERLINE, IBUS_ATTR_UNDERLINE_SINGLE, 0, -1);
+            Editor::updatePreeditText (preedit_text, m_cursor, TRUE);
+        }
+        break;
+    default:
+        g_assert_not_reached ();
     }
-
-    guint edit_begin = 0;
-    guint edit_end = 0;
-
-    m_buffer.clear ();
-    if (m_lookup_table.size() != 0) {
-        guint cursor = m_lookup_table.cursorPos ();
-        m_buffer << m_punct_candidates[cursor];
-    }
-
-    StaticText preedit_text (m_buffer);
-    /* underline */
-    preedit_text.appendAttribute (IBUS_ATTR_TYPE_UNDERLINE, IBUS_ATTR_UNDERLINE_SINGLE, 0, -1);
-
-    /* candidate */
-    if (edit_begin < edit_end) {
-        preedit_text.appendAttribute (IBUS_ATTR_TYPE_FOREGROUND, 0x00000000,
-                                        edit_begin, edit_end);
-        preedit_text.appendAttribute (IBUS_ATTR_TYPE_BACKGROUND, 0x00c8c8f0,
-                                        edit_begin, edit_end);
-    }
-    Editor::updatePreeditText (preedit_text, edit_begin, TRUE);
 }
 
 };

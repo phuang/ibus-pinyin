@@ -25,10 +25,8 @@ public:
     virtual gboolean processSpace (guint keyval, guint keycode, guint modifiers);
     virtual gboolean insert (gchar ch);
     virtual void updateLookupTable (void);
-    virtual gboolean fillLookupTableByPage (void);
     virtual void updateAuxiliaryText (void);
     virtual void updatePreeditText (void);
-    virtual void getPunctCandidates (void);
     virtual gboolean selectCandidate (guint i);
     virtual gboolean selectCandidateInPage (guint i);
     virtual void commit (const gchar *str);
@@ -40,12 +38,18 @@ public:
     virtual gboolean moveCursorToBegin (void);
     virtual gboolean moveCursorToEnd (void);
 
+    void fillLookupTable (void);
+    void updatePunctCandidates (gchar ch);
 protected:
-    gboolean m_punct_mode;
+    enum {
+        MODE_DISABLE,
+        MODE_INIT,
+        MODE_NORMAL,
+    } m_punct_mode;
     LookupTable m_lookup_table;
-    //PhraseEditor m_phrase_editor;
     String m_buffer;
-    std::vector<String> m_punct_candidates;
+    std::vector<const gchar *> m_selected_puncts;
+    std::vector<const gchar *> m_punct_candidates;
 
 };
 
