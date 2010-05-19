@@ -16,16 +16,16 @@ puncts[] = {
     "-", "…", "—", "－", "¯", "﹉", "￣", "﹊", "ˍ", "–", "‥", NULL,
     ".", "。", "·", "‧", "﹒", "．", NULL,
     "/", "／", "÷", "↗", "↙", "∕", NULL,
-    "0", "０", NULL,
-    "1", "１", NULL,
-    "2", "２", NULL,
-    "3", "３", NULL,
-    "4", "４", NULL,
-    "5", "５", NULL,
-    "6", "６", NULL,
-    "7", "７", NULL,
-    "8", "８", NULL,
-    "9", "９", NULL,
+    "0", "０", "0", NULL,
+    "1", "１", "1", NULL,
+    "2", "２", "2", NULL,
+    "3", "３", "3", NULL,
+    "4", "４", "4", NULL,
+    "5", "５", "5", NULL,
+    "6", "６", "6", NULL,
+    "7", "７", "7", NULL,
+    "8", "８", "8", NULL,
+    "9", "９", "9", NULL,
     ":", "：", "︰", "﹕", NULL,
     ";", "；", "﹔", NULL,
     "<", "＜", "〈", "《", "︽", "︿", "﹤", NULL,
@@ -33,64 +33,64 @@ puncts[] = {
     ">", "＞", "〉", "》", "︾", "﹀", "﹥", NULL,
     "?", "？", "﹖", "⁇", "⁈", NULL,
     "@", "＠", "⊕", "⊙", "㊣", "﹫", "◉", "◎", NULL,
-    "A", "Ａ", NULL,
-    "B", "Ｂ", NULL,
-    "C", "Ｃ", NULL,
-    "D", "Ｄ", NULL,
-    "E", "Ｅ", NULL,
-    "F", "Ｆ", NULL,
-    "G", "Ｇ", NULL,
-    "H", "Ｈ", NULL,
-    "I", "Ｉ", NULL,
-    "J", "Ｊ", NULL,
-    "K", "Ｋ", NULL,
-    "L", "Ｌ", NULL,
-    "M", "Ｍ", NULL,
-    "N", "Ｎ", NULL,
-    "O", "Ｏ", NULL,
-    "P", "Ｐ", NULL,
-    "Q", "Ｑ", NULL,
-    "R", "Ｒ", NULL,
-    "S", "Ｓ", NULL,
-    "T", "Ｔ", NULL,
-    "U", "Ｕ", NULL,
-    "V", "Ｖ", NULL,
-    "W", "Ｗ", NULL,
-    "X", "Ｘ", NULL,
-    "Y", "Ｙ", NULL,
-    "Z", "Ｚ", NULL,
+    "A", "Ａ", "A", NULL,
+    "B", "Ｂ", "B", NULL,
+    "C", "Ｃ", "C", NULL,
+    "D", "Ｄ", "D", NULL,
+    "E", "Ｅ", "E", NULL,
+    "F", "Ｆ", "F", NULL,
+    "G", "Ｇ", "G", NULL,
+    "H", "Ｈ", "H", NULL,
+    "I", "Ｉ", "I", NULL,
+    "J", "Ｊ", "J", NULL,
+    "K", "Ｋ", "K", NULL,
+    "L", "Ｌ", "L", NULL,
+    "M", "Ｍ", "M", NULL,
+    "N", "Ｎ", "N", NULL,
+    "O", "Ｏ", "O", NULL,
+    "P", "Ｐ", "P", NULL,
+    "Q", "Ｑ", "Q", NULL,
+    "R", "Ｒ", "R", NULL,
+    "S", "Ｓ", "S", NULL,
+    "T", "Ｔ", "T", NULL,
+    "U", "Ｕ", "U", NULL,
+    "V", "Ｖ", "V", NULL,
+    "W", "Ｗ", "W", NULL,
+    "X", "Ｘ", "X", NULL,
+    "Y", "Ｙ", "Y", NULL,
+    "Z", "Ｚ", "Z", NULL,
     "[", "「", "［", "『", "【", "｢", "︻", "﹁", "﹃", NULL,
     "\\", "＼", "↖", "↘", "﹨", NULL,
     "]", "」", "］", "』", "】", "｣", "︼", "﹂", "﹄", NULL,
     "^", "︿", "〈", "《", "︽", "﹤", "＜", NULL,
     "_", "＿", "╴", "←", "→", NULL,
     "`", "‵", "′", NULL,
-    "a", "ａ", NULL,
-    "b", "ｂ", NULL,
-    "c", "ｃ", NULL,
-    "d", "ｄ", NULL,
-    "e", "ｅ", NULL,
-    "f", "ｆ", NULL,
-    "g", "ｇ", NULL,
-    "h", "ｈ", NULL,
-    "i", "ｉ", NULL,
-    "j", "ｊ", NULL,
-    "k", "ｋ", NULL,
-    "l", "ｌ", NULL,
-    "m", "ｍ", NULL,
-    "n", "ｎ", NULL,
-    "o", "ｏ", NULL,
-    "p", "ｐ", NULL,
-    "q", "ｑ", NULL,
-    "r", "ｒ", NULL,
-    "s", "ｓ", NULL,
-    "t", "ｔ", NULL,
-    "u", "ｕ", NULL,
-    "v", "ｖ", NULL,
-    "w", "ｗ", NULL,
-    "x", "ｘ", NULL,
-    "y", "ｙ", NULL,
-    "z", "ｚ", NULL,
+    "a", "ａ", "a", NULL,
+    "b", "ｂ", "b", NULL,
+    "c", "ｃ", "c", NULL,
+    "d", "ｄ", "d", NULL,
+    "e", "ｅ", "e", NULL,
+    "f", "ｆ", "f", NULL,
+    "g", "ｇ", "g", NULL,
+    "h", "ｈ", "h", NULL,
+    "i", "ｉ", "i", NULL,
+    "j", "ｊ", "j", NULL,
+    "k", "ｋ", "k", NULL,
+    "l", "ｌ", "l", NULL,
+    "m", "ｍ", "m", NULL,
+    "n", "ｎ", "n", NULL,
+    "o", "ｏ", "o", NULL,
+    "p", "ｐ", "p", NULL,
+    "q", "ｑ", "q", NULL,
+    "r", "ｒ", "r", NULL,
+    "s", "ｓ", "s", NULL,
+    "t", "ｔ", "t", NULL,
+    "u", "ｕ", "u", NULL,
+    "v", "ｖ", "v", NULL,
+    "w", "ｗ", "w", NULL,
+    "x", "ｘ", "x", NULL,
+    "y", "ｙ", "y", NULL,
+    "z", "ｚ", "z", NULL,
     "{", "｛", "︷", "﹛", "〔", "﹝", "︹", NULL,
     "|", "｜", "↑", "↓", "∣", "∥", "︱", "︳", "︴", "￤", NULL,
     "}", "｝", "︸", "﹜", "〕", "﹞", "︺", NULL,
@@ -116,82 +116,82 @@ punct_table[] = {
     &puncts[96],    // "."
     &puncts[103],    // "/"
     &puncts[110],    // "0"
-    &puncts[113],    // "1"
-    &puncts[116],    // "2"
-    &puncts[119],    // "3"
-    &puncts[122],    // "4"
-    &puncts[125],    // "5"
-    &puncts[128],    // "6"
-    &puncts[131],    // "7"
-    &puncts[134],    // "8"
-    &puncts[137],    // "9"
-    &puncts[140],    // ":"
-    &puncts[145],    // ";"
-    &puncts[149],    // "<"
-    &puncts[157],    // "="
-    &puncts[166],    // ">"
-    &puncts[174],    // "?"
-    &puncts[180],    // "@"
-    &puncts[189],    // "A"
-    &puncts[192],    // "B"
-    &puncts[195],    // "C"
-    &puncts[198],    // "D"
-    &puncts[201],    // "E"
-    &puncts[204],    // "F"
-    &puncts[207],    // "G"
-    &puncts[210],    // "H"
-    &puncts[213],    // "I"
-    &puncts[216],    // "J"
-    &puncts[219],    // "K"
-    &puncts[222],    // "L"
-    &puncts[225],    // "M"
-    &puncts[228],    // "N"
-    &puncts[231],    // "O"
-    &puncts[234],    // "P"
-    &puncts[237],    // "Q"
-    &puncts[240],    // "R"
-    &puncts[243],    // "S"
-    &puncts[246],    // "T"
-    &puncts[249],    // "U"
-    &puncts[252],    // "V"
-    &puncts[255],    // "W"
-    &puncts[258],    // "X"
-    &puncts[261],    // "Y"
-    &puncts[264],    // "Z"
-    &puncts[267],    // "["
-    &puncts[277],    // "\\"
-    &puncts[283],    // "]"
-    &puncts[293],    // "^"
-    &puncts[301],    // "_"
-    &puncts[307],    // "`"
-    &puncts[311],    // "a"
-    &puncts[314],    // "b"
-    &puncts[317],    // "c"
-    &puncts[320],    // "d"
-    &puncts[323],    // "e"
-    &puncts[326],    // "f"
-    &puncts[329],    // "g"
-    &puncts[332],    // "h"
-    &puncts[335],    // "i"
-    &puncts[338],    // "j"
-    &puncts[341],    // "k"
-    &puncts[344],    // "l"
-    &puncts[347],    // "m"
-    &puncts[350],    // "n"
-    &puncts[353],    // "o"
-    &puncts[356],    // "p"
-    &puncts[359],    // "q"
-    &puncts[362],    // "r"
-    &puncts[365],    // "s"
-    &puncts[368],    // "t"
-    &puncts[371],    // "u"
-    &puncts[374],    // "v"
-    &puncts[377],    // "w"
-    &puncts[380],    // "x"
-    &puncts[383],    // "y"
-    &puncts[386],    // "z"
-    &puncts[389],    // "{"
-    &puncts[397],    // "|"
-    &puncts[408],    // "}"
-    &puncts[416],    // "~"
+    &puncts[114],    // "1"
+    &puncts[118],    // "2"
+    &puncts[122],    // "3"
+    &puncts[126],    // "4"
+    &puncts[130],    // "5"
+    &puncts[134],    // "6"
+    &puncts[138],    // "7"
+    &puncts[142],    // "8"
+    &puncts[146],    // "9"
+    &puncts[150],    // ":"
+    &puncts[155],    // ";"
+    &puncts[159],    // "<"
+    &puncts[167],    // "="
+    &puncts[176],    // ">"
+    &puncts[184],    // "?"
+    &puncts[190],    // "@"
+    &puncts[199],    // "A"
+    &puncts[203],    // "B"
+    &puncts[207],    // "C"
+    &puncts[211],    // "D"
+    &puncts[215],    // "E"
+    &puncts[219],    // "F"
+    &puncts[223],    // "G"
+    &puncts[227],    // "H"
+    &puncts[231],    // "I"
+    &puncts[235],    // "J"
+    &puncts[239],    // "K"
+    &puncts[243],    // "L"
+    &puncts[247],    // "M"
+    &puncts[251],    // "N"
+    &puncts[255],    // "O"
+    &puncts[259],    // "P"
+    &puncts[263],    // "Q"
+    &puncts[267],    // "R"
+    &puncts[271],    // "S"
+    &puncts[275],    // "T"
+    &puncts[279],    // "U"
+    &puncts[283],    // "V"
+    &puncts[287],    // "W"
+    &puncts[291],    // "X"
+    &puncts[295],    // "Y"
+    &puncts[299],    // "Z"
+    &puncts[303],    // "["
+    &puncts[313],    // "\\"
+    &puncts[319],    // "]"
+    &puncts[329],    // "^"
+    &puncts[337],    // "_"
+    &puncts[343],    // "`"
+    &puncts[347],    // "a"
+    &puncts[351],    // "b"
+    &puncts[355],    // "c"
+    &puncts[359],    // "d"
+    &puncts[363],    // "e"
+    &puncts[367],    // "f"
+    &puncts[371],    // "g"
+    &puncts[375],    // "h"
+    &puncts[379],    // "i"
+    &puncts[383],    // "j"
+    &puncts[387],    // "k"
+    &puncts[391],    // "l"
+    &puncts[395],    // "m"
+    &puncts[399],    // "n"
+    &puncts[403],    // "o"
+    &puncts[407],    // "p"
+    &puncts[411],    // "q"
+    &puncts[415],    // "r"
+    &puncts[419],    // "s"
+    &puncts[423],    // "t"
+    &puncts[427],    // "u"
+    &puncts[431],    // "v"
+    &puncts[435],    // "w"
+    &puncts[439],    // "x"
+    &puncts[443],    // "y"
+    &puncts[447],    // "z"
+    &puncts[451],    // "{"
+    &puncts[459],    // "|"
+    &puncts[470],    // "}"
+    &puncts[478],    // "~"
 };

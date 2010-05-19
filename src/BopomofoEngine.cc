@@ -3,7 +3,6 @@
 #include <libintl.h>
 #include <string>
 #include <cstdlib>
-#include <ibus.h>
 #include "RawEditor.h"
 #include "PunctEditor.h"
 #include "ExtEditor.h"
