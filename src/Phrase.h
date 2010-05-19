@@ -6,12 +6,14 @@
 
 namespace PY {
 
+#define PHRASE_LEN_IN_BYTE (MAX_UTF8_LEN * (MAX_PHRASE_LEN + 1))
+
 struct Phrase {
-    gchar phrase[MAX_UTF8_LEN * (MAX_PHRASE_LEN + 1)];
-    guint  freq;
-    guint  user_freq;
-    guint  pinyin_id[MAX_PHRASE_LEN][2];
-    guint  len;
+    gchar phrase[PHRASE_LEN_IN_BYTE];
+    guint freq;
+    guint user_freq;
+    guint pinyin_id[MAX_PHRASE_LEN][2];
+    guint len;
 
     void reset (void) {
         phrase[0] = 0;
