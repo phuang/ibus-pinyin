@@ -3,7 +3,7 @@
 #include <libintl.h>
 #include <string>
 #include <cstdlib>
-#include <ibus.h>
+#include "PunctEditor.h"
 #include "RawEditor.h"
 #include "ExtEditor.h"
 #include "FullPinyinEditor.h"
@@ -33,6 +33,7 @@ PinyinEngine::PinyinEngine (IBusEngine *engine)
     else
         m_editors[MODE_INIT].reset (new FullPinyinEditor (m_props));
 
+    m_editors[MODE_PUNCT].reset (new PunctEditor (m_props));
     m_editors[MODE_RAW].reset (new RawEditor (m_props));
     m_editors[MODE_EXTENSION].reset (new ExtEditor (m_props));
 
@@ -83,11 +84,16 @@ PinyinEngine::processKeyEvent (guint keyval, guint keycode, guint modifiers)
             ((modifiers & CASHM_MASK) == 0)) {
             const String & text = m_editors[MODE_INIT]->text ();
             if (text.empty ()) {
-            #if 0
-                if (keyval == IBUS_i) {
+                switch (keyval) {
+                case IBUS_grave:
+                    m_input_mode = MODE_PUNCT;
+                    break;
+                #if 0
+                case IBUS_i:
                     m_input_mode = MODE_EXTENSION;
+                    break;
+                #endif
                 }
-            #endif
             }
             else {
                 if (m_prev_pressed_key != IBUS_period) {
