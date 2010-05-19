@@ -314,6 +314,7 @@ PunctEditor::moveCursorToBegin (void)
     g_assert (m_punct_mode == MODE_NORMAL);
     m_cursor = 0;
     m_punct_candidates.clear ();
+    fillLookupTable ();
     update ();
 
     return TRUE;
@@ -367,6 +368,7 @@ PunctEditor::removeCharBefore (void)
         }
         else {
             m_punct_candidates.clear ();
+            fillLookupTable ();
         }
     }
 
@@ -529,11 +531,10 @@ PunctEditor::updatePunctCandidates (gchar ch)
                                           G_N_ELEMENTS (punct_table),
                                           sizeof(punct_table[0]),
                                           punct_cmp);
-    if (brs == NULL)
-        return;
-
-    for (res = (*brs) + 1; *res != NULL; ++res) {
-        m_punct_candidates.push_back (*res);
+    if (brs != NULL) {
+        for (res = (*brs) + 1; *res != NULL; ++res) {
+            m_punct_candidates.push_back (*res);
+        }
     }
     fillLookupTable ();
 }
