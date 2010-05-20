@@ -149,8 +149,8 @@ Query::fill (PhraseArray &phrases, gint count)
             phrase.len = m_pinyin_len;
 
             for (guint i = 0, column = DB_COLUMN_S0; i < m_pinyin_len; i++) {
-                phrase.pinyin_id[i][0] = m_stmt->columnInt (column++);
-                phrase.pinyin_id[i][1] = m_stmt->columnInt (column++);
+                phrase.pinyin_id[i].sheng = m_stmt->columnInt (column++);
+                phrase.pinyin_id[i].yun = m_stmt->columnInt (column++);
             }
 
             phrases.push_back (phrase);
@@ -537,11 +537,11 @@ inline void
 Database::phraseWhereSql (const Phrase & p, String & sql)
 {
     sql << " WHERE";
-    sql << " s0=" << p.pinyin_id[0][0]
-        << " AND y0=" << p.pinyin_id[0][1];
+    sql << " s0=" << p.pinyin_id[0].sheng
+        << " AND y0=" << p.pinyin_id[0].yun;
     for (guint i = 1; i < p.len; i++) {
-        sql << " AND s" << i << '=' << p.pinyin_id[i][0]
-            << " AND y" << i << '=' << p.pinyin_id[i][1];
+        sql << " AND s" << i << '=' << p.pinyin_id[i].sheng
+            << " AND y" << i << '=' << p.pinyin_id[i].yun;
     }
     sql << " AND phrase=\"" << p.phrase << "\"";
 
@@ -556,7 +556,7 @@ Database::phraseSql (const Phrase & p, String & sql)
         << ','   << p.freq;                 /* freq */
 
     for (guint i = 0; i < p.len; i++) {
-        sql << ',' << p.pinyin_id[i][0] << ',' << p.pinyin_id[i][1];
+        sql << ',' << p.pinyin_id[i].sheng << ',' << p.pinyin_id[i].yun;
     }
 
     sql << ");\n";

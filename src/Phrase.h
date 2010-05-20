@@ -13,7 +13,10 @@ struct Phrase {
     gchar phrase[PHRASE_LEN_IN_BYTE];
     guint freq;
     guint user_freq;
-    guint8 pinyin_id[MAX_PHRASE_LEN][2];
+    struct {
+        guint8 sheng;
+        guint8 yun;
+    } pinyin_id[MAX_PHRASE_LEN];
     guint len;
 
     void reset (void) {
