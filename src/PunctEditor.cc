@@ -435,6 +435,7 @@ PunctEditor::commit (const gchar *str)
 {
     StaticText text(str);
     commitText (text);
+    reset ();
 }
 
 void
@@ -446,7 +447,6 @@ PunctEditor::commit (void)
         m_buffer << *it;
     }
 
-    reset ();
     commit (m_buffer);
 }
 
