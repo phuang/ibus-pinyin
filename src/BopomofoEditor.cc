@@ -35,6 +35,9 @@
 
 namespace PY {
 
+#include "Bopomofo.h"
+#include "BopomofoKeyboard.h"
+
 BopomofoEditor::BopomofoEditor (PinyinProperties & props)
     : PinyinEditor (props),
       m_select_mode (FALSE)
@@ -580,6 +583,29 @@ BopomofoEditor::updatePreeditText (void)
                                         edit_begin, edit_end);
     }
     Editor::updatePreeditText (preedit_text, edit_begin, TRUE);
+}
+
+static int
+keyboard_cmp (const void *p1, const void *p2)
+{
+    const gint s1 = (const gint) p1;
+    const gint *s2 = (const gint *) p2;
+    return s1 - s2[0];
+}
+
+gint
+BopomofoEditor::keyvalToBopomofo(gint ch)
+{
+    const gint keyboard = 0; /* TODO: setup */
+    const gint *brs;
+    brs = (const gint *) std::bsearch ((void *) ch,
+                                       bopomofo_keyboard[keyboard],
+                                       G_N_ELEMENTS (bopomofo_keyboard[keyboard]),
+                                       sizeof(bopomofo_keyboard[keyboard][0]),
+                                       keyboard_cmp);
+    if (G_UNLIKELY (brs == NULL))
+        return BOPOMOFO_ZERO;
+    return brs[1];
 }
 
 };
