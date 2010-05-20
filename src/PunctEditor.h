@@ -19,8 +19,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-#ifndef __PY_PUNCT_EDITOR__
-#define __PY_PUNCT_EDITOR__
+#ifndef __PY_PUNCT_EDITOR_
+#define __PY_PUNCT_EDITOR_
 
 #include <glib.h>
 #include "Editor.h"

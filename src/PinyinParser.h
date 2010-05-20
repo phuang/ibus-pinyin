@@ -18,8 +18,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-#ifndef __PY_PARSER_H__
-#define __PY_PARSER_H__
+#ifndef __PY_PARSER_H_
+#define __PY_PARSER_H_
 
 #include <glib.h>
 #include "String.h"

@@ -19,8 +19,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-#ifndef BOPOMOFO_H_
-#define BOPOMOFO_H_
+#ifndef __PY_BOPOMOFO_H_
+#define __PY_BOPOMOFO_H_
 
 #define MAX_BOPOMOFO_LEN (4)
 
@@ -68,13 +68,13 @@
 #define BOPOMOFO_TONE_5             (41)
 
 const static wchar_t bopomofo_char[] = {
-    L'\0',L'ㄅ',L'ㄆ',L'ㄇ',L'ㄈ',L'ㄉ',L'ㄊ',L'ㄋ',L'ㄌ',L'ㄍ',L'ㄎ',
-    L'ㄏ',L'ㄐ',L'ㄑ',L'ㄒ',L'ㄓ',L'ㄔ',L'ㄕ',L'ㄖ',L'ㄗ',L'ㄘ',L'ㄙ',
+    L'\0', L'ㄅ', L'ㄆ', L'ㄇ', L'ㄈ', L'ㄉ', L'ㄊ', L'ㄋ', L'ㄌ', L'ㄍ', L'ㄎ',
+    L'ㄏ', L'ㄐ', L'ㄑ', L'ㄒ', L'ㄓ', L'ㄔ', L'ㄕ', L'ㄖ', L'ㄗ', L'ㄘ', L'ㄙ',
 
-    L'ㄧ',L'ㄨ',L'ㄩ',L'ㄚ',L'ㄛ',L'ㄜ',L'ㄝ',L'ㄞ',L'ㄟ',L'ㄠ',L'ㄡ',
-    L'ㄢ',L'ㄣ',L'ㄤ',L'ㄥ',L'ㄦ',
+    L'ㄧ', L'ㄨ', L'ㄩ', L'ㄚ', L'ㄛ', L'ㄜ', L'ㄝ', L'ㄞ', L'ㄟ', L'ㄠ', L'ㄡ',
+    L'ㄢ', L'ㄣ', L'ㄤ', L'ㄥ', L'ㄦ',
 
-    L'ˊ',L'ˇ',L'ˋ',L'˙',
+    L'ˊ', L'ˇ', L'ˋ', L'˙',
 };
 
-#endif /* BOPOMOFO_H_ */
+#endif /* __PY_BOPOMOFO_H_ */

@@ -18,8 +18,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-#ifndef __PY_DATABASE_H__
-#define __PY_DATABASE_H__
+#ifndef __PY_DATABASE_H_
+#define __PY_DATABASE_H_
 
 #include <sqlite3.h>
 #include <boost/shared_ptr.hpp>

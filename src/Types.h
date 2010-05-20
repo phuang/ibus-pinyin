@@ -18,8 +18,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-#ifndef __PY_TYPE_H_
-#define __PY_TYPE_H_
+#ifndef __PY_TYPES_H_
+#define __PY_TYPES_H_
 
 #include <glib.h>
 
