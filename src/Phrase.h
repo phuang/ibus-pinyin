@@ -2,6 +2,7 @@
 #ifndef __PY_PHRASE_H_
 #define __PY_PHRASE_H_
 
+#include <cstring>
 #include "Types.h"
 
 namespace PY {
@@ -12,7 +13,7 @@ struct Phrase {
     gchar phrase[PHRASE_LEN_IN_BYTE];
     guint freq;
     guint user_freq;
-    guint pinyin_id[MAX_PHRASE_LEN][2];
+    guint8 pinyin_id[MAX_PHRASE_LEN][2];
     guint len;
 
     void reset (void) {
@@ -29,10 +30,7 @@ struct Phrase {
     Phrase & operator += (const Phrase & a) {
         g_assert (len + a.len <= MAX_PHRASE_LEN);
         g_strlcat (phrase, a.phrase, sizeof (phrase));
-        for (guint i = 0; i < a.len; i++) {
-            pinyin_id[len + i][0] = a.pinyin_id[i][0];
-            pinyin_id[len + i][1] = a.pinyin_id[i][1];
-        }
+        std::memcpy (pinyin_id + len, a.pinyin_id, a.len << 1);
         len += a.len;
         return *this;
     }
