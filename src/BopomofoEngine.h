@@ -3,6 +3,7 @@
  * ibus-pinyin - The Chinese PinYin engine for IBus
  *
  * Copyright (c) 2008-2010 Peng Huang <shawn.p.huang@gmail.com>
+ * Copyright (c) 2010 BYVoid <byvoid1@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
