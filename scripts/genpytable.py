@@ -314,12 +314,7 @@ def gen_table():
         bopomofo    : L"%s",
         sheng       : "%s",
         yun         : "%s",
-        sheng_id    : %s,
-        yun_id      : %s,
-        fsheng_id   : %s,
-        fyun_id     : %s,
-        fsheng_id_2 : %s,
-        fyun_id_2   : %s,
+        pinyin_id   : {{ %s, %s }, { %s, %s }, { %s, %s }},
         len         : %d,
         flags       : %s
     },''' % (i, text, bopomofo, s, y.replace("v", "ü"), s_id, y_id, fs1_id, fy1_id, fs2_id, fy2_id, l, flags)

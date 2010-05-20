@@ -110,14 +110,12 @@ struct Pinyin {
     const wchar_t *bopomofo;
     const gchar *sheng;
     const gchar *yun;
-    const guint8 sheng_id;
-    const guint8 yun_id;
-    const guint8 fsheng_id;
-    const guint8 fyun_id;
-    const guint8 fsheng_id_2;
-    const guint8 fyun_id_2;
+    struct {
+        guint8 sheng;
+        guint8 yun;
+    } pinyin_id[3];
     const guint len;
-    const guint  flags;
+    const guint flags;
 };
 
 #define MAX_UTF8_LEN 6
