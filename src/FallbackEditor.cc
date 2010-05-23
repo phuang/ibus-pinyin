@@ -23,16 +23,6 @@
 
 namespace PY {
 
-#define CMSHM_MASK              \
-        (IBUS_CONTROL_MASK |    \
-         IBUS_MOD1_MASK |       \
-         IBUS_SUPER_MASK |      \
-         IBUS_HYPER_MASK |      \
-         IBUS_META_MASK)
-
-#define CMSHM_FILTER(modifiers)  \
-    (modifiers & (CMSHM_MASK))
-
 inline gboolean
 FallbackEditor::processPunct (guint keyval, guint keycode, guint modifiers)
 {

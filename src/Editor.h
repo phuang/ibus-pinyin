@@ -28,6 +28,7 @@
 #include "Text.h"
 #include "LookupTable.h"
 #include "PinyinProperties.h"
+#include "Util.h"
 
 namespace PY {
 

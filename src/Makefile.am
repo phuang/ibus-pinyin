@@ -46,6 +46,7 @@ ibus_engine_c_sources = \
 	FullPinyinEditor.cc \
 	HalfFullConverter.cc \
 	Main.cc \
+	PhoneticEditor.cc \
 	PhraseEditor.cc \
 	PinyinEditor.cc \
 	PinyinEngine.cc \
@@ -80,6 +81,7 @@ ibus_engine_h_sources = \
 	HalfFullConverter.h \
 	LookupTable.h \
 	Object.h \
+	PhoneticEditor.h \
 	Phrase.h \
 	PhraseArray.h \
 	PhraseEditor.h \
