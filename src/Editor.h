@@ -29,6 +29,7 @@
 #include "LookupTable.h"
 #include "PinyinProperties.h"
 #include "Config.h"
+#include "Util.h"
 
 namespace PY {
 

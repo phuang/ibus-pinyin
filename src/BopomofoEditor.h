@@ -22,31 +22,37 @@
 #ifndef __PY_BOPOMOFO_EDITOR_H_
 #define __PY_BOPOMOFO_EDITOR_H_
 
-#include "PinyinEditor.h"
+#include "PhoneticEditor.h"
 
 namespace PY {
 
-class BopomofoEditor : public PinyinEditor {
+#define MAX_PINYIN_LEN 64
+
+class BopomofoEditor : public PhoneticEditor {
 
 public:
     BopomofoEditor (PinyinProperties & props, Config & config = BopomofoConfig::instance ());
     ~BopomofoEditor (void);
 
-public:
-    /* virtual functions */
-    virtual gboolean processKeyEvent (guint keyval, guint keycode, guint modifiers);
-    virtual void reset (void);
-
 protected:
     std::wstring bopomofo;
     gboolean m_select_mode;
 
-    virtual void updatePinyin (void);
-    virtual void updateAuxiliaryText (void);
-    virtual void updatePreeditText (void);
-    virtual void commit (void);
+    gboolean processNumber (guint keyval, guint keycode, guint modifiers);
+    gboolean processNumberWithShift (guint keyval, guint keycode, guint modifiers);
+    gboolean processBopomofo (guint keyval, guint keycode, guint modifiers);
+    gboolean processKeyEvent (guint keyval, guint keycode, guint modifiers);
+
+    void updateAuxiliaryText ();
+    void updateLookupTable ();
+    void updatePinyin ();
+    void updatePreeditText ();
+
+    void commit ();
+    void reset ();
 
     gboolean insert (gint ch);
+    gint keyvalToBopomofo(gint ch);
 
     gboolean removeCharBefore (void);
     gboolean removeCharAfter (void);
@@ -59,13 +65,6 @@ protected:
     gboolean moveCursorRightByWord (void);
     gboolean moveCursorToBegin (void);
     gboolean moveCursorToEnd (void);
-
-    gboolean processSpace (guint keyval, guint keycode, guint modifiers);
-    gboolean processNumber (guint keyval, guint keycode, guint modifiers);
-    gboolean processNumberWithShift (guint keyval, guint keycode, guint modifiers);
-    gboolean processBopomofo (guint keyval, guint keycode, guint modifiers);
-    gint keyvalToBopomofo(gint ch);
-
 
 };
 

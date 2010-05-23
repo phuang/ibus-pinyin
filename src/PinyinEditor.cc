@@ -24,28 +24,12 @@
 
 namespace PY {
 
-#define MAX_PINYIN_LEN 64
-
 /* init static members */
 PinyinEditor::PinyinEditor (PinyinProperties & props, Config & config)
-    : Editor (props, config),
-      m_pinyin (MAX_PHRASE_LEN),
-      m_pinyin_len (0),
-      m_buffer (64),
-      m_lookup_table (m_config.pageSize ()),
-      m_phrase_editor (props, config)
+    : PhoneticEditor (props, config)
 {
 }
 
-#define CMSHM_MASK              \
-        (IBUS_CONTROL_MASK |    \
-         IBUS_MOD1_MASK |       \
-         IBUS_SUPER_MASK |      \
-         IBUS_HYPER_MASK |      \
-         IBUS_META_MASK)
-
-#define CMSHM_FILTER(modifiers)  \
-    (modifiers & (CMSHM_MASK))
 
 /**
  * process pinyin
@@ -53,7 +37,7 @@ PinyinEditor::PinyinEditor (PinyinProperties & props, Config & config)
 inline gboolean
 PinyinEditor::processPinyin (guint keyval, guint keycode, guint modifiers)
 {
-    if (G_UNLIKELY (CMSHM_FILTER(modifiers) != 0))
+    if (G_UNLIKELY (CMSHM_FILTER (modifiers) != 0))
         return m_text ? TRUE : FALSE;
 
     return insert (keyval);
@@ -88,22 +72,6 @@ PinyinEditor::processNumber (guint keyval, guint keycode, guint modifiers)
         selectCandidateInPage (i);
     else if ((modifiers & ~IBUS_LOCK_MASK) == IBUS_CONTROL_MASK)
         resetCandidateInPage (i);
-    return TRUE;
-}
-
-inline gboolean
-PinyinEditor::processSpace (guint keyval, guint keycode, guint modifiers)
-{
-    if (!m_text)
-        return FALSE;
-    if (CMSHM_FILTER (modifiers) != 0)
-        return TRUE;
-    if (m_lookup_table.size () != 0) {
-        selectCandidate (m_lookup_table.cursorPos ());
-    }
-    else {
-        commit ();
-    }
     return TRUE;
 }
 
@@ -156,7 +124,7 @@ PinyinEditor::processPunct (guint keyval, guint keycode, guint modifiers)
 }
 
 inline gboolean
-PinyinEditor::processOthers (guint keyval, guint keycode, guint modifiers)
+PinyinEditor::processFunctionKey (guint keyval, guint keycode, guint modifiers)
 {
     if (m_text.empty ())
         return FALSE;
@@ -181,135 +149,10 @@ PinyinEditor::processOthers (guint keyval, guint keycode, guint modifiers)
                 return FALSE;
             selectCandidateInPage (2);
             return TRUE;
-
-        case IBUS_Return:
-        case IBUS_KP_Enter:
-            commit ();
-            return TRUE;
-
-        case IBUS_BackSpace:
-            if (m_phrase_editor.unselectCandidates ()) {
-                update ();
-            }
-            else {
-                removeCharBefore ();
-            }
-            return TRUE;
-
-        case IBUS_Delete:
-        case IBUS_KP_Delete:
-            removeCharAfter ();
-            return TRUE;
-
-        case IBUS_Left:
-        case IBUS_KP_Left:
-            if (m_phrase_editor.unselectCandidates ()) {
-                update ();
-            }
-            else {
-                moveCursorLeft ();
-            }
-            return TRUE;
-
-        case IBUS_Right:
-        case IBUS_KP_Right:
-            if (m_phrase_editor.unselectCandidates ()) {
-                update ();
-            }
-            else {
-                moveCursorRight ();
-            }
-            return TRUE;
-
-        case IBUS_Home:
-        case IBUS_KP_Home:
-            if (m_phrase_editor.unselectCandidates ()) {
-                update ();
-            }
-            else {
-                moveCursorToBegin ();
-            }
-            return TRUE;
-
-        case IBUS_End:
-        case IBUS_KP_End:
-            if (m_phrase_editor.unselectCandidates ()) {
-                update ();
-            }
-            else {
-                moveCursorToEnd ();
-            }
-            return TRUE;
-
-        case IBUS_Up:
-        case IBUS_KP_Up:
-            cursorUp ();
-            return TRUE;
-
-        case IBUS_Down:
-        case IBUS_KP_Down:
-            cursorDown ();
-            return TRUE;
-
-        case IBUS_Page_Up:
-        case IBUS_KP_Page_Up:
-            pageUp ();
-            return TRUE;
-
-        case IBUS_Page_Down:
-        case IBUS_KP_Page_Down:
-        case IBUS_Tab:
-            pageDown ();
-            return TRUE;
-
-        case IBUS_Escape:
-            reset ();
-            return TRUE;
-        default:
-            return TRUE;
-        }
-    }
-    else {
-        switch (keyval) {
-        case IBUS_BackSpace:
-            if (m_phrase_editor.unselectCandidates ()) {
-                update ();
-            }
-            else {
-                removeWordBefore ();
-            }
-            return TRUE;
-
-        case IBUS_Delete:
-        case IBUS_KP_Delete:
-            removeWordAfter ();
-            return TRUE;
-
-        case IBUS_Left:
-        case IBUS_KP_Left:
-            if (m_phrase_editor.unselectCandidates ()) {
-                update ();
-            }
-            else {
-                moveCursorLeftByWord ();
-            }
-            return TRUE;
-
-        case IBUS_Right:
-        case IBUS_KP_Right:
-            if (m_phrase_editor.unselectCandidates ()) {
-                update ();
-            }
-            else {
-                moveCursorToEnd ();
-            }
-            return TRUE;
-
-        default:
-            return TRUE;
         };
     }
-    return TRUE;
+
+    return PhoneticEditor::processFunctionKey (keyval, keycode, modifiers);
 }
 
 gboolean
@@ -335,36 +178,48 @@ PinyinEditor::processKeyEvent (guint keyval, guint keycode, guint modifiers)
     case IBUS_bracketleft ... IBUS_quoteleft:
     case IBUS_braceleft ... IBUS_asciitilde:
         return processPunct (keyval, keycode, modifiers);
-    /* space */
     case IBUS_space:
         return processSpace (keyval, keycode, modifiers);
-    /* others */
     default:
-        return processOthers (keyval, keycode, modifiers);
+        return processFunctionKey (keyval, keycode, modifiers);
     }
-}
-
-gboolean
-PinyinEditor::updateSpecialPhrases (void) {
-    if (!m_selected_special_phrase.empty ())
-        return FALSE;
-
-    guint size = m_special_phrases.size ();
-    guint begin = m_phrase_editor.cursorInChar ();
-    guint end = m_cursor;
-
-    m_special_phrases.clear ();
-    if (begin < end) {
-        SpecialPhraseTable::instance ().lookup (
-            m_text.substr (begin, m_cursor - begin),
-            m_special_phrases);
-    }
-
-    return size != m_special_phrases.size () || size != 0;
 }
 
 void
-PinyinEditor::updatePreeditText (void)
+PinyinEditor::commit ()
+{
+    if (G_UNLIKELY (m_buffer.empty ()))
+        return;
+
+    m_buffer.clear ();
+
+    m_buffer << m_phrase_editor.selectedString ();
+
+    const gchar *p;
+
+    if (m_selected_special_phrase.empty ()) {
+        p = textAfterPinyin (m_buffer.utf8Length ());
+    }
+    else {
+        m_buffer << m_selected_special_phrase;
+        p = textAfterCursor ();
+    }
+
+    if (G_UNLIKELY (m_props.modeFull ())) {
+        while (*p != '\0') {
+            m_buffer.appendUnichar (HalfFullConverter::toFull (*p++));
+        }
+    }
+    else {
+        m_buffer << p;
+    }
+    m_phrase_editor.commit ();
+    reset ();
+    PhoneticEditor::commit ((const gchar *)m_buffer);
+}
+
+void
+PinyinEditor::updatePreeditText ()
 {
     /* preedit text = selected phrases + highlight candidate + rest text */
     if (G_UNLIKELY (m_phrase_editor.empty () && m_text.empty ())) {
@@ -444,7 +299,7 @@ PinyinEditor::updatePreeditText (void)
 }
 
 void
-PinyinEditor::updateAuxiliaryText (void)
+PinyinEditor::updateAuxiliaryText ()
 {
     /* clear pinyin array */
     if (G_UNLIKELY (m_text.empty () ||
@@ -499,260 +354,13 @@ PinyinEditor::updateAuxiliaryText (void)
     Editor::updateAuxiliaryText (aux_text, TRUE);
 }
 
+
 void
-PinyinEditor::updateLookupTable (void)
+PinyinEditor::updateLookupTable ()
 {
-    m_lookup_table.clear ();
     m_lookup_table.setPageSize (m_config.pageSize ());
     m_lookup_table.setOrientation (m_config.orientation ());
-
-    fillLookupTableByPage ();
-    if (m_lookup_table.size ()) {
-        Editor::updateLookupTable (m_lookup_table, TRUE);
-    }
-    else {
-        hideLookupTable ();
-    }
-}
-
-inline gboolean
-PinyinEditor::fillLookupTableByPage (void)
-{
-    if (!m_selected_special_phrase.empty ()) {
-        return FALSE;
-    }
-
-    guint filled_nr = m_lookup_table.size ();
-    guint page_size = m_lookup_table.pageSize ();
-
-    if (m_special_phrases.size () + m_phrase_editor.candidates ().size () < filled_nr + page_size)
-        m_phrase_editor.fillCandidates ();
-
-    guint need_nr = MIN (page_size, m_special_phrases.size () + m_phrase_editor.candidates ().size () - filled_nr);
-    g_assert (need_nr >= 0);
-    if (need_nr == 0) {
-        return FALSE;
-    }
-
-    for (guint i = filled_nr; i < filled_nr + need_nr; i++) {
-        if (i < m_special_phrases.size ()) {
-            Text text (m_special_phrases[i].c_str ());
-            text.appendAttribute (IBUS_ATTR_TYPE_FOREGROUND, 0x0000ef00, 0, -1);
-            m_lookup_table.appendCandidate (text);
-        }
-        else {
-            if (G_LIKELY (m_props.modeSimp () || !m_config.tradCandidate ())) {
-                Text text (m_phrase_editor.candidate (i - m_special_phrases.size ()));
-                if (m_phrase_editor.candidateIsUserPhease (i - m_special_phrases.size ()))
-                    text.appendAttribute (IBUS_ATTR_TYPE_FOREGROUND, 0x000000ef, 0, -1);
-                m_lookup_table.appendCandidate (text);
-            }
-            else {
-                m_buffer.truncate (0);
-                SimpTradConverter::simpToTrad (m_phrase_editor.candidate (i - m_special_phrases.size ()), m_buffer);
-                Text text (m_buffer);
-                if (m_phrase_editor.candidateIsUserPhease (i - m_special_phrases.size ()))
-                    text.appendAttribute (IBUS_ATTR_TYPE_FOREGROUND, 0x000000ef, 0, -1);
-                m_lookup_table.appendCandidate (text);
-            }
-        }
-    }
-
-
-    return TRUE;
-}
-
-void
-PinyinEditor::pageUp (void)
-{
-    if (G_LIKELY (m_lookup_table.pageUp ())) {
-        updateLookupTableFast (m_lookup_table, TRUE);
-        updatePreeditText ();
-        updateAuxiliaryText ();
-    }
-}
-
-void
-PinyinEditor::pageDown (void)
-{
-    if (G_LIKELY(
-            (m_lookup_table.pageDown ()) ||
-            (fillLookupTableByPage () && m_lookup_table.pageDown ()))) {
-        updateLookupTableFast (m_lookup_table, TRUE);
-        updatePreeditText ();
-        updateAuxiliaryText ();
-    }
-}
-
-void
-PinyinEditor::cursorUp (void)
-{
-    if (G_LIKELY (m_lookup_table.cursorUp ())) {
-        updateLookupTableFast (m_lookup_table, TRUE);
-        updatePreeditText ();
-        updateAuxiliaryText ();
-    }
-}
-
-void
-PinyinEditor::cursorDown (void)
-{
-    if (G_LIKELY (
-            (m_lookup_table.cursorPos () == m_lookup_table.size () - 1) &&
-            (fillLookupTableByPage () == FALSE))) {
-        return;
-    }
-
-    if (G_LIKELY (m_lookup_table.cursorDown ())) {
-        updateLookupTableFast (m_lookup_table, TRUE);
-        updatePreeditText ();
-        updateAuxiliaryText ();
-    }
-}
-
-void
-PinyinEditor::candidateClicked (guint index, guint button, guint state)
-{
-   selectCandidateInPage (index);
-}
-
-void
-PinyinEditor::updateAuxiliaryTextBefore (String &buffer)
-{
-}
-
-void
-PinyinEditor::updateAuxiliaryTextAfter (String &buffer)
-{
-}
-
-void
-PinyinEditor::reset (void)
-{
-    m_pinyin.clear ();
-    m_pinyin_len = 0;
-    m_lookup_table.clear ();
-    m_phrase_editor.reset ();
-    m_special_phrases.clear ();
-    m_selected_special_phrase.clear ();
-
-    Editor::reset ();
-}
-
-void
-PinyinEditor::update (void)
-{
-    updateLookupTable ();
-    updatePreeditText ();
-    updateAuxiliaryText ();
-}
-
-void
-PinyinEditor::commit (const gchar *str)
-{
-    StaticText text(str);
-    commitText (text);
-}
-
-void
-PinyinEditor::commit (void)
-{
-    if (G_UNLIKELY (empty ()))
-        return;
-
-    m_buffer.clear ();
-
-    m_buffer << m_phrase_editor.selectedString ();
-
-    const gchar *p;
-
-    if (m_selected_special_phrase.empty ()) {
-        p = textAfterPinyin (m_buffer.utf8Length ());
-    }
-    else {
-        m_buffer << m_selected_special_phrase;
-        p = textAfterCursor ();
-    }
-
-    if (G_UNLIKELY (m_props.modeFull ())) {
-        while (*p != '\0') {
-            m_buffer.appendUnichar (HalfFullConverter::toFull (*p++));
-        }
-    }
-    else {
-        m_buffer << p;
-    }
-    m_phrase_editor.commit ();
-    reset ();
-    commit ((const gchar *)m_buffer);
-}
-
-inline gboolean
-PinyinEditor::selectCandidate (guint i)
-{
-    if (i < m_special_phrases.size ()) {
-        /* select a special phrase */
-        m_selected_special_phrase = m_special_phrases[i];
-        if (m_cursor == m_text.size ()) {
-            m_buffer = m_phrase_editor.selectedString ();
-            m_buffer << m_selected_special_phrase;
-            m_phrase_editor.commit ();
-            reset ();
-            commit ((const gchar *)m_buffer);
-        }
-        else {
-            updateSpecialPhrases ();
-            update ();
-        }
-        return TRUE;
-    }
-
-    i -= m_special_phrases.size ();
-    if (m_phrase_editor.selectCandidate (i)) {
-        if (m_phrase_editor.pinyinExistsAfterCursor () ||
-            *textAfterPinyin () != '\0') {
-            updateSpecialPhrases ();
-            update ();
-        }
-        else {
-            commit ();
-        }
-        return TRUE;
-    }
-    return FALSE;
-}
-
-gboolean
-PinyinEditor::selectCandidateInPage (guint i)
-{
-    guint page_size = m_lookup_table.pageSize ();
-    guint cursor_pos = m_lookup_table.cursorPos ();
-
-    if (G_UNLIKELY (i >= page_size))
-        return FALSE;
-    i += (cursor_pos / page_size) * page_size;
-
-    return selectCandidate (i);
-}
-
-inline gboolean
-PinyinEditor::resetCandidate (guint i)
-{
-    i -= m_special_phrases.size ();
-    if (m_phrase_editor.resetCandidate (i)) {
-        update ();
-    }
-    return TRUE;
-}
-
-inline gboolean
-PinyinEditor::resetCandidateInPage (guint i)
-{
-    guint page_size = m_lookup_table.pageSize ();
-    guint cursor_pos = m_lookup_table.cursorPos ();
-    i += (cursor_pos / page_size) * page_size;
-
-    return resetCandidate (i);
+    PhoneticEditor::updateLookupTable ();
 }
 
 };

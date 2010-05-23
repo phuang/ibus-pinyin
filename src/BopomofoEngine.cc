@@ -26,8 +26,6 @@
 #include "RawEditor.h"
 #include "PunctEditor.h"
 #include "ExtEditor.h"
-#include "FullPinyinEditor.h"
-#include "DoublePinyinEditor.h"
 #include "BopomofoEditor.h"
 #include "BopomofoEngine.h"
 #include "HalfFullConverter.h"
@@ -70,14 +68,6 @@ BopomofoEngine::~BopomofoEngine (void)
 {
 }
 
-
-#define CASHM_MASK       \
-    (IBUS_CONTROL_MASK | \
-    IBUS_MOD1_MASK |     \
-    IBUS_SUPER_MASK |    \
-    IBUS_HYPER_MASK |    \
-    IBUS_META_MASK)
-
 gboolean
 BopomofoEngine::processKeyEvent (guint keyval, guint keycode, guint modifiers)
 {
@@ -101,7 +91,7 @@ BopomofoEngine::processKeyEvent (guint keyval, guint keycode, guint modifiers)
     if (m_props.modeChinese ()) {
         if (G_UNLIKELY (m_input_mode == MODE_INIT &&
                         m_editors[MODE_INIT]->text ().empty () &&
-                        (modifiers & CASHM_MASK) == 0) &&
+                        (CMSHM_FILTER (modifiers)) == 0) &&
                         keyval == IBUS_grave) {
             /* if BopomofoEditor is empty and get a grave key,
              * switch current editor to PunctEditor */

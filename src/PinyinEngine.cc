@@ -27,7 +27,6 @@
 #include "ExtEditor.h"
 #include "FullPinyinEditor.h"
 #include "DoublePinyinEditor.h"
-#include "BopomofoEditor.h"
 #include "PinyinEngine.h"
 #include "HalfFullConverter.h"
 #include "Config.h"
@@ -71,14 +70,6 @@ PinyinEngine::~PinyinEngine (void)
 {
 }
 
-
-#define CASHM_MASK       \
-    (IBUS_CONTROL_MASK | \
-    IBUS_MOD1_MASK |     \
-    IBUS_SUPER_MASK |    \
-    IBUS_HYPER_MASK |    \
-    IBUS_META_MASK)
-
 gboolean
 PinyinEngine::processKeyEvent (guint keyval, guint keycode, guint modifiers)
 {
@@ -101,7 +92,7 @@ PinyinEngine::processKeyEvent (guint keyval, guint keycode, guint modifiers)
 
     if (m_props.modeChinese ()) {
         if (m_input_mode == MODE_INIT &&
-            ((modifiers & CASHM_MASK) == 0)) {
+            ((CMSHM_FILTER (modifiers)) == 0)) {
             const String & text = m_editors[MODE_INIT]->text ();
             if (text.empty ()) {
                 switch (keyval) {
