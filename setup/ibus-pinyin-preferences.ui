@@ -5,7 +5,7 @@
   <object class="GtkDialog" id="dialog">
     <property name="width_request">400</property>
     <property name="border_width">5</property>
-    <property name="title" translatable="yes">Pinyin preferences</property>
+    <property name="title" translatable="yes">Preferences</property>
     <property name="window_position">center-always</property>
     <property name="icon_name">gtk-preferences</property>
     <property name="type_hint">normal</property>
@@ -13,158 +13,26 @@
     <child internal-child="vbox">
       <object class="GtkVBox" id="dialog-vbox1">
         <property name="visible">True</property>
-        <property name="orientation">vertical</property>
         <property name="spacing">2</property>
         <child>
-          <object class="GtkNotebook" id="notebook1">
+          <object class="GtkNotebook" id="pages">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
+            <property name="tab_vborder">3</property>
             <child>
-              <object class="GtkAlignment" id="alignment5">
+              <object class="GtkAlignment" id="pageGeneral">
                 <property name="visible">True</property>
                 <property name="top_padding">12</property>
                 <property name="bottom_padding">12</property>
                 <property name="left_padding">12</property>
                 <property name="right_padding">12</property>
                 <child>
-                  <object class="GtkVBox" id="vbox4">
+                  <object class="GtkVBox" id="vbox13">
                     <property name="visible">True</property>
-                    <property name="orientation">vertical</property>
                     <property name="spacing">18</property>
-                    <child>
-                      <object class="GtkFrame" id="frame3">
-                        <property name="visible">True</property>
-                        <property name="label_xalign">0</property>
-                        <property name="shadow_type">none</property>
-                        <child>
-                          <object class="GtkAlignment" id="alignment6">
-                            <property name="visible">True</property>
-                            <property name="top_padding">6</property>
-                            <property name="left_padding">12</property>
-                            <child>
-                              <object class="GtkVBox" id="vbox9">
-                                <property name="visible">True</property>
-                                <property name="orientation">vertical</property>
-                                <property name="spacing">6</property>
-                                <child>
-                                  <object class="GtkTable" id="table3">
-                                    <property name="visible">True</property>
-                                    <property name="n_columns">3</property>
-                                    <property name="column_spacing">12</property>
-                                    <property name="homogeneous">True</property>
-                                    <child>
-                                      <object class="GtkRadioButton" id="FullPinyin">
-                                        <property name="label" translatable="yes">Full pinyin</property>
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">True</property>
-                                        <property name="receives_default">False</property>
-                                        <property name="tooltip_text" translatable="yes">Use full pinyin.</property>
-                                        <property name="draw_indicator">True</property>
-                                        <property name="group">DoublePinyin</property>
-                                      </object>
-                                      <packing>
-                                        <property name="x_options">GTK_FILL</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="GtkCheckButton" id="IncompletePinyin">
-                                        <property name="label" translatable="yes">Incomplete pinyin</property>
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">True</property>
-                                        <property name="receives_default">False</property>
-                                        <property name="tooltip_text" translatable="yes">Enable incomplete pinyin (like zh g).</property>
-                                        <property name="active">True</property>
-                                        <property name="draw_indicator">True</property>
-                                      </object>
-                                      <packing>
-                                        <property name="left_attach">1</property>
-                                        <property name="right_attach">3</property>
-                                      </packing>
-                                    </child>
-                                  </object>
-                                  <packing>
-                                    <property name="position">0</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkTable" id="table6">
-                                    <property name="visible">True</property>
-                                    <property name="n_columns">3</property>
-                                    <property name="column_spacing">12</property>
-                                    <property name="homogeneous">True</property>
-                                    <child>
-                                      <object class="GtkRadioButton" id="DoublePinyin">
-                                        <property name="label" translatable="yes">Double pinyin</property>
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">True</property>
-                                        <property name="receives_default">False</property>
-                                        <property name="tooltip_text" translatable="yes">Use double pinyin.</property>
-                                        <property name="active">True</property>
-                                        <property name="draw_indicator">True</property>
-                                      </object>
-                                      <packing>
-                                        <property name="x_options">GTK_FILL</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="GtkHBox" id="hbox1">
-                                        <property name="visible">True</property>
-                                        <property name="spacing">12</property>
-                                        <child>
-                                          <object class="GtkLabel" id="labelDoublePinyinSchema">
-                                            <property name="visible">True</property>
-                                            <property name="xalign">0</property>
-                                            <property name="label" translatable="yes">Schema:</property>
-                                          </object>
-                                          <packing>
-                                            <property name="expand">False</property>
-                                            <property name="position">0</property>
-                                          </packing>
-                                        </child>
-                                        <child>
-                                          <object class="GtkComboBox" id="DoublePinyinSchema">
-                                            <property name="visible">True</property>
-                                            <property name="sensitive">False</property>
-                                            <property name="tooltip_text" translatable="yes">Select double pinyin schema.</property>
-                                            <property name="model">liststoreDoublePinyin</property>
-                                            <property name="button_sensitivity">on</property>
-                                          </object>
-                                          <packing>
-                                            <property name="position">1</property>
-                                          </packing>
-                                        </child>
-                                      </object>
-                                      <packing>
-                                        <property name="left_attach">1</property>
-                                        <property name="right_attach">3</property>
-                                      </packing>
-                                    </child>
-                                  </object>
-                                  <packing>
-                                    <property name="position">1</property>
-                                  </packing>
-                                </child>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
-                        <child type="label">
-                          <object class="GtkLabel" id="label6">
-                            <property name="visible">True</property>
-                            <property name="label" translatable="yes">&lt;b&gt;Pinyin mode&lt;/b&gt;</property>
-                            <property name="use_markup">True</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
                     <child>
                       <object class="GtkFrame" id="frame4">
                         <property name="visible">True</property>
-                        <property name="tooltip_text" translatable="yes">Setup the initial state of pinyin input method.</property>
                         <property name="label_xalign">0</property>
                         <property name="shadow_type">none</property>
                         <child>
@@ -215,7 +83,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
-                                    <property name="active">True</property>
                                     <property name="draw_indicator">True</property>
                                     <property name="group">InitEnglish</property>
                                   </object>
@@ -230,6 +97,7 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
+                                    <property name="active">True</property>
                                     <property name="draw_indicator">True</property>
                                   </object>
                                   <packing>
@@ -243,7 +111,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
-                                    <property name="active">True</property>
                                     <property name="draw_indicator">True</property>
                                     <property name="group">InitHalf</property>
                                   </object>
@@ -260,6 +127,7 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
+                                    <property name="active">True</property>
                                     <property name="draw_indicator">True</property>
                                   </object>
                                   <packing>
@@ -318,7 +186,6 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
-                                    <property name="active">True</property>
                                     <property name="draw_indicator">True</property>
                                     <property name="group">InitTraditionalChinese</property>
                                   </object>
@@ -359,7 +226,262 @@
                       </object>
                       <packing>
                         <property name="expand">False</property>
+                        <property name="fill">False</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkFrame" id="frame5">
+                        <property name="visible">True</property>
+                        <property name="label_xalign">0</property>
+                        <property name="shadow_type">none</property>
+                        <child>
+                          <object class="GtkAlignment" id="alignment8">
+                            <property name="visible">True</property>
+                            <property name="top_padding">6</property>
+                            <property name="left_padding">12</property>
+                            <child>
+                              <object class="GtkVBox" id="vbox8">
+                                <property name="visible">True</property>
+                                <property name="spacing">6</property>
+                                <child>
+                                  <object class="GtkHBox" id="hbox3">
+                                    <property name="visible">True</property>
+                                    <property name="spacing">12</property>
+                                    <property name="homogeneous">True</property>
+                                    <child>
+                                      <object class="GtkLabel" id="label4">
+                                        <property name="visible">True</property>
+                                        <property name="xalign">0</property>
+                                        <property name="label" translatable="yes">Orientation of candidates:</property>
+                                        <property name="use_markup">True</property>
+                                      </object>
+                                      <packing>
+                                        <property name="position">0</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkComboBox" id="LookupTableOrientation">
+                                        <property name="visible">True</property>
+                                        <property name="model">liststoreLookupTableOrientation</property>
+                                        <property name="button_sensitivity">on</property>
+                                      </object>
+                                      <packing>
+                                        <property name="position">1</property>
+                                      </packing>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="position">0</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkHBox" id="hbox4">
+                                    <property name="visible">True</property>
+                                    <property name="spacing">12</property>
+                                    <property name="homogeneous">True</property>
+                                    <child>
+                                      <object class="GtkLabel" id="label16">
+                                        <property name="visible">True</property>
+                                        <property name="xalign">0</property>
+                                        <property name="label" translatable="yes">Number of candidates:</property>
+                                        <property name="use_markup">True</property>
+                                      </object>
+                                      <packing>
+                                        <property name="position">0</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkHScale" id="hscaleLookupTablePageSize">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="update_policy">delayed</property>
+                                        <property name="adjustment">LookupTablePageSize</property>
+                                        <property name="digits">0</property>
+                                        <property name="value_pos">left</property>
+                                      </object>
+                                      <packing>
+                                        <property name="position">1</property>
+                                      </packing>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="position">1</property>
+                                  </packing>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child type="label">
+                          <object class="GtkLabel" id="label8">
+                            <property name="visible">True</property>
+                            <property name="label" translatable="yes">&lt;b&gt;UI&lt;/b&gt;</property>
+                            <property name="use_markup">True</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">False</property>
                         <property name="position">1</property>
+                      </packing>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child type="tab">
+              <object class="GtkLabel" id="label19">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes">General</property>
+              </object>
+              <packing>
+                <property name="tab_fill">False</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkAlignment" id="pagePinyinMode">
+                <property name="visible">True</property>
+                <property name="top_padding">12</property>
+                <property name="bottom_padding">12</property>
+                <property name="left_padding">12</property>
+                <property name="right_padding">12</property>
+                <child>
+                  <object class="GtkVBox" id="vbox4">
+                    <property name="visible">True</property>
+                    <property name="spacing">18</property>
+                    <child>
+                      <object class="GtkFrame" id="frame3">
+                        <property name="visible">True</property>
+                        <property name="label_xalign">0</property>
+                        <property name="shadow_type">none</property>
+                        <child>
+                          <object class="GtkAlignment" id="alignment6">
+                            <property name="visible">True</property>
+                            <property name="top_padding">6</property>
+                            <property name="left_padding">12</property>
+                            <child>
+                              <object class="GtkVBox" id="vbox9">
+                                <property name="visible">True</property>
+                                <property name="spacing">6</property>
+                                <child>
+                                  <object class="GtkRadioButton" id="FullPinyin">
+                                    <property name="label" translatable="yes">Full pinyin</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="receives_default">False</property>
+                                    <property name="draw_indicator">True</property>
+                                    <property name="group">DoublePinyin</property>
+                                  </object>
+                                  <packing>
+                                    <property name="position">0</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkVBox" id="vbox2">
+                                    <property name="visible">True</property>
+                                    <child>
+                                      <object class="GtkRadioButton" id="DoublePinyin">
+                                        <property name="label" translatable="yes">Double pinyin</property>
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="receives_default">False</property>
+                                        <property name="active">True</property>
+                                        <property name="draw_indicator">True</property>
+                                      </object>
+                                      <packing>
+                                        <property name="position">0</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkAlignment" id="alignment3">
+                                        <property name="visible">True</property>
+                                        <property name="left_padding">22</property>
+                                        <child>
+                                          <object class="GtkVBox" id="vbox14">
+                                            <property name="visible">True</property>
+                                            <child>
+                                              <object class="GtkHBox" id="hbox1">
+                                                <property name="visible">True</property>
+                                                <child>
+                                                  <object class="GtkLabel" id="labelDoublePinyinSchema">
+                                                    <property name="visible">True</property>
+                                                    <property name="xalign">0</property>
+                                                    <property name="label" translatable="yes">Schema:</property>
+                                                  </object>
+                                                  <packing>
+                                                    <property name="position">0</property>
+                                                  </packing>
+                                                </child>
+                                                <child>
+                                                  <object class="GtkComboBox" id="DoublePinyinSchema">
+                                                    <property name="visible">True</property>
+                                                    <property name="sensitive">False</property>
+                                                    <property name="model">liststoreDoublePinyin</property>
+                                                    <property name="button_sensitivity">on</property>
+                                                  </object>
+                                                  <packing>
+                                                    <property name="position">1</property>
+                                                  </packing>
+                                                </child>
+                                              </object>
+                                              <packing>
+                                                <property name="position">0</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkCheckButton" id="DoublePinyinShowRaw">
+                                                <property name="label" translatable="yes">Show raw input of Double Pinyin</property>
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="receives_default">False</property>
+                                                <property name="draw_indicator">True</property>
+                                              </object>
+                                              <packing>
+                                                <property name="position">1</property>
+                                              </packing>
+                                            </child>
+                                          </object>
+                                        </child>
+                                      </object>
+                                      <packing>
+                                        <property name="position">1</property>
+                                      </packing>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="position">1</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkCheckButton" id="IncompletePinyin">
+                                    <property name="label" translatable="yes">Incomplete pinyin</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="receives_default">False</property>
+                                    <property name="active">True</property>
+                                    <property name="draw_indicator">True</property>
+                                  </object>
+                                  <packing>
+                                    <property name="position">2</property>
+                                  </packing>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child type="label">
+                          <object class="GtkLabel" id="label6">
+                            <property name="visible">True</property>
+                            <property name="label" translatable="yes">&lt;b&gt;Pinyin mode&lt;/b&gt;</property>
+                            <property name="use_markup">True</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="position">0</property>
                       </packing>
                     </child>
                     <child>
@@ -375,7 +497,6 @@
                             <child>
                               <object class="GtkVBox" id="vbox11">
                                 <property name="visible">True</property>
-                                <property name="orientation">vertical</property>
                                 <property name="spacing">6</property>
                                 <child>
                                   <object class="GtkTable" id="table2">
@@ -449,196 +570,16 @@
                         <child type="label">
                           <object class="GtkLabel" id="label20">
                             <property name="visible">True</property>
-                            <property name="label" translatable="yes">&lt;b&gt;Others&lt;/b&gt;</property>
+                            <property name="label" translatable="yes">&lt;b&gt;Input Custom&lt;/b&gt;</property>
                             <property name="use_markup">True</property>
                           </object>
                         </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
-                        <property name="position">2</property>
+                        <property name="position">1</property>
                       </packing>
                     </child>
-                  </object>
-                </child>
-              </object>
-            </child>
-            <child type="tab">
-              <object class="GtkLabel" id="label1">
-                <property name="visible">True</property>
-                <property name="label" translatable="yes">Pinyin mode</property>
-              </object>
-              <packing>
-                <property name="tab_fill">False</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkAlignment" id="alignment10">
-                <property name="visible">True</property>
-                <property name="top_padding">12</property>
-                <property name="bottom_padding">12</property>
-                <property name="left_padding">12</property>
-                <property name="right_padding">12</property>
-                <child>
-                  <object class="GtkVBox" id="vbox10">
-                    <property name="visible">True</property>
-                    <property name="orientation">vertical</property>
-                    <child>
-                      <object class="GtkFrame" id="frame5">
-                        <property name="visible">True</property>
-                        <property name="label_xalign">0</property>
-                        <property name="shadow_type">none</property>
-                        <child>
-                          <object class="GtkAlignment" id="alignment8">
-                            <property name="visible">True</property>
-                            <property name="top_padding">6</property>
-                            <property name="left_padding">12</property>
-                            <child>
-                              <object class="GtkVBox" id="vbox8">
-                                <property name="visible">True</property>
-                                <property name="orientation">vertical</property>
-                                <property name="spacing">6</property>
-                                <child>
-                                  <object class="GtkHBox" id="hbox3">
-                                    <property name="visible">True</property>
-                                    <property name="spacing">12</property>
-                                    <property name="homogeneous">True</property>
-                                    <child>
-                                      <object class="GtkLabel" id="label4">
-                                        <property name="visible">True</property>
-                                        <property name="xalign">0</property>
-                                        <property name="label" translatable="yes">Orientation of candidates:</property>
-                                        <property name="use_markup">True</property>
-                                      </object>
-                                      <packing>
-                                        <property name="position">0</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="GtkComboBox" id="LookupTableOrientation">
-                                        <property name="visible">True</property>
-                                        <property name="model">liststoreLookupTableOrientation</property>
-                                        <property name="button_sensitivity">on</property>
-                                      </object>
-                                      <packing>
-                                        <property name="position">1</property>
-                                      </packing>
-                                    </child>
-                                  </object>
-                                  <packing>
-                                    <property name="position">0</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkHBox" id="hbox4">
-                                    <property name="visible">True</property>
-                                    <property name="spacing">12</property>
-                                    <property name="homogeneous">True</property>
-                                    <child>
-                                      <object class="GtkLabel" id="label16">
-                                        <property name="visible">True</property>
-                                        <property name="xalign">0</property>
-                                        <property name="label" translatable="yes">Number of candidates:</property>
-                                        <property name="use_markup">True</property>
-                                      </object>
-                                      <packing>
-                                        <property name="position">0</property>
-                                      </packing>
-                                    </child>
-                                    <child>
-                                      <object class="GtkHScale" id="hscaleLookupTablePageSize">
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">True</property>
-                                        <property name="update_policy">delayed</property>
-                                        <property name="adjustment">LookupTablePageSize</property>
-                                        <property name="digits">0</property>
-                                        <property name="value_pos">left</property>
-                                      </object>
-                                      <packing>
-                                        <property name="position">1</property>
-                                      </packing>
-                                    </child>
-                                  </object>
-                                  <packing>
-                                    <property name="position">1</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkCheckButton" id="TradCandidate">
-                                    <property name="label" translatable="yes">Show candidates in traditional Chinese</property>
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="receives_default">False</property>
-                                    <property name="draw_indicator">True</property>
-                                  </object>
-                                  <packing>
-                                    <property name="position">2</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkCheckButton" id="DoublePinyinShowRaw">
-                                    <property name="label" translatable="yes">Show raw input of Double Pinyin</property>
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="receives_default">False</property>
-                                    <property name="draw_indicator">True</property>
-                                  </object>
-                                  <packing>
-                                    <property name="position">3</property>
-                                  </packing>
-                                </child>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
-                        <child type="label">
-                          <object class="GtkLabel" id="label8">
-                            <property name="visible">True</property>
-                            <property name="label" translatable="yes">&lt;b&gt;UI&lt;/b&gt;</property>
-                            <property name="use_markup">True</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="position">1</property>
-              </packing>
-            </child>
-            <child type="tab">
-              <object class="GtkLabel" id="label13">
-                <property name="visible">True</property>
-                <property name="label" translatable="yes">UI</property>
-              </object>
-              <packing>
-                <property name="position">1</property>
-                <property name="tab_fill">False</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkAlignment" id="alignment3">
-                <property name="visible">True</property>
-                <property name="top_padding">12</property>
-                <property name="bottom_padding">12</property>
-                <property name="left_padding">12</property>
-                <property name="right_padding">12</property>
-                <child>
-                  <object class="GtkVBox" id="vbox2">
-                    <property name="visible">True</property>
-                    <property name="orientation">vertical</property>
-                    <property name="spacing">12</property>
                     <child>
                       <object class="GtkFrame" id="frame2">
                         <property name="visible">True</property>
@@ -652,84 +593,100 @@
                             <child>
                               <object class="GtkVBox" id="vbox3">
                                 <property name="visible">True</property>
-                                <property name="orientation">vertical</property>
-                                <property name="spacing">6</property>
+                                <property name="spacing">4</property>
                                 <child>
-                                  <object class="GtkCheckButton" id="CorrectPinyin_GN_NG">
-                                    <property name="label">gn =&gt; ng</property>
+                                  <object class="GtkTable" id="table5">
                                     <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="receives_default">False</property>
-                                    <property name="active">True</property>
-                                    <property name="draw_indicator">True</property>
+                                    <property name="n_rows">3</property>
+                                    <property name="n_columns">2</property>
+                                    <property name="row_spacing">4</property>
+                                    <child>
+                                      <object class="GtkCheckButton" id="CorrectPinyin_GN_NG">
+                                        <property name="label">gn =&gt; ng</property>
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="receives_default">False</property>
+                                        <property name="active">True</property>
+                                        <property name="draw_indicator">True</property>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkCheckButton" id="CorrectPinyin_MG_NG">
+                                        <property name="label">mg =&gt; ng</property>
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="receives_default">False</property>
+                                        <property name="active">True</property>
+                                        <property name="draw_indicator">True</property>
+                                      </object>
+                                      <packing>
+                                        <property name="top_attach">1</property>
+                                        <property name="bottom_attach">2</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkCheckButton" id="CorrectPinyin_IOU_IU">
+                                        <property name="label">iou =&gt; iu</property>
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="receives_default">False</property>
+                                        <property name="active">True</property>
+                                        <property name="draw_indicator">True</property>
+                                      </object>
+                                      <packing>
+                                        <property name="top_attach">2</property>
+                                        <property name="bottom_attach">3</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkCheckButton" id="CorrectPinyin_UEI_UI">
+                                        <property name="label">uei =&gt; ui</property>
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="receives_default">False</property>
+                                        <property name="active">True</property>
+                                        <property name="draw_indicator">True</property>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">1</property>
+                                        <property name="right_attach">2</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkCheckButton" id="CorrectPinyin_UEN_UN">
+                                        <property name="label">uen =&gt; un</property>
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="receives_default">False</property>
+                                        <property name="active">True</property>
+                                        <property name="draw_indicator">True</property>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">1</property>
+                                        <property name="right_attach">2</property>
+                                        <property name="top_attach">1</property>
+                                        <property name="bottom_attach">2</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkCheckButton" id="CorrectPinyin_UE_VE">
+                                        <property name="label">ue =&gt; ve</property>
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="receives_default">False</property>
+                                        <property name="active">True</property>
+                                        <property name="draw_indicator">True</property>
+                                      </object>
+                                      <packing>
+                                        <property name="left_attach">1</property>
+                                        <property name="right_attach">2</property>
+                                        <property name="top_attach">2</property>
+                                        <property name="bottom_attach">3</property>
+                                      </packing>
+                                    </child>
                                   </object>
                                   <packing>
                                     <property name="position">0</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkCheckButton" id="CorrectPinyin_MG_NG">
-                                    <property name="label">mg =&gt; ng</property>
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="receives_default">False</property>
-                                    <property name="active">True</property>
-                                    <property name="draw_indicator">True</property>
-                                  </object>
-                                  <packing>
-                                    <property name="position">1</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkCheckButton" id="CorrectPinyin_IOU_IU">
-                                    <property name="label">iou =&gt; iu</property>
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="receives_default">False</property>
-                                    <property name="active">True</property>
-                                    <property name="draw_indicator">True</property>
-                                  </object>
-                                  <packing>
-                                    <property name="position">2</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkCheckButton" id="CorrectPinyin_UEI_UI">
-                                    <property name="label">uei =&gt; ui</property>
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="receives_default">False</property>
-                                    <property name="active">True</property>
-                                    <property name="draw_indicator">True</property>
-                                  </object>
-                                  <packing>
-                                    <property name="position">3</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkCheckButton" id="CorrectPinyin_UEN_UN">
-                                    <property name="label">uen =&gt; un</property>
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="receives_default">False</property>
-                                    <property name="active">True</property>
-                                    <property name="draw_indicator">True</property>
-                                  </object>
-                                  <packing>
-                                    <property name="position">4</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkCheckButton" id="CorrectPinyin_UE_VE">
-                                    <property name="label">ue =&gt; ve</property>
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="receives_default">False</property>
-                                    <property name="active">True</property>
-                                    <property name="draw_indicator">True</property>
-                                  </object>
-                                  <packing>
-                                    <property name="position">5</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -742,7 +699,7 @@
                                     <property name="draw_indicator">True</property>
                                   </object>
                                   <packing>
-                                    <property name="position">6</property>
+                                    <property name="position">1</property>
                                   </packing>
                                 </child>
                               </object>
@@ -755,7 +712,6 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
-                            <property name="tooltip_text" translatable="yes">Enable pinyin correcting.</property>
                             <property name="active">True</property>
                             <property name="draw_indicator">True</property>
                           </object>
@@ -763,6 +719,107 @@
                       </object>
                       <packing>
                         <property name="expand">False</property>
+                        <property name="position">2</property>
+                      </packing>
+                    </child>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child type="tab">
+              <object class="GtkLabel" id="label1">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes">Pinyin mode</property>
+              </object>
+              <packing>
+                <property name="position">1</property>
+                <property name="tab_fill">False</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkAlignment" id="pageBopomofoMode">
+                <property name="visible">True</property>
+                <property name="top_padding">12</property>
+                <property name="bottom_padding">12</property>
+                <property name="left_padding">12</property>
+                <property name="right_padding">12</property>
+                <child>
+                  <object class="GtkVBox" id="vbox10">
+                    <property name="visible">True</property>
+                    <property name="spacing">18</property>
+                    <child>
+                      <object class="GtkFrame" id="frame8">
+                        <property name="visible">True</property>
+                        <property name="label_xalign">0</property>
+                        <property name="shadow_type">none</property>
+                        <child>
+                          <object class="GtkAlignment" id="alignment15">
+                            <property name="visible">True</property>
+                            <property name="top_padding">6</property>
+                            <property name="left_padding">12</property>
+                            <child>
+                              <object class="GtkVBox" id="vbox15">
+                                <property name="visible">True</property>
+                                <property name="spacing">6</property>
+                                <child>
+                                  <object class="GtkHBox" id="hbox5">
+                                    <property name="visible">True</property>
+                                    <child>
+                                      <object class="GtkLabel" id="labelBopomofoKeyboardMapping">
+                                        <property name="visible">True</property>
+                                        <property name="xalign">0</property>
+                                        <property name="label" translatable="yes">Keyboard Mappming:</property>
+                                      </object>
+                                      <packing>
+                                        <property name="position">0</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkComboBox" id="BopomofoKeyboardMapping">
+                                        <property name="visible">True</property>
+                                        <property name="model">liststoreBopomofoKeyboardMapping</property>
+                                        <property name="button_sensitivity">on</property>
+                                      </object>
+                                      <packing>
+                                        <property name="position">1</property>
+                                      </packing>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="position">0</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkCheckButton" id="IncompleteBopomofo">
+                                    <property name="label" translatable="yes">Incomplete Bopomofo</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="receives_default">False</property>
+                                    <property name="active">True</property>
+                                    <property name="draw_indicator">True</property>
+                                  </object>
+                                  <packing>
+                                    <property name="position">1</property>
+                                  </packing>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child type="label">
+                          <object class="GtkLabel" id="label2">
+                            <property name="visible">True</property>
+                            <property name="label" translatable="yes">&lt;b&gt;Bopomofo mode&lt;/b&gt;</property>
+                            <property name="use_markup">True</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">False</property>
                         <property name="position">0</property>
                       </packing>
                     </child>
@@ -774,9 +831,9 @@
               </packing>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="label2">
+              <object class="GtkLabel" id="label13">
                 <property name="visible">True</property>
-                <property name="label" translatable="yes">Correct pinyin</property>
+                <property name="label" translatable="yes">Bopomofo mode</property>
               </object>
               <packing>
                 <property name="position">2</property>
@@ -784,7 +841,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkAlignment" id="alignment1">
+              <object class="GtkAlignment" id="pageFuzzy">
                 <property name="visible">True</property>
                 <property name="top_padding">12</property>
                 <property name="bottom_padding">12</property>
@@ -793,7 +850,6 @@
                 <child>
                   <object class="GtkVBox" id="vbox1">
                     <property name="visible">True</property>
-                    <property name="orientation">vertical</property>
                     <property name="spacing">12</property>
                     <child>
                       <object class="GtkFrame" id="frame1">
@@ -1184,11 +1240,10 @@
                         </child>
                         <child type="label">
                           <object class="GtkCheckButton" id="FuzzyPinyin">
-                            <property name="label" translatable="yes">Fuzzy pinyin</property>
+                            <property name="label" translatable="yes">Fuzzy syllable</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
-                            <property name="tooltip_text" translatable="yes">Enable fuzzy pinyin.</property>
                             <property name="draw_indicator">True</property>
                           </object>
                         </child>
@@ -1208,7 +1263,7 @@
             <child type="tab">
               <object class="GtkLabel" id="label3">
                 <property name="visible">True</property>
-                <property name="label" translatable="yes">Fuzzy pinyin</property>
+                <property name="label" translatable="yes">Fuzzy syllable</property>
               </object>
               <packing>
                 <property name="position">3</property>
@@ -1216,7 +1271,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkAlignment" id="alignment12">
+              <object class="GtkAlignment" id="pageDictionary">
                 <property name="visible">True</property>
                 <property name="top_padding">12</property>
                 <property name="bottom_padding">12</property>
@@ -1225,7 +1280,6 @@
                 <child>
                   <object class="GtkVBox" id="vbox5">
                     <property name="visible">True</property>
-                    <property name="orientation">vertical</property>
                     <child>
                       <object class="GtkFrame" id="frame7">
                         <property name="visible">True</property>
@@ -1239,7 +1293,6 @@
                             <child>
                               <object class="GtkVBox" id="vbox12">
                                 <property name="visible">True</property>
-                                <property name="orientation">vertical</property>
                                 <property name="spacing">6</property>
                                 <child>
                                   <object class="GtkHBox" id="hbox2">
@@ -1278,12 +1331,6 @@
                                     <property name="position">0</property>
                                   </packing>
                                 </child>
-                                <child>
-                                  <placeholder/>
-                                </child>
-                                <child>
-                                  <placeholder/>
-                                </child>
                               </object>
                             </child>
                           </object>
@@ -1299,12 +1346,6 @@
                       <packing>
                         <property name="position">0</property>
                       </packing>
-                    </child>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <child>
-                      <placeholder/>
                     </child>
                   </object>
                 </child>
@@ -1324,9 +1365,8 @@
               </packing>
             </child>
             <child>
-              <object class="GtkAlignment" id="alignment9">
+              <object class="GtkAlignment" id="pageAbout">
                 <property name="visible">True</property>
-                <property name="yscale">0.30000001192092896</property>
                 <property name="top_padding">12</property>
                 <property name="bottom_padding">12</property>
                 <property name="left_padding">12</property>
@@ -1334,17 +1374,16 @@
                 <child>
                   <object class="GtkVBox" id="vbox6">
                     <property name="visible">True</property>
-                    <property name="orientation">vertical</property>
+                    <property name="spacing">6</property>
                     <child>
                       <object class="GtkVBox" id="vbox7">
                         <property name="visible">True</property>
-                        <property name="orientation">vertical</property>
                         <property name="spacing">6</property>
                         <child>
                           <object class="GtkImage" id="image1">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="pixel_size">48</property>
+                            <property name="pixel_size">32</property>
                             <property name="icon_name">gtk-about</property>
                           </object>
                           <packing>
@@ -1390,7 +1429,6 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
-                            <property name="has_tooltip">True</property>
                             <property name="relief">none</property>
                             <property name="uri">http://ibus.googlecode.com</property>
                           </object>
@@ -1404,6 +1442,71 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkFrame" id="frame9">
+                        <property name="visible">True</property>
+                        <property name="label_xalign">0</property>
+                        <property name="shadow_type">none</property>
+                        <child>
+                          <object class="GtkAlignment" id="alignment16">
+                            <property name="visible">True</property>
+                            <property name="top_padding">6</property>
+                            <child>
+                              <object class="GtkLabel" id="label23">
+                                <property name="visible">True</property>
+                                <property name="label">Peng Huang &lt;shawn.p.huang@gmail.com&gt;
+BYVoid &lt;byvoid1@gmail.com&gt;</property>
+                                <property name="selectable">True</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child type="label">
+                          <object class="GtkLabel" id="label25">
+                            <property name="visible">True</property>
+                            <property name="label" translatable="yes">&lt;b&gt;Author&lt;/b&gt;</property>
+                            <property name="use_markup">True</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="pack_type">end</property>
+                        <property name="position">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkFrame" id="frame10">
+                        <property name="visible">True</property>
+                        <property name="label_xalign">0</property>
+                        <property name="shadow_type">none</property>
+                        <child>
+                          <object class="GtkAlignment" id="alignment17">
+                            <property name="visible">True</property>
+                            <property name="top_padding">6</property>
+                            <child>
+                              <object class="GtkLabel" id="label24">
+                                <property name="visible">True</property>
+                                <property name="label">koterpillar, Zerng07</property>
+                                <property name="selectable">True</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child type="label">
+                          <object class="GtkLabel" id="label26">
+                            <property name="visible">True</property>
+                            <property name="label" translatable="yes">&lt;b&gt;Contributor:&lt;/b&gt;</property>
+                            <property name="use_markup">True</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="pack_type">end</property>
+                        <property name="position">1</property>
                       </packing>
                     </child>
                   </object>
@@ -1505,6 +1608,26 @@
       </row>
       <row>
         <col id="0" translatable="yes">Vertical</col>
+      </row>
+    </data>
+  </object>
+  <object class="GtkListStore" id="liststoreBopomofoKeyboardMapping">
+    <columns>
+      <!-- column-name keyboard_mapping -->
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0" translatable="yes">Standard</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">GinYieh</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Eten</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">IBM</col>
       </row>
     </data>
   </object>
