@@ -18,7 +18,6 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-#include "Config.h"
 #include "PinyinEditor.h"
 #include "SimpTradConverter.h"
 #include "HalfFullConverter.h"
@@ -28,13 +27,13 @@ namespace PY {
 #define MAX_PINYIN_LEN 64
 
 /* init static members */
-PinyinEditor::PinyinEditor (PinyinProperties & props)
-    : Editor (props),
+PinyinEditor::PinyinEditor (PinyinProperties & props, Config & config)
+    : Editor (props, config),
       m_pinyin (MAX_PHRASE_LEN),
       m_pinyin_len (0),
       m_buffer (64),
-      m_lookup_table (Config::pageSize ()),
-      m_phrase_editor (props)
+      m_lookup_table (m_config.pageSize ()),
+      m_phrase_editor (props, config)
 {
 }
 
@@ -121,32 +120,32 @@ PinyinEditor::processPunct (guint keyval, guint keycode, guint modifiers)
     case IBUS_apostrophe:
         return insert (keyval);
     case IBUS_comma:
-        if (Config::commaPeriodPage ()) {
+        if (m_config.commaPeriodPage ()) {
             pageUp ();
             return TRUE;
         }
         break;
     case IBUS_minus:
-        if (Config::minusEqualPage ()) {
+        if (m_config.minusEqualPage ()) {
             pageUp ();
             return TRUE;
         }
         break;
     case IBUS_period:
-        if (Config::commaPeriodPage ()) {
+        if (m_config.commaPeriodPage ()) {
             pageDown ();
             return TRUE;
         }
         break;
     case IBUS_equal:
-        if (Config::minusEqualPage ()) {
+        if (m_config.minusEqualPage ()) {
             pageDown ();
             return TRUE;
         }
         break;
     }
 
-    if (Config::autoCommit ()) {
+    if (m_config.autoCommit ()) {
         if (m_phrase_editor.pinyinExistsAfterCursor ()) {
             selectCandidate (m_lookup_table.cursorPos ());
         }
@@ -172,13 +171,13 @@ PinyinEditor::processOthers (guint keyval, guint keycode, guint modifiers)
     if (modifiers == 0) {
         switch (keyval) {
         case IBUS_Shift_L:
-            if (!Config::shiftSelectCandidate ())
+            if (!m_config.shiftSelectCandidate ())
                 return FALSE;
             selectCandidateInPage (1);
             return TRUE;
 
         case IBUS_Shift_R:
-            if (!Config::shiftSelectCandidate ())
+            if (!m_config.shiftSelectCandidate ())
                 return FALSE;
             selectCandidateInPage (2);
             return TRUE;
@@ -504,8 +503,8 @@ void
 PinyinEditor::updateLookupTable (void)
 {
     m_lookup_table.clear ();
-    m_lookup_table.setPageSize (Config::pageSize ());
-    m_lookup_table.setOrientation (Config::orientation ());
+    m_lookup_table.setPageSize (m_config.pageSize ());
+    m_lookup_table.setOrientation (m_config.orientation ());
 
     fillLookupTableByPage ();
     if (m_lookup_table.size ()) {
@@ -542,7 +541,7 @@ PinyinEditor::fillLookupTableByPage (void)
             m_lookup_table.appendCandidate (text);
         }
         else {
-            if (G_LIKELY (m_props.modeSimp () || !Config::tradCandidate ())) {
+            if (G_LIKELY (m_props.modeSimp () || !m_config.tradCandidate ())) {
                 Text text (m_phrase_editor.candidate (i - m_special_phrases.size ()));
                 if (m_phrase_editor.candidateIsUserPhease (i - m_special_phrases.size ()))
                     text.appendAttribute (IBUS_ATTR_TYPE_FOREGROUND, 0x000000ef, 0, -1);

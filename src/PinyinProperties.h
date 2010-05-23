@@ -32,7 +32,7 @@ namespace PY {
 
 class PinyinProperties {
 public:
-    PinyinProperties (void);
+    PinyinProperties (Config & config);
     
     void toggleModeChinese (void);
     void toggleModeFull (void);
@@ -58,6 +58,7 @@ private:
     signal <void (Property &)> m_signal_update_property;
 
 private:
+    Config    & m_config;
     gboolean    m_mode_chinese;
     gboolean    m_mode_full;
     gboolean    m_mode_full_punct;

@@ -70,7 +70,8 @@ start_component (void)
         exit (0);
     }
 
-    Config config (bus);
+    PinyinConfig::init (bus);
+    BopomofoConfig::init (bus);
 
     g_signal_connect ((IBusBus *)bus, "disconnected", G_CALLBACK (ibus_disconnected_cb), NULL);
 

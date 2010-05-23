@@ -41,20 +41,21 @@ namespace PY {
 /* constructor */
 PinyinEngine::PinyinEngine (IBusEngine *engine)
     : Engine (engine),
+      m_props (PinyinConfig::instance ()),
       m_prev_pressed_key (IBUS_VoidSymbol),
       m_input_mode (MODE_INIT),
-      m_fallback_editor (new FallbackEditor (m_props))
+      m_fallback_editor (new FallbackEditor (m_props, PinyinConfig::instance ()))
 {
     gint i;
 
-    if (Config::doublePinyin ())
-        m_editors[MODE_INIT].reset (new DoublePinyinEditor (m_props));
+    if (PinyinConfig::instance ().doublePinyin ())
+        m_editors[MODE_INIT].reset (new DoublePinyinEditor (m_props, PinyinConfig::instance ()));
     else
-        m_editors[MODE_INIT].reset (new FullPinyinEditor (m_props));
+        m_editors[MODE_INIT].reset (new FullPinyinEditor (m_props, PinyinConfig::instance ()));
 
-    m_editors[MODE_PUNCT].reset (new PunctEditor (m_props));
-    m_editors[MODE_RAW].reset (new RawEditor (m_props));
-    m_editors[MODE_EXTENSION].reset (new ExtEditor (m_props));
+    m_editors[MODE_PUNCT].reset (new PunctEditor (m_props, PinyinConfig::instance ()));
+    m_editors[MODE_RAW].reset (new RawEditor (m_props, PinyinConfig::instance ()));
+    m_editors[MODE_EXTENSION].reset (new ExtEditor (m_props, PinyinConfig::instance ()));
 
     m_props.signalUpdateProperty ().connect (bind (&PinyinEngine::updateProperty, this, _1));
 
@@ -153,15 +154,15 @@ PinyinEngine::processKeyEvent (guint keyval, guint keycode, guint modifiers)
 void
 PinyinEngine::focusIn (void)
 {
-    if (Config::doublePinyin ()) {
+    if (PinyinConfig::instance ().doublePinyin ()) {
         if (dynamic_cast <DoublePinyinEditor *> (m_editors[MODE_INIT].get ()) == NULL) {
-            m_editors[MODE_INIT].reset (new DoublePinyinEditor (m_props));
+            m_editors[MODE_INIT].reset (new DoublePinyinEditor (m_props, PinyinConfig::instance ()));
             connectEditorSignals (m_editors[MODE_INIT]);
         }
     }
     else {
         if (dynamic_cast <FullPinyinEditor *> (m_editors[MODE_INIT].get ()) == NULL) {
-            m_editors[MODE_INIT].reset (new FullPinyinEditor (m_props));
+            m_editors[MODE_INIT].reset (new FullPinyinEditor (m_props, PinyinConfig::instance ()));
             connectEditorSignals (m_editors[MODE_INIT]);
         }
     }

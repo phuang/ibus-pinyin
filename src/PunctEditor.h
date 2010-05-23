@@ -30,7 +30,7 @@ namespace PY {
 
 class PunctEditor : public Editor {
 public:
-    PunctEditor (PinyinProperties &props);
+    PunctEditor (PinyinProperties &props, Config & config);
 
     virtual gboolean processKeyEvent (guint keyval, guint keycode, guint modifiers);
     virtual void pageUp (void);

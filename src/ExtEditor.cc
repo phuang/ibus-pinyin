@@ -22,8 +22,8 @@
 
 namespace PY {
 
-ExtEditor::ExtEditor (PinyinProperties & props)
-    : Editor (props)
+ExtEditor::ExtEditor (PinyinProperties & props, Config & config)
+    : Editor (props, config)
 {
 }
 

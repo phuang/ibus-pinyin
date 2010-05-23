@@ -28,8 +28,8 @@ namespace PY {
 
 class FallbackEditor : public Editor {
 public:
-    FallbackEditor (PinyinProperties &props)
-        : Editor (props),
+    FallbackEditor (PinyinProperties &props, Config & config)
+        : Editor (props, config),
           m_quote (TRUE),
           m_double_quote (TRUE),
           m_prev_committed_char (0) {}

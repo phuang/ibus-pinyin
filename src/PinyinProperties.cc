@@ -25,11 +25,12 @@ namespace PY {
 
 #define _(text) (dgettext (GETTEXT_PACKAGE, text))
 
-PinyinProperties::PinyinProperties (void)
-    : m_mode_chinese (Config::initChinese ()),
-      m_mode_full (Config::initFull ()),
-      m_mode_full_punct (Config::initFullPunct ()),
-      m_mode_simp (Config::initSimpChinese ()),
+PinyinProperties::PinyinProperties (Config & config)
+    : m_config (config),
+      m_mode_chinese (m_config.initChinese ()),
+      m_mode_full (m_config.initFull ()),
+      m_mode_full_punct (m_config.initFullPunct ()),
+      m_mode_simp (m_config.initSimpChinese ()),
       m_prop_chinese ("mode.chinese",
                 PROP_TYPE_NORMAL,
                 StaticText ("CN"),

@@ -36,10 +36,10 @@ namespace PY {
 
 #include "PunctTable.h"
 
-PunctEditor::PunctEditor (PinyinProperties & props)
-    : Editor (props),
+PunctEditor::PunctEditor (PinyinProperties & props, Config & config)
+    : Editor (props, config),
       m_punct_mode (MODE_DISABLE),
-      m_lookup_table (Config::pageSize ())
+      m_lookup_table (m_config.pageSize ())
 {
 }
 
@@ -509,8 +509,8 @@ void
 PunctEditor::fillLookupTable (void)
 {
     m_lookup_table.clear ();
-    m_lookup_table.setPageSize (Config::pageSize ());
-    m_lookup_table.setOrientation (Config::orientation ());
+    m_lookup_table.setPageSize (m_config.pageSize ());
+    m_lookup_table.setOrientation (m_config.orientation ());
 
     for (std::vector<const gchar *>::iterator it = m_punct_candidates.begin ();
          it != m_punct_candidates.end (); it++) {

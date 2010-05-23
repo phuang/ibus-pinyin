@@ -28,6 +28,7 @@
 #include "Text.h"
 #include "LookupTable.h"
 #include "PinyinProperties.h"
+#include "Config.h"
 
 namespace PY {
 
@@ -36,7 +37,7 @@ typedef boost::shared_ptr<Editor> EditorPtr;
 
 class Editor {
 public:
-    Editor (PinyinProperties & prop);
+    Editor (PinyinProperties & prop, Config & config);
     virtual ~Editor (void);
 
     virtual gboolean processKeyEvent (guint keyval, guint keycode, guint modifiers);
@@ -131,6 +132,7 @@ protected:
     String m_text;
     guint  m_cursor;
     PinyinProperties & m_props;
+    Config & m_config;
 };
 
 };

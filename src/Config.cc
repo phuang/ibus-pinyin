@@ -18,32 +18,18 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
+#include <boost/bind.hpp>
 #include "Types.h"
 #include "Config.h"
 #include "Util.h"
 
 namespace PY {
 
-guint Config::m_option = PINYIN_INCOMPLETE_PINYIN | PINYIN_CORRECT_ALL;
-guint Config::m_option_mask = PINYIN_INCOMPLETE_PINYIN | PINYIN_CORRECT_ALL;
+PinyinConfig * PinyinConfig::m_instance = NULL;
+BopomofoConfig * BopomofoConfig::m_instance = NULL;
 
-gint Config::m_orientation = IBUS_ORIENTATION_HORIZONTAL;
-guint Config::m_page_size = 5;
-gboolean Config::m_shift_select_candidate = FALSE;
-gboolean Config::m_minus_equal_page = TRUE;
-gboolean Config::m_comma_period_page = TRUE;
-gboolean Config::m_auto_commit = FALSE;
-
-gboolean Config::m_double_pinyin = FALSE;
-gint Config::m_double_pinyin_schema = 0;
-gboolean Config::m_double_pinyin_show_raw = FALSE;
-
-gboolean Config::m_init_chinese = TRUE;
-gboolean Config::m_init_full = FALSE;
-gboolean Config::m_init_full_punct = TRUE;
-gboolean Config::m_init_simp_chinese = TRUE;
-gboolean Config::m_trad_candidate = FALSE;
-gboolean Config::m_special_phrases = TRUE;
+#if 0
+#endif
 
 static const std::string engine_pinyin ("engine/Pinyin");
 static const std::string correct_pinyin ("CorrectPinyin");
@@ -66,6 +52,40 @@ static const std::string init_full_punct ("InitFullPunct");
 static const std::string init_simp_chinese ("InitSimplifiedChinese");
 static const std::string trad_candidate ("TradCandidate");
 static const std::string special_phrases ("SpecialPhrases");
+
+
+
+Config::Config (Bus & bus, const std::string & name)
+    : Object (ibus_bus_get_config (bus)),
+      m_section ("engine/" + name)
+{
+    m_option = PINYIN_INCOMPLETE_PINYIN | PINYIN_CORRECT_ALL;
+    m_option_mask = PINYIN_INCOMPLETE_PINYIN | PINYIN_CORRECT_ALL;
+
+    m_orientation = IBUS_ORIENTATION_HORIZONTAL;
+    m_page_size = 5;
+    m_shift_select_candidate = FALSE;
+    m_minus_equal_page = TRUE;
+    m_comma_period_page = TRUE;
+    m_auto_commit = FALSE;
+
+    m_double_pinyin = FALSE;
+    m_double_pinyin_schema = 0;
+    m_double_pinyin_show_raw = FALSE;
+
+    m_init_chinese = TRUE;
+    m_init_full = FALSE;
+    m_init_full_punct = TRUE;
+    m_init_simp_chinese = TRUE;
+    m_trad_candidate = FALSE;
+    m_special_phrases = TRUE;
+
+    readDefaultValues ();
+    g_signal_connect (get<IBusConfig> (),
+                      "value-changed",
+                      G_CALLBACK (valueChangedCallback),
+                      this);
+}
 
 static const struct {
     std::string name;
@@ -114,55 +134,55 @@ void
 Config::readDefaultValues (void)
 {
     /* double pinyin */
-    m_double_pinyin = read (engine_pinyin, double_pinyin, false);
-    m_double_pinyin_schema = read (engine_pinyin, double_pinyin_schema, 0);
+    m_double_pinyin = read (double_pinyin, false);
+    m_double_pinyin_schema = read (double_pinyin_schema, 0);
     if (m_double_pinyin_schema >= 5) {
         m_double_pinyin_schema = 0;
         g_warn_if_reached ();
     }
-    m_double_pinyin_show_raw = read (engine_pinyin, double_pinyin_show_raw, false);
+    m_double_pinyin_show_raw = read (double_pinyin_show_raw, false);
 
     /* init states */
-    m_init_chinese = read (engine_pinyin, init_chinese, true);
-    m_init_full = read (engine_pinyin, init_full, false);
-    m_init_full_punct = read (engine_pinyin, init_full_punct, true);
-    m_init_simp_chinese = read (engine_pinyin, init_simp_chinese, true);
+    m_init_chinese = read (init_chinese, true);
+    m_init_full = read (init_full, false);
+    m_init_full_punct = read (init_full_punct, true);
+    m_init_simp_chinese = read (init_simp_chinese, true);
 
-    m_trad_candidate = read (engine_pinyin, trad_candidate, false);
-    m_special_phrases = read (engine_pinyin, special_phrases, true);
+    m_trad_candidate = read (trad_candidate, false);
+    m_special_phrases = read (special_phrases, true);
 
     /* others */
-    m_orientation = read (engine_pinyin, PY::orientation, 0);
+    m_orientation = read (PY::orientation, 0);
     if (m_orientation != IBUS_ORIENTATION_VERTICAL &&
         m_orientation != IBUS_ORIENTATION_HORIZONTAL) {
         m_orientation = IBUS_ORIENTATION_HORIZONTAL;
         g_warn_if_reached ();
     }
-    m_page_size = read (engine_pinyin, page_size, 5);
+    m_page_size = read (page_size, 5);
     if (m_page_size > 10) {
         m_page_size = 5;
         g_warn_if_reached ();
     }
-    m_shift_select_candidate = read (engine_pinyin, shift_select_candidate, false);
-    m_minus_equal_page = read (engine_pinyin, minus_equal_page, true);
-    m_comma_period_page = read (engine_pinyin, comma_period_page, true);
-    m_auto_commit = read (engine_pinyin, auto_commit, false);
+    m_shift_select_candidate = read (shift_select_candidate, false);
+    m_minus_equal_page = read (minus_equal_page, true);
+    m_comma_period_page = read (comma_period_page, true);
+    m_auto_commit = read (auto_commit, false);
 
     /* correct pinyin */
-    if (read (engine_pinyin, correct_pinyin, true))
+    if (read (correct_pinyin, true))
         m_option_mask |= PINYIN_CORRECT_ALL;
     else
         m_option_mask &= ~PINYIN_CORRECT_ALL;
 
     /* fuzzy pinyin */
-    if (read (engine_pinyin, fuzzy_pinyin, false))
+    if (read (fuzzy_pinyin, false))
         m_option_mask |= PINYIN_FUZZY_ALL;
     else
         m_option_mask &= ~PINYIN_FUZZY_ALL;
 
     /* read values */
     for (guint i = 0; i < G_N_ELEMENTS (options); i++) {
-        if (read (engine_pinyin, options[i].name, options[i].defval))
+        if (read (options[i].name, options[i].defval))
             m_option |= options[i].option;
         else
             m_option &= ~options[i].option;
@@ -170,12 +190,11 @@ Config::readDefaultValues (void)
 }
 
 inline bool
-Config::read (const std::string & section,
-              const std::string & name,
+Config::read (const std::string & name,
               bool                defval)
 {
     GValue value = {0};
-    if (ibus_config_get_value (get<IBusConfig> (), section.c_str (), name.c_str (), &value)) {
+    if (ibus_config_get_value (get<IBusConfig> (), m_section.c_str (), name.c_str (), &value)) {
         if (G_VALUE_TYPE (&value) == G_TYPE_BOOLEAN)
             return g_value_get_boolean (&value);
     }
@@ -183,12 +202,11 @@ Config::read (const std::string & section,
 }
 
 inline gint
-Config::read (const std::string & section,
-              const std::string & name,
+Config::read (const std::string & name,
               gint                defval)
 {
     GValue value = {0};
-    if (ibus_config_get_value (get<IBusConfig> (), section.c_str (), name.c_str (), &value)) {
+    if (ibus_config_get_value (get<IBusConfig> (), m_section.c_str (), name.c_str (), &value)) {
         if (G_VALUE_TYPE (&value) == G_TYPE_INT)
             return g_value_get_int (&value);
     }
@@ -211,12 +229,11 @@ normalizeGValue (const GValue *value, gint defval)
     return g_value_get_int (value);
 }
 
+
 void
-Config::valueChangedCallback (IBusConfig    *config,
-                              const gchar   *section,
-                              const gchar   *name,
-                              const GValue  *value,
-                              Config        *self)
+Config::valueChanged (const std::string & section,
+                      const std::string & name,
+                      const GValue  *value)
 {
     if (engine_pinyin != section)
         return;
@@ -298,5 +315,30 @@ Config::valueChangedCallback (IBusConfig    *config,
 
 }
 
+void
+Config::valueChangedCallback (IBusConfig    *config,
+                              const gchar   *section,
+                              const gchar   *name,
+                              const GValue  *value,
+                              Config        *self)
+{
+    self->valueChanged (section, name, value);
+}
+
+void
+PinyinConfig::init (Bus & bus)
+{
+    if (PinyinConfig::m_instance == NULL) {
+        PinyinConfig::m_instance = new PinyinConfig (bus);
+    }
+}
+
+void
+BopomofoConfig::init (Bus & bus)
+{
+    if (BopomofoConfig::m_instance == NULL) {
+        BopomofoConfig::m_instance = new BopomofoConfig (bus);
+    }
+}
 
 };

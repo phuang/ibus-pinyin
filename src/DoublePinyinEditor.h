@@ -28,7 +28,7 @@ namespace PY {
 class DoublePinyinEditor : public PinyinEditor {
 
 public:
-    DoublePinyinEditor (PinyinProperties & props);
+    DoublePinyinEditor (PinyinProperties & props, Config & config = PinyinConfig::instance ());
 
     gboolean insert (gint ch);
 

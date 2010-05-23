@@ -36,7 +36,7 @@ class SpecialPhraseTable;
 
 class PinyinEditor : public Editor {
 public:
-    PinyinEditor (PinyinProperties & props);
+    PinyinEditor (PinyinProperties & props, Config & config = PinyinConfig::instance ());
 
 public:
     /* virtual functions */

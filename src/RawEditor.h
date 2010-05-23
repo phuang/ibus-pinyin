@@ -28,7 +28,8 @@ namespace PY {
 
 class RawEditor : public Editor {
 public:
-    RawEditor (PinyinProperties &props) : Editor (props) {}
+    RawEditor (PinyinProperties &props, Config & config)
+        : Editor (props, config) { }
 };
 
 };

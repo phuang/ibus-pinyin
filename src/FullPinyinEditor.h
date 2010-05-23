@@ -28,7 +28,7 @@ namespace PY {
 class FullPinyinEditor : public PinyinEditor {
 
 public:
-    FullPinyinEditor (PinyinProperties & props);
+    FullPinyinEditor (PinyinProperties & props, Config & config = PinyinConfig::instance ());
     ~FullPinyinEditor (void);
 
 public:

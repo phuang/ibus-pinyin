@@ -18,20 +18,20 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-#include "Config.h"
 #include "PhraseEditor.h"
 #include "SimpTradConverter.h"
 
 namespace PY {
 
-PhraseEditor::PhraseEditor (PinyinProperties & props)
+PhraseEditor::PhraseEditor (PinyinProperties & props, Config & config)
     : m_candidates (32),
       m_selected_phrases (8),
       m_selected_string (32),
       m_candidate_0_phrases (8),
       m_pinyin (16),
       m_cursor (0),
-      m_props (props)
+      m_props (props),
+      m_config (config)
 {
 }
 
@@ -114,7 +114,7 @@ PhraseEditor::updateCandidates (void)
     m_query.reset (new Query (m_pinyin,
                               m_cursor,
                               m_pinyin.size () - m_cursor,
-                              Config::option ()));
+                              m_config.option ()));
     fillCandidates ();
 }
 
@@ -137,7 +137,7 @@ PhraseEditor::updateTheFirstCandidate (void)
         Query query (m_pinyin,
                      begin,
                      end - begin,
-                     Config::option ());
+                     m_config.option ());
         ret = query.fill (m_candidate_0_phrases, 1);
         g_assert (ret == 1);
         begin += m_candidate_0_phrases.back ().len;

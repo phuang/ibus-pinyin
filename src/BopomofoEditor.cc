@@ -19,7 +19,6 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-#include "Config.h"
 #include "BopomofoEditor.h"
 #include "SimpTradConverter.h"
 
@@ -38,8 +37,8 @@ namespace PY {
 #include "Bopomofo.h"
 #include "BopomofoKeyboard.h"
 
-BopomofoEditor::BopomofoEditor (PinyinProperties & props)
-    : PinyinEditor (props),
+BopomofoEditor::BopomofoEditor (PinyinProperties & props, Config & config)
+    : PinyinEditor (props, config),
       m_select_mode (FALSE)
 {
 }
@@ -64,7 +63,7 @@ BopomofoEditor::insert (gint ch)
 
     m_text.insert (m_cursor++, ch);
 
-    if (G_UNLIKELY (!(Config::option () & PINYIN_INCOMPLETE_PINYIN))) {
+    if (G_UNLIKELY (!(m_config.option () & PINYIN_INCOMPLETE_PINYIN))) {
         updateSpecialPhrases ();
         updatePinyin ();
     }
@@ -422,7 +421,7 @@ BopomofoEditor::updatePinyin (void)
 
         m_pinyin_len = PinyinParser::parseBopomofo (bopomofo,            // bopomofo
                                                     m_cursor,            // text length
-                                                    Config::option (),   // option
+                                                    m_config.option (),   // option
                                                     m_pinyin,            // result
                                                     MAX_PHRASE_LEN);     // max result length
     }

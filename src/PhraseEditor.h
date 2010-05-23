@@ -22,6 +22,7 @@
 #define __PY_PHRASE_EDITOR_H_
 
 #include "String.h"
+#include "Config.h"
 #include "Database.h"
 #include "PhraseArray.h"
 #include "PinyinProperties.h"
@@ -32,7 +33,7 @@ namespace PY {
 
 class PhraseEditor {
 public:
-    PhraseEditor (PinyinProperties & props);
+    PhraseEditor (PinyinProperties & props, Config & config);
     ~PhraseEditor (void);
 
     const String & selectedString (void) const { return m_selected_string; }
@@ -128,6 +129,7 @@ private:
     guint m_cursor;
     PinyinProperties & m_props;
     QueryPtr    m_query;
+    Config    & m_config;
 };
 
 };

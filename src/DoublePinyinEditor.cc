@@ -18,7 +18,6 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-#include "Config.h"
 #include "DoublePinyinEditor.h"
 
 namespace PY {
@@ -34,15 +33,15 @@ namespace PY {
     ((c >= IBUS_a && c <= IBUS_z) ? c - IBUS_a : (c == IBUS_semicolon ? 26 : -1))
 
 #define ID_TO_SHENG(id) \
-    (double_pinyin_map[Config::doublePinyinSchema ()].sheng[id])
+    (double_pinyin_map[m_config.doublePinyinSchema ()].sheng[id])
 #define ID_TO_YUNS(id) \
-    (double_pinyin_map[Config::doublePinyinSchema ()].yun[id])
+    (double_pinyin_map[m_config.doublePinyinSchema ()].yun[id])
 
 #define IS_ALPHA(c) \
         ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'))
 
-DoublePinyinEditor::DoublePinyinEditor (PinyinProperties & props)
-    : PinyinEditor (props)
+DoublePinyinEditor::DoublePinyinEditor (PinyinProperties & props, Config & config)
+    : PinyinEditor (props, config)
 {
 }
 
@@ -324,7 +323,7 @@ DoublePinyinEditor::reset (void)
 inline const Pinyin *
 DoublePinyinEditor::isPinyin (gint i)
 {
-    if ((Config::option () & PINYIN_INCOMPLETE_PINYIN) == 0) {
+    if ((m_config.option () & PINYIN_INCOMPLETE_PINYIN) == 0) {
         return NULL;
     }
 
@@ -352,19 +351,19 @@ DoublePinyinEditor::isPinyin (gint i, gint j)
 
     if (yun[1] == PINYIN_ID_VOID) {
         return PinyinParser::isPinyin (sheng, yun[0],
-                        Config::option () & (PINYIN_FUZZY_ALL | PINYIN_CORRECT_V_TO_U));
+                        m_config.option () & (PINYIN_FUZZY_ALL | PINYIN_CORRECT_V_TO_U));
     }
 
     pinyin = PinyinParser::isPinyin (sheng, yun[0],
-                    Config::option () & (PINYIN_FUZZY_ALL));
+                    m_config.option () & (PINYIN_FUZZY_ALL));
     if (pinyin == NULL)
         pinyin = PinyinParser::isPinyin (sheng, yun[1],
-                        Config::option () & (PINYIN_FUZZY_ALL));
+                        m_config.option () & (PINYIN_FUZZY_ALL));
     if (pinyin != NULL)
         return pinyin;
 
     /* if sheng == j q x y and yun == v, try to correct v to u */
-    if ((Config::option () & PINYIN_CORRECT_V_TO_U) == 0)
+    if ((m_config.option () & PINYIN_CORRECT_V_TO_U) == 0)
         return NULL;
 
     if (yun[0] != PINYIN_ID_V && yun[1] != PINYIN_ID_V)
@@ -376,7 +375,7 @@ DoublePinyinEditor::isPinyin (gint i, gint j)
     case PINYIN_ID_X:
     case PINYIN_ID_Y:
         return PinyinParser::isPinyin (sheng, PINYIN_ID_V,
-                            Config::option () & (PINYIN_FUZZY_ALL | PINYIN_CORRECT_V_TO_U));
+                            m_config.option () & (PINYIN_FUZZY_ALL | PINYIN_CORRECT_V_TO_U));
     default:
         return NULL;
     }
@@ -448,10 +447,10 @@ DoublePinyinEditor::updatePinyin (gboolean all)
 void
 DoublePinyinEditor::updateAuxiliaryTextAfter (String &buffer)
 {
-    if (G_LIKELY (!Config::doublePinyinShowRaw ()))
+    if (G_LIKELY (!m_config.doublePinyinShowRaw ()))
         return;
 
-    if (G_LIKELY (Config::orientation () == IBUS_ORIENTATION_HORIZONTAL)) {
+    if (G_LIKELY (m_config.orientation () == IBUS_ORIENTATION_HORIZONTAL)) {
         buffer << "        [ ";
     }
     else {

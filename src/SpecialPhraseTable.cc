@@ -58,7 +58,7 @@ SpecialPhraseTable::lookup (const std::string         &command,
 {
     result.clear ();
 
-    if (!Config::specialPhrases ())
+    if (!PinyinConfig::instance ().specialPhrases ())
         return FALSE;
 
     std::pair<Map::iterator, Map::iterator> range = m_map.equal_range (command);

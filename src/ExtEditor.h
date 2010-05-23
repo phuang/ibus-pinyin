@@ -28,7 +28,7 @@ namespace PY {
 
 class ExtEditor : public Editor {
 public:
-    ExtEditor (PinyinProperties &props);
+    ExtEditor (PinyinProperties & props, Config & config);
 
     virtual gboolean processKeyEvent (guint keyval, guint keycode, guint modifiers);
     virtual void pageUp (void);

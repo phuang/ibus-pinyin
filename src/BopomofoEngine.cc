@@ -42,18 +42,19 @@ namespace PY {
 /* constructor */
 BopomofoEngine::BopomofoEngine (IBusEngine *engine)
     : Engine (engine),
+      m_props (BopomofoConfig::instance ()),
       m_prev_pressed_key (IBUS_VoidSymbol),
       m_input_mode (MODE_INIT),
-      m_fallback_editor (new FallbackEditor (m_props))
+      m_fallback_editor (new FallbackEditor (m_props, BopomofoConfig::instance ()))
 {
     gint i;
 
     /* create editors */
-    m_editors[MODE_INIT].reset (new BopomofoEditor (m_props));
-    m_editors[MODE_PUNCT].reset (new PunctEditor (m_props));
+    m_editors[MODE_INIT].reset (new BopomofoEditor (m_props, BopomofoConfig::instance ()));
+    m_editors[MODE_PUNCT].reset (new PunctEditor (m_props, BopomofoConfig::instance ()));
 
-    m_editors[MODE_RAW].reset (new RawEditor (m_props));
-    m_editors[MODE_EXTENSION].reset (new ExtEditor (m_props));
+    m_editors[MODE_RAW].reset (new RawEditor (m_props, BopomofoConfig::instance ()));
+    m_editors[MODE_EXTENSION].reset (new ExtEditor (m_props, BopomofoConfig::instance ()));
 
     m_props.signalUpdateProperty ().connect (bind (&BopomofoEngine::updateProperty, this, _1));
 

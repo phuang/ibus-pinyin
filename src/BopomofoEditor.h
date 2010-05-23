@@ -29,7 +29,7 @@ namespace PY {
 class BopomofoEditor : public PinyinEditor {
 
 public:
-    BopomofoEditor (PinyinProperties & props);
+    BopomofoEditor (PinyinProperties & props, Config & config = BopomofoConfig::instance ());
     ~BopomofoEditor (void);
 
 public:
