@@ -378,7 +378,12 @@ class PreferencesDialog:
         return self.__dialog.run()
 
 def main():
-    PreferencesDialog(sys.argv[1]).run()
+    name = "pinyin"
+    if len(sys.argv) == 2:
+        name = sys.argv[1]
+    if name not in ("pinyin", "bopomofo"):
+        name = "pinyin"
+    PreferencesDialog(name).run()
 
 
 if __name__ == "__main__":
