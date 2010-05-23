@@ -58,6 +58,7 @@ ibus_engine_c_sources = \
 	SpecialPhraseTable.cc \
 	$(NULL)
 ibus_engine_built_h_sources = \
+	BopomofoKeyboard.h \
 	PinyinParserTable.h \
 	PunctTable.h \
 	SimpTradConverterTable.h \
