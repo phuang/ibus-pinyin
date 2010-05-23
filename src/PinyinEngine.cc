@@ -188,7 +188,7 @@ PinyinEngine::cursorDown (void)
 inline void
 PinyinEngine::showSetupDialog (void)
 {
-    g_spawn_command_line_async (LIBEXECDIR"/ibus-setup-pinyin", NULL);
+    g_spawn_command_line_async (LIBEXECDIR"/ibus-setup-pinyin pinyin", NULL);
 }
 
 gboolean

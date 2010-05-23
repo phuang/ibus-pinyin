@@ -147,7 +147,7 @@ BopomofoEngine::cursorDown (void)
 inline void
 BopomofoEngine::showSetupDialog (void)
 {
-    g_spawn_command_line_async (LIBEXECDIR"/ibus-setup-pinyin", NULL);
+    g_spawn_command_line_async (LIBEXECDIR"/ibus-setup-pinyin bopomofo", NULL);
 }
 
 gboolean
