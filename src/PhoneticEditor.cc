@@ -263,7 +263,7 @@ PhoneticEditor::fillLookupTableByPage (void)
             m_lookup_table.appendCandidate (text);
         }
         else {
-            if (G_LIKELY (m_props.modeSimp () || !m_config.tradCandidate ())) {
+            if (G_LIKELY (m_props.modeSimp ())) {
                 Text text (m_phrase_editor.candidate (i - m_special_phrases.size ()));
                 if (m_phrase_editor.candidateIsUserPhease (i - m_special_phrases.size ()))
                     text.appendAttribute (IBUS_ATTR_TYPE_FOREGROUND, 0x000000ef, 0, -1);

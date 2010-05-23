@@ -31,7 +31,6 @@ BopomofoConfig * BopomofoConfig::m_instance = NULL;
 #if 0
 #endif
 
-static const std::string engine_pinyin ("engine/Pinyin");
 static const std::string correct_pinyin ("CorrectPinyin");
 static const std::string fuzzy_pinyin ("FuzzyPinyin");
 
@@ -50,7 +49,6 @@ static const std::string init_chinese ("InitChinese");
 static const std::string init_full ("InitFull");
 static const std::string init_full_punct ("InitFullPunct");
 static const std::string init_simp_chinese ("InitSimplifiedChinese");
-static const std::string trad_candidate ("TradCandidate");
 static const std::string special_phrases ("SpecialPhrases");
 
 
@@ -77,7 +75,6 @@ Config::Config (Bus & bus, const std::string & name)
     m_init_full = FALSE;
     m_init_full_punct = TRUE;
     m_init_simp_chinese = TRUE;
-    m_trad_candidate = FALSE;
     m_special_phrases = TRUE;
 
     readDefaultValues ();
@@ -148,7 +145,6 @@ Config::readDefaultValues (void)
     m_init_full_punct = read (init_full_punct, true);
     m_init_simp_chinese = read (init_simp_chinese, true);
 
-    m_trad_candidate = read (trad_candidate, false);
     m_special_phrases = read (special_phrases, true);
 
     /* others */
@@ -187,6 +183,8 @@ Config::readDefaultValues (void)
         else
             m_option &= ~options[i].option;
     }
+
+    m_bopomofoKeyboardMapping = read ("BopomofoKeyboardMapping", 0);
 }
 
 inline bool
@@ -235,7 +233,7 @@ Config::valueChanged (const std::string & section,
                       const std::string & name,
                       const GValue  *value)
 {
-    if (engine_pinyin != section)
+    if (m_section != section)
         return;
 
     /* double pinyin */
@@ -259,8 +257,6 @@ Config::valueChanged (const std::string & section,
         m_init_full_punct = normalizeGValue (value, true);
     else if (init_simp_chinese == name)
         m_init_simp_chinese = normalizeGValue (value, true);
-    else if (trad_candidate == name)
-        m_trad_candidate = normalizeGValue (value, false);
     else if (special_phrases == name)
         m_special_phrases = normalizeGValue (value, true);
     /* lookup table page size */
@@ -287,6 +283,8 @@ Config::valueChanged (const std::string & section,
         m_comma_period_page = normalizeGValue (value, true);
     else if (auto_commit == name)
         m_auto_commit = normalizeGValue (value, false);
+    else if ("BopomofoKeyboardMapping" == name)
+        m_bopomofoKeyboardMapping = normalizeGValue (value, 0);
     /* correct pinyin */
     else if (correct_pinyin == name) {
         if (normalizeGValue (value, TRUE))

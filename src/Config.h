@@ -49,8 +49,8 @@ public:
     gboolean initFull (void) { return m_init_full; }
     gboolean initFullPunct (void) { return m_init_full_punct; }
     gboolean initSimpChinese (void) { return m_init_simp_chinese; }
-    gboolean tradCandidate (void) { return m_trad_candidate; }
     gboolean specialPhrases (void) { return m_special_phrases; }
+    gint bopomofoKeyboardMapping (void) { return m_bopomofoKeyboardMapping; }
 
 private:
     bool read (const std::string & name, bool defval);
@@ -86,8 +86,9 @@ private:
     gboolean m_init_full;
     gboolean m_init_full_punct;
     gboolean m_init_simp_chinese;
-    gboolean m_trad_candidate;
     gboolean m_special_phrases;
+
+    gint m_bopomofoKeyboardMapping;
 };
 
 /* PinyinConfig */

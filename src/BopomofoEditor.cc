@@ -573,7 +573,7 @@ keyboard_cmp (const void *p1, const void *p2)
 gint
 BopomofoEditor::keyvalToBopomofo(gint ch)
 {
-    const gint keyboard = 0; /* TODO: setup */
+    const gint keyboard = m_config.bopomofoKeyboardMapping ();
     const gint *brs;
     brs = (const gint *) std::bsearch ((void *) ch,
                                        bopomofo_keyboard[keyboard],

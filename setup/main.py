@@ -190,14 +190,14 @@ class PreferencesDialog:
         
         # read value
         self.__bopomofo_keyboard_mapping.set_active(self.__get_value("BopomofoKeyboardMapping", 0))
-        self.__incomplete_bopomofo.set_active(self.__get_value("IncompleteBopomofo", False))
+        self.__incomplete_bopomofo.set_active(self.__get_value("IncompletePinyin", False))
 
         # connect signals
         def __bopomofo_keyboard_mapping_changed_cb(widget):
             self.__set_value("BopomofoKeyboardMapping", widget.get_active())
         
         self.__bopomofo_keyboard_mapping.connect("changed", __bopomofo_keyboard_mapping_changed_cb)
-        self.__incomplete_bopomofo.connect("toggled", self.__toggled_cb, "IncompleteBopomofo")
+        self.__incomplete_bopomofo.connect("toggled", self.__toggled_cb, "IncompletePinyin")
 
     def __init_input_custom(self):
         # others
