@@ -80,7 +80,7 @@ def tochar(ch):
 
 def gen_table():
     i = 0
-    print 'static const gint'
+    print 'static const guint8'
     print 'bopomofo_keyboard[][41][2] = {'
     for keyboard in bopomofo_keyboard:
         print '    {'
@@ -91,7 +91,7 @@ def gen_table():
             i += 1
         items.sort()
         for k,v in items:
-            print '        {%4s, %15s },' % (tochar(k),v)
+            print '        { %-4s, %-15s },' % (tochar(k),v)
         print '    },'
     print '};'
     print

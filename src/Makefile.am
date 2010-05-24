@@ -166,6 +166,9 @@ CLEANFILES = \
 	ZhConversion.* \
 	$(NULL)
 
+BopomofoKeyboard.h:
+	$(PYTHON) $(top_srcdir)/scripts/genbopomofokeyboard.py > $@
+
 PinyinParserTable.h:
 	$(PYTHON) $(top_srcdir)/scripts/genpytable.py > $@
 
