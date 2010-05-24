@@ -22,6 +22,7 @@
 #define __PY_CONFIG_H_
 
 #include <string>
+#include <boost/scoped_ptr.hpp>
 #include <glib.h>
 #include <glib-object.h>
 #include <ibus.h>
@@ -101,7 +102,7 @@ protected:
     PinyinConfig (Bus & bus, const std::string & name = "Pinyin") : Config (bus, name) { }
 
 private:
-    static PinyinConfig * m_instance;
+    static boost::scoped_ptr<PinyinConfig> m_instance;
 };
 
 /* Bopomof Config */
@@ -114,7 +115,7 @@ protected:
     BopomofoConfig (Bus & bus) : PinyinConfig (bus, "Bopomofo") { }
 
 private:
-    static BopomofoConfig * m_instance;
+    static boost::scoped_ptr<BopomofoConfig> m_instance;
 };
 
 };

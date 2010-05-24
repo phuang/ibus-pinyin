@@ -43,8 +43,8 @@ namespace PY {
 #define STRING_SPECIAL_PHRASES              ("SpecialPhrases")
 #define STRING_BOPOMOFO_KEYBOARD_MAPPING    ("BopomofoKeyboardMapping")
 
-PinyinConfig * PinyinConfig::m_instance = NULL;
-BopomofoConfig * BopomofoConfig::m_instance = NULL;
+boost::scoped_ptr<PinyinConfig> PinyinConfig::m_instance;
+boost::scoped_ptr<BopomofoConfig> BopomofoConfig::m_instance;
 
 Config::Config (Bus & bus, const std::string & name)
     : Object (ibus_bus_get_config (bus)),
@@ -320,7 +320,7 @@ void
 PinyinConfig::init (Bus & bus)
 {
     if (PinyinConfig::m_instance == NULL) {
-        PinyinConfig::m_instance = new PinyinConfig (bus);
+        PinyinConfig::m_instance.reset (new PinyinConfig (bus));
     }
 }
 
@@ -328,7 +328,7 @@ void
 BopomofoConfig::init (Bus & bus)
 {
     if (BopomofoConfig::m_instance == NULL) {
-        BopomofoConfig::m_instance = new BopomofoConfig (bus);
+        BopomofoConfig::m_instance.reset (new BopomofoConfig (bus));
     }
 }
 
