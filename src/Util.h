@@ -44,8 +44,25 @@ namespace PY {
          IBUS_HYPER_MASK |      \
          IBUS_META_MASK)
 
+#define SCMSHM_MASK             \
+        (IBUS_SHIFT_MASK |      \
+         IBUS_CONTROL_MASK |    \
+         IBUS_MOD1_MASK |       \
+         IBUS_SUPER_MASK |      \
+         IBUS_HYPER_MASK |      \
+         IBUS_META_MASK)
+
 #define CMSHM_FILTER(modifiers)  \
     (modifiers & (CMSHM_MASK))
+
+#define SCMSHM_FILTER(modifiers)  \
+    (modifiers & (SCMSHM_MASK))
+
+#define CMSHM_TEST(modifiers, mask) \
+    (CMSHM_FILTER (modifiers) == (mask))
+
+#define SCMSHM_TEST(modifiers, mask) \
+    (SCMSHM_FILTER (modifiers) == (mask))
 
 class UUID {
 public:

@@ -91,11 +91,9 @@ PinyinEngine::processKeyEvent (guint keyval, guint keycode, guint modifiers)
     }
 
     /* Toggle simp/trad Chinese Mode when hotkey Ctrl + Shift + F pressed */
-    if (keyval == IBUS_F &&
-        ((modifiers & IBUS_SHIFT_MASK != 0) &&
-        (modifiers & IBUS_CONTROL_MASK != 0))) {
+    if (keyval == IBUS_F && SCMSHM_TEST (modifiers, (IBUS_SHIFT_MASK | IBUS_CONTROL_MASK))) {
         m_props.toggleModeSimp();
-        m_prev_pressed_key = IBUS_VoidSymbol;
+        m_prev_pressed_key = IBUS_F;
         return TRUE;
     }
 
