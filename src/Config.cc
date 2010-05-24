@@ -25,33 +25,26 @@
 
 namespace PY {
 
+#define STRING_CORRECT_PINYIN               ("CorrectPinyin")
+#define STRING_FUZZY_PINYIN                 ("FuzzyPinyin")
+#define STRING_ORIENTATION                  ("LookupTableOrientation")
+#define STRING_PAGE_SIZE                    ("LookupTablePageSize")
+#define STRING_SHIFT_SELECT_CANDIDATE       ("ShiftSelectCandidate")
+#define STRING_MINUS_EQUAL_PAGE             ("MinusEqualPage")
+#define STRING_COMMA_PERIOD_PAGE            ("CommaPeriodPage")
+#define STRING_AUTO_COMMIT                  ("AutoCommit")
+#define STRING_DOUBLE_PINYIN                ("DoublePinyin")
+#define STRING_DOUBLE_PINYIN_SCHEMA         ("DoublePinyinSchema")
+#define STRING_DOUBLE_PINYIN_SHOW_RAW       ("DoublePinyinShowRaw")
+#define STRING_INIT_CHINESE                 ("InitChinese")
+#define STRING_INIT_FULL                    ("InitFull")
+#define STRING_INIT_FULL_PUNCT              ("InitFullPunct")
+#define STRING_INIT_SIMP_CHINESE            ("InitSimplifiedChinese")
+#define STRING_SPECIAL_PHRASES              ("SpecialPhrases")
+#define STRING_BOPOMOFO_KEYBOARD_MAPPING    ("BopomofoKeyboardMapping")
+
 PinyinConfig * PinyinConfig::m_instance = NULL;
 BopomofoConfig * BopomofoConfig::m_instance = NULL;
-
-#if 0
-#endif
-
-static const std::string correct_pinyin ("CorrectPinyin");
-static const std::string fuzzy_pinyin ("FuzzyPinyin");
-
-static const std::string orientation ("LookupTableOrientation");
-static const std::string page_size ("LookupTablePageSize");
-static const std::string shift_select_candidate ("ShiftSelectCandidate");
-static const std::string minus_equal_page ("MinusEqualPage");
-static const std::string comma_period_page ("CommaPeriodPage");
-static const std::string auto_commit ("AutoCommit");
-
-static const std::string double_pinyin ("DoublePinyin");
-static const std::string double_pinyin_schema ("DoublePinyinSchema");
-static const std::string double_pinyin_show_raw ("DoublePinyinShowRaw");
-
-static const std::string init_chinese ("InitChinese");
-static const std::string init_full ("InitFull");
-static const std::string init_full_punct ("InitFullPunct");
-static const std::string init_simp_chinese ("InitSimplifiedChinese");
-static const std::string special_phrases ("SpecialPhrases");
-
-
 
 Config::Config (Bus & bus, const std::string & name)
     : Object (ibus_bus_get_config (bus)),
@@ -85,93 +78,93 @@ Config::Config (Bus & bus, const std::string & name)
 }
 
 static const struct {
-    std::string name;
+    const gchar *name;
     guint option;
     bool defval;
 } options [] = {
-    { std::string ("IncompletePinyin"), PINYIN_INCOMPLETE_PINYIN, TRUE },
+    { "IncompletePinyin",       PINYIN_INCOMPLETE_PINYIN,   TRUE },
     /* correct */
-    { std::string ("CorrectPinyin_GN_NG"),    PINYIN_CORRECT_GN_TO_NG,    TRUE },
-    { std::string ("CorrectPinyin_GN_NG"),    PINYIN_CORRECT_GN_TO_NG,    TRUE },
-    { std::string ("CorrectPinyin_MG_NG"),    PINYIN_CORRECT_MG_TO_NG,    TRUE },
-    { std::string ("CorrectPinyin_IOU_IU"),   PINYIN_CORRECT_IOU_TO_IU,   TRUE },
-    { std::string ("CorrectPinyin_UEI_UI"),   PINYIN_CORRECT_UEI_TO_UI,   TRUE },
-    { std::string ("CorrectPinyin_UEN_UN"),   PINYIN_CORRECT_UEN_TO_UN,   TRUE },
-    { std::string ("CorrectPinyin_UE_VE"),    PINYIN_CORRECT_UE_TO_VE,    TRUE },
-    { std::string ("CorrectPinyin_V_U"),      PINYIN_CORRECT_V_TO_U,      TRUE },
-    { std::string ("CorrectPinyin_VE_UE"),    PINYIN_CORRECT_V_TO_U,      TRUE },
+    { "CorrectPinyin_GN_NG",    PINYIN_CORRECT_GN_TO_NG,    TRUE },
+    { "CorrectPinyin_GN_NG",    PINYIN_CORRECT_GN_TO_NG,    TRUE },
+    { "CorrectPinyin_MG_NG",    PINYIN_CORRECT_MG_TO_NG,    TRUE },
+    { "CorrectPinyin_IOU_IU",   PINYIN_CORRECT_IOU_TO_IU,   TRUE },
+    { "CorrectPinyin_UEI_UI",   PINYIN_CORRECT_UEI_TO_UI,   TRUE },
+    { "CorrectPinyin_UEN_UN",   PINYIN_CORRECT_UEN_TO_UN,   TRUE },
+    { "CorrectPinyin_UE_VE",    PINYIN_CORRECT_UE_TO_VE,    TRUE },
+    { "CorrectPinyin_V_U",      PINYIN_CORRECT_V_TO_U,      TRUE },
+    { "CorrectPinyin_VE_UE",    PINYIN_CORRECT_V_TO_U,      TRUE },
     /* fuzzy pinyin */
-    { std::string ("FuzzyPinyin_C_CH"),      PINYIN_FUZZY_C_CH,  FALSE },
-    { std::string ("FuzzyPinyin_CH_C"),      PINYIN_FUZZY_CH_C,  FALSE },
-    { std::string ("FuzzyPinyin_Z_ZH"),      PINYIN_FUZZY_Z_ZH,  FALSE },
-    { std::string ("FuzzyPinyin_ZH_Z"),      PINYIN_FUZZY_ZH_Z,  FALSE },
-    { std::string ("FuzzyPinyin_S_SH"),      PINYIN_FUZZY_S_SH,  FALSE },
-    { std::string ("FuzzyPinyin_SH_S"),      PINYIN_FUZZY_SH_S,  FALSE },
-    { std::string ("FuzzyPinyin_L_N"),       PINYIN_FUZZY_L_N,   FALSE },
-    { std::string ("FuzzyPinyin_N_L"),       PINYIN_FUZZY_N_L,   FALSE },
-    { std::string ("FuzzyPinyin_F_H"),       PINYIN_FUZZY_F_H,   FALSE },
-    { std::string ("FuzzyPinyin_H_F"),       PINYIN_FUZZY_H_F,   FALSE },
-    { std::string ("FuzzyPinyin_L_R"),       PINYIN_FUZZY_L_R,   FALSE },
-    { std::string ("FuzzyPinyin_R_L"),       PINYIN_FUZZY_R_L,   FALSE },
-    { std::string ("FuzzyPinyin_K_G"),       PINYIN_FUZZY_K_G,   FALSE },
-    { std::string ("FuzzyPinyin_G_K"),       PINYIN_FUZZY_G_K,   FALSE },
-    { std::string ("FuzzyPinyin_AN_ANG"),    PINYIN_FUZZY_AN_ANG,    FALSE },
-    { std::string ("FuzzyPinyin_ANG_AN"),    PINYIN_FUZZY_ANG_AN,    FALSE },
-    { std::string ("FuzzyPinyin_EN_ENG"),    PINYIN_FUZZY_EN_ENG,    FALSE },
-    { std::string ("FuzzyPinyin_ENG_EN"),    PINYIN_FUZZY_ENG_EN,    FALSE },
-    { std::string ("FuzzyPinyin_IN_ING"),    PINYIN_FUZZY_IN_ING,    FALSE },
-    { std::string ("FuzzyPinyin_ING_IN"),    PINYIN_FUZZY_ING_IN,    FALSE },
-    { std::string ("FuzzyPinyin_IAN_IANG"),  PINYIN_FUZZY_IAN_IANG,  FALSE },
-    { std::string ("FuzzyPinyin_IANG_IAN"),  PINYIN_FUZZY_IANG_IAN,  FALSE },
-    { std::string ("FuzzyPinyin_UAN_UANG"),  PINYIN_FUZZY_UAN_UANG,  FALSE },
-    { std::string ("FuzzyPinyin_UANG_UAN"),  PINYIN_FUZZY_UANG_UAN,  FALSE },
+    { "FuzzyPinyin_C_CH",       PINYIN_FUZZY_C_CH,          FALSE },
+    { "FuzzyPinyin_CH_C",       PINYIN_FUZZY_CH_C,          FALSE },
+    { "FuzzyPinyin_Z_ZH",       PINYIN_FUZZY_Z_ZH,          FALSE },
+    { "FuzzyPinyin_ZH_Z",       PINYIN_FUZZY_ZH_Z,          FALSE },
+    { "FuzzyPinyin_S_SH",       PINYIN_FUZZY_S_SH,          FALSE },
+    { "FuzzyPinyin_SH_S",       PINYIN_FUZZY_SH_S,          FALSE },
+    { "FuzzyPinyin_L_N",        PINYIN_FUZZY_L_N,           FALSE },
+    { "FuzzyPinyin_N_L",        PINYIN_FUZZY_N_L,           FALSE },
+    { "FuzzyPinyin_F_H",        PINYIN_FUZZY_F_H,           FALSE },
+    { "FuzzyPinyin_H_F",        PINYIN_FUZZY_H_F,           FALSE },
+    { "FuzzyPinyin_L_R",        PINYIN_FUZZY_L_R,           FALSE },
+    { "FuzzyPinyin_R_L",        PINYIN_FUZZY_R_L,           FALSE },
+    { "FuzzyPinyin_K_G",        PINYIN_FUZZY_K_G,           FALSE },
+    { "FuzzyPinyin_G_K",        PINYIN_FUZZY_G_K,           FALSE },
+    { "FuzzyPinyin_AN_ANG",     PINYIN_FUZZY_AN_ANG,        FALSE },
+    { "FuzzyPinyin_ANG_AN",     PINYIN_FUZZY_ANG_AN,        FALSE },
+    { "FuzzyPinyin_EN_ENG",     PINYIN_FUZZY_EN_ENG,        FALSE },
+    { "FuzzyPinyin_ENG_EN",     PINYIN_FUZZY_ENG_EN,        FALSE },
+    { "FuzzyPinyin_IN_ING",     PINYIN_FUZZY_IN_ING,        FALSE },
+    { "FuzzyPinyin_ING_IN",     PINYIN_FUZZY_ING_IN,        FALSE },
+    { "FuzzyPinyin_IAN_IANG",   PINYIN_FUZZY_IAN_IANG,      FALSE },
+    { "FuzzyPinyin_IANG_IAN",   PINYIN_FUZZY_IANG_IAN,      FALSE },
+    { "FuzzyPinyin_UAN_UANG",   PINYIN_FUZZY_UAN_UANG,      FALSE },
+    { "FuzzyPinyin_UANG_UAN",   PINYIN_FUZZY_UANG_UAN,      FALSE },
 };
 
 void
 Config::readDefaultValues (void)
 {
     /* double pinyin */
-    m_double_pinyin = read (double_pinyin, false);
-    m_double_pinyin_schema = read (double_pinyin_schema, 0);
+    m_double_pinyin = read (STRING_DOUBLE_PINYIN, false);
+    m_double_pinyin_schema = read (STRING_DOUBLE_PINYIN_SCHEMA, 0);
     if (m_double_pinyin_schema >= 5) {
         m_double_pinyin_schema = 0;
         g_warn_if_reached ();
     }
-    m_double_pinyin_show_raw = read (double_pinyin_show_raw, false);
+    m_double_pinyin_show_raw = read (STRING_DOUBLE_PINYIN_SHOW_RAW, false);
 
     /* init states */
-    m_init_chinese = read (init_chinese, true);
-    m_init_full = read (init_full, false);
-    m_init_full_punct = read (init_full_punct, true);
-    m_init_simp_chinese = read (init_simp_chinese, true);
+    m_init_chinese = read (STRING_INIT_CHINESE, true);
+    m_init_full = read (STRING_INIT_FULL, false);
+    m_init_full_punct = read (STRING_INIT_FULL_PUNCT, true);
+    m_init_simp_chinese = read (STRING_INIT_SIMP_CHINESE, true);
 
-    m_special_phrases = read (special_phrases, true);
+    m_special_phrases = read (STRING_SPECIAL_PHRASES, true);
 
     /* others */
-    m_orientation = read (PY::orientation, 0);
+    m_orientation = read (STRING_ORIENTATION, 0);
     if (m_orientation != IBUS_ORIENTATION_VERTICAL &&
         m_orientation != IBUS_ORIENTATION_HORIZONTAL) {
         m_orientation = IBUS_ORIENTATION_HORIZONTAL;
         g_warn_if_reached ();
     }
-    m_page_size = read (page_size, 5);
+    m_page_size = read (STRING_PAGE_SIZE, 5);
     if (m_page_size > 10) {
         m_page_size = 5;
         g_warn_if_reached ();
     }
-    m_shift_select_candidate = read (shift_select_candidate, false);
-    m_minus_equal_page = read (minus_equal_page, true);
-    m_comma_period_page = read (comma_period_page, true);
-    m_auto_commit = read (auto_commit, false);
+    m_shift_select_candidate = read (STRING_SHIFT_SELECT_CANDIDATE, false);
+    m_minus_equal_page = read (STRING_MINUS_EQUAL_PAGE, true);
+    m_comma_period_page = read (STRING_COMMA_PERIOD_PAGE, true);
+    m_auto_commit = read (STRING_AUTO_COMMIT, false);
 
     /* correct pinyin */
-    if (read (correct_pinyin, true))
+    if (read (STRING_CORRECT_PINYIN, true))
         m_option_mask |= PINYIN_CORRECT_ALL;
     else
         m_option_mask &= ~PINYIN_CORRECT_ALL;
 
     /* fuzzy pinyin */
-    if (read (fuzzy_pinyin, false))
+    if (read (STRING_FUZZY_PINYIN, false))
         m_option_mask |= PINYIN_FUZZY_ALL;
     else
         m_option_mask &= ~PINYIN_FUZZY_ALL;
@@ -184,7 +177,7 @@ Config::readDefaultValues (void)
             m_option &= ~options[i].option;
     }
 
-    m_bopomofoKeyboardMapping = read ("BopomofoKeyboardMapping", 0);
+    m_bopomofoKeyboardMapping = read (STRING_BOPOMOFO_KEYBOARD_MAPPING, 0);
 }
 
 inline bool
@@ -237,30 +230,30 @@ Config::valueChanged (const std::string & section,
         return;
 
     /* double pinyin */
-    if (double_pinyin == name)
+    if (STRING_DOUBLE_PINYIN == name)
         m_double_pinyin = normalizeGValue (value, false);
-    else if (double_pinyin_schema == name) {
+    else if (STRING_DOUBLE_PINYIN_SCHEMA == name) {
         m_double_pinyin_schema = normalizeGValue (value, 0);
         if (m_double_pinyin_schema >= 5) {
             m_double_pinyin_schema = 0;
             g_warn_if_reached ();
         }
     }
-    else if (double_pinyin_show_raw == name)
+    else if (STRING_DOUBLE_PINYIN_SHOW_RAW == name)
         m_double_pinyin_show_raw = normalizeGValue (value, false);
     /* init states */
-    else if (init_chinese == name)
+    else if (STRING_INIT_CHINESE == name)
         m_init_chinese = normalizeGValue (value, true);
-    else if (init_full == name)
+    else if (STRING_INIT_FULL == name)
         m_init_full = normalizeGValue (value, true);
-    else if (init_full_punct == name)
+    else if (STRING_INIT_FULL_PUNCT == name)
         m_init_full_punct = normalizeGValue (value, true);
-    else if (init_simp_chinese == name)
+    else if (STRING_INIT_SIMP_CHINESE == name)
         m_init_simp_chinese = normalizeGValue (value, true);
-    else if (special_phrases == name)
+    else if (STRING_SPECIAL_PHRASES == name)
         m_special_phrases = normalizeGValue (value, true);
     /* lookup table page size */
-    else if (PY::orientation == name) {
+    else if (STRING_ORIENTATION == name) {
         m_orientation = normalizeGValue (value, 0);
         if (m_orientation != IBUS_ORIENTATION_VERTICAL &&
             m_orientation != IBUS_ORIENTATION_HORIZONTAL) {
@@ -268,32 +261,32 @@ Config::valueChanged (const std::string & section,
             g_warn_if_reached ();
         }
     }
-    else if (page_size == name) {
+    else if (STRING_PAGE_SIZE == name) {
         m_page_size = normalizeGValue (value, 5);
         if (m_page_size > 10) {
             m_page_size = 5;
             g_warn_if_reached ();
         }
     }
-    else if (shift_select_candidate == name)
+    else if (STRING_SHIFT_SELECT_CANDIDATE == name)
         m_shift_select_candidate = normalizeGValue (value, false);
-    else if (minus_equal_page == name)
+    else if (STRING_MINUS_EQUAL_PAGE == name)
         m_minus_equal_page = normalizeGValue (value, true);
-    else if (comma_period_page == name)
+    else if (STRING_COMMA_PERIOD_PAGE == name)
         m_comma_period_page = normalizeGValue (value, true);
-    else if (auto_commit == name)
+    else if (STRING_AUTO_COMMIT == name)
         m_auto_commit = normalizeGValue (value, false);
-    else if ("BopomofoKeyboardMapping" == name)
+    else if (STRING_BOPOMOFO_KEYBOARD_MAPPING == name)
         m_bopomofoKeyboardMapping = normalizeGValue (value, 0);
     /* correct pinyin */
-    else if (correct_pinyin == name) {
+    else if (STRING_CORRECT_PINYIN == name) {
         if (normalizeGValue (value, TRUE))
             m_option_mask |= PINYIN_CORRECT_ALL;
         else
             m_option_mask &= ~PINYIN_CORRECT_ALL;
     }
     /* fuzzy pinyin */
-    else if (fuzzy_pinyin == name) {
+    else if (STRING_FUZZY_PINYIN == name) {
         if (normalizeGValue (value, TRUE))
             m_option_mask |= PINYIN_FUZZY_ALL;
         else
