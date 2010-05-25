@@ -33,7 +33,15 @@
 # 
 
 libexec_PROGRAMS = ibus-engine-pinyin
-ibus_engine_c_sources = \
+ibus_engine_pinyin_built_c_sources = \
+	$(NULL)
+ibus_engine_pinyin_built_h_sources = \
+	BopomofoKeyboard.h \
+	PinyinParserTable.h \
+	PunctTable.h \
+	SimpTradConverterTable.h \
+	$(NULL)
+ibus_engine_pinyin_c_sources = \
 	BopomofoEditor.cc \
 	BopomofoEngine.cc \
 	Config.cc \
@@ -58,13 +66,7 @@ ibus_engine_c_sources = \
 	SpecialPhrase.cc \
 	SpecialPhraseTable.cc \
 	$(NULL)
-ibus_engine_built_h_sources = \
-	BopomofoKeyboard.h \
-	PinyinParserTable.h \
-	PunctTable.h \
-	SimpTradConverterTable.h \
-	$(NULL)
-ibus_engine_h_sources = \
+ibus_engine_pinyin_h_sources = \
 	Bopomofo.h \
 	BopomofoEditor.h \
 	BopomofoEngine.h \
@@ -106,10 +108,10 @@ ibus_engine_h_sources = \
 	Util.h \
 	$(NULL)
 ibus_engine_pinyin_SOURCES = \
-	$(ibus_engine_c_sources) \
-	$(ibus_engine_h_sources) \
-	$(ibus_engine_built_c_sources) \
-	$(ibus_engine_built_h_sources) \
+	$(ibus_engine_pinyin_c_sources) \
+	$(ibus_engine_pinyin_h_sources) \
+	$(ibus_engine_pinyin_built_c_sources) \
+	$(ibus_engine_pinyin_built_h_sources) \
 	$(NULL)
 ibus_engine_pinyin_CXXFLAGS = \
 	@IBUS_CFLAGS@ \
