@@ -1448,13 +1448,14 @@
                             <property name="label" translatable="yes">&lt;small&gt;
 &lt;b&gt;Authors:&lt;/b&gt;
 Peng Huang
-By Void
+BYVoid
 
-&lt;b&gt;Contributers:&lt;/b&gt;
+&lt;b&gt;Contributors:&lt;/b&gt;
 koterpilla, Zerng07
 &lt;/small&gt;</property>
                             <property name="use_markup">True</property>
                             <property name="justify">center</property>
+                            <property name="selectable">True</property>
                           </object>
                           <packing>
                             <property name="position">5</property>
