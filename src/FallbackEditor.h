@@ -63,6 +63,8 @@ private:
     }
 
     gboolean processPunct (guint keyval, guint keycode, guint modifiers);
+    gboolean processPunctForSimplifiedChinese (guint keyval, guint keycode, guint modifiers);
+    gboolean processPunctForTraditionalChinese (guint keyval, guint keycode, guint modifiers);
 
 private:
     gboolean m_quote;
