@@ -24,6 +24,143 @@
 namespace PY {
 
 inline gboolean
+FallbackEditor::processPunctForSimplifiedChinese (guint keyval, guint keycode, guint modifiers)
+{
+    switch (keyval) {
+    case '`':
+        commit ("·"); return TRUE;
+    case '~':
+        commit ("～"); return TRUE;
+    case '!':
+        commit ("！"); return TRUE;
+    // case '@':
+    // case '#':
+    case '$':
+        commit ("￥"); return TRUE;
+    // case '%':
+    case '^':
+        commit ("……"); return TRUE;
+    // case '&':
+    // case '*':
+    case '(':
+        commit ("（"); return TRUE;
+    case ')':
+        commit ("）"); return TRUE;
+    // case '-':
+    case '_':
+        commit ("——"); return TRUE;
+    // case '=':
+    // case '+':
+    case '[':
+        commit ("【"); return TRUE;
+    case ']':
+        commit ("】"); return TRUE;
+    case '{':
+        commit ("『"); return TRUE;
+    case '}':
+        commit ("』"); return TRUE;
+    case '\\':
+        commit ("、"); return TRUE;
+    // case '|':
+    case ';':
+        commit ("；"); return TRUE;
+    case ':':
+        commit ("："); return TRUE;
+    case '\'':
+        commit (m_quote ? "‘" : "’");
+        m_quote = !m_quote;
+        return TRUE;
+    case '"':
+        commit (m_double_quote ? "“" : "”");
+        m_double_quote = !m_double_quote;
+        return TRUE;
+    case ',':
+        commit ("，"); return TRUE;
+    case '.':
+        if (m_prev_committed_char >= '0' && m_prev_committed_char <= '9')
+            commit (keyval);
+        else
+            commit ("。");
+        return TRUE;
+    case '<':
+        commit ("《"); return TRUE;
+    case '>':
+        commit ("》"); return TRUE;
+    // case '/':
+    case '?':
+        commit ("？"); return TRUE;
+    }
+    return FALSE;
+}
+
+inline gboolean
+FallbackEditor::processPunctForTraditionalChinese (guint keyval, guint keycode, guint modifiers)
+{
+    switch (keyval) {
+    case '~':
+        commit ("～"); return TRUE;
+    case '!':
+        commit ("！"); return TRUE;
+    // case '@':
+    // case '#':
+    case '$':
+        commit ("￥"); return TRUE;
+    // case '%':
+    case '^':
+        commit ("……"); return TRUE;
+    // case '&':
+    // case '*':
+    case '(':
+        commit ("（"); return TRUE;
+    case ')':
+        commit ("）"); return TRUE;
+    // case '-':
+    case '_':
+        commit ("——"); return TRUE;
+    // case '=':
+    // case '+':
+    case '[':
+        commit ("「"); return TRUE;
+    case ']':
+        commit ("」"); return TRUE;
+    case '{':
+        commit ("『"); return TRUE;
+    case '}':
+        commit ("』"); return TRUE;
+    case '\\':
+        commit ("、"); return TRUE;
+    // case '|':
+    case ';':
+        commit ("；"); return TRUE;
+    case ':':
+        commit ("："); return TRUE;
+    case '\'':
+        commit ("，");
+        return TRUE;
+    case '"':
+        commit ("；");
+        return TRUE;
+    case ',':
+        commit ("，"); return TRUE;
+    case '.':
+        if (m_prev_committed_char >= '0' && m_prev_committed_char <= '9')
+            commit (keyval);
+        else
+            commit ("。");
+        return TRUE;
+    case '<':
+        commit ("《"); return TRUE;
+    case '>':
+        commit ("》"); return TRUE;
+    case '/':
+        commit ("。"); return TRUE;
+    case '?':
+        commit ("？"); return TRUE;
+    }
+    return FALSE;
+}
+
+inline gboolean
 FallbackEditor::processPunct (guint keyval, guint keycode, guint modifiers)
 {
     guint cmshm_modifiers = CMSHM_FILTER (modifiers);
@@ -48,69 +185,13 @@ FallbackEditor::processPunct (guint keyval, guint keycode, guint modifiers)
     else {
         /* Chinese mode */
         if (m_props.modeFullPunct ()) {
-            switch (keyval) {
-            case '`':
-                commit ("·"); return TRUE;
-            case '~':
-                commit ("～"); return TRUE;
-            case '!':
-                commit ("！"); return TRUE;
-            // case '@':
-            // case '#':
-            case '$':
-                commit ("￥"); return TRUE;
-            // case '%':
-            case '^':
-                commit ("……"); return TRUE;
-            // case '&':
-            // case '*':
-            case '(':
-                commit ("（"); return TRUE;
-            case ')':
-                commit ("）"); return TRUE;
-            // case '-':
-            case '_':
-                commit ("——"); return TRUE;
-            // case '=':
-            // case '+':
-            case '[':
-                commit ("【"); return TRUE;
-            case ']':
-                commit ("】"); return TRUE;
-            case '{':
-                commit ("『"); return TRUE;
-            case '}':
-                commit ("』"); return TRUE;
-            case '\\':
-                commit ("、"); return TRUE;
-            // case '|':
-            case ';':
-                commit ("；"); return TRUE;
-            case ':':
-                commit ("："); return TRUE;
-            case '\'':
-                commit (m_quote ? "‘" : "’");
-                m_quote = !m_quote;
-                return TRUE;
-            case '"':
-                commit (m_double_quote ? "“" : "”");
-                m_double_quote = !m_double_quote;
-                return TRUE;
-            case ',':
-                commit ("，"); return TRUE;
-            case '.':
-                if (m_prev_committed_char >= '0' && m_prev_committed_char <= '9')
-                    commit (keyval);
-                else
-                    commit ("。");
-                return TRUE;
-            case '<':
-                commit ("《"); return TRUE;
-            case '>':
-                commit ("》"); return TRUE;
-            // case '/':
-            case '?':
-                commit ("？"); return TRUE;
+            if (m_props.modeSimp ()) {
+                if (processPunctForSimplifiedChinese (keyval, keycode, modifiers))
+                    return TRUE;
+            }
+            else {
+                if (processPunctForTraditionalChinese (keyval, keycode, modifiers))
+                    return TRUE;
             }
         }
         commit (m_props.modeFull () ? HalfFullConverter::toFull (keyval) : keyval);
@@ -195,6 +276,5 @@ FallbackEditor::reset (void) {
     m_double_quote = TRUE;
     m_prev_committed_char = 0;
 }
-
 
 };
