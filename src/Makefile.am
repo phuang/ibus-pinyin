@@ -89,17 +89,14 @@ ibus_engine_h_sources = \
 	PinyinEditor.h \
 	PinyinEngine.h \
 	PinyinParser.h \
-	PinyinParserTable.h \
 	PinyinProperties.h \
 	Pointer.h \
 	Property.h \
 	PunctEditor.h \
-	PunctTable.h \
 	RawEditor.h \
 	Regex.h \
 	Signal.h \
 	SimpTradConverter.h \
-	SimpTradConverterTable.h \
 	SpecialPhrase.h \
 	DynamicSpecialPhrase.h \
 	SpecialPhraseTable.h \
@@ -111,8 +108,8 @@ ibus_engine_h_sources = \
 ibus_engine_pinyin_SOURCES = \
 	$(ibus_engine_c_sources) \
 	$(ibus_engine_h_sources) \
-	$(ibus_engine__built_c_sources) \
-	$(ibus_engine__built_h_sources) \
+	$(ibus_engine_built_c_sources) \
+	$(ibus_engine_built_h_sources) \
 	$(NULL)
 ibus_engine_pinyin_CXXFLAGS = \
 	@IBUS_CFLAGS@ \
