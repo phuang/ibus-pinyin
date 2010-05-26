@@ -566,7 +566,7 @@ static int
 keyboard_cmp (const void *p1, const void *p2)
 {
     const gint s1 = (const gint) p1;
-    const gint *s2 = (const gint *) p2;
+    const guint8 *s2 = (const guint8 *) p2;
     return s1 - s2[0];
 }
 
@@ -574,8 +574,8 @@ gint
 BopomofoEditor::keyvalToBopomofo(gint ch)
 {
     const gint keyboard = m_config.bopomofoKeyboardMapping ();
-    const gint *brs;
-    brs = (const gint *) std::bsearch ((void *) ch,
+    const guint8 *brs;
+    brs = (const guint8 *) std::bsearch ((void *) ch,
                                        bopomofo_keyboard[keyboard],
                                        G_N_ELEMENTS (bopomofo_keyboard[keyboard]),
                                        sizeof(bopomofo_keyboard[keyboard][0]),
