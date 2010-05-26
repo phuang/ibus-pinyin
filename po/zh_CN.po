@@ -158,7 +158,7 @@ msgstr "英文"
 
 #: ../setup/ibus-pinyin-preferences.ui.h:31
 msgid "Eten"
-msgstr ""
+msgstr "Eten"
 
 #: ../setup/ibus-pinyin-preferences.ui.h:32
 msgid "Full"
@@ -178,7 +178,7 @@ msgstr "常规"
 
 #: ../setup/ibus-pinyin-preferences.ui.h:36
 msgid "GinYieh"
-msgstr ""
+msgstr "GinYieh"
 
 #: ../setup/ibus-pinyin-preferences.ui.h:37
 msgid "Half"
@@ -194,7 +194,7 @@ msgstr "水平"
 
 #: ../setup/ibus-pinyin-preferences.ui.h:40
 msgid "IBM"
-msgstr ""
+msgstr "IBM"
 
 #: ../setup/ibus-pinyin-preferences.ui.h:41
 msgid "Incomplete Bopomofo"
@@ -254,7 +254,7 @@ msgstr "简体"
 
 #: ../setup/ibus-pinyin-preferences.ui.h:55
 msgid "Standard"
-msgstr ""
+msgstr "标准"
 
 #: ../setup/ibus-pinyin-preferences.ui.h:56
 msgid "Traditional"
