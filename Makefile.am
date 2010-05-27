@@ -81,6 +81,9 @@ debian/changelog:
 		if test -z "$$serie"; then \
 		  serie=lucid; \
 		fi; \
+		if test -z "$$release"; then \
+		  release=1; \
+		fi; \
 		s=`cat debian/changelog.in`; \
 		eval "echo \"$${s}\""; \
 	) > $@
