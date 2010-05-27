@@ -47,8 +47,11 @@ public:
         m_fallback_editor->reset ();
     }
 
-
-    void enable (void) {}
+    void enable (void) {
+        if (!m_props.modeChinese ()) {
+            m_props.toggleModeChinese ();
+        }
+    }
     void disable (void) {}
     void pageUp (void);
     void pageDown (void);
