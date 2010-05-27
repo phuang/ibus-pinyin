@@ -562,10 +562,10 @@ BopomofoEditor::updateLookupTable ()
     PhoneticEditor::updateLookupTable ();
 }
 
-static int
-keyboard_cmp (const void *p1, const void *p2)
+static gint
+keyboard_cmp (gconstpointer p1, gconstpointer p2)
 {
-    const gint s1 = (const gint) p1;
+    const gint s1 = GPOINTER_TO_INT (p1);
     const guint8 *s2 = (const guint8 *) p2;
     return s1 - s2[0];
 }
@@ -575,7 +575,7 @@ BopomofoEditor::keyvalToBopomofo(gint ch)
 {
     const gint keyboard = m_config.bopomofoKeyboardMapping ();
     const guint8 *brs;
-    brs = (const guint8 *) std::bsearch ((void *) ch,
+    brs = (const guint8 *) std::bsearch (GINT_TO_POINTER (ch),
                                        bopomofo_keyboard[keyboard],
                                        G_N_ELEMENTS (bopomofo_keyboard[keyboard]),
                                        sizeof(bopomofo_keyboard[keyboard][0]),
