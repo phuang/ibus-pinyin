@@ -34,6 +34,7 @@ namespace PY {
 class Config : Object {
 protected:
     Config (Bus & bus, const std::string & name);
+    virtual ~Config (void);
 
 public:
     guint option (void) { return m_option & m_option_mask; }
@@ -53,21 +54,22 @@ public:
     gboolean specialPhrases (void) { return m_special_phrases; }
     gint bopomofoKeyboardMapping (void) { return m_bopomofoKeyboardMapping; }
 
-private:
+protected:
     bool read (const std::string & name, bool defval);
     int read (const std::string & name, int defval);
-    void readDefaultValues (void);
+    virtual void readDefaultValues (void);
 
-    virtual void valueChanged (const std::string & section,
-                               const std::string & name,
-                               const GValue  *value);
+    virtual gboolean valueChanged (const std::string & section,
+                                   const std::string & name,
+                                   const GValue  *value);
+private:
     static void valueChangedCallback (IBusConfig    *config,
                                       const gchar   *section,
                                       const gchar   *name,
                                       const GValue  *value,
                                       Config        *self);
 
-private:
+protected:
     std::string m_section;
     guint m_option;
     guint m_option_mask;
@@ -99,20 +101,30 @@ public:
     static PinyinConfig & instance (void) { return *m_instance; }
 
 protected:
-    PinyinConfig (Bus & bus, const std::string & name = "Pinyin") : Config (bus, name) { }
+    PinyinConfig (Bus & bus, const std::string & name = "Pinyin");
+    virtual void readDefaultValues (void);
+
+    virtual gboolean valueChanged (const std::string & section,
+                                   const std::string & name,
+                                   const GValue  *value);
 
 private:
     static boost::scoped_ptr<PinyinConfig> m_instance;
 };
 
 /* Bopomof Config */
-class BopomofoConfig : public PinyinConfig {
+class BopomofoConfig : public Config {
 public:
     static void init (Bus & bus);
     static BopomofoConfig & instance (void) { return *m_instance; }
 
 protected:
-    BopomofoConfig (Bus & bus) : PinyinConfig (bus, "Bopomofo") { }
+    BopomofoConfig (Bus & bus);
+    virtual void readDefaultValues (void);
+
+    virtual gboolean valueChanged (const std::string & section,
+                                   const std::string & name,
+                                   const GValue  *value);
 
 private:
     static boost::scoped_ptr<BopomofoConfig> m_instance;
