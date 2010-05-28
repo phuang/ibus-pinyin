@@ -25,23 +25,23 @@
 
 namespace PY {
 
-#define STRING_CORRECT_PINYIN               ("CorrectPinyin")
-#define STRING_FUZZY_PINYIN                 ("FuzzyPinyin")
-#define STRING_ORIENTATION                  ("LookupTableOrientation")
-#define STRING_PAGE_SIZE                    ("LookupTablePageSize")
-#define STRING_SHIFT_SELECT_CANDIDATE       ("ShiftSelectCandidate")
-#define STRING_MINUS_EQUAL_PAGE             ("MinusEqualPage")
-#define STRING_COMMA_PERIOD_PAGE            ("CommaPeriodPage")
-#define STRING_AUTO_COMMIT                  ("AutoCommit")
-#define STRING_DOUBLE_PINYIN                ("DoublePinyin")
-#define STRING_DOUBLE_PINYIN_SCHEMA         ("DoublePinyinSchema")
-#define STRING_DOUBLE_PINYIN_SHOW_RAW       ("DoublePinyinShowRaw")
-#define STRING_INIT_CHINESE                 ("InitChinese")
-#define STRING_INIT_FULL                    ("InitFull")
-#define STRING_INIT_FULL_PUNCT              ("InitFullPunct")
-#define STRING_INIT_SIMP_CHINESE            ("InitSimplifiedChinese")
-#define STRING_SPECIAL_PHRASES              ("SpecialPhrases")
-#define STRING_BOPOMOFO_KEYBOARD_MAPPING    ("BopomofoKeyboardMapping")
+const gchar * const CONFIG_CORRECT_PINYIN            = "CorrectPinyin";
+const gchar * const CONFIG_FUZZY_PINYIN              = "FuzzyPinyin";
+const gchar * const CONFIG_ORIENTATION               = "LookupTableOrientation";
+const gchar * const CONFIG_PAGE_SIZE                 = "LookupTablePageSize";
+const gchar * const CONFIG_SHIFT_SELECT_CANDIDATE    = "ShiftSelectCandidate";
+const gchar * const CONFIG_MINUS_EQUAL_PAGE          = "MinusEqualPage";
+const gchar * const CONFIG_COMMA_PERIOD_PAGE         = "CommaPeriodPage";
+const gchar * const CONFIG_AUTO_COMMIT               = "AutoCommit";
+const gchar * const CONFIG_DOUBLE_PINYIN             = "DoublePinyin";
+const gchar * const CONFIG_DOUBLE_PINYIN_SCHEMA      = "DoublePinyinSchema";
+const gchar * const CONFIG_DOUBLE_PINYIN_SHOW_RAW    = "DoublePinyinShowRaw";
+const gchar * const CONFIG_INIT_CHINESE              = "InitChinese";
+const gchar * const CONFIG_INIT_FULL                 = "InitFull";
+const gchar * const CONFIG_INIT_FULL_PUNCT           = "InitFullPunct";
+const gchar * const CONFIG_INIT_SIMP_CHINESE         = "InitSimplifiedChinese";
+const gchar * const CONFIG_SPECIAL_PHRASES           = "SpecialPhrases";
+const gchar * const CONFIG_BOPOMOFO_KEYBOARD_MAPPING = "BopomofoKeyboardMapping";
 
 boost::scoped_ptr<PinyinConfig> PinyinConfig::m_instance;
 boost::scoped_ptr<BopomofoConfig> BopomofoConfig::m_instance;
@@ -124,47 +124,47 @@ void
 Config::readDefaultValues (void)
 {
     /* double pinyin */
-    m_double_pinyin = read (STRING_DOUBLE_PINYIN, false);
-    m_double_pinyin_schema = read (STRING_DOUBLE_PINYIN_SCHEMA, 0);
+    m_double_pinyin = read (CONFIG_DOUBLE_PINYIN, false);
+    m_double_pinyin_schema = read (CONFIG_DOUBLE_PINYIN_SCHEMA, 0);
     if (m_double_pinyin_schema >= 5) {
         m_double_pinyin_schema = 0;
         g_warn_if_reached ();
     }
-    m_double_pinyin_show_raw = read (STRING_DOUBLE_PINYIN_SHOW_RAW, false);
+    m_double_pinyin_show_raw = read (CONFIG_DOUBLE_PINYIN_SHOW_RAW, false);
 
     /* init states */
-    m_init_chinese = read (STRING_INIT_CHINESE, true);
-    m_init_full = read (STRING_INIT_FULL, false);
-    m_init_full_punct = read (STRING_INIT_FULL_PUNCT, true);
-    m_init_simp_chinese = read (STRING_INIT_SIMP_CHINESE, true);
+    m_init_chinese = read (CONFIG_INIT_CHINESE, true);
+    m_init_full = read (CONFIG_INIT_FULL, false);
+    m_init_full_punct = read (CONFIG_INIT_FULL_PUNCT, true);
+    m_init_simp_chinese = read (CONFIG_INIT_SIMP_CHINESE, true);
 
-    m_special_phrases = read (STRING_SPECIAL_PHRASES, true);
+    m_special_phrases = read (CONFIG_SPECIAL_PHRASES, true);
 
     /* others */
-    m_orientation = read (STRING_ORIENTATION, 0);
+    m_orientation = read (CONFIG_ORIENTATION, 0);
     if (m_orientation != IBUS_ORIENTATION_VERTICAL &&
         m_orientation != IBUS_ORIENTATION_HORIZONTAL) {
         m_orientation = IBUS_ORIENTATION_HORIZONTAL;
         g_warn_if_reached ();
     }
-    m_page_size = read (STRING_PAGE_SIZE, 5);
+    m_page_size = read (CONFIG_PAGE_SIZE, 5);
     if (m_page_size > 10) {
         m_page_size = 5;
         g_warn_if_reached ();
     }
-    m_shift_select_candidate = read (STRING_SHIFT_SELECT_CANDIDATE, false);
-    m_minus_equal_page = read (STRING_MINUS_EQUAL_PAGE, true);
-    m_comma_period_page = read (STRING_COMMA_PERIOD_PAGE, true);
-    m_auto_commit = read (STRING_AUTO_COMMIT, false);
+    m_shift_select_candidate = read (CONFIG_SHIFT_SELECT_CANDIDATE, false);
+    m_minus_equal_page = read (CONFIG_MINUS_EQUAL_PAGE, true);
+    m_comma_period_page = read (CONFIG_COMMA_PERIOD_PAGE, true);
+    m_auto_commit = read (CONFIG_AUTO_COMMIT, false);
 
     /* correct pinyin */
-    if (read (STRING_CORRECT_PINYIN, true))
+    if (read (CONFIG_CORRECT_PINYIN, true))
         m_option_mask |= PINYIN_CORRECT_ALL;
     else
         m_option_mask &= ~PINYIN_CORRECT_ALL;
 
     /* fuzzy pinyin */
-    if (read (STRING_FUZZY_PINYIN, false))
+    if (read (CONFIG_FUZZY_PINYIN, false))
         m_option_mask |= PINYIN_FUZZY_ALL;
     else
         m_option_mask &= ~PINYIN_FUZZY_ALL;
@@ -177,7 +177,7 @@ Config::readDefaultValues (void)
             m_option &= ~options[i].option;
     }
 
-    m_bopomofoKeyboardMapping = read (STRING_BOPOMOFO_KEYBOARD_MAPPING, 0);
+    m_bopomofoKeyboardMapping = read (CONFIG_BOPOMOFO_KEYBOARD_MAPPING, 0);
 }
 
 inline bool
@@ -230,30 +230,30 @@ Config::valueChanged (const std::string & section,
         return;
 
     /* double pinyin */
-    if (STRING_DOUBLE_PINYIN == name)
+    if (CONFIG_DOUBLE_PINYIN == name)
         m_double_pinyin = normalizeGValue (value, false);
-    else if (STRING_DOUBLE_PINYIN_SCHEMA == name) {
+    else if (CONFIG_DOUBLE_PINYIN_SCHEMA == name) {
         m_double_pinyin_schema = normalizeGValue (value, 0);
         if (m_double_pinyin_schema >= 5) {
             m_double_pinyin_schema = 0;
             g_warn_if_reached ();
         }
     }
-    else if (STRING_DOUBLE_PINYIN_SHOW_RAW == name)
+    else if (CONFIG_DOUBLE_PINYIN_SHOW_RAW == name)
         m_double_pinyin_show_raw = normalizeGValue (value, false);
     /* init states */
-    else if (STRING_INIT_CHINESE == name)
+    else if (CONFIG_INIT_CHINESE == name)
         m_init_chinese = normalizeGValue (value, true);
-    else if (STRING_INIT_FULL == name)
+    else if (CONFIG_INIT_FULL == name)
         m_init_full = normalizeGValue (value, true);
-    else if (STRING_INIT_FULL_PUNCT == name)
+    else if (CONFIG_INIT_FULL_PUNCT == name)
         m_init_full_punct = normalizeGValue (value, true);
-    else if (STRING_INIT_SIMP_CHINESE == name)
+    else if (CONFIG_INIT_SIMP_CHINESE == name)
         m_init_simp_chinese = normalizeGValue (value, true);
-    else if (STRING_SPECIAL_PHRASES == name)
+    else if (CONFIG_SPECIAL_PHRASES == name)
         m_special_phrases = normalizeGValue (value, true);
     /* lookup table page size */
-    else if (STRING_ORIENTATION == name) {
+    else if (CONFIG_ORIENTATION == name) {
         m_orientation = normalizeGValue (value, 0);
         if (m_orientation != IBUS_ORIENTATION_VERTICAL &&
             m_orientation != IBUS_ORIENTATION_HORIZONTAL) {
@@ -261,32 +261,32 @@ Config::valueChanged (const std::string & section,
             g_warn_if_reached ();
         }
     }
-    else if (STRING_PAGE_SIZE == name) {
+    else if (CONFIG_PAGE_SIZE == name) {
         m_page_size = normalizeGValue (value, 5);
         if (m_page_size > 10) {
             m_page_size = 5;
             g_warn_if_reached ();
         }
     }
-    else if (STRING_SHIFT_SELECT_CANDIDATE == name)
+    else if (CONFIG_SHIFT_SELECT_CANDIDATE == name)
         m_shift_select_candidate = normalizeGValue (value, false);
-    else if (STRING_MINUS_EQUAL_PAGE == name)
+    else if (CONFIG_MINUS_EQUAL_PAGE == name)
         m_minus_equal_page = normalizeGValue (value, true);
-    else if (STRING_COMMA_PERIOD_PAGE == name)
+    else if (CONFIG_COMMA_PERIOD_PAGE == name)
         m_comma_period_page = normalizeGValue (value, true);
-    else if (STRING_AUTO_COMMIT == name)
+    else if (CONFIG_AUTO_COMMIT == name)
         m_auto_commit = normalizeGValue (value, false);
-    else if (STRING_BOPOMOFO_KEYBOARD_MAPPING == name)
+    else if (CONFIG_BOPOMOFO_KEYBOARD_MAPPING == name)
         m_bopomofoKeyboardMapping = normalizeGValue (value, 0);
     /* correct pinyin */
-    else if (STRING_CORRECT_PINYIN == name) {
+    else if (CONFIG_CORRECT_PINYIN == name) {
         if (normalizeGValue (value, TRUE))
             m_option_mask |= PINYIN_CORRECT_ALL;
         else
             m_option_mask &= ~PINYIN_CORRECT_ALL;
     }
     /* fuzzy pinyin */
-    else if (STRING_FUZZY_PINYIN == name) {
+    else if (CONFIG_FUZZY_PINYIN == name) {
         if (normalizeGValue (value, TRUE))
             m_option_mask |= PINYIN_FUZZY_ALL;
         else
