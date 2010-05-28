@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ibus-pinyin 1.2.99\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-05-25 16:59+0800\n"
+"POT-Creation-Date: 2010-05-28 13:43+0800\n"
 "PO-Revision-Date: 2009-09-20 16:05+8\n"
 "Last-Translator: Peng Huang <shawn.p.huang@gmail.com>\n"
 "Language-Team: Peng Huang <shawn.p.huang@gmail.com>\n"
@@ -100,11 +100,11 @@ msgid ""
 "</small>"
 msgstr ""
 "<small>\n"
-"<b>Authors:</b>\n"
+"<b>作者:</b>\n"
 "Peng Huang\n"
 "BYVoid\n"
 "\n"
-"<b>Contributors:</b>\n"
+"<b>贡献者:</b>\n"
 "koterpilla, Zerng07\n"
 "</small>"
 
@@ -158,7 +158,7 @@ msgstr "英文"
 
 #: ../setup/ibus-pinyin-preferences.ui.h:31
 msgid "Eten"
-msgstr "Eten"
+msgstr "倚天"
 
 #: ../setup/ibus-pinyin-preferences.ui.h:32
 msgid "Full"
@@ -178,7 +178,7 @@ msgstr "常规"
 
 #: ../setup/ibus-pinyin-preferences.ui.h:36
 msgid "GinYieh"
-msgstr "GinYieh"
+msgstr "精业"
 
 #: ../setup/ibus-pinyin-preferences.ui.h:37
 msgid "Half"

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ibus-pinyin 1.3.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-05-25 16:59+0800\n"
+"POT-Creation-Date: 2010-05-28 13:43+0800\n"
 "PO-Revision-Date: 2009-09-20 16:05+8\n"
 "Last-Translator: BYVoid <byvoid1@gmail.com>\n"
 "Language-Team: BYVoid <byvoid1@gmail.com>\n"
@@ -36,11 +36,11 @@ msgstr "中文"
 
 #: ../src/PinyinProperties.cc:47
 msgid "Full/Half width"
-msgstr "全角/半角"
+msgstr "全形/半形"
 
 #: ../src/PinyinProperties.cc:54
 msgid "Full/Half width punctuation"
-msgstr "半角符號"
+msgstr "半形符號"
 
 #: ../src/PinyinProperties.cc:61
 msgid "Simplfied/Traditional Chinese"
@@ -56,14 +56,12 @@ msgid "<big><b>IBus Pinyin %s</b></big>"
 msgstr "<big><b>IBus 拼音 %s</b></big>"
 
 #: ../setup/ibus-pinyin-preferences.ui.h:1
-#, fuzzy
 msgid "<b>Bopomofo mode</b>"
-msgstr "注音（調試）"
+msgstr "<b>注音模式</b>"
 
 #: ../setup/ibus-pinyin-preferences.ui.h:2
-#, fuzzy
 msgid "<b>Correct pinyin</b>"
-msgstr "拼音糾錯"
+msgstr "<b>拼音糾錯</b>"
 
 #: ../setup/ibus-pinyin-preferences.ui.h:3
 msgid "<b>Dictionary option</b>"
@@ -74,9 +72,8 @@ msgid "<b>Initial state</b>"
 msgstr "<b>初始狀態</b>"
 
 #: ../setup/ibus-pinyin-preferences.ui.h:5
-#, fuzzy
 msgid "<b>Input Custom</b>"
-msgstr "<b>初始狀態</b>"
+msgstr "<b>輸入配置</b>"
 
 #: ../setup/ibus-pinyin-preferences.ui.h:6
 msgid "<b>Pinyin mode</b>"
@@ -97,6 +94,14 @@ msgid ""
 "koterpilla, Zerng07\n"
 "</small>"
 msgstr ""
+"<small>\n"
+"<b>作者:</b>\n"
+"Peng Huang\n"
+"BYVoid\n"
+"\n"
+"<b>貢獻者:</b>\n"
+"koterpilla, Zerng07\n"
+"</small>"
 
 #: ../setup/ibus-pinyin-preferences.ui.h:18
 msgid "<small>Copyright (c) 2009-2010 Peng Huang</small>"
@@ -115,7 +120,6 @@ msgid "Auto commit"
 msgstr "自動上詞"
 
 #: ../setup/ibus-pinyin-preferences.ui.h:22
-#, fuzzy
 msgid "Bopomofo mode"
 msgstr "注音（調試）"
 
@@ -136,14 +140,12 @@ msgid "Edit custom phrases"
 msgstr "編輯自定義詞組"
 
 #: ../setup/ibus-pinyin-preferences.ui.h:28
-#, fuzzy
 msgid "Enable correct pinyin"
-msgstr "拼音糾錯"
+msgstr "啓用拼音糾錯"
 
 #: ../setup/ibus-pinyin-preferences.ui.h:29
-#, fuzzy
 msgid "Enable fuzzy syllable"
-msgstr "啓動模糊拼音。"
+msgstr "啓用模糊音"
 
 #: ../setup/ibus-pinyin-preferences.ui.h:30
 msgid "English"
@@ -151,11 +153,11 @@ msgstr "英文"
 
 #: ../setup/ibus-pinyin-preferences.ui.h:31
 msgid "Eten"
-msgstr ""
+msgstr "倚天"
 
 #: ../setup/ibus-pinyin-preferences.ui.h:32
 msgid "Full"
-msgstr "全角"
+msgstr "全形"
 
 #: ../setup/ibus-pinyin-preferences.ui.h:33
 msgid "Full pinyin"
@@ -163,23 +165,23 @@ msgstr "全拼"
 
 #: ../setup/ibus-pinyin-preferences.ui.h:34
 msgid "Fuzzy syllable"
-msgstr ""
+msgstr "模糊音"
 
 #: ../setup/ibus-pinyin-preferences.ui.h:35
 msgid "General"
-msgstr ""
+msgstr "常規"
 
 #: ../setup/ibus-pinyin-preferences.ui.h:36
 msgid "GinYieh"
-msgstr ""
+msgstr "精業"
 
 #: ../setup/ibus-pinyin-preferences.ui.h:37
 msgid "Half"
-msgstr "半角"
+msgstr "半形"
 
 #: ../setup/ibus-pinyin-preferences.ui.h:38
 msgid "Half/full width:"
-msgstr "全角/半角："
+msgstr "全形/半形："
 
 #: ../setup/ibus-pinyin-preferences.ui.h:39
 msgid "Horizontal"
@@ -187,10 +189,9 @@ msgstr "水平"
 
 #: ../setup/ibus-pinyin-preferences.ui.h:40
 msgid "IBM"
-msgstr ""
+msgstr "IBM"
 
 #: ../setup/ibus-pinyin-preferences.ui.h:41
-#, fuzzy
 msgid "Incomplete Bopomofo"
 msgstr "簡拼"
 
@@ -200,7 +201,7 @@ msgstr "簡拼"
 
 #: ../setup/ibus-pinyin-preferences.ui.h:43
 msgid "Keyboard Mappming:"
-msgstr ""
+msgstr "鍵盤映射："
 
 #: ../setup/ibus-pinyin-preferences.ui.h:44
 msgid "Language:"
@@ -231,9 +232,8 @@ msgid "Pinyin mode"
 msgstr "拼音模式"
 
 #: ../setup/ibus-pinyin-preferences.ui.h:51
-#, fuzzy
 msgid "Preferences"
-msgstr "拼音偏好設定"
+msgstr "偏好設定"
 
 #: ../setup/ibus-pinyin-preferences.ui.h:52
 msgid "Punctuations:"
@@ -249,7 +249,7 @@ msgstr "簡體"
 
 #: ../setup/ibus-pinyin-preferences.ui.h:55
 msgid "Standard"
-msgstr ""
+msgstr "標準"
 
 #: ../setup/ibus-pinyin-preferences.ui.h:56
 msgid "Traditional"
@@ -294,7 +294,7 @@ msgstr "http://ibus.googlecode.com"
 #~ msgstr "支持不完全拼音（例如：zh g）。"
 
 #~ msgid "Enable pinyin correcting."
-#~ msgstr "啓動拼音糾錯。"
+#~ msgstr "啓用拼音糾錯。"
 
 #~ msgid "Fuzzy pinyin"
 #~ msgstr "模糊拼音"
