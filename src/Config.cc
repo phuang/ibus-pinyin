@@ -117,8 +117,6 @@ static const struct {
 void
 Config::readDefaultValues (void)
 {
-    m_special_phrases = read (CONFIG_SPECIAL_PHRASES, true);
-
     /* others */
     m_orientation = read (CONFIG_ORIENTATION, 0);
     if (m_orientation != IBUS_ORIENTATION_VERTICAL &&
@@ -196,10 +194,8 @@ Config::valueChanged (const std::string & section,
     if (m_section != section)
         return FALSE;
 
-    if (CONFIG_SPECIAL_PHRASES == name)
-        m_special_phrases = normalizeGValue (value, true);
     /* lookup table page size */
-    else if (CONFIG_ORIENTATION == name) {
+    if (CONFIG_ORIENTATION == name) {
         m_orientation = normalizeGValue (value, 0);
         if (m_orientation != IBUS_ORIENTATION_VERTICAL &&
             m_orientation != IBUS_ORIENTATION_HORIZONTAL) {
@@ -298,6 +294,8 @@ PinyinConfig::readDefaultValues (void)
     m_init_full_punct = read (CONFIG_INIT_FULL_PUNCT, true);
     m_init_simp_chinese = read (CONFIG_INIT_SIMP_CHINESE, true);
 
+    m_special_phrases = read (CONFIG_SPECIAL_PHRASES, true);
+
     /* other */
     m_shift_select_candidate = read (CONFIG_SHIFT_SELECT_CANDIDATE, false);
     m_minus_equal_page = read (CONFIG_MINUS_EQUAL_PAGE, true);
@@ -352,6 +350,8 @@ PinyinConfig::valueChanged (const std::string & section,
         m_init_full_punct = normalizeGValue (value, true);
     else if (CONFIG_INIT_SIMP_CHINESE == name)
         m_init_simp_chinese = normalizeGValue (value, true);
+    else if (CONFIG_SPECIAL_PHRASES == name)
+        m_special_phrases = normalizeGValue (value, true);
     /* others */
     else if (CONFIG_SHIFT_SELECT_CANDIDATE == name)
         m_shift_select_candidate = normalizeGValue (value, false);
@@ -408,6 +408,8 @@ BopomofoConfig::readDefaultValues (void)
     m_init_full_punct = read (CONFIG_INIT_FULL_PUNCT, true);
     m_init_simp_chinese = read (CONFIG_INIT_SIMP_CHINESE, false);
 
+    m_special_phrases = read (CONFIG_SPECIAL_PHRASES, false);
+
     m_bopomofoKeyboardMapping = read (CONFIG_BOPOMOFO_KEYBOARD_MAPPING, 0);
 }
 
@@ -431,6 +433,8 @@ BopomofoConfig::valueChanged (const std::string & section,
         m_init_full_punct = normalizeGValue (value, true);
     else if (CONFIG_INIT_SIMP_CHINESE == name)
         m_init_simp_chinese = normalizeGValue (value, false);
+    else if (CONFIG_SPECIAL_PHRASES == name)
+        m_special_phrases = normalizeGValue (value, false);
     else if (CONFIG_BOPOMOFO_KEYBOARD_MAPPING == name)
         m_bopomofoKeyboardMapping = normalizeGValue (value, 0);
     else
