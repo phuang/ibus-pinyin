@@ -78,7 +78,7 @@ Config::Config (Bus & bus, const std::string & name)
 }
 
 static const struct {
-    const gchar *name;
+    const gchar * const name;
     guint option;
     bool defval;
 } options [] = {
