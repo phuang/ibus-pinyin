@@ -120,6 +120,23 @@ PinyinProperties::toggleModeSimp (void)
     updateProperty (m_prop_simp);
 }
 
+void
+PinyinProperties::reset (void)
+{
+    if (modeChinese () != m_config.initChinese ()) {
+        toggleModeChinese ();
+    }
+    if (modeFull () != m_config.initFull ()) {
+        toggleModeFull ();
+    }
+    if (modeFullPunct () != m_config.initFullPunct ()) {
+        toggleModeFullPunct ();
+    }
+    if (modeSimp () != m_config.initSimpChinese ()) {
+        toggleModeSimp ();
+    }
+}
+
 gboolean
 PinyinProperties::propertyActivate (const gchar *prop_name, guint prop_state) {
     const static std::string mode_chinese ("mode.chinese");

@@ -48,9 +48,7 @@ public:
     }
 
     void enable (void) {
-        if (!m_props.modeChinese ()) {
-            m_props.toggleModeChinese ();
-        }
+        m_props.reset ();
     }
     void disable (void) {}
     void pageUp (void);
