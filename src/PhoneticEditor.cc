@@ -237,7 +237,7 @@ PhoneticEditor::updateLookupTable (void)
     }
 }
 
-inline gboolean
+gboolean
 PhoneticEditor::fillLookupTableByPage (void)
 {
     if (!m_selected_special_phrase.empty ()) {
@@ -366,7 +366,7 @@ PhoneticEditor::commit (const gchar *str)
     commitText (text);
 }
 
-inline gboolean
+gboolean
 PhoneticEditor::selectCandidate (guint i)
 {
     if (i < m_special_phrases.size ()) {
@@ -414,7 +414,7 @@ PhoneticEditor::selectCandidateInPage (guint i)
     return selectCandidate (i);
 }
 
-inline gboolean
+gboolean
 PhoneticEditor::resetCandidate (guint i)
 {
     i -= m_special_phrases.size ();
