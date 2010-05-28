@@ -214,13 +214,6 @@ Config::valueChanged (const std::string & section,
             g_warn_if_reached ();
         }
     }
-    /* correct pinyin */
-    else if (CONFIG_CORRECT_PINYIN == name) {
-        if (normalizeGValue (value, TRUE))
-            m_option_mask |= PINYIN_CORRECT_ALL;
-        else
-            m_option_mask &= ~PINYIN_CORRECT_ALL;
-    }
     /* fuzzy pinyin */
     else if (CONFIG_FUZZY_PINYIN == name) {
         if (normalizeGValue (value, TRUE))
@@ -305,8 +298,6 @@ PinyinConfig::readDefaultValues (void)
     m_init_full_punct = read (CONFIG_INIT_FULL_PUNCT, true);
     m_init_simp_chinese = read (CONFIG_INIT_SIMP_CHINESE, true);
 
-    m_special_phrases = read (CONFIG_SPECIAL_PHRASES, true);
-
     /* other */
     m_shift_select_candidate = read (CONFIG_SHIFT_SELECT_CANDIDATE, false);
     m_minus_equal_page = read (CONFIG_MINUS_EQUAL_PAGE, true);
@@ -370,6 +361,13 @@ PinyinConfig::valueChanged (const std::string & section,
         m_comma_period_page = normalizeGValue (value, true);
     else if (CONFIG_AUTO_COMMIT == name)
         m_auto_commit = normalizeGValue (value, false);
+    /* correct pinyin */
+    else if (CONFIG_CORRECT_PINYIN == name) {
+        if (normalizeGValue (value, TRUE))
+            m_option_mask |= PINYIN_CORRECT_ALL;
+        else
+            m_option_mask &= ~PINYIN_CORRECT_ALL;
+    }
     else {
         for (guint i = 0; i < G_N_ELEMENTS (pinyin_options); i++) {
             if (G_LIKELY (pinyin_options[i].name != name))
@@ -409,19 +407,6 @@ BopomofoConfig::readDefaultValues (void)
     m_init_full = read (CONFIG_INIT_FULL, false);
     m_init_full_punct = read (CONFIG_INIT_FULL_PUNCT, true);
     m_init_simp_chinese = read (CONFIG_INIT_SIMP_CHINESE, false);
-
-    /* others */
-    m_orientation = read (CONFIG_ORIENTATION, 0);
-    if (m_orientation != IBUS_ORIENTATION_VERTICAL &&
-        m_orientation != IBUS_ORIENTATION_HORIZONTAL) {
-        m_orientation = IBUS_ORIENTATION_HORIZONTAL;
-        g_warn_if_reached ();
-    }
-    m_page_size = read (CONFIG_PAGE_SIZE, 5);
-    if (m_page_size > 10) {
-        m_page_size = 5;
-        g_warn_if_reached ();
-    }
 
     m_bopomofoKeyboardMapping = read (CONFIG_BOPOMOFO_KEYBOARD_MAPPING, 0);
 }
