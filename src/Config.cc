@@ -70,7 +70,6 @@ Config::Config (Bus & bus, const std::string & name)
     m_init_simp_chinese = TRUE;
     m_special_phrases = TRUE;
 
-    readDefaultValues ();
     g_signal_connect (get<IBusConfig> (),
                       "value-changed",
                       G_CALLBACK (valueChangedCallback),
@@ -282,8 +281,9 @@ PinyinConfig::PinyinConfig (Bus & bus, const std::string & name)
 void
 PinyinConfig::init (Bus & bus)
 {
-    if (PinyinConfig::m_instance == NULL) {
-        PinyinConfig::m_instance.reset (new PinyinConfig (bus));
+    if (m_instance == NULL) {
+        m_instance.reset (new PinyinConfig (bus));
+        m_instance->readDefaultValues ();
     }
 }
 
@@ -404,8 +404,9 @@ BopomofoConfig::BopomofoConfig (Bus & bus)
 void
 BopomofoConfig::init (Bus & bus)
 {
-    if (BopomofoConfig::m_instance == NULL) {
-        BopomofoConfig::m_instance.reset (new BopomofoConfig (bus));
+    if (m_instance == NULL) {
+        m_instance.reset (new BopomofoConfig (bus));
+        m_instance->readDefaultValues ();
     }
 }
 
