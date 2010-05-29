@@ -154,6 +154,12 @@ Config::read (const std::string & name,
         if (G_VALUE_TYPE (&value) == G_TYPE_BOOLEAN)
             return g_value_get_boolean (&value);
     }
+
+    // write default value to config
+    g_value_init (&value, G_TYPE_BOOLEAN);
+    g_value_set_boolean (&value, defval);
+    ibus_config_set_value (get<IBusConfig> (), m_section.c_str (), name.c_str (), &value);
+
     return defval;
 }
 
@@ -166,6 +172,12 @@ Config::read (const std::string & name,
         if (G_VALUE_TYPE (&value) == G_TYPE_INT)
             return g_value_get_int (&value);
     }
+
+    // write default value to config
+    g_value_init (&value, G_TYPE_INT);
+    g_value_set_int (&value, defval);
+    ibus_config_set_value (get<IBusConfig> (), m_section.c_str (), name.c_str (), &value);
+
     return defval;
 }
 
