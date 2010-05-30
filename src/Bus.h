@@ -28,14 +28,15 @@ namespace PY {
 
 class Bus : Object {
 public:
-    Bus (void) : Object (ibus_bus_new ()) {
-    }
+    Bus (void) : Object (ibus_bus_new ()) { }
 
-    bool isConnected (void) {
+    bool isConnected (void)
+    {
         return ibus_bus_is_connected (*this);
     }
 
-    operator IBusBus * (void) const {
+    operator IBusBus * (void) const
+    {
         return get<IBusBus> ();
     }
 };
