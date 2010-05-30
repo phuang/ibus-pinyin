@@ -41,20 +41,23 @@ public:
 
     void reset (void);
 
-    gboolean modeChinese (void) { return m_mode_chinese; }
-    gboolean modeFull (void) { return m_mode_full; }
-    gboolean modeFullPunct (void) { return m_mode_full_punct; }
-    gboolean modeSimp (void) { return m_mode_simp; }
+    gboolean modeChinese (void) const   { return m_mode_chinese; }
+    gboolean modeFull (void) const      { return m_mode_full; }
+    gboolean modeFullPunct (void) const { return m_mode_full_punct; }
+    gboolean modeSimp (void) const      { return m_mode_simp; }
 
+    PropList & properties (void)        { return m_props; }
+    
     gboolean propertyActivate (const gchar *prop_name, guint prop_state);
-    PropList & properties (void) { return m_props; }
 
-    signal <void (Property &)> & signalUpdateProperty  (void) {
+    signal <void (Property &)> & signalUpdateProperty (void) 
+    {
         return m_signal_update_property;
     }
 
 private:
-    void updateProperty (Property & prop) {
+    void updateProperty (Property & prop) const
+    {
         m_signal_update_property (prop);
     }
 

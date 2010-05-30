@@ -29,16 +29,19 @@ namespace PY {
 class Object {
 protected:
     template <typename T>
-    Object (T *p) : m_p ((GObject *)p) {
+    Object (T *p) : m_p ((GObject *)p)
+    {
         g_assert (get <GObject *>() != NULL);
     }
 
-    operator GObject * (void) const {
+    operator GObject * (void) const
+    {
         return m_p;
     }
 
     template <typename T>
-    T * get (void) const {
+    T * get (void) const
+    {
         return (T *) (GObject *) m_p;
     }
 

@@ -46,8 +46,8 @@ protected:
     void updatePreeditText (void);
 
     virtual gboolean processKeyEvent (guint keyval, guint keycode, guint modifiers);
-    virtual void updateAuxiliaryTextBefore (String &buffer) {};
-    virtual void updateAuxiliaryTextAfter  (String &buffer) {};
+    virtual void updateAuxiliaryTextBefore (String &buffer) { };
+    virtual void updateAuxiliaryTextAfter  (String &buffer) { };
 };
 
 };

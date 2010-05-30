@@ -38,18 +38,21 @@ struct Phrase {
     } pinyin_id[MAX_PHRASE_LEN];
     guint len;
 
-    void reset (void) {
+    void reset (void)
+    {
         phrase[0] = 0;
         freq = 0;
         user_freq = 0;
         len = 0;
     }
 
-    gboolean empty (void) const {
+    gboolean empty (void) const
+    {
         return len == 0;
     }
 
-    Phrase & operator += (const Phrase & a) {
+    Phrase & operator += (const Phrase & a)
+    {
         g_assert (len + a.len <= MAX_PHRASE_LEN);
         g_strlcat (phrase, a.phrase, sizeof (phrase));
         std::memcpy (pinyin_id + len, a.pinyin_id, a.len << 1);
@@ -57,7 +60,8 @@ struct Phrase {
         return *this;
     }
 
-    operator const gchar * (void) const {
+    operator const gchar * (void) const
+    {
         return phrase;
     }
 

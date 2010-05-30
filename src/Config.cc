@@ -273,8 +273,8 @@ static const struct {
     { "CorrectPinyin_VE_UE",    PINYIN_CORRECT_V_TO_U,      TRUE },
 };
 
-PinyinConfig::PinyinConfig (Bus & bus, const std::string & name)
-    : Config (bus, name)
+PinyinConfig::PinyinConfig (Bus & bus)
+    : Config (bus, "Pinyin")
 {
 }
 

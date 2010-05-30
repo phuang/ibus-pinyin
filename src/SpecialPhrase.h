@@ -32,7 +32,8 @@ public:
     SpecialPhrase (guint pos) : m_position (pos) { }
     virtual ~SpecialPhrase (void);
 
-    guint position (void) const {
+    guint position (void) const
+    {
         return m_position;
     }
 

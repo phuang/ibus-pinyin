@@ -60,15 +60,18 @@ protected:
     void commit (const gchar *str);
 
     /* inline functions */
-    void updatePhraseEditor () {
+    void updatePhraseEditor ()
+    {
         m_phrase_editor.update (m_pinyin);
     }
 
-    const gchar * textAfterPinyin () const {
+    const gchar * textAfterPinyin () const
+    {
         return (const gchar *)m_text + m_pinyin_len;
     }
 
-    const gchar * textAfterPinyin (guint i) const {
+    const gchar * textAfterPinyin (guint i) const
+    {
         g_assert (i <= m_pinyin.size ());
         if ( G_UNLIKELY (i == 0))
             return m_text;
@@ -76,7 +79,8 @@ protected:
         return (const gchar *)m_text + m_pinyin[i].begin + m_pinyin[i].len;
     }
 
-    const gchar * textAfterCursor () const {
+    const gchar * textAfterCursor () const
+    {
         return (const gchar *)m_text + m_cursor;
     }
 

@@ -169,6 +169,34 @@ PinyinEngine::focusIn (void)
 
 
 void
+PinyinEngine::focusOut (void)
+{
+    reset ();
+}
+
+void
+PinyinEngine::reset (void)
+{
+    m_prev_pressed_key = IBUS_VoidSymbol;
+    m_input_mode = MODE_INIT;
+    for (gint i = 0; i < MODE_LAST; i++) {
+        m_editors[i]->reset ();
+    }
+    m_fallback_editor->reset ();
+}
+
+void
+PinyinEngine::enable (void)
+{
+    m_props.reset ();
+}
+
+void
+PinyinEngine::disable (void)
+{
+}
+
+void
 PinyinEngine::pageUp (void)
 {
     m_editors[m_input_mode]->pageUp ();

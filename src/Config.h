@@ -37,22 +37,22 @@ protected:
     virtual ~Config (void);
 
 public:
-    guint option (void) { return m_option & m_option_mask; }
-    guint orientation (void) { return m_orientation; }
-    guint pageSize (void) { return m_page_size; }
-    gboolean shiftSelectCandidate (void) { return m_shift_select_candidate; }
-    gboolean minusEqualPage (void) { return m_minus_equal_page; }
-    gboolean commaPeriodPage (void) { return m_comma_period_page; }
-    gboolean autoCommit (void) { return m_auto_commit; }
-    gboolean doublePinyin (void) { return m_double_pinyin; }
-    gint doublePinyinSchema (void) { return m_double_pinyin_schema; }
-    gboolean doublePinyinShowRaw (void) { return m_double_pinyin_show_raw; }
-    gboolean initChinese (void) { return m_init_chinese; }
-    gboolean initFull (void) { return m_init_full; }
-    gboolean initFullPunct (void) { return m_init_full_punct; }
-    gboolean initSimpChinese (void) { return m_init_simp_chinese; }
-    gboolean specialPhrases (void) { return m_special_phrases; }
-    gint bopomofoKeyboardMapping (void) { return m_bopomofoKeyboardMapping; }
+    guint option (void) const                   { return m_option & m_option_mask; }
+    guint orientation (void) const              { return m_orientation; }
+    guint pageSize (void) const                 { return m_page_size; }
+    gboolean shiftSelectCandidate (void) const  { return m_shift_select_candidate; }
+    gboolean minusEqualPage (void) const        { return m_minus_equal_page; }
+    gboolean commaPeriodPage (void) const       { return m_comma_period_page; }
+    gboolean autoCommit (void) const            { return m_auto_commit; }
+    gboolean doublePinyin (void) const          { return m_double_pinyin; }
+    gint doublePinyinSchema (void) const        { return m_double_pinyin_schema; }
+    gboolean doublePinyinShowRaw (void) const   { return m_double_pinyin_show_raw; }
+    gboolean initChinese (void) const           { return m_init_chinese; }
+    gboolean initFull (void) const              { return m_init_full; }
+    gboolean initFullPunct (void) const         { return m_init_full_punct; }
+    gboolean initSimpChinese (void) const       { return m_init_simp_chinese; }
+    gboolean specialPhrases (void) const        { return m_special_phrases; }
+    gint bopomofoKeyboardMapping (void) const   { return m_bopomofoKeyboardMapping; }
 
 protected:
     bool read (const std::string & name, bool defval);
@@ -101,7 +101,7 @@ public:
     static PinyinConfig & instance (void) { return *m_instance; }
 
 protected:
-    PinyinConfig (Bus & bus, const std::string & name = "Pinyin");
+    PinyinConfig (Bus & bus);
     virtual void readDefaultValues (void);
 
     virtual gboolean valueChanged (const std::string & section,

@@ -66,7 +66,8 @@ namespace PY {
 
 class UUID {
 public:
-    UUID (void) {
+    UUID (void)
+    {
         uuid_t u;
 #if defined(HAVE_UUID_CREATE)
         gchar* uuid;
@@ -80,7 +81,8 @@ public:
 #endif
     }
 
-    operator const gchar * (void) const {
+    operator const gchar * (void) const
+    {
         return m_uuid;        
     }
 
@@ -90,7 +92,8 @@ private:
 
 class Uname {
 public:
-    Uname (void) {
+    Uname (void)
+    {
         uname (&m_buf);
     }
 
@@ -101,20 +104,23 @@ private:
 
 class Hostname : public Uname {
 public:
-    operator const gchar * (void) const {
+    operator const gchar * (void) const
+    {
         return hostname ();
     }
 };
 
 class Env : public std::string {
 public:
-    Env (const gchar *name) {
+    Env (const gchar *name)
+    {
         gchar *str;
         str = std::getenv (name);
         assign (str != NULL ? str : "");
     }
 
-    operator const gchar *(void) const {
+    operator const gchar *(void) const
+    {
         return c_str();
     }
 };

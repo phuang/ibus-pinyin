@@ -70,7 +70,7 @@ public:
     void conditionsDouble (void);
     void conditionsTriple (void);
 
-    static Database & instance (void) {return m_instance; }
+    static Database & instance (void) { return m_instance; }
 
 private:
     gboolean init (void);
