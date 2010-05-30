@@ -91,7 +91,7 @@ PinyinEngine::processKeyEvent (guint keyval, guint keycode, guint modifiers)
     }
 
     /* Toggle simp/trad Chinese Mode when hotkey Ctrl + Shift + F pressed */
-    if (keyval == IBUS_F && SCMSHM_TEST (modifiers, (IBUS_SHIFT_MASK | IBUS_CONTROL_MASK))) {
+    if (keyval == IBUS_F && scmshm_test (modifiers, (IBUS_SHIFT_MASK | IBUS_CONTROL_MASK))) {
         m_props.toggleModeSimp();
         m_prev_pressed_key = IBUS_F;
         return TRUE;
@@ -99,7 +99,7 @@ PinyinEngine::processKeyEvent (guint keyval, guint keycode, guint modifiers)
 
     if (m_props.modeChinese ()) {
         if (m_input_mode == MODE_INIT &&
-            ((CMSHM_FILTER (modifiers)) == 0)) {
+            ((cmshm_filter (modifiers)) == 0)) {
             const String & text = m_editors[MODE_INIT]->text ();
             if (text.empty ()) {
                 switch (keyval) {

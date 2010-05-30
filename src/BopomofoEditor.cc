@@ -310,7 +310,7 @@ BopomofoEditor::processNumberWithShift (guint keyval, guint keycode, guint modif
 inline gboolean
 BopomofoEditor::processBopomofo (guint keyval, guint keycode, guint modifiers)
 {
-    if (G_UNLIKELY (CMSHM_FILTER (modifiers) != 0))
+    if (G_UNLIKELY (cmshm_filter (modifiers) != 0))
         return m_text ? TRUE : FALSE;
 
     if (keyvalToBopomofo (keyval) == BOPOMOFO_ZERO)

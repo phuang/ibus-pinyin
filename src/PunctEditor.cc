@@ -78,7 +78,7 @@ PunctEditor::processSpace (guint keyval, guint keycode, guint modifiers)
 {
     if (m_punct_mode != MODE_INIT && m_punct_mode != MODE_NORMAL)
         return FALSE;
-    if (CMSHM_FILTER (modifiers) != 0)
+    if (cmshm_filter (modifiers) != 0)
         return TRUE;
     commit ();
     return TRUE;
@@ -87,7 +87,7 @@ PunctEditor::processSpace (guint keyval, guint keycode, guint modifiers)
 gboolean
 PunctEditor::processPunct (guint keyval, guint keycode, guint modifiers)
 {
-    if (CMSHM_FILTER (modifiers) != 0)
+    if (cmshm_filter (modifiers) != 0)
         return TRUE;
 
     if (m_punct_mode == MODE_DISABLE) {

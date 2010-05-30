@@ -163,7 +163,7 @@ FallbackEditor::processPunctForTraditionalChinese (guint keyval, guint keycode, 
 inline gboolean
 FallbackEditor::processPunct (guint keyval, guint keycode, guint modifiers)
 {
-    guint cmshm_modifiers = CMSHM_FILTER (modifiers);
+    guint cmshm_modifiers = cmshm_filter (modifiers);
 
     if (G_UNLIKELY (keyval == IBUS_period && cmshm_modifiers == IBUS_CONTROL_MASK)) {
         m_props.toggleModeFullPunct ();

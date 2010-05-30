@@ -473,7 +473,7 @@ DoublePinyinEditor::processKeyEvent (guint keyval, guint keycode, guint modifier
 {
     /* handle ';' key */
     if (G_UNLIKELY (keyval == IBUS_semicolon)) {
-        if (CMSHM_FILTER (modifiers) == 0) {
+        if (cmshm_filter (modifiers) == 0) {
             if (insert (keyval))
                 return TRUE;
         }

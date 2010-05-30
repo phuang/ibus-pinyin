@@ -35,34 +35,42 @@
 #include <cstdlib>
 #include <string>
 
+#include <ibus.h>
+
 namespace PY {
 
-#define CMSHM_MASK              \
-        (IBUS_CONTROL_MASK |    \
-         IBUS_MOD1_MASK |       \
-         IBUS_SUPER_MASK |      \
-         IBUS_HYPER_MASK |      \
-         IBUS_META_MASK)
+// mask for Ctrl, Alt, Super, Hyper, Meta
+const guint CMSHM_MASK = IBUS_CONTROL_MASK |
+                         IBUS_MOD1_MASK |
+                         IBUS_SUPER_MASK |
+                         IBUS_HYPER_MASK |
+                         IBUS_META_MASK;
+// mask for Shift, Ctrl, Alt, Super, Hyper, Meta
+const guint SCMSHM_MASK = CMSHM_MASK | IBUS_SHIFT_MASK;
 
-#define SCMSHM_MASK             \
-        (IBUS_SHIFT_MASK |      \
-         IBUS_CONTROL_MASK |    \
-         IBUS_MOD1_MASK |       \
-         IBUS_SUPER_MASK |      \
-         IBUS_HYPER_MASK |      \
-         IBUS_META_MASK)
+inline guint
+cmshm_filter (guint modifiers)
+{
+    return modifiers & CMSHM_MASK;
+}
 
-#define CMSHM_FILTER(modifiers)  \
-    (modifiers & (CMSHM_MASK))
+inline guint
+scmshm_filter (guint modifiers)
+{
+    return modifiers & SCMSHM_MASK;
+}
 
-#define SCMSHM_FILTER(modifiers)  \
-    (modifiers & (SCMSHM_MASK))
+inline gboolean
+cmshm_test (guint modifiers, guint mask)
+{
+    return cmshm_filter (modifiers) == mask;
+}
 
-#define CMSHM_TEST(modifiers, mask) \
-    (CMSHM_FILTER (modifiers) == (mask))
-
-#define SCMSHM_TEST(modifiers, mask) \
-    (SCMSHM_FILTER (modifiers) == (mask))
+inline gboolean
+scmshm_test (guint modifiers, guint mask)
+{
+    return scmshm_filter (modifiers) == mask;
+}
 
 class UUID {
 public:

@@ -37,7 +37,7 @@ PinyinEditor::PinyinEditor (PinyinProperties & props, Config & config)
 inline gboolean
 PinyinEditor::processPinyin (guint keyval, guint keycode, guint modifiers)
 {
-    if (G_UNLIKELY (CMSHM_FILTER (modifiers) != 0))
+    if (G_UNLIKELY (cmshm_filter (modifiers) != 0))
         return m_text ? TRUE : FALSE;
 
     return insert (keyval);
@@ -81,7 +81,7 @@ PinyinEditor::processPunct (guint keyval, guint keycode, guint modifiers)
     if (m_text.empty ())
         return FALSE;
 
-    if (CMSHM_FILTER (modifiers) != 0)
+    if (cmshm_filter (modifiers) != 0)
         return TRUE;
 
     switch (keyval) {
@@ -130,7 +130,7 @@ PinyinEditor::processFunctionKey (guint keyval, guint keycode, guint modifiers)
         return FALSE;
 
     /* ignore numlock */
-    modifiers = CMSHM_FILTER (modifiers);
+    modifiers = cmshm_filter (modifiers);
 
     if (modifiers != 0 && modifiers != IBUS_CONTROL_MASK)
         return TRUE;

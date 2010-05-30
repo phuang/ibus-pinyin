@@ -40,7 +40,7 @@ PhoneticEditor::processSpace (guint keyval, guint keycode, guint modifiers)
 {
     if (!m_text)
         return FALSE;
-    if (CMSHM_FILTER (modifiers) != 0)
+    if (cmshm_filter (modifiers) != 0)
         return TRUE;
     if (m_lookup_table.size () != 0) {
         selectCandidate (m_lookup_table.cursorPos ());
@@ -58,7 +58,7 @@ PhoneticEditor::processFunctionKey (guint keyval, guint keycode, guint modifiers
         return FALSE;
 
     /* ignore numlock */
-    modifiers = CMSHM_FILTER (modifiers);
+    modifiers = cmshm_filter (modifiers);
 
     if (modifiers != 0 && modifiers != IBUS_CONTROL_MASK)
         return TRUE;
