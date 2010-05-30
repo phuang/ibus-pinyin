@@ -175,7 +175,7 @@ PunctTable.h:
 	$(PYTHON) $(top_srcdir)/scripts/genpuncttable.py > $@
 
 SimpTradConverterTable.h:
-	$(PYTHON) $(srcdir)/update-simptrad-table.py > $@
+	$(PYTHON) $(top_srcdir)/scripts/update-simptrad-table.py > $@
 
 update-simptrad-table:
 	$(RM) ZhConversion.php ZhConversion.py SimpTradConverterTable.h

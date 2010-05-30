@@ -1,4 +1,7 @@
 #!/usr/bin/env python
+import sys
+sys.path.append(".")
+
 from ZhConversion import *
 from valid_hanzi import *
 from sctc import *
