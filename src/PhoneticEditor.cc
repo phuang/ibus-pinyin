@@ -203,15 +203,20 @@ PhoneticEditor::processKeyEvent (guint keyval, guint keycode, guint modifiers)
 }
 
 gboolean
-PhoneticEditor::updateSpecialPhrases (void) {
+PhoneticEditor::updateSpecialPhrases (void)
+{
+    guint size = m_special_phrases.size ();
+    m_special_phrases.clear ();
+
+    if (!m_config.specialPhrases ())
+        return FALSE;
+
     if (!m_selected_special_phrase.empty ())
         return FALSE;
 
-    guint size = m_special_phrases.size ();
     guint begin = m_phrase_editor.cursorInChar ();
     guint end = m_cursor;
 
-    m_special_phrases.clear ();
     if (begin < end) {
         SpecialPhraseTable::instance ().lookup (
             m_text.substr (begin, m_cursor - begin),

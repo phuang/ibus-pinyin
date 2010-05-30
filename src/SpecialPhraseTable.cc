@@ -19,7 +19,6 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 #include <fstream>
-#include "Config.h"
 #include "DynamicSpecialPhrase.h"
 #include "SpecialPhraseTable.h"
 
@@ -55,9 +54,6 @@ SpecialPhraseTable::lookup (const std::string         &command,
                             std::vector<std::string>  &result)
 {
     result.clear ();
-
-    if (!PinyinConfig::instance ().specialPhrases ())
-        return FALSE;
 
     std::pair<Map::iterator, Map::iterator> range = m_map.equal_range (command);
     for (Map::iterator it = range.first; it != range.second; it ++) {
