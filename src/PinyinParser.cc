@@ -21,7 +21,6 @@
 
 #include <cstring>
 #include <cstdlib>
-#include <glib.h>
 #include "PinyinParser.h"
 
 namespace PY {

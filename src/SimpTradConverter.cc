@@ -20,7 +20,6 @@
  */
 #include <cstdlib>
 #include <cwchar>
-#include <glib.h>
 #include <glib-object.h>
 #include "SimpTradConverter.h"
 

@@ -19,8 +19,6 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#include <cstring>
-#include <ibus.h>
 #include "Engine.h"
 #include "PinyinEngine.h"
 #include "BopomofoEngine.h"

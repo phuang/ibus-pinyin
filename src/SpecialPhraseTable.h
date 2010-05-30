@@ -22,7 +22,6 @@
 #define __PY_SPECIAL_PHRASE_TABLE_H_
 
 #include <map>
-#include <list>
 #include <string>
 #include <vector>
 #include <glib.h>

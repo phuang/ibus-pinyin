@@ -24,7 +24,6 @@
 
 #include <glib.h>
 #include "Editor.h"
-#include "PhraseEditor.h"
 
 namespace PY {
 

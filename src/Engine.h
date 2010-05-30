@@ -24,12 +24,9 @@
 #include <ibus.h>
 
 #include "Pointer.h"
-#include "Database.h"
 #include "LookupTable.h"
 #include "Property.h"
-#include "Config.h"
 #include "Editor.h"
-#include "FallbackEditor.h"
 
 namespace PY {
 

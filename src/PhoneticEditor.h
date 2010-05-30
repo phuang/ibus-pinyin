@@ -21,9 +21,7 @@
 #ifndef __PY_PHONETIC_EDITOR_H_
 #define __PY_PHONETIC_EDITOR_H_
 
-#include <glib.h>
 #include "Editor.h"
-#include "Database.h"
 #include "PinyinParser.h"
 #include "PhraseEditor.h"
 #include "SpecialPhraseTable.h"
