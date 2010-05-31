@@ -45,7 +45,7 @@ public:
     {
         return m_cursor == 0 ? 0 : m_pinyin[m_cursor - 1].begin + m_pinyin[m_cursor - 1].len;
     }
-    
+
     gboolean pinyinExistsAfterCursor (void) const
     {
         return m_pinyin.size () > m_cursor;

@@ -28,15 +28,18 @@ namespace PY {
 template<typename T>
 struct Pointer {
 public:
-    Pointer (T *p = NULL) : m_p (NULL) {
+    Pointer (T *p = NULL) : m_p (NULL)
+    {
         set (p);
     }
 
-    ~Pointer (void) {
+    ~Pointer (void)
+    {
         set (NULL);
     }
 
-    void set (T * p) {
+    void set (T * p)
+    {
         if (m_p) {
             g_object_unref (m_p);
         }
@@ -50,29 +53,35 @@ public:
         }
     }
 
-    Pointer<T> &operator = (T *p) {
+    Pointer<T> &operator = (T *p)
+    {
         set (p);
         return *this;
     }
 
-    Pointer<T> &operator = (const Pointer<T> & p) {
+    Pointer<T> &operator = (const Pointer<T> & p)
+    {
         set (p.m_p);
         return *this;
     }
 
-    const T * operator-> (void) const {
+    const T * operator-> (void) const
+    {
         return m_p;
     }
 
-    T * operator-> (void) {
+    T * operator-> (void)
+    {
         return m_p;
     }
 
-    operator T * (void) const {
+    operator T * (void) const
+    {
         return m_p;
     }
 
-    operator gboolean (void) const {
+    operator gboolean (void) const
+    {
         return m_p != NULL;
     }
 

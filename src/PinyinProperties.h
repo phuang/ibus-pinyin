@@ -47,10 +47,10 @@ public:
     gboolean modeSimp (void) const      { return m_mode_simp; }
 
     PropList & properties (void)        { return m_props; }
-    
+
     gboolean propertyActivate (const gchar *prop_name, guint prop_state);
 
-    signal <void (Property &)> & signalUpdateProperty (void) 
+    signal <void (Property &)> & signalUpdateProperty (void)
     {
         return m_signal_update_property;
     }
