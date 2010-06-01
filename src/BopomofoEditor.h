@@ -39,14 +39,18 @@ public:
 protected:
     std::wstring bopomofo;
     gboolean m_select_mode;
+    std::string m_select_keys;
 
-    gboolean processNumber (guint keyval, guint keycode, guint modifiers);
-    gboolean processNumberWithShift (guint keyval, guint keycode, guint modifiers);
+    gboolean processGuideKey (guint keyval, guint keycode, guint modifiers);
+    gboolean processAuxiliarySelectKey (guint keyval, guint keycode, guint modifiers);
+    gboolean processSelectKey (guint keyval, guint keycode, guint modifiers);
     gboolean processBopomofo (guint keyval, guint keycode, guint modifiers);
     gboolean processKeyEvent (guint keyval, guint keycode, guint modifiers);
 
     void updateAuxiliaryText ();
     void updateLookupTable ();
+    void updateLookupTableFast ();
+    void updateLookupTableLabel ();
     void updatePinyin ();
     void updatePreeditText ();
 

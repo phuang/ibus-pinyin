@@ -227,7 +227,11 @@ PhoneticEditor::updateSpecialPhrases (void)
     return size != m_special_phrases.size () || size != 0;
 }
 
-
+void
+PhoneticEditor::updateLookupTableFast (void)
+{
+    Editor::updateLookupTableFast (m_lookup_table, TRUE);
+}
 
 void
 PhoneticEditor::updateLookupTable (void)
@@ -294,7 +298,7 @@ void
 PhoneticEditor::pageUp (void)
 {
     if (G_LIKELY (m_lookup_table.pageUp ())) {
-        updateLookupTableFast (m_lookup_table, TRUE);
+        updateLookupTableFast ();
         updatePreeditText ();
         updateAuxiliaryText ();
     }
@@ -306,7 +310,7 @@ PhoneticEditor::pageDown (void)
     if (G_LIKELY(
             (m_lookup_table.pageDown ()) ||
             (fillLookupTableByPage () && m_lookup_table.pageDown ()))) {
-        updateLookupTableFast (m_lookup_table, TRUE);
+        updateLookupTableFast ();
         updatePreeditText ();
         updateAuxiliaryText ();
     }
@@ -316,7 +320,7 @@ void
 PhoneticEditor::cursorUp (void)
 {
     if (G_LIKELY (m_lookup_table.cursorUp ())) {
-        updateLookupTableFast (m_lookup_table, TRUE);
+        updateLookupTableFast ();
         updatePreeditText ();
         updateAuxiliaryText ();
     }
@@ -332,7 +336,7 @@ PhoneticEditor::cursorDown (void)
     }
 
     if (G_LIKELY (m_lookup_table.cursorDown ())) {
-        updateLookupTableFast (m_lookup_table, TRUE);
+        updateLookupTableFast ();
         updatePreeditText ();
         updateAuxiliaryText ();
     }
