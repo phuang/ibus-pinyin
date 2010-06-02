@@ -39,7 +39,6 @@ public:
 protected:
     std::wstring bopomofo;
     gboolean m_select_mode;
-    std::string m_select_keys;
 
     gboolean processGuideKey (guint keyval, guint keycode, guint modifiers);
     gboolean processAuxiliarySelectKey (guint keyval, guint keycode, guint modifiers);

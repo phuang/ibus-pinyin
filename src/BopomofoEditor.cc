@@ -31,8 +31,7 @@ namespace PY {
 
 BopomofoEditor::BopomofoEditor (PinyinProperties & props, Config & config)
     : PhoneticEditor (props, config),
-      m_select_mode (FALSE),
-      m_select_keys ("1234567890")
+      m_select_mode (FALSE)
 {
 }
 
@@ -231,6 +230,9 @@ BopomofoEditor::moveCursorToEnd (void)
 gboolean
 BopomofoEditor::processGuideKey (guint keyval, guint keycode, guint modifiers)
 {
+    if (!m_config.guideKey ())
+        return FALSE;
+
     if (G_UNLIKELY (cmshm_filter (modifiers) != 0))
         return FALSE;
 
@@ -257,12 +259,18 @@ BopomofoEditor::processAuxiliarySelectKey (guint keyval, guint keycode, guint mo
     switch (keyval) {
     case IBUS_KP_0:
         i = 9;
+        if (!m_config.auxiliarySelectKeyKP ())
+            return FALSE;
         break;
     case IBUS_KP_1 ... IBUS_KP_9:
         i = keyval - IBUS_KP_1;
+        if (!m_config.auxiliarySelectKeyKP ())
+            return FALSE;
         break;
     case IBUS_F1 ... IBUS_F10:
         i = keyval - IBUS_F1;
+        if (!m_config.auxiliarySelectKeyF ())
+            return FALSE;
         break;
     default:
         return FALSE;
@@ -283,12 +291,14 @@ BopomofoEditor::processSelectKey (guint keyval, guint keycode, guint modifiers)
     if (G_LIKELY (!m_select_mode && ((modifiers & IBUS_MOD1_MASK) == 0)))
         return FALSE;
 
-    std::string::size_type pos = m_select_keys.find (keyval,0);
-    if (pos == std::string::npos)
+    const gchar * pos = strchr (m_config.selectKeys (), keyval);
+    if (pos == NULL)
         return FALSE;
 
     m_select_mode = TRUE;
-    selectCandidateInPage (pos);
+
+    guint i = pos - m_config.selectKeys ();
+    selectCandidateInPage (i);
 
     return TRUE;
 }
@@ -549,9 +559,9 @@ BopomofoEditor::updateLookupTableLabel ()
 {
     String str_label;
     guint color = m_select_mode ? 0x000000 : 0xBBBBBB;
-    for (const gchar *p = m_select_keys.c_str (); *p; p++)
+    for (const gchar *p = m_config.selectKeys (); *p; p++)
     {
-        guint i = p - m_select_keys.c_str ();
+        guint i = p - m_config.selectKeys ();
         if (i >= m_config.pageSize ())
             break;
         str_label.printf ("%c.",*p);
@@ -559,7 +569,10 @@ BopomofoEditor::updateLookupTableLabel ()
         text_label.appendAttribute (IBUS_ATTR_TYPE_FOREGROUND, color,0,-1);
         m_lookup_table.setLabel (i,text_label);
     }
-    m_lookup_table.setCursorVisable (m_select_mode);
+    if (m_config.guideKey ())
+        m_lookup_table.setCursorVisable (m_select_mode);
+    else
+        m_lookup_table.setCursorVisable (TRUE);
 }
 
 void

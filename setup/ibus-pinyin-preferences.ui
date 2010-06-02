@@ -762,13 +762,26 @@
                                 <property name="visible">True</property>
                                 <property name="spacing">6</property>
                                 <child>
+                                  <object class="GtkCheckButton" id="IncompleteBopomofo">
+                                    <property name="label" translatable="yes">Incomplete Bopomofo</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="receives_default">False</property>
+                                    <property name="active">True</property>
+                                    <property name="draw_indicator">True</property>
+                                  </object>
+                                  <packing>
+                                    <property name="position">0</property>
+                                  </packing>
+                                </child>
+                                <child>
                                   <object class="GtkHBox" id="hbox5">
                                     <property name="visible">True</property>
                                     <child>
                                       <object class="GtkLabel" id="labelBopomofoKeyboardMapping">
                                         <property name="visible">True</property>
                                         <property name="xalign">0</property>
-                                        <property name="label" translatable="yes">Keyboard Mappming:</property>
+                                        <property name="label" translatable="yes">Keyboard Mapping:</property>
                                       </object>
                                       <packing>
                                         <property name="position">0</property>
@@ -784,19 +797,6 @@
                                         <property name="position">1</property>
                                       </packing>
                                     </child>
-                                  </object>
-                                  <packing>
-                                    <property name="position">0</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkCheckButton" id="IncompleteBopomofo">
-                                    <property name="label" translatable="yes">Incomplete Bopomofo</property>
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="receives_default">False</property>
-                                    <property name="active">True</property>
-                                    <property name="draw_indicator">True</property>
                                   </object>
                                   <packing>
                                     <property name="position">1</property>
@@ -818,6 +818,105 @@
                         <property name="expand">False</property>
                         <property name="fill">False</property>
                         <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkFrame" id="frame1">
+                        <property name="visible">True</property>
+                        <property name="label_xalign">0</property>
+                        <property name="shadow_type">none</property>
+                        <child>
+                          <object class="GtkAlignment" id="alignment1">
+                            <property name="visible">True</property>
+                            <property name="top_padding">6</property>
+                            <property name="left_padding">12</property>
+                            <child>
+                              <object class="GtkVBox" id="vbox2">
+                                <property name="visible">True</property>
+                                <property name="spacing">6</property>
+                                <child>
+                                  <object class="GtkHBox" id="hbox9">
+                                    <property name="visible">True</property>
+                                    <child>
+                                      <object class="GtkLabel" id="labelSelectionKeys">
+                                        <property name="visible">True</property>
+                                        <property name="xalign">0</property>
+                                        <property name="label" translatable="yes">Selection Keys:</property>
+                                      </object>
+                                      <packing>
+                                        <property name="position">0</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkComboBoxEntry" id="SelectKeys">
+                                        <property name="visible">True</property>
+                                        <property name="model">liststoreSelectionKeys</property>
+                                        <property name="button_sensitivity">on</property>
+                                      </object>
+                                      <packing>
+                                        <property name="position">1</property>
+                                      </packing>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="position">0</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkCheckButton" id="GuideKey">
+                                    <property name="label" translatable="yes">Enable Guidekey for Candidates Selection</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="receives_default">False</property>
+                                    <property name="active">True</property>
+                                    <property name="draw_indicator">True</property>
+                                  </object>
+                                  <packing>
+                                    <property name="position">1</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkCheckButton" id="AuxiliarySelectKey_F">
+                                    <property name="label" translatable="yes">Enable Auxiliary Select Keys F1 .. F10</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="receives_default">False</property>
+                                    <property name="active">True</property>
+                                    <property name="draw_indicator">True</property>
+                                  </object>
+                                  <packing>
+                                    <property name="position">2</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkCheckButton" id="AuxiliarySelectKey_KP">
+                                    <property name="label" translatable="yes">Enable Auxiliary Select Keys Numbers on Keypad</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="receives_default">False</property>
+                                    <property name="active">True</property>
+                                    <property name="draw_indicator">True</property>
+                                  </object>
+                                  <packing>
+                                    <property name="position">3</property>
+                                  </packing>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child type="label">
+                          <object class="GtkLabel" id="label23">
+                            <property name="visible">True</property>
+                            <property name="label" translatable="yes">&lt;b&gt;Selection mode&lt;/b&gt;</property>
+                            <property name="use_markup">True</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">False</property>
+                        <property name="position">1</property>
                       </packing>
                     </child>
                   </object>
@@ -1586,6 +1685,32 @@ koterpilla, Zerng07
       </row>
       <row>
         <col id="0" translatable="yes">IBM</col>
+      </row>
+    </data>
+  </object>
+  <object class="GtkListStore" id="liststoreSelectionKeys">
+    <columns>
+      <!-- column-name select_keys -->
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0" translatable="no">1234567890</col>
+      </row>
+      <row>
+        <col id="0" translatable="no">asdfghjkl;</col>
+      </row>
+      <row>
+        <col id="0" translatable="no">1qaz2wsxed</col>
+      </row>
+      <row>
+        <col id="0" translatable="no">asdfzxcvgb</col>
+      </row>
+      <row>
+        <col id="0" translatable="no">1234qweras</col>
+      </row>
+      <row>
+        <col id="0" translatable="no">aoeu;qjkix</col>
       </row>
     </data>
   </object>

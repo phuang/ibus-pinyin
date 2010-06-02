@@ -41,6 +41,10 @@ const gchar * const CONFIG_INIT_FULL_PUNCT           = "InitFullPunct";
 const gchar * const CONFIG_INIT_SIMP_CHINESE         = "InitSimplifiedChinese";
 const gchar * const CONFIG_SPECIAL_PHRASES           = "SpecialPhrases";
 const gchar * const CONFIG_BOPOMOFO_KEYBOARD_MAPPING = "BopomofoKeyboardMapping";
+const gchar * const CONFIG_SELECT_KEYS               = "SelectKeys";
+const gchar * const CONFIG_GUIDE_KEY                 = "GuideKey";
+const gchar * const CONFIG_AUXILIARY_SELECT_KEY_F    = "AuxiliarySelectKey_F";
+const gchar * const CONFIG_AUXILIARY_SELECT_KEY_KP   = "AuxiliarySelectKey_KP";
 
 boost::scoped_ptr<PinyinConfig> PinyinConfig::m_instance;
 boost::scoped_ptr<BopomofoConfig> BopomofoConfig::m_instance;
@@ -144,11 +148,11 @@ Config::readDefaultValues (void)
 }
 
 inline bool
-Config::read (const std::string & name,
-              bool                defval)
+Config::read (const gchar * name,
+              bool          defval)
 {
     GValue value = {0};
-    if (ibus_config_get_value (get<IBusConfig> (), m_section.c_str (), name.c_str (), &value)) {
+    if (ibus_config_get_value (get<IBusConfig> (), m_section.c_str (), name, &value)) {
         if (G_VALUE_TYPE (&value) == G_TYPE_BOOLEAN)
             return g_value_get_boolean (&value);
     }
@@ -156,17 +160,17 @@ Config::read (const std::string & name,
     // write default value to config
     g_value_init (&value, G_TYPE_BOOLEAN);
     g_value_set_boolean (&value, defval);
-    ibus_config_set_value (get<IBusConfig> (), m_section.c_str (), name.c_str (), &value);
+    ibus_config_set_value (get<IBusConfig> (), m_section.c_str (), name, &value);
 
     return defval;
 }
 
 inline gint
-Config::read (const std::string & name,
-              gint                defval)
+Config::read (const gchar * name,
+              gint          defval)
 {
     GValue value = {0};
-    if (ibus_config_get_value (get<IBusConfig> (), m_section.c_str (), name.c_str (), &value)) {
+    if (ibus_config_get_value (get<IBusConfig> (), m_section.c_str (), name, &value)) {
         if (G_VALUE_TYPE (&value) == G_TYPE_INT)
             return g_value_get_int (&value);
     }
@@ -174,7 +178,25 @@ Config::read (const std::string & name,
     // write default value to config
     g_value_init (&value, G_TYPE_INT);
     g_value_set_int (&value, defval);
-    ibus_config_set_value (get<IBusConfig> (), m_section.c_str (), name.c_str (), &value);
+    ibus_config_set_value (get<IBusConfig> (), m_section.c_str (), name, &value);
+
+    return defval;
+}
+
+inline const gchar *
+Config::read (const gchar * name,
+              const gchar * defval)
+{
+    GValue value = {0};
+    if (ibus_config_get_value (get<IBusConfig> (), m_section.c_str (), name, &value)) {
+        if (G_VALUE_TYPE (&value) == G_TYPE_STRING)
+            return g_value_get_string (&value);
+    }
+
+    // write default value to config
+    g_value_init (&value, G_TYPE_STRING);
+    g_value_set_static_string (&value, defval);
+    ibus_config_set_value (get<IBusConfig> (), m_section.c_str (), name, &value);
 
     return defval;
 }
@@ -195,6 +217,13 @@ normalizeGValue (const GValue *value, gint defval)
     return g_value_get_int (value);
 }
 
+static inline const gchar *
+normalizeGValue (const GValue *value, const gchar * defval)
+{
+    if (value == NULL || G_VALUE_TYPE (value) != G_TYPE_STRING)
+        return defval;
+    return g_value_get_string (value);
+}
 
 gboolean
 Config::valueChanged (const std::string & section,
@@ -422,7 +451,12 @@ BopomofoConfig::readDefaultValues (void)
 
     m_special_phrases = read (CONFIG_SPECIAL_PHRASES, false);
 
-    m_bopomofoKeyboardMapping = read (CONFIG_BOPOMOFO_KEYBOARD_MAPPING, 0);
+    m_bopomofo_keyboard_mapping = read (CONFIG_BOPOMOFO_KEYBOARD_MAPPING, 0);
+
+    m_select_keys = read (CONFIG_SELECT_KEYS, "1234567890");
+    m_guide_key = read (CONFIG_GUIDE_KEY, true);
+    m_auxiliary_select_key_f = read (CONFIG_AUXILIARY_SELECT_KEY_F, true);
+    m_auxiliary_select_key_kp = read (CONFIG_AUXILIARY_SELECT_KEY_KP, true);
 }
 
 gboolean
@@ -448,10 +482,17 @@ BopomofoConfig::valueChanged (const std::string & section,
     else if (CONFIG_SPECIAL_PHRASES == name)
         m_special_phrases = normalizeGValue (value, false);
     else if (CONFIG_BOPOMOFO_KEYBOARD_MAPPING == name)
-        m_bopomofoKeyboardMapping = normalizeGValue (value, 0);
+        m_bopomofo_keyboard_mapping = normalizeGValue (value, 0);
+    else if (CONFIG_SELECT_KEYS == name)
+        m_select_keys = normalizeGValue (value, "1234567890");
+    else if (CONFIG_GUIDE_KEY == name)
+        m_guide_key = normalizeGValue (value, true);
+    else if (CONFIG_AUXILIARY_SELECT_KEY_F == name)
+        m_auxiliary_select_key_f = normalizeGValue (value, true);
+    else if (CONFIG_AUXILIARY_SELECT_KEY_KP == name)
+        m_auxiliary_select_key_kp = normalizeGValue (value, true);
     else
         return FALSE;
-
     return TRUE;
 
 }

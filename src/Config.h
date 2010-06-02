@@ -51,11 +51,17 @@ public:
     gboolean initFullPunct (void) const         { return m_init_full_punct; }
     gboolean initSimpChinese (void) const       { return m_init_simp_chinese; }
     gboolean specialPhrases (void) const        { return m_special_phrases; }
-    gint bopomofoKeyboardMapping (void) const   { return m_bopomofoKeyboardMapping; }
+    gint bopomofoKeyboardMapping (void) const   { return m_bopomofo_keyboard_mapping; }
+    const gchar * selectKeys (void) const       { return m_select_keys.c_str (); }
+    gboolean guideKey (void) const              { return m_guide_key; }
+    gboolean auxiliarySelectKeyF (void) const   { return m_auxiliary_select_key_f; }
+    gboolean auxiliarySelectKeyKP (void) const  { return m_auxiliary_select_key_kp; }
 
 protected:
-    bool read (const std::string & name, bool defval);
-    int read (const std::string & name, int defval);
+    bool read (const gchar * name, bool defval);
+    gint read (const gchar * name, gint defval);
+    const gchar * read (const gchar * name, const gchar * defval);
+
     virtual void readDefaultValues (void);
 
     virtual gboolean valueChanged (const std::string & section,
@@ -90,7 +96,11 @@ protected:
     gboolean m_init_simp_chinese;
     gboolean m_special_phrases;
 
-    gint m_bopomofoKeyboardMapping;
+    gint m_bopomofo_keyboard_mapping;
+    std::string m_select_keys;
+    gboolean m_guide_key;
+    gboolean m_auxiliary_select_key_f;
+    gboolean m_auxiliary_select_key_kp;
 };
 
 /* PinyinConfig */

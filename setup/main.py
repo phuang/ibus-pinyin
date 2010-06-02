@@ -181,23 +181,40 @@ class PreferencesDialog:
         # page Bopomodo Mode
         self.__page_bopomofo_mode.show()
         
-        # bopomofo
-        self.__bopomofo_keyboard_mapping = self.__builder.get_object("BopomofoKeyboardMapping")
+        # bopomofo mode
         self.__incomplete_bopomofo = self.__builder.get_object("IncompleteBopomofo")
+        self.__bopomofo_keyboard_mapping = self.__builder.get_object("BopomofoKeyboardMapping")
         renderer = gtk.CellRendererText()
         self.__bopomofo_keyboard_mapping.pack_start(renderer)
         self.__bopomofo_keyboard_mapping.set_attributes(renderer, text=0)
         
+        # selection mode
+        self.__select_keys = self.__builder.get_object("SelectKeys")
+        self.__select_keys.set_text_column(0)
+        self.__guide_key = self.__builder.get_object("GuideKey")
+        self.__auxiliary_select_key_f = self.__builder.get_object("AuxiliarySelectKey_F")
+        self.__auxiliary_select_key_kp = self.__builder.get_object("AuxiliarySelectKey_KP")
+
         # read value
         self.__bopomofo_keyboard_mapping.set_active(self.__get_value("BopomofoKeyboardMapping", 0))
         self.__incomplete_bopomofo.set_active(self.__get_value("IncompletePinyin", False))
+        self.__select_keys.get_child().set_text(self.__get_value("SelectKeys", "1234567890"))
+        self.__guide_key.set_active(self.__get_value("GuideKey", 1))
+        self.__auxiliary_select_key_f.set_active(self.__get_value("AuxiliarySelectKey_F", 1))
+        self.__auxiliary_select_key_kp.set_active(self.__get_value("AuxiliarySelectKey_KP", 1))
 
         # connect signals
         def __bopomofo_keyboard_mapping_changed_cb(widget):
             self.__set_value("BopomofoKeyboardMapping", widget.get_active())
+        def __select_keys_changed_cb(widget):
+            self.__set_value("SelectKeys", widget.get_active_text())
         
         self.__bopomofo_keyboard_mapping.connect("changed", __bopomofo_keyboard_mapping_changed_cb)
         self.__incomplete_bopomofo.connect("toggled", self.__toggled_cb, "IncompletePinyin")
+        self.__select_keys.connect("changed", __select_keys_changed_cb)
+        self.__guide_key.connect("toggled", self.__toggled_cb, "GuideKey")
+        self.__auxiliary_select_key_f.connect("toggled", self.__toggled_cb, "AuxiliarySelectKey_F")
+        self.__auxiliary_select_key_kp.connect("toggled", self.__toggled_cb, "AuxiliarySelectKey_KP")
 
     def __init_input_custom(self):
         # others
@@ -373,6 +390,7 @@ class PreferencesDialog:
 
     def __set_value(self, name, val):
         self.__config.set_value(self.__config_namespace, name, val)
+        print name,val
 
     def run(self):
         return self.__dialog.run()
