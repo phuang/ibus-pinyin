@@ -29,6 +29,7 @@
 #include "Pointer.h"
 #include "Bus.h"
 #include "Config.h"
+#include "Database.h"
 
 using namespace PY;
 
@@ -40,8 +41,17 @@ static Pointer<IBusFactory> factory;
 static gboolean ibus = FALSE;
 static gboolean verbose = FALSE;
 
+static void
+show_version_and_quit (void)
+{
+    g_print ("%s - Version %s\n", g_get_application_name (), VERSION);
+    exit (EXIT_SUCCESS);
+}
+
 static const GOptionEntry entries[] =
 {
+    { "version", 'V', G_OPTION_FLAG_NO_ARG, G_OPTION_ARG_CALLBACK,
+        (gpointer) show_version_and_quit, "Show the application's version.", NULL },
     { "ibus",    'i', 0, G_OPTION_ARG_NONE, &ibus, "component is executed by ibus", NULL },
     { "verbose", 'v', 0, G_OPTION_ARG_NONE, &verbose, "verbose", NULL },
     { NULL },
@@ -70,6 +80,7 @@ start_component (void)
         exit (0);
     }
 
+    Database::init ();
     PinyinConfig::init (bus);
     BopomofoConfig::init (bus);
 

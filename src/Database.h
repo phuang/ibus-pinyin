@@ -23,6 +23,7 @@
 
 #include <sqlite3.h>
 #include <boost/shared_ptr.hpp>
+#include <boost/scoped_ptr.hpp>
 #include "String.h"
 #include "Types.h"
 #include "PinyinArray.h"
@@ -54,9 +55,10 @@ private:
 typedef boost::shared_ptr<Query> QueryPtr;
 
 class Database {
-private:
-    Database ();
+public:
     ~Database ();
+protected:
+    Database ();
 
 public:
     SQLStmtPtr query (const PinyinArray   & pinyin,
@@ -70,11 +72,12 @@ public:
     void conditionsDouble (void);
     void conditionsTriple (void);
 
-    static Database & instance (void) { return m_instance; }
+    static void init (void);
+    static Database & instance (void) { return *m_instance; }
 
 private:
-    gboolean init (void);
-    gboolean initUserDatabase (const gchar *userdb);
+    gboolean open (void);
+    gboolean openUserDB (const gchar *userdb);
     void prefetch (void);
     void phraseSql (const Phrase & p, String & sql);
     void phraseWhereSql (const Phrase & p, String & sql);
@@ -87,7 +90,7 @@ private:
     String m_buffer;     /* temp buffer */
 
 private:
-    static Database m_instance;
+    static boost::scoped_ptr<Database> m_instance;
 };
 
 

@@ -39,7 +39,7 @@ namespace PY {
 
 #define DB_PREFETCH_LEN     (6)
 
-Database Database::m_instance;
+boost::scoped_ptr<Database> Database::m_instance;
 
 class Conditions : public std::vector<std::string> {
 public:
@@ -189,7 +189,7 @@ Query::fill (PhraseArray &phrases, gint count)
 Database::Database (void)
     : m_db (NULL)
 {
-    init ();
+    open ();
 }
 
 Database::~Database (void)
@@ -214,7 +214,7 @@ Database::executeSQL (const gchar *sql)
 }
 
 gboolean
-Database::init (void)
+Database::open (void)
 {
     gboolean retval;
 
@@ -276,10 +276,10 @@ Database::init (void)
              << G_DIR_SEPARATOR_S << "pinyin";
     g_mkdir_with_parents (m_buffer, 0750);
     m_buffer << G_DIR_SEPARATOR_S << "user-1.3.db";
-    retval = initUserDatabase (m_buffer);
+    retval = openUserDB (m_buffer);
     if (!retval) {
         g_warning ("Can not open user database %s", m_buffer.c_str ());
-        if (!initUserDatabase (":memory:"))
+        if (!openUserDB (":memory:"))
             goto _failed;
     }
 
@@ -297,7 +297,7 @@ _failed:
 }
 
 gboolean
-Database::initUserDatabase (const gchar *userdb)
+Database::openUserDB (const gchar *userdb)
 {
     m_sql.printf ("ATTACH DATABASE \"%s\" AS userdb;", userdb);
     if (!executeSQL (m_sql))
@@ -614,6 +614,14 @@ Database::remove (const Phrase & phrase)
     m_sql << "COMMIT;\n";
 
     executeSQL (m_sql);
+}
+
+void
+Database::init (void)
+{
+    if (m_instance == NULL) {
+        m_instance.reset (new Database ());
+    }
 }
 
 };
