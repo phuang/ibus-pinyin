@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ibus-pinyin 1.2.99\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-05-28 13:43+0800\n"
+"POT-Creation-Date: 2010-06-04 15:21+0800\n"
 "PO-Revision-Date: 2009-09-20 16:05+8\n"
 "Last-Translator: Peng Huang <shawn.p.huang@gmail.com>\n"
 "Language-Team: Peng Huang <shawn.p.huang@gmail.com>\n"
@@ -35,34 +35,34 @@ msgstr "注音（调试）"
 msgid "Bopomofo input method (debug)"
 msgstr "注音输入法（调试）"
 
-#: ../src/PinyinProperties.cc:40 ../setup/ibus-pinyin-preferences.ui.h:23
+#: ../src/PinyinProperties.cc:39 ../setup/ibus-pinyin-preferences.ui.h:24
 msgid "Chinese"
 msgstr "中文"
 
-#: ../src/PinyinProperties.cc:47
+#: ../src/PinyinProperties.cc:46
 msgid "Full/Half width"
 msgstr "全角/半角"
 
-#: ../src/PinyinProperties.cc:54
+#: ../src/PinyinProperties.cc:53
 msgid "Full/Half width punctuation"
 msgstr "半角符号"
 
-#: ../src/PinyinProperties.cc:61
+#: ../src/PinyinProperties.cc:60
 msgid "Simplfied/Traditional Chinese"
 msgstr "简体/繁体中文"
 
-#: ../src/PinyinProperties.cc:64 ../src/PinyinProperties.cc:66
+#: ../src/PinyinProperties.cc:63 ../src/PinyinProperties.cc:65
 msgid "Pinyin preferences"
 msgstr "拼音首选项"
 
-#: ../setup/main.py:359 ../setup/ibus-pinyin-preferences.ui.h:9
+#: ../setup/main.py:377 ../setup/ibus-pinyin-preferences.ui.h:10
 #, no-c-format, python-format
 msgid "<big><b>IBus Pinyin %s</b></big>"
 msgstr "<big><b>IBus 拼音 %s</b></big>"
 
 #: ../setup/ibus-pinyin-preferences.ui.h:1
 msgid "<b>Bopomofo mode</b>"
-msgstr "注音模式"
+msgstr "<b>注音模式</b>"
 
 #: ../setup/ibus-pinyin-preferences.ui.h:2
 msgid "<b>Correct pinyin</b>"
@@ -85,10 +85,14 @@ msgid "<b>Pinyin mode</b>"
 msgstr "<b>拼音模式</b>"
 
 #: ../setup/ibus-pinyin-preferences.ui.h:7
+msgid "<b>Selection mode</b>"
+msgstr "<b>选词模式</b>"
+
+#: ../setup/ibus-pinyin-preferences.ui.h:8
 msgid "<b>UI</b>"
 msgstr "<b>外观</b>"
 
-#: ../setup/ibus-pinyin-preferences.ui.h:10
+#: ../setup/ibus-pinyin-preferences.ui.h:11
 msgid ""
 "<small>\n"
 "<b>Authors:</b>\n"
@@ -108,187 +112,203 @@ msgstr ""
 "koterpilla, Zerng07\n"
 "</small>"
 
-#: ../setup/ibus-pinyin-preferences.ui.h:18
+#: ../setup/ibus-pinyin-preferences.ui.h:19
 msgid "<small>Copyright (c) 2009-2010 Peng Huang</small>"
 msgstr "<small>版权所有 (c) 2009-2010 黄鹏</small>"
 
-#: ../setup/ibus-pinyin-preferences.ui.h:19
+#: ../setup/ibus-pinyin-preferences.ui.h:20
 msgid "ABC"
 msgstr "智能ABC"
 
-#: ../setup/ibus-pinyin-preferences.ui.h:20
+#: ../setup/ibus-pinyin-preferences.ui.h:21
 msgid "About"
 msgstr "关于"
 
-#: ../setup/ibus-pinyin-preferences.ui.h:21
+#: ../setup/ibus-pinyin-preferences.ui.h:22
 msgid "Auto commit"
 msgstr "自动上词"
 
-#: ../setup/ibus-pinyin-preferences.ui.h:22
+#: ../setup/ibus-pinyin-preferences.ui.h:23
 msgid "Bopomofo mode"
 msgstr "注音模式"
 
-#: ../setup/ibus-pinyin-preferences.ui.h:24
+#: ../setup/ibus-pinyin-preferences.ui.h:25
 msgid "Chinese:"
 msgstr "中文："
 
-#: ../setup/ibus-pinyin-preferences.ui.h:25
+#: ../setup/ibus-pinyin-preferences.ui.h:26
 msgid "Dictionary"
 msgstr "词典"
 
-#: ../setup/ibus-pinyin-preferences.ui.h:26
+#: ../setup/ibus-pinyin-preferences.ui.h:27
 msgid "Double pinyin"
 msgstr "双拼"
 
-#: ../setup/ibus-pinyin-preferences.ui.h:27
+#: ../setup/ibus-pinyin-preferences.ui.h:28
 msgid "Edit custom phrases"
 msgstr "编辑自定义词组"
 
-#: ../setup/ibus-pinyin-preferences.ui.h:28
+#: ../setup/ibus-pinyin-preferences.ui.h:29
+msgid "Enable Auxiliary Select Keys F1 .. F10"
+msgstr "启用辅助选词键F1 .. F10"
+
+#: ../setup/ibus-pinyin-preferences.ui.h:30
+msgid "Enable Auxiliary Select Keys Numbers on Keypad"
+msgstr "启用数字键盘辅助选词键"
+
+#: ../setup/ibus-pinyin-preferences.ui.h:31
+msgid "Enable Guidekey for Candidates Selection"
+msgstr "启用选词引导键"
+
+#: ../setup/ibus-pinyin-preferences.ui.h:32
 msgid "Enable correct pinyin"
 msgstr "启动拼音纠错"
 
-#: ../setup/ibus-pinyin-preferences.ui.h:29
+#: ../setup/ibus-pinyin-preferences.ui.h:33
 msgid "Enable fuzzy syllable"
 msgstr "启动模糊音"
 
-#: ../setup/ibus-pinyin-preferences.ui.h:30
+#: ../setup/ibus-pinyin-preferences.ui.h:34
 msgid "English"
 msgstr "英文"
 
-#: ../setup/ibus-pinyin-preferences.ui.h:31
+#: ../setup/ibus-pinyin-preferences.ui.h:35
 msgid "Eten"
 msgstr "倚天"
 
-#: ../setup/ibus-pinyin-preferences.ui.h:32
+#: ../setup/ibus-pinyin-preferences.ui.h:36
 msgid "Full"
 msgstr "全角"
 
-#: ../setup/ibus-pinyin-preferences.ui.h:33
+#: ../setup/ibus-pinyin-preferences.ui.h:37
 msgid "Full pinyin"
 msgstr "全拼"
 
-#: ../setup/ibus-pinyin-preferences.ui.h:34
+#: ../setup/ibus-pinyin-preferences.ui.h:38
 msgid "Fuzzy syllable"
 msgstr "模糊音"
 
-#: ../setup/ibus-pinyin-preferences.ui.h:35
+#: ../setup/ibus-pinyin-preferences.ui.h:39
 msgid "General"
 msgstr "常规"
 
-#: ../setup/ibus-pinyin-preferences.ui.h:36
+#: ../setup/ibus-pinyin-preferences.ui.h:40
 msgid "GinYieh"
 msgstr "精业"
 
-#: ../setup/ibus-pinyin-preferences.ui.h:37
+#: ../setup/ibus-pinyin-preferences.ui.h:41
 msgid "Half"
 msgstr "半角"
 
-#: ../setup/ibus-pinyin-preferences.ui.h:38
+#: ../setup/ibus-pinyin-preferences.ui.h:42
 msgid "Half/full width:"
 msgstr "全角/半角："
 
-#: ../setup/ibus-pinyin-preferences.ui.h:39
+#: ../setup/ibus-pinyin-preferences.ui.h:43
 msgid "Horizontal"
 msgstr "水平"
 
-#: ../setup/ibus-pinyin-preferences.ui.h:40
+#: ../setup/ibus-pinyin-preferences.ui.h:44
 msgid "IBM"
 msgstr "IBM"
 
-#: ../setup/ibus-pinyin-preferences.ui.h:41
+#: ../setup/ibus-pinyin-preferences.ui.h:45
 msgid "Incomplete Bopomofo"
 msgstr "简拼"
 
-#: ../setup/ibus-pinyin-preferences.ui.h:42
+#: ../setup/ibus-pinyin-preferences.ui.h:46
 msgid "Incomplete pinyin"
 msgstr "简拼"
 
-#: ../setup/ibus-pinyin-preferences.ui.h:43
-msgid "Keyboard Mappming:"
+#: ../setup/ibus-pinyin-preferences.ui.h:47
+msgid "Keyboard Mapping:"
 msgstr "键盘映射："
 
-#: ../setup/ibus-pinyin-preferences.ui.h:44
+#: ../setup/ibus-pinyin-preferences.ui.h:48
 msgid "Language:"
 msgstr "语言："
 
-#: ../setup/ibus-pinyin-preferences.ui.h:45
+#: ../setup/ibus-pinyin-preferences.ui.h:49
 msgid "MSPY"
 msgstr "微软拼音"
 
-#: ../setup/ibus-pinyin-preferences.ui.h:46
+#: ../setup/ibus-pinyin-preferences.ui.h:50
 msgid "Number of candidates:"
 msgstr "每页显示候选词数："
 
-#: ../setup/ibus-pinyin-preferences.ui.h:47
+#: ../setup/ibus-pinyin-preferences.ui.h:51
 msgid "Orientation of candidates:"
 msgstr "候选词排列方向："
 
-#: ../setup/ibus-pinyin-preferences.ui.h:48
+#: ../setup/ibus-pinyin-preferences.ui.h:52
 msgid "PYJJ"
 msgstr "拼音加加"
 
-#: ../setup/ibus-pinyin-preferences.ui.h:49
+#: ../setup/ibus-pinyin-preferences.ui.h:53
 msgid "Pinyin input method for IBus"
 msgstr "IBus 拼音输入法"
 
-#: ../setup/ibus-pinyin-preferences.ui.h:50
+#: ../setup/ibus-pinyin-preferences.ui.h:54
 msgid "Pinyin mode"
 msgstr "拼音模式"
 
-#: ../setup/ibus-pinyin-preferences.ui.h:51
+#: ../setup/ibus-pinyin-preferences.ui.h:55
 msgid "Preferences"
 msgstr "首选项"
 
-#: ../setup/ibus-pinyin-preferences.ui.h:52
+#: ../setup/ibus-pinyin-preferences.ui.h:56
 msgid "Punctuations:"
 msgstr "标点符号："
 
-#: ../setup/ibus-pinyin-preferences.ui.h:53
+#: ../setup/ibus-pinyin-preferences.ui.h:57
+msgid "Selection Keys:"
+msgstr "选词键："
+
+#: ../setup/ibus-pinyin-preferences.ui.h:58
 msgid "Show raw input of Double Pinyin"
 msgstr "显示双拼原始输入"
 
-#: ../setup/ibus-pinyin-preferences.ui.h:54
+#: ../setup/ibus-pinyin-preferences.ui.h:59
 msgid "Simplified"
 msgstr "简体"
 
-#: ../setup/ibus-pinyin-preferences.ui.h:55
+#: ../setup/ibus-pinyin-preferences.ui.h:60
 msgid "Standard"
 msgstr "标准"
 
-#: ../setup/ibus-pinyin-preferences.ui.h:56
+#: ../setup/ibus-pinyin-preferences.ui.h:61
 msgid "Traditional"
 msgstr "繁体"
 
-#: ../setup/ibus-pinyin-preferences.ui.h:57
+#: ../setup/ibus-pinyin-preferences.ui.h:62
 msgid "Use custom phrases"
 msgstr "使用自定义词组"
 
-#: ../setup/ibus-pinyin-preferences.ui.h:58
+#: ../setup/ibus-pinyin-preferences.ui.h:63
 msgid "Vertical"
 msgstr "竖直"
 
-#: ../setup/ibus-pinyin-preferences.ui.h:59
+#: ../setup/ibus-pinyin-preferences.ui.h:64
 msgid "ZGPY"
 msgstr "紫光拼音"
 
-#: ../setup/ibus-pinyin-preferences.ui.h:60
+#: ../setup/ibus-pinyin-preferences.ui.h:65
 msgid "ZRM"
 msgstr "自然码"
 
-#: ../setup/ibus-pinyin-preferences.ui.h:61
+#: ../setup/ibus-pinyin-preferences.ui.h:66
 msgid "[,] [.] flip page"
 msgstr "[,][.]键翻页"
 
-#: ../setup/ibus-pinyin-preferences.ui.h:62
+#: ../setup/ibus-pinyin-preferences.ui.h:67
 msgid "[-] [=] flip page"
 msgstr "[-][=]键翻页"
 
-#: ../setup/ibus-pinyin-preferences.ui.h:63
+#: ../setup/ibus-pinyin-preferences.ui.h:68
 msgid "[Shift] select candidate"
 msgstr "[Shift]键选词"
 
-#: ../setup/ibus-pinyin-preferences.ui.h:64
+#: ../setup/ibus-pinyin-preferences.ui.h:69
 msgid "http://ibus.googlecode.com"
 msgstr "http://ibus.googlecode.com"
 
