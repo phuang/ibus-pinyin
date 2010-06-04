@@ -25,9 +25,19 @@
 #include "SimpTradConverter.h"
 
 namespace PY {
-
-#include "Bopomofo.h"
 #include "BopomofoKeyboard.h"
+
+const static gchar * bopomofo_select_keys[] = {
+    "1234567890",
+    "asdfghjkl;",
+    "1qaz2wsxed",
+    "asdfzxcvgb",
+    "1234qweras",
+    "aoeu;qjkix",
+    "aoeuhtnsid",
+    "aoeuidhtns",
+    "qweasdzxcr"
+};
 
 BopomofoEditor::BopomofoEditor (PinyinProperties & props, Config & config)
     : PhoneticEditor (props, config),
