@@ -453,7 +453,7 @@ BopomofoConfig::readDefaultValues (void)
 
     m_bopomofo_keyboard_mapping = read (CONFIG_BOPOMOFO_KEYBOARD_MAPPING, 0);
 
-    m_select_keys = read (CONFIG_SELECT_KEYS, "1234567890");
+    m_select_keys = read (CONFIG_SELECT_KEYS, 0);
     m_guide_key = read (CONFIG_GUIDE_KEY, true);
     m_auxiliary_select_key_f = read (CONFIG_AUXILIARY_SELECT_KEY_F, true);
     m_auxiliary_select_key_kp = read (CONFIG_AUXILIARY_SELECT_KEY_KP, true);
@@ -484,7 +484,7 @@ BopomofoConfig::valueChanged (const std::string & section,
     else if (CONFIG_BOPOMOFO_KEYBOARD_MAPPING == name)
         m_bopomofo_keyboard_mapping = normalizeGValue (value, 0);
     else if (CONFIG_SELECT_KEYS == name)
-        m_select_keys = normalizeGValue (value, "1234567890");
+        m_select_keys = normalizeGValue (value, 0);
     else if (CONFIG_GUIDE_KEY == name)
         m_guide_key = normalizeGValue (value, true);
     else if (CONFIG_AUXILIARY_SELECT_KEY_F == name)

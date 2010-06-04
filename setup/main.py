@@ -190,7 +190,8 @@ class PreferencesDialog:
         
         # selection mode
         self.__select_keys = self.__builder.get_object("SelectKeys")
-        self.__select_keys.set_text_column(0)
+        self.__select_keys.pack_start(renderer)
+        self.__select_keys.set_attributes(renderer, text=0)
         self.__guide_key = self.__builder.get_object("GuideKey")
         self.__auxiliary_select_key_f = self.__builder.get_object("AuxiliarySelectKey_F")
         self.__auxiliary_select_key_kp = self.__builder.get_object("AuxiliarySelectKey_KP")
@@ -198,7 +199,7 @@ class PreferencesDialog:
         # read value
         self.__bopomofo_keyboard_mapping.set_active(self.__get_value("BopomofoKeyboardMapping", 0))
         self.__incomplete_bopomofo.set_active(self.__get_value("IncompletePinyin", False))
-        self.__select_keys.get_child().set_text(self.__get_value("SelectKeys", "1234567890"))
+        self.__select_keys.set_active(self.__get_value("SelectKeys", 0))
         self.__guide_key.set_active(self.__get_value("GuideKey", 1))
         self.__auxiliary_select_key_f.set_active(self.__get_value("AuxiliarySelectKey_F", 1))
         self.__auxiliary_select_key_kp.set_active(self.__get_value("AuxiliarySelectKey_KP", 1))
@@ -207,7 +208,7 @@ class PreferencesDialog:
         def __bopomofo_keyboard_mapping_changed_cb(widget):
             self.__set_value("BopomofoKeyboardMapping", widget.get_active())
         def __select_keys_changed_cb(widget):
-            self.__set_value("SelectKeys", widget.get_active_text())
+            self.__set_value("SelectKeys", widget.get_active())
         
         self.__bopomofo_keyboard_mapping.connect("changed", __bopomofo_keyboard_mapping_changed_cb)
         self.__incomplete_bopomofo.connect("toggled", self.__toggled_cb, "IncompletePinyin")

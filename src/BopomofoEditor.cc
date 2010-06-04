@@ -291,13 +291,13 @@ BopomofoEditor::processSelectKey (guint keyval, guint keycode, guint modifiers)
     if (G_LIKELY (!m_select_mode && ((modifiers & IBUS_MOD1_MASK) == 0)))
         return FALSE;
 
-    const gchar * pos = strchr (m_config.selectKeys (), keyval);
+    const gchar * pos = strchr (bopomofo_select_keys[m_config.selectKeys ()], keyval);
     if (pos == NULL)
         return FALSE;
 
     m_select_mode = TRUE;
 
-    guint i = pos - m_config.selectKeys ();
+    guint i = pos - bopomofo_select_keys[m_config.selectKeys ()];
     selectCandidateInPage (i);
 
     return TRUE;
@@ -559,9 +559,9 @@ BopomofoEditor::updateLookupTableLabel ()
 {
     String str_label;
     guint color = m_select_mode ? 0x000000 : 0xBBBBBB;
-    for (const gchar *p = m_config.selectKeys (); *p; p++)
+    for (const gchar *p = bopomofo_select_keys[m_config.selectKeys ()]; *p; p++)
     {
-        guint i = p - m_config.selectKeys ();
+        guint i = p - bopomofo_select_keys[m_config.selectKeys ()];
         if (i >= m_config.pageSize ())
             break;
         str_label.printf ("%c.",*p);

@@ -77,4 +77,16 @@ const static wchar_t bopomofo_char[] = {
     L'ˊ', L'ˇ', L'ˋ', L'˙',
 };
 
+const static gchar * bopomofo_select_keys[] = {
+    "1234567890",
+    "asdfghjkl;",
+    "1qaz2wsxed",
+    "asdfzxcvgb",
+    "1234qweras",
+    "aoeu;qjkix",
+    "aoeuhtnsid",
+    "aoeuidhtns",
+    "qweasdzxcr"
+};
+
 #endif /* __PY_BOPOMOFO_H_ */

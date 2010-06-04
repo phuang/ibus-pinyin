@@ -52,7 +52,7 @@ public:
     gboolean initSimpChinese (void) const       { return m_init_simp_chinese; }
     gboolean specialPhrases (void) const        { return m_special_phrases; }
     gint bopomofoKeyboardMapping (void) const   { return m_bopomofo_keyboard_mapping; }
-    const gchar * selectKeys (void) const       { return m_select_keys.c_str (); }
+    gint selectKeys (void) const                { return m_select_keys; }
     gboolean guideKey (void) const              { return m_guide_key; }
     gboolean auxiliarySelectKeyF (void) const   { return m_auxiliary_select_key_f; }
     gboolean auxiliarySelectKeyKP (void) const  { return m_auxiliary_select_key_kp; }
@@ -97,7 +97,7 @@ protected:
     gboolean m_special_phrases;
 
     gint m_bopomofo_keyboard_mapping;
-    std::string m_select_keys;
+    gint m_select_keys;
     gboolean m_guide_key;
     gboolean m_auxiliary_select_key_f;
     gboolean m_auxiliary_select_key_kp;

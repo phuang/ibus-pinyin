@@ -848,7 +848,7 @@
                                       </packing>
                                     </child>
                                     <child>
-                                      <object class="GtkComboBoxEntry" id="SelectKeys">
+                                      <object class="GtkComboBox" id="SelectKeys">
                                         <property name="visible">True</property>
                                         <property name="model">liststoreSelectionKeys</property>
                                         <property name="button_sensitivity">on</property>
@@ -1695,22 +1695,31 @@ koterpilla, Zerng07
     </columns>
     <data>
       <row>
-        <col id="0" translatable="no">1234567890</col>
+        <col id="0">1234567890</col>
       </row>
       <row>
-        <col id="0" translatable="no">asdfghjkl;</col>
+        <col id="0">asdfghjkl;</col>
       </row>
       <row>
-        <col id="0" translatable="no">1qaz2wsxed</col>
+        <col id="0">1qaz2wsxed</col>
       </row>
       <row>
-        <col id="0" translatable="no">asdfzxcvgb</col>
+        <col id="0">asdfzxcvgb</col>
       </row>
       <row>
-        <col id="0" translatable="no">1234qweras</col>
+        <col id="0">1234qweras</col>
       </row>
       <row>
-        <col id="0" translatable="no">aoeu;qjkix</col>
+        <col id="0">aoeu;qjkix</col>
+      </row>
+      <row>
+        <col id="0">aoeuhtnsid</col>
+      </row>
+      <row>
+        <col id="0">aoeuidhtns</col>
+      </row>
+      <row>
+        <col id="0">qweasdzxcr</col>
       </row>
     </data>
   </object>
