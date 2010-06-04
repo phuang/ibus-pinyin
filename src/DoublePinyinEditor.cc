@@ -19,6 +19,7 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 #include "DoublePinyinEditor.h"
+#include "Config.h"
 
 namespace PY {
 

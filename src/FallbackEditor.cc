@@ -20,6 +20,7 @@
  */
 #include "FallbackEditor.h"
 #include "HalfFullConverter.h"
+#include "PinyinProperties.h"
 
 namespace PY {
 

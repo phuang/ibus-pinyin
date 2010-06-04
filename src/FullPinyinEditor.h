@@ -25,10 +25,12 @@
 
 namespace PY {
 
+class Config;
+
 class FullPinyinEditor : public PinyinEditor {
 
 public:
-    FullPinyinEditor (PinyinProperties & props, Config & config = PinyinConfig::instance ());
+    FullPinyinEditor (PinyinProperties & props, Config & config);
     ~FullPinyinEditor (void);
 
 public:

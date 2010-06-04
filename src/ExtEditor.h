@@ -21,7 +21,6 @@
 #ifndef __PY_EXT_EDITOR_
 #define __PY_EXT_EDITOR_
 
-#include <glib.h>
 #include "Editor.h"
 
 namespace PY {

@@ -21,14 +21,12 @@
 #ifndef __PY_PINYIN_PROPERTIES_H_
 #define __PY_PINYIN_PROPERTIES_H_
 
-#include <libintl.h>
-#include <ibus.h>
 #include "Signal.h"
-#include "Text.h"
 #include "Property.h"
-#include "Config.h"
 
 namespace PY {
+
+class Config;
 
 class PinyinProperties {
 public:

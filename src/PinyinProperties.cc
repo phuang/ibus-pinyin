@@ -19,6 +19,9 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 #include "PinyinProperties.h"
+#include <libintl.h>
+#include "Text.h"
+#include "Config.h"
 
 namespace PY {
 

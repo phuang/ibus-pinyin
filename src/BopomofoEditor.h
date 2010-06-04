@@ -26,12 +26,14 @@
 
 namespace PY {
 
+class Config;
+
 #define MAX_PINYIN_LEN 64
 
 class BopomofoEditor : public PhoneticEditor {
 
 public:
-    BopomofoEditor (PinyinProperties & props, Config & config = BopomofoConfig::instance ());
+    BopomofoEditor (PinyinProperties & props, Config & config);
     ~BopomofoEditor (void);
 
 protected:

@@ -21,15 +21,19 @@
 #ifndef __PY_PHRASE_EDITOR_H_
 #define __PY_PHRASE_EDITOR_H_
 
+#include <boost/shared_ptr.hpp>
 #include "String.h"
-#include "Config.h"
-#include "Database.h"
 #include "PhraseArray.h"
-#include "PinyinProperties.h"
+#include "PinyinArray.h"
 
 #define FILL_GRAN (12)
 
 namespace PY {
+
+class Query;
+class Database;
+class PinyinProperties;
+class Config;
 
 class PhraseEditor {
 public:
@@ -56,21 +60,7 @@ public:
         return m_candidates[i];
     }
 
-    gboolean fillCandidates (void)
-    {
-        if (G_UNLIKELY (m_query.get () == NULL)) {
-            return FALSE;
-        }
-
-        gint ret = m_query->fill (m_candidates, FILL_GRAN);
-
-        if (G_UNLIKELY (ret < FILL_GRAN)) {
-            /* got all candidates from query */
-            m_query.reset ();
-        }
-
-        return ret > 0 ? TRUE : FALSE;
-    }
+    gboolean fillCandidates (void);
 
     const PhraseArray & candidate0 (void) const
     {
@@ -111,11 +101,7 @@ public:
     gboolean update (const PinyinArray &pinyin);
     gboolean selectCandidate (guint i);
     gboolean resetCandidate (guint i);
-    void commit (void)
-    {
-        Database::instance ().commit (m_selected_phrases);
-        reset ();
-    }
+    void commit (void);
 
     gboolean empty (void) const
     {
@@ -139,7 +125,7 @@ private:
     PinyinArray m_pinyin;
     guint m_cursor;
     PinyinProperties & m_props;
-    QueryPtr    m_query;
+    boost::shared_ptr<Query> m_query;
     Config    & m_config;
 };
 

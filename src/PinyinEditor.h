@@ -25,13 +25,15 @@
 
 namespace PY {
 
+class Config;
+
 #define MAX_PINYIN_LEN 64
 
 class SpecialPhraseTable;
 
 class PinyinEditor : public PhoneticEditor {
 public:
-    PinyinEditor (PinyinProperties & props, Config & config = PinyinConfig::instance ());
+    PinyinEditor (PinyinProperties & props, Config & config);
 
 protected:
     gboolean processPinyin (guint keyval, guint keycode, guint modifiers);

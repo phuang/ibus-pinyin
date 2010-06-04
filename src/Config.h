@@ -23,13 +23,12 @@
 
 #include <string>
 #include <boost/scoped_ptr.hpp>
-#include <glib.h>
-#include <glib-object.h>
 #include <ibus.h>
 #include "Object.h"
-#include "Bus.h"
 
 namespace PY {
+
+class Bus;
 
 class Config : Object {
 protected:

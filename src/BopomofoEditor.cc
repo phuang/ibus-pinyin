@@ -20,6 +20,8 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 #include "BopomofoEditor.h"
+#include "Config.h"
+#include "PinyinProperties.h"
 #include "SimpTradConverter.h"
 
 namespace PY {

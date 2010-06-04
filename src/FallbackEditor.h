@@ -21,7 +21,7 @@
 #ifndef __PY_FALLBACK_EDITOR_
 #define __PY_FALLBACK_EDITOR_
 
-#include <glib.h>
+#include "Text.h"
 #include "Editor.h"
 
 namespace PY {

@@ -18,10 +18,9 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-#include <boost/bind.hpp>
-#include "Types.h"
 #include "Config.h"
-#include "Util.h"
+#include "Types.h"
+#include "Bus.h"
 
 namespace PY {
 

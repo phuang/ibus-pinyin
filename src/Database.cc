@@ -18,14 +18,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-#include <cstring>
-#include <cstdio>
-#include <cstdlib>
-#include <cstdarg>
-#include <glib.h>
-#include <sqlite3.h>
 #include "Database.h"
+#include <sqlite3.h>
 #include "Util.h"
+#include "PinyinArray.h"
 
 namespace PY {
 

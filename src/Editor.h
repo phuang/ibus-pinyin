@@ -25,13 +25,14 @@
 #include <boost/shared_ptr.hpp>
 #include "Signal.h"
 #include "String.h"
-#include "Text.h"
-#include "LookupTable.h"
-#include "PinyinProperties.h"
-#include "Config.h"
 #include "Util.h"
 
 namespace PY {
+
+class Text;
+class LookupTable;
+class PinyinProperties;
+class Config;
 
 class Editor;
 typedef boost::shared_ptr<Editor> EditorPtr;

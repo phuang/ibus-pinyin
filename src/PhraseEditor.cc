@@ -19,6 +19,9 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 #include "PhraseEditor.h"
+#include "Config.h"
+#include "Database.h"
+#include "PinyinProperties.h"
 #include "SimpTradConverter.h"
 
 namespace PY {
@@ -62,6 +65,13 @@ PhraseEditor::resetCandidate (guint i)
 
     updateCandidates ();
     return TRUE;
+}
+
+void
+PhraseEditor::commit (void)
+{
+    Database::instance ().commit (m_selected_phrases);
+    reset ();
 }
 
 gboolean
@@ -142,6 +152,23 @@ PhraseEditor::updateTheFirstCandidate (void)
         g_assert (ret == 1);
         begin += m_candidate_0_phrases.back ().len;
     }
+}
+
+gboolean
+PhraseEditor::fillCandidates (void)
+{
+    if (G_UNLIKELY (m_query.get () == NULL)) {
+        return FALSE;
+    }
+
+    gint ret = m_query->fill (m_candidates, FILL_GRAN);
+
+    if (G_UNLIKELY (ret < FILL_GRAN)) {
+        /* got all candidates from query */
+        m_query.reset ();
+    }
+
+    return ret > 0 ? TRUE : FALSE;
 }
 
 };

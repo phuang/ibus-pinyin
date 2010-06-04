@@ -21,15 +21,18 @@
 #ifndef __PY_DATABASE_H_
 #define __PY_DATABASE_H_
 
-#include <sqlite3.h>
 #include <boost/shared_ptr.hpp>
 #include <boost/scoped_ptr.hpp>
 #include "String.h"
 #include "Types.h"
-#include "PinyinArray.h"
 #include "PhraseArray.h"
 
+typedef struct sqlite3 sqlite3;
+
 namespace PY {
+
+class PinyinArray;
+struct Phrase;
 
 class SQLStmt;
 typedef boost::shared_ptr<SQLStmt> SQLStmtPtr;
@@ -52,7 +55,6 @@ private:
     guint m_option;
     SQLStmtPtr m_stmt;
 };
-typedef boost::shared_ptr<Query> QueryPtr;
 
 class Database {
 public:

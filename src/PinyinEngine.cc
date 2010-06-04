@@ -18,22 +18,15 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-
-#include <libintl.h>
+#include "PinyinEngine.h"
 #include <string>
-#include <cstdlib>
+#include "Config.h"
 #include "PunctEditor.h"
 #include "RawEditor.h"
 #include "ExtEditor.h"
 #include "FullPinyinEditor.h"
 #include "DoublePinyinEditor.h"
 #include "FallbackEditor.h"
-#include "PinyinEngine.h"
-#include "Config.h"
-#include "Text.h"
-#include "Util.h"
-
-#define _(text) (dgettext (GETTEXT_PACKAGE, text))
 
 namespace PY {
 
