@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ibus-pinyin 1.3.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-06-05 08:18+0800\n"
+"POT-Creation-Date: 2010-06-05 17:13+0800\n"
 "PO-Revision-Date: 2009-09-20 16:05+8\n"
 "Last-Translator: BYVoid <byvoid1@gmail.com>\n"
 "Language-Team: BYVoid <byvoid1@gmail.com>\n"
@@ -126,7 +126,7 @@ msgstr "自動上詞"
 
 #: ../setup/ibus-pinyin-preferences.ui.h:23
 msgid "Bopomofo mode"
-msgstr "注音（調試）"
+msgstr "注音模式"
 
 #: ../setup/ibus-pinyin-preferences.ui.h:25
 msgid "Chinese:"
