@@ -567,17 +567,18 @@ BopomofoEditor::updatePreeditText (void)
 void
 BopomofoEditor::updateLookupTableLabel ()
 {
-    String str_label;
+    std::string str;
     guint color = m_select_mode ? 0x000000 : 0xBBBBBB;
     for (const gchar *p = bopomofo_select_keys[m_config.selectKeys ()]; *p; p++)
     {
         guint i = p - bopomofo_select_keys[m_config.selectKeys ()];
         if (i >= m_config.pageSize ())
             break;
-        str_label.printf ("%c.",*p);
-        Text text_label (str_label);
-        text_label.appendAttribute (IBUS_ATTR_TYPE_FOREGROUND, color,0,-1);
-        m_lookup_table.setLabel (i,text_label);
+        str = *p;
+        str += ".";
+        Text text_label (str);
+        text_label.appendAttribute (IBUS_ATTR_TYPE_FOREGROUND, color, 0, -1);
+        m_lookup_table.setLabel (i, text_label);
     }
     if (m_config.guideKey ())
         m_lookup_table.setCursorVisable (m_select_mode);
