@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ibus-pinyin 1.3.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-06-04 15:21+0800\n"
+"POT-Creation-Date: 2010-06-05 08:18+0800\n"
 "PO-Revision-Date: 2009-09-20 16:05+8\n"
 "Last-Translator: BYVoid <byvoid1@gmail.com>\n"
 "Language-Team: BYVoid <byvoid1@gmail.com>\n"
@@ -10,45 +10,46 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../src/Main.cc:79
+#: ../src/Main.cc:90
 msgid "Pinyin input method"
 msgstr "拼音輸入法"
 
-#: ../src/Main.cc:88
+#: ../src/Main.cc:99
 msgid "Pinyin (debug)"
 msgstr "拼音（調試）"
 
-#: ../src/Main.cc:89
+#: ../src/Main.cc:100
 msgid "Pinyin input method (debug)"
 msgstr "拼音輸入法（調試）"
 
-#: ../src/Main.cc:98
+#: ../src/Main.cc:109
 msgid "Bopomofo (debug)"
 msgstr "注音（調試）"
 
-#: ../src/Main.cc:99
+#: ../src/Main.cc:110
 msgid "Bopomofo input method (debug)"
 msgstr "注音輸入法（調試）"
 
-#: ../src/PinyinProperties.cc:39 ../setup/ibus-pinyin-preferences.ui.h:24
+#: ../src/PinyinProperties.cc:42 ../setup/ibus-pinyin-preferences.ui.h:24
 msgid "Chinese"
 msgstr "中文"
 
-#: ../src/PinyinProperties.cc:46
+#: ../src/PinyinProperties.cc:49
 msgid "Full/Half width"
 msgstr "全形/半形"
 
-#: ../src/PinyinProperties.cc:53
+#: ../src/PinyinProperties.cc:56
 msgid "Full/Half width punctuation"
 msgstr "半形符號"
 
-#: ../src/PinyinProperties.cc:60
+#: ../src/PinyinProperties.cc:63
 msgid "Simplfied/Traditional Chinese"
 msgstr "簡體/繁體中文"
 
-#: ../src/PinyinProperties.cc:63 ../src/PinyinProperties.cc:65
-msgid "Pinyin preferences"
-msgstr "拼音偏好設定"
+#: ../src/PinyinProperties.cc:66 ../src/PinyinProperties.cc:68
+#: ../setup/ibus-pinyin-preferences.ui.h:55
+msgid "Preferences"
+msgstr "偏好設定"
 
 #: ../setup/main.py:377 ../setup/ibus-pinyin-preferences.ui.h:10
 #, no-c-format, python-format
@@ -247,10 +248,6 @@ msgstr "IBus 拼音輸入法"
 msgid "Pinyin mode"
 msgstr "拼音模式"
 
-#: ../setup/ibus-pinyin-preferences.ui.h:55
-msgid "Preferences"
-msgstr "偏好設定"
-
 #: ../setup/ibus-pinyin-preferences.ui.h:56
 msgid "Punctuations:"
 msgstr "標點符號："
@@ -306,36 +303,3 @@ msgstr "[Shift]鍵選詞"
 #: ../setup/ibus-pinyin-preferences.ui.h:69
 msgid "http://ibus.googlecode.com"
 msgstr "http://ibus.googlecode.com"
-
-#~ msgid "<b>Others</b>"
-#~ msgstr "<b>其他</b>"
-
-#~ msgid "Enable incomplete pinyin (like zh g)."
-#~ msgstr "支持不完全拼音（例如：zh g）。"
-
-#~ msgid "Enable pinyin correcting."
-#~ msgstr "啓用拼音糾錯。"
-
-#~ msgid "Fuzzy pinyin"
-#~ msgstr "模糊拼音"
-
-#~ msgid "Schema:"
-#~ msgstr "雙拼方案："
-
-#~ msgid "Select double pinyin schema."
-#~ msgstr "選擇雙拼模式。"
-
-#~ msgid "Setup the initial state of pinyin input method."
-#~ msgstr "設置拼音輸入法初始狀態。"
-
-#~ msgid "Show candidates in traditional Chinese"
-#~ msgstr "顯示繁體候選詞"
-
-#~ msgid "UI"
-#~ msgstr "外觀"
-
-#~ msgid "Use double pinyin."
-#~ msgstr "使用雙拼。"
-
-#~ msgid "Use full pinyin."
-#~ msgstr "使用全拼。"

@@ -63,9 +63,9 @@ PinyinProperties::PinyinProperties (Config & config)
                 StaticText (_("Simplfied/Traditional Chinese"))),
       m_prop_setup ("setup",
                 PROP_TYPE_NORMAL,
-                StaticText (_("Pinyin preferences")),
+                StaticText (_("Preferences")),
                 "ibus-setup",
-                StaticText (_("Pinyin preferences")))
+                StaticText (_("Preferences")))
 {
     m_props.append (m_prop_chinese);
     m_props.append (m_prop_full);
