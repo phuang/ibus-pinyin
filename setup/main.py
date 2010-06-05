@@ -391,7 +391,6 @@ class PreferencesDialog:
 
     def __set_value(self, name, val):
         self.__config.set_value(self.__config_namespace, name, val)
-        print name,val
 
     def run(self):
         return self.__dialog.run()
