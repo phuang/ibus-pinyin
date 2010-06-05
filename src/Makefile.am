@@ -205,5 +205,5 @@ ZhConversion.php:
 	svn cat http://svn.wikimedia.org/svnroot/mediawiki/trunk/phase3/includes/ZhConversion.php > $@
 
 ZhConversion.py: ZhConversion.php
-	php php_2_py.php > $@
+	php $(top_srcdir)/scripts/php_2_py.php > $@
 
