@@ -165,11 +165,34 @@ ExtEditor::pageDown (void)
 gboolean
 ExtEditor::removeCharBefore()
 {
+    if (G_UNLIKELY( m_cursor <= 0 )) {
+        m_cursor = 0;
+        return FALSE;
+    }
+
+    if (G_UNLIKELY( m_cursor > m_text.length() )) {
+        m_cursor = m_text.length();
+        return FALSE;
+    }
+
+    m_text.erase(m_cursor - 1, 1);
+    m_cursor = std::max(0, (int)(m_cursor - 1));
 }
 
 gboolean
 ExtEditor::removeCharAfter()
 {
+    if (G_UNLIKELY( m_cursor < 0 )) {
+        m_cursor = 0;
+        return FALSE;
+    }
+
+    if (G_UNLIKELY( m_cursor >= m_text.length() )) {
+        m_cursor = m_text.length();
+        return FALSE;
+    }
+    m_text.erase(m_cursor, 1);
+    m_cursor = std::min(m_cursor, (guint)m_text.length());
 }
 
 void
