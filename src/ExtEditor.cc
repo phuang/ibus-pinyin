@@ -46,8 +46,66 @@ ExtEditor::processKeyEvent (guint keyval, guint keycode, guint modifiers)
     if ( modifiers )
         return FALSE;
 
-    //handle backspace here.
+    //handle backspace/delete here.
+    switch (keyval){
+    case IBUS_Delete:
+    case IBUS_KP_Delete:
+        removeCharAfter();
+        return TRUE;
+    case IBUS_BackSpace:
+        removeCharBefore();
+        return TRUE;
+    }
     //handle page/cursor up/down here.
+    switch (keyval) {
+    case IBUS_comma:
+        if (Config::commaPeriodPage ()) {
+            pageUp ();
+            return TRUE;
+        }
+        break;
+    case IBUS_minus:
+        if (Config::minusEqualPage ()) {
+            pageUp ();
+            return TRUE;
+        }
+        break;
+    case IBUS_period:
+        if (Config::commaPeriodPage ()) {
+            pageDown ();
+            return TRUE;
+        }
+        break;
+    case IBUS_equal:
+        if (Config::minusEqualPage ()) {
+            pageDown ();
+            return TRUE;
+        }
+        break;
+    case IBUS_Up:
+    case IBUS_KP_Up:
+        cursorUp ();
+        return TRUE;
+
+    case IBUS_Down:
+    case IBUS_KP_Down:
+        cursorDown ();
+        return TRUE;
+
+    case IBUS_Page_Up:
+    case IBUS_KP_Page_Up:
+        pageUp ();
+        return TRUE;
+
+    case IBUS_Page_Down:
+    case IBUS_KP_Page_Down:
+        pageDown ();
+        return TRUE;
+
+    case IBUS_Escape:
+        reset ();
+        return TRUE;
+    }
     //handle label key select here.
 
     m_cursor = std::min(m_cursor, (guint)m_text.length());
@@ -84,6 +142,7 @@ ExtEditor::processKeyEvent (guint keyval, guint keycode, guint modifiers)
     }
     /* Deal other staff with updateStateFromInput(). */
     updateStateFromInput();
+    update();
     return TRUE;
 }
 
@@ -101,6 +160,16 @@ ExtEditor::pageDown (void)
     if (G_LIKELY(m_lookup_table.pageDown())) {
         update();
     }
+}
+
+gboolean
+ExtEditor::removeCharBefore()
+{
+}
+
+gboolean
+ExtEditor::removeCharAfter()
+{
 }
 
 void
@@ -130,6 +199,9 @@ ExtEditor::update (void)
 void
 ExtEditor::reset (void)
 {
+    m_text = "";
+    updateStateFromInput();
+    update();
 }
 
 void
@@ -162,8 +234,12 @@ ExtEditor::updateStateFromInput()
 {
     /* Do parse and candidates update here. */
     /* prefix i double check here. */
-    if ( !m_text.length() )
+    if ( !m_text.length() ) {
+        m_preedit_text = "";
+        m_auxiliary_text = "";
+        clearLookupTable();
         return false;
+    }
     if ( ! 'i' == m_text[0] ){
         g_warning("i is expected in m_input string.\n");
         return false;
@@ -174,7 +250,6 @@ ExtEditor::updateStateFromInput()
     m_mode = LABEL_LIST_COMMANDS;
     if ( 1 == m_text.length() ){
         fillCommandCandidates();
-        updateAuxiliaryText();
         return true;
     }
     /* Check m_text len, and update auxiliary string meanwhile.
@@ -192,7 +267,6 @@ ExtEditor::updateStateFromInput()
 
             m_auxiliary_text += " ";
             m_auxiliary_text += m_text.substr(1, 1);
-            updateAuxiliaryText();
             return true;
         } else if ( m_text.length() >= 3) {
             std::string command_name = m_text.substr(1,2);
@@ -205,8 +279,6 @@ ExtEditor::updateStateFromInput()
                 m_mode = LABEL_NONE;
                 clearLookupTable();
                 m_lookup_table.clear();
-                updateLookupTable();
-                updateAuxiliaryText();
                 return false;
             }
 
@@ -229,7 +301,6 @@ ExtEditor::updateStateFromInput()
             }
 
             fillCommand(command_name, argment);
-            updateAuxiliaryText();
         }
     }
     else if ( isdigit(m_text[1]) ){
@@ -267,7 +338,6 @@ ExtEditor::fillCommandCandidates(std::string prefix)
         }
     }
 
-    updateLookupTable();
     return true;
 }
 
@@ -339,7 +409,6 @@ ExtEditor::fillCommand(std::string command_name, const char * argument){
         g_array_free(candidates, TRUE);
     }
 
-    updateLookupTable();
     return true;
 }
 

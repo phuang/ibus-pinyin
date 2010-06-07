@@ -58,6 +58,9 @@ private:
     void updatePreeditText();
     void updateAuxiliaryText();
 
+    gboolean removeCharBefore();
+    gboolean removeCharAfter();
+
     ExtEditorLabelMode m_mode;
     Pointer<IBusEnginePlugin> m_lua_plugin;
 
