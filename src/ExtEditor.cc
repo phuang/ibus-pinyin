@@ -90,26 +90,41 @@ ExtEditor::processKeyEvent (guint keyval, guint keycode, guint modifiers)
 void
 ExtEditor::pageUp (void)
 {
+    if (G_LIKELY(m_lookup_table.pageUp())) {
+        update();
+    }
 }
 
 void
 ExtEditor::pageDown (void)
 {
+    if (G_LIKELY(m_lookup_table.pageDown())) {
+        update();
+    }
 }
 
 void
 ExtEditor::cursorUp (void)
 {
+    if (G_LIKELY (m_lookup_table.cursorUp ())) {
+        update();
+    }
 }
 
 void
 ExtEditor::cursorDown (void)
 {
+    if (G_LIKELY (m_lookup_table.cursorDown ())) {
+        update();
+    }
 }
 
 void
 ExtEditor::update (void)
 {
+    updateLookupTable();
+    updatePreeditText();
+    updateAuxiliaryText();
 }
 
 void
@@ -120,6 +135,26 @@ ExtEditor::reset (void)
 void
 ExtEditor::candidateClicked (guint index, guint button, guint state)
 {
+    selectCandidateInPage (index);
+}
+
+gboolean
+ExtEditor::selectCandidateInPage (guint i)
+{
+    guint page_size = m_lookup_table.pageSize();
+    guint cursor_pos = m_lookup_table.cursorPos();
+
+    if (G_UNLIKELY(i >= page_size))
+        return FALSE;
+    i += (cursor_pos / page_size) * page_size;
+
+    return selectCandidate (i);
+}
+
+gboolean
+ExtEditor::selectCandidate (guint i)
+{
+    //TODO: implement this.
 }
 
 bool

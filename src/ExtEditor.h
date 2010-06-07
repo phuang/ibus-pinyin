@@ -52,6 +52,8 @@ private:
     /* Auxiliary functions for lookup table */
     void clearLookupTable();
     void updateLookupTable();
+    gboolean selectCandidateInPage (guint i);
+    gboolean selectCandidate (guint i);
 
     void updatePreeditText();
     void updateAuxiliaryText();
