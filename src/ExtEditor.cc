@@ -170,7 +170,7 @@ ExtEditor::updateStateFromInput()
                 m_mode = LABEL_NONE;
                 clearLookupTable();
                 m_lookup_table.clear();
-                sendLookupTable();
+                updateLookupTable();
                 updateAuxiliaryText();
                 return false;
             }
@@ -232,7 +232,7 @@ ExtEditor::fillCommandCandidates(std::string prefix)
         }
     }
 
-    sendLookupTable();
+    updateLookupTable();
     return true;
 }
 
@@ -304,7 +304,7 @@ ExtEditor::fillCommand(std::string command_name, const char * argument){
         g_array_free(candidates, TRUE);
     }
 
-    sendLookupTable();
+    updateLookupTable();
     return true;
 }
 
@@ -318,7 +318,7 @@ ExtEditor::clearLookupTable()
 }
 
 void
-ExtEditor::sendLookupTable()
+ExtEditor::updateLookupTable()
 {
     if (m_lookup_table.size ()) {
         Editor::updateLookupTable (m_lookup_table, TRUE);

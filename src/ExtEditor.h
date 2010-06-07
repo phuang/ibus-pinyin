@@ -51,7 +51,7 @@ private:
 
     /* Auxiliary functions for lookup table */
     void clearLookupTable();
-    void sendLookupTable();
+    void updateLookupTable();
 
     void updatePreeditText();
     void updateAuxiliaryText();
