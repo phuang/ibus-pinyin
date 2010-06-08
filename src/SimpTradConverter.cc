@@ -18,13 +18,26 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
+#ifdef HAVE_CONFIG_H
+#  include "config.h"
+#endif
+
+#include "SimpTradConverter.h"
+
 #include <cstdlib>
 #include <cwchar>
 #include <glib-object.h>
-#include "SimpTradConverter.h"
+
+#ifdef HAVE_OPENCC
+#  include <opencc.h>
+#endif
+
+#include "String.h"
 
 namespace PY {
+#ifndef HAVE_OPENCC
 #include "SimpTradConverterTable.h"
+#endif
 
 static int _cmp (const void *p1, const void *p2)
 {
@@ -34,6 +47,21 @@ static int _cmp (const void *p1, const void *p2)
     return std::wcscmp (s1, s2[0]);
 }
 
+#ifdef HAVE_OPENCC
+void
+SimpTradConverter::simpToTrad (const gchar *in, String &out)
+{
+    static gunichar buf[64];
+    gunichar *in_ucs4;
+
+    in_ucs4 = g_utf8_to_ucs4_fast (in, -1, NULL);
+
+    words_segmention ((wchar_t*)buf, (const wchar_t *)in_ucs4);
+    g_free (in_ucs4);
+
+    out << buf;
+}
+#else
 void
 SimpTradConverter::simpToTrad (const gchar *in, String &out)
 {
@@ -74,5 +102,6 @@ SimpTradConverter::simpToTrad (const gchar *in, String &out)
 
     g_free (in_ucs4);
 }
+#endif
 
 }

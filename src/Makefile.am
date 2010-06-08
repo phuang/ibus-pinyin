@@ -117,6 +117,7 @@ ibus_engine_pinyin_CXXFLAGS = \
 	@IBUS_CFLAGS@ \
 	@SQLITE_CFLAGS@ \
 	@BOOST_CPPFLAGS@ \
+	@OPENCC_CFLAGS@ \
 	-DGETTEXT_PACKAGE=\"@GETTEXT_PACKAGE@\" \
 	-DPKGDATADIR=\"$(pkgdatadir)\" \
 	-DLIBEXECDIR=\"$(libexecdir)\" \
@@ -124,6 +125,7 @@ ibus_engine_pinyin_CXXFLAGS = \
 ibus_engine_pinyin_LDADD = \
 	@IBUS_LIBS@ \
 	@SQLITE_LIBS@ \
+	@OPENCC_LIBS@ \
 	$(NULL)
 
 if HAVE_LIBUUID

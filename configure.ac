@@ -110,8 +110,14 @@ BOOST_FIND_HEADER([boost/signals2.hpp])
 AC_PATH_PROG(ENV, env)
 AC_SUBST(ENV)
 
-#check python
+# check python
 AM_PATH_PYTHON([2.5])
+
+# check opencc
+PKG_CHECK_MODULES(OPENCC, [opencc], [
+    AC_DEFINE(HAVE_OPENCC, 1, [Define if found opencc])
+    have_opencc=yes
+], [have_opencc=no])
 
 # define GETTEXT_* variables
 GETTEXT_PACKAGE=ibus-pinyin
@@ -161,6 +167,7 @@ AC_MSG_RESULT([
 Build options:
     Version                     $VERSION
     Install prefix              $prefix
+    Use opencc                  $have_opencc
     Build database android      $enable_db_android
     Build database open-phrase  $enable_db_open_phrase
 ])
