@@ -58,6 +58,10 @@ private:
     void updatePreeditText();
     void updateAuxiliaryText();
 
+    gboolean processEditKey(guint keyval);
+    gboolean processPageKey(guint keyval);
+    gboolean processLabelKey(guint keyval);
+
     gboolean removeCharBefore();
     gboolean removeCharAfter();
 

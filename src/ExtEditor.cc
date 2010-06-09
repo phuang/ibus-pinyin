@@ -47,6 +47,57 @@ ExtEditor::processKeyEvent (guint keyval, guint keycode, guint modifiers)
         return FALSE;
 
     //handle backspace/delete here.
+    if (processEditKey(keyval))
+        return TRUE;
+
+    //handle page/cursor up/down here.
+    if (processPageKey(keyval))
+        return TRUE;
+
+    //handle label key select here.
+    if (processLabelKey(keyval))
+        return TRUE;
+
+    m_cursor = std::min(m_cursor, (guint)m_text.length());
+
+    /* Remember the input string. */
+    switch(m_cursor){
+    case 0: //Empty input string.
+        {
+            g_return_val_if_fail( 'i' == keyval, FALSE);
+            if ( 'i' == keyval ) {
+                m_text.insert(m_cursor, keyval);
+                m_cursor++;
+            }
+        }
+        break;
+    case 1 ... 2: // Only contains 'i' in input string.
+        {
+            g_return_val_if_fail( 'i' == m_text[0], FALSE);
+            if ( isalnum(keyval) ) {
+                m_text.insert(m_cursor, keyval);
+                m_cursor++;
+            }
+        }
+        break;
+    default: //Here is the appended argment.
+        {
+            g_return_val_if_fail( 'i' == m_text[0], FALSE);
+            if (isprint(keyval)){
+                m_text.insert(m_cursor, keyval);
+                m_cursor++;
+            }
+        }
+        break;
+    }
+    /* Deal other staff with updateStateFromInput(). */
+    updateStateFromInput();
+    update();
+    return TRUE;
+}
+
+gboolean
+ExtEditor::processEditKey(guint keyval){
     switch (keyval){
     case IBUS_Delete:
     case IBUS_KP_Delete:
@@ -56,7 +107,11 @@ ExtEditor::processKeyEvent (guint keyval, guint keycode, guint modifiers)
         removeCharBefore();
         return TRUE;
     }
-    //handle page/cursor up/down here.
+    return FALSE;
+}
+
+gboolean
+ExtEditor::processPageKey(guint keyval){
     switch (keyval) {
     case IBUS_comma:
         if (Config::commaPeriodPage ()) {
@@ -106,44 +161,14 @@ ExtEditor::processKeyEvent (guint keyval, guint keycode, guint modifiers)
         reset ();
         return TRUE;
     }
-    //handle label key select here.
+    return FALSE;
+}
 
-    m_cursor = std::min(m_cursor, (guint)m_text.length());
+gboolean
+ExtEditor::processLabelKey(guint keyval){
+    //TODO: implement this according to enum ExtEditorLabelMode.
 
-    /* Remember the input string. */
-    switch(m_cursor){
-    case 0: //Empty input string.
-        {
-            g_return_val_if_fail( 'i' == keyval, FALSE);
-            if ( 'i' == keyval ) {
-                m_text.insert(m_cursor, keyval);
-                m_cursor++;
-            }
-        }
-        break;
-    case 1 ... 2: // Only contains 'i' in input string.
-        {      
-            g_return_val_if_fail( 'i' == m_text[0], FALSE);
-            if ( isalnum(keyval) ) {
-                m_text.insert(m_cursor, keyval);
-                m_cursor++;
-            }
-        }
-        break;
-    default: //Here is the appended argment.
-        {
-            g_return_val_if_fail( 'i' == m_text[0], FALSE);
-            if (isprint(keyval)){
-                m_text.insert(m_cursor, keyval);
-                m_cursor++;
-            }
-        }
-        break;
-    }
-    /* Deal other staff with updateStateFromInput(). */
-    updateStateFromInput();
-    update();
-    return TRUE;
+    return FALSE;
 }
 
 void
