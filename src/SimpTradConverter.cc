@@ -41,19 +41,37 @@ namespace PY {
 
 #ifdef HAVE_OPENCC
 
+#define BUFFER_SIZE 16
 void
 SimpTradConverter::simpToTrad (const gchar *in, String &out)
 {
-    static gunichar buf[64];
-    gunichar *in_ucs4;
+    static gunichar buf[BUFFER_SIZE + 1];
+    gunichar *in_ucs4 = g_utf8_to_ucs4_fast (in, -1, NULL);
+    wchar_t * pinbuf = (wchar_t *)in_ucs4, * poutbuf = (wchar_t *)buf;
+    size_t inbuf_left = std::wcslen((wchar_t *)in_ucs4), outbuf_left = BUFFER_SIZE;
 
-    in_ucs4 = g_utf8_to_ucs4_fast (in, -1, NULL);
+    opencc_t od = opencc_open(OPENCC_CONVERT_SIMP_TO_TRAD);
 
-    opencc_simp_to_trad ((wchar_t*)buf, (const wchar_t *)in_ucs4);
+    size_t ccnt;
+    while ((ccnt = opencc_convert(od, &pinbuf, &inbuf_left, &poutbuf, &outbuf_left)) > 0)
+    {
+        if (ccnt == OPENCC_CONVERT_ERROR)
+        {
+            g_warning ("An error occurs in SimpTradConverter:");
+            opencc_perror(od);
+            g_assert_not_reached ();
+        }
+
+        *poutbuf = L'\0';
+        out << buf;
+        outbuf_left = BUFFER_SIZE;
+        poutbuf = (wchar_t *)buf;
+    }
+
+    opencc_close(od);
     g_free (in_ucs4);
-
-    out << buf;
 }
+#undef BUFFER_SIZE
 
 #else
 
