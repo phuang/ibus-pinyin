@@ -56,7 +56,9 @@ SimpTradConverter::simpToTrad (const gchar *in, String &out)
 
     in_ucs4 = g_utf8_to_ucs4_fast (in, -1, NULL);
 
-    words_segmention ((wchar_t*)buf, (const wchar_t *)in_ucs4);
+    opencc_set_segment_buff_size (64);
+    opencc_simp_to_trad ((wchar_t*)buf, (const wchar_t *)in_ucs4);
+
     g_free (in_ucs4);
 
     out << buf;
