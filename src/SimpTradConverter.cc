@@ -32,6 +32,7 @@
 #  include <opencc.h>
 #endif
 
+#include "Types.h"
 #include "String.h"
 
 namespace PY {
@@ -41,7 +42,7 @@ namespace PY {
 
 #ifdef HAVE_OPENCC
 
-const int BUFFER_SIZE = 64;
+const int BUFFER_SIZE = MAX_PHRASE_LEN;
 
 void
 SimpTradConverter::simpToTrad (const gchar *in, String &out)
