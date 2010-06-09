@@ -171,6 +171,13 @@ ExtEditor::processLabelKey(guint keyval){
     return FALSE;
 }
 
+gboolean
+ExtEditor::processSpace(guint keyval){
+    //TODO:: implement this.
+
+    return FALSE;
+}
+
 void
 ExtEditor::pageUp (void)
 {
@@ -274,7 +281,19 @@ ExtEditor::selectCandidateInPage (guint i)
 gboolean
 ExtEditor::selectCandidate (guint i)
 {
-    //TODO: implement this.
+    switch(m_mode){
+    case LABEL_LIST_NUMBERS:
+        //TODO: implement pinyin extension i number mode.
+        break;
+    case LABEL_LIST_COMMANDS:
+        break;
+    case LABEL_LIST_DIGIT:
+    case LABEL_LIST_ALPHA:
+        break;
+    case LABEL_LIST_SINGLE:
+        break;
+    }
+    return FALSE;
 }
 
 bool

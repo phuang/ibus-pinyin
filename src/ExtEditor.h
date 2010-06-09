@@ -62,6 +62,8 @@ private:
     gboolean processPageKey(guint keyval);
     gboolean processLabelKey(guint keyval);
 
+    gboolean processSpace(guint keyval);
+
     gboolean removeCharBefore();
     gboolean removeCharAfter();
 
