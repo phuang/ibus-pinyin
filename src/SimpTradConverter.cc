@@ -32,6 +32,7 @@
 #  include <opencc.h>
 #endif
 
+#include "Types.h"
 #include "String.h"
 
 namespace PY {
@@ -41,24 +42,28 @@ namespace PY {
 
 #ifdef HAVE_OPENCC
 
-#define BUFFER_SIZE 16
+const int BUFFER_SIZE = MAX_PHRASE_LEN;
+
 void
 SimpTradConverter::simpToTrad (const gchar *in, String &out)
 {
     static gunichar buf[BUFFER_SIZE + 1];
-    gunichar *in_ucs4 = g_utf8_to_ucs4_fast (in, -1, NULL);
-    wchar_t * pinbuf = (wchar_t *)in_ucs4, * poutbuf = (wchar_t *)buf;
-    size_t inbuf_left = std::wcslen((wchar_t *)in_ucs4), outbuf_left = BUFFER_SIZE;
+    glong size;
+    gunichar *in_ucs4 = g_utf8_to_ucs4_fast (in, -1, &size);
+    wchar_t *pinbuf = (wchar_t *)in_ucs4;
+    wchar_t *poutbuf = (wchar_t *)buf;
+    size_t inbuf_left = size;
+    size_t outbuf_left = BUFFER_SIZE;
 
-    opencc_t od = opencc_open(OPENCC_CONVERT_SIMP_TO_TRAD);
+    static opencc_t od = NULL;
+    if (od == NULL)
+        od = opencc_open (OPENCC_CONVERT_SIMP_TO_TRAD);
 
     size_t ccnt;
-    while ((ccnt = opencc_convert(od, &pinbuf, &inbuf_left, &poutbuf, &outbuf_left)) > 0)
-    {
-        if (ccnt == OPENCC_CONVERT_ERROR)
-        {
+    while ((ccnt = opencc_convert(od, &pinbuf, &inbuf_left, &poutbuf, &outbuf_left)) > 0) {
+        if (ccnt == OPENCC_CONVERT_ERROR) {
             g_warning ("An error occurs in SimpTradConverter:");
-            opencc_perror(od);
+            opencc_perror (od);
             g_assert_not_reached ();
         }
 
@@ -68,10 +73,8 @@ SimpTradConverter::simpToTrad (const gchar *in, String &out)
         poutbuf = (wchar_t *)buf;
     }
 
-    opencc_close(od);
     g_free (in_ucs4);
 }
-#undef BUFFER_SIZE
 
 #else
 
