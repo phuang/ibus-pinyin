@@ -39,15 +39,8 @@ namespace PY {
 #include "SimpTradConverterTable.h"
 #endif
 
-static int _cmp (const void *p1, const void *p2)
-{
-    const wchar_t *s1 = (const wchar_t *) p1;
-    const wchar_t **s2 = (const wchar_t **) p2;
-
-    return std::wcscmp (s1, s2[0]);
-}
-
 #ifdef HAVE_OPENCC
+
 void
 SimpTradConverter::simpToTrad (const gchar *in, String &out)
 {
@@ -56,12 +49,22 @@ SimpTradConverter::simpToTrad (const gchar *in, String &out)
 
     in_ucs4 = g_utf8_to_ucs4_fast (in, -1, NULL);
 
-    words_segmention ((wchar_t*)buf, (const wchar_t *)in_ucs4);
+    opencc_simp_to_trad ((wchar_t*)buf, (const wchar_t *)in_ucs4);
     g_free (in_ucs4);
 
     out << buf;
 }
+
 #else
+
+static int _cmp (const void *p1, const void *p2)
+{
+    const wchar_t *s1 = (const wchar_t *) p1;
+    const wchar_t **s2 = (const wchar_t **) p2;
+
+    return std::wcscmp (s1, s2[0]);
+}
+
 void
 SimpTradConverter::simpToTrad (const gchar *in, String &out)
 {
