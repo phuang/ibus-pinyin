@@ -42,37 +42,53 @@ namespace PY {
 
 #ifdef HAVE_OPENCC
 
-const int BUFFER_SIZE = MAX_PHRASE_LEN;
+class OpenCC {
+private:
+    static const int BUFFER_SIZE = MAX_PHRASE_LEN;
+
+public:
+    OpenCC (void)
+    {
+        od = opencc_open (OPENCC_CONVERT_SIMP_TO_TRAD);
+    }
+
+    ~OpenCC (void)
+    {
+        opencc_close (od);
+    }
+
+    void convert (wchar_t *inbuf, size_t inlen, String &out)
+    {
+        static wchar_t buf[BUFFER_SIZE + 1];
+
+        while (inlen != 0) {
+            wchar_t *outbuf = (wchar_t *)buf;
+            size_t   outleft = BUFFER_SIZE;
+
+            if (opencc_convert (od, &inbuf, &inlen, &outbuf, &outleft) == OPENCC_CONVERT_ERROR) {
+                /* error happens, append left chars and return */
+                out << (gunichar *)inbuf;
+                g_warning ("An error occurs in SimpTradConverter:");
+                return;
+            }
+            else {
+                *outbuf = L'\0';
+                out << (gunichar *)buf;
+            }
+        };
+    }
+private:
+    opencc_t od;
+};
 
 void
 SimpTradConverter::simpToTrad (const gchar *in, String &out)
 {
-    static gunichar buf[BUFFER_SIZE + 1];
+    static OpenCC opencc;
     glong size;
     gunichar *in_ucs4 = g_utf8_to_ucs4_fast (in, -1, &size);
-    wchar_t *pinbuf = (wchar_t *)in_ucs4;
-    wchar_t *poutbuf = (wchar_t *)buf;
-    size_t inbuf_left = size;
-    size_t outbuf_left = BUFFER_SIZE;
 
-    static opencc_t od = NULL;
-    if (od == NULL)
-        od = opencc_open (OPENCC_CONVERT_SIMP_TO_TRAD);
-
-    size_t ccnt;
-    while ((ccnt = opencc_convert(od, &pinbuf, &inbuf_left, &poutbuf, &outbuf_left)) > 0) {
-        if (ccnt == OPENCC_CONVERT_ERROR) {
-            g_warning ("An error occurs in SimpTradConverter:");
-            opencc_perror (od);
-            g_assert_not_reached ();
-        }
-
-        *poutbuf = L'\0';
-        out << buf;
-        outbuf_left = BUFFER_SIZE;
-        poutbuf = (wchar_t *)buf;
-    }
-
+    opencc.convert ((wchar_t *)in_ucs4, size, out);
     g_free (in_ucs4);
 }
 
