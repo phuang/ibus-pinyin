@@ -74,6 +74,11 @@ private:
     std::string m_auxiliary_text;
 
     LookupTable m_lookup_table;
+
+    //saved lua extension call results.
+    int m_result_num;
+    const lua_command_candidate_t * m_candidate;
+    GArray * m_candidates;
 };
 
 };

@@ -8,7 +8,10 @@ namespace PY {
 
 ExtEditor::ExtEditor (PinyinProperties & props)
     : Editor (props),
-      m_mode(LABEL_NONE)
+      m_mode(LABEL_NONE),
+      m_result_num(0),
+      m_candidate(NULL),
+      m_candidates(NULL)
 {
     m_lua_plugin = ibus_engine_plugin_new();
 
@@ -414,9 +417,26 @@ ExtEditor::fillCommand(std::string command_name, const char * argument){
     if ( NULL == command )
         return false;
 
-    int result_num = ibus_engine_plugin_call(m_lua_plugin, command->lua_function_name, argument);
+    if ( m_result_num != 0) {
+        if ( m_result_num == 1) {
+            ibus_engine_plugin_free_candidate((lua_command_candidate_t *)m_candidate);
+            m_candidate = NULL;
+        }else{
+            for ( int i = 0; i < result_num; ++i){
+                const lua_command_candidate_t * candidate = g_array_index(m_candidates, lua_command_candidate_t *, i);
+                ibus_engine_plugin_free_candidate((lua_command_candidate_t *)candidate);
+            }
 
-    if ( 1 == result_num )
+            g_array_free(m_candidates, TRUE);
+            m_candidates = NULL;
+        }
+        m_result_num = 0;
+        g_assert(m_candidates == NULL && m_candidate == NULL);
+    }
+
+    m_result_num = ibus_engine_plugin_call(m_lua_plugin, command->lua_function_name, argument);
+
+    if ( 1 == m_result_num )
         m_mode = LABEL_LIST_SINGLE;
 
     clearLookupTable();
@@ -437,28 +457,26 @@ ExtEditor::fillCommand(std::string command_name, const char * argument){
     }
 
     //Generate candidates
-    const lua_command_candidate_t * candidate = NULL;
     std::string result;
-    if ( 1 == result_num ){
-        candidate = ibus_engine_plugin_get_retval(m_lua_plugin);
+    if ( 1 == m_result_num ){
+        m_candidate = ibus_engine_plugin_get_retval(m_lua_plugin);
         result = "";
-        if ( candidate->content ){
-            result = candidate->content;
+        if ( m_candidate->content ){
+            result = m_candidate->content;
         }
-        if ( candidate->suggest && candidate-> help ){
-            result += candidate->suggest;
+        if ( m_candidate->suggest && m_candidate-> help ){
+            result += m_candidate->suggest;
             result += " ";
             result += "[";
-            result += candidate->help;
+            result += m_candidate->help;
             result += "]";
         }
 
-        ibus_engine_plugin_free_candidate((lua_command_candidate_t *)candidate);
         m_lookup_table.appendCandidate(Text(result));
-    }else if (result_num > 1){
-        GArray * candidates = ibus_engine_plugin_get_retvals(m_lua_plugin);
-        for ( int i = 0; i < result_num; ++i){
-            candidate = g_array_index(candidates, lua_command_candidate_t *, i);
+    }else if (m_result_num > 1){
+        m_candidates = ibus_engine_plugin_get_retvals(m_lua_plugin);
+        for ( int i = 0; i < m_result_num; ++i){
+            const lua_command_candidate_t * candidate = g_array_index(m_candidates, lua_command_candidate_t *, i);
             result = "";
             if ( candidate->content ){
                 result = candidate->content;
@@ -470,10 +488,9 @@ ExtEditor::fillCommand(std::string command_name, const char * argument){
                 result += candidate->help;
                 result += "]";
             }
-            ibus_engine_plugin_free_candidate((lua_command_candidate_t *)candidate);
+
             m_lookup_table.appendCandidate(Text(result));
         }
-        g_array_free(candidates, TRUE);
     }
 
     return true;
