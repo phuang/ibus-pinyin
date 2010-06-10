@@ -69,6 +69,7 @@ public:
                 /* error happens, append left chars and return */
                 out << (gunichar *)inbuf;
                 g_warning ("An error occurs in SimpTradConverter:");
+                opencc_perror (od);
                 return;
             }
             else {
