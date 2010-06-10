@@ -42,55 +42,22 @@ namespace PY {
 
 #ifdef HAVE_OPENCC
 
-class OpenCC {
-private:
-    static const int BUFFER_SIZE = MAX_PHRASE_LEN;
-
-public:
-    OpenCC (void)
-    {
-        od = opencc_open (OPENCC_CONVERT_SIMP_TO_TRAD);
-    }
-
-    ~OpenCC (void)
-    {
-        opencc_close (od);
-    }
-
-    void convert (wchar_t *inbuf, size_t inlen, String &out)
-    {
-        static wchar_t buf[BUFFER_SIZE + 1];
-
-        while (inlen != 0) {
-            wchar_t *outbuf = (wchar_t *)buf;
-            size_t   outleft = BUFFER_SIZE;
-
-            if (opencc_convert (od, &inbuf, &inlen, &outbuf, &outleft) == OPENCC_CONVERT_ERROR) {
-                /* error happens, append left chars and return */
-                out << (gunichar *)inbuf;
-                g_warning ("An error occurs in SimpTradConverter:");
-                opencc_perror (od);
-                return;
-            }
-            else {
-                *outbuf = L'\0';
-                out << (gunichar *)buf;
-            }
-        };
-    }
-private:
-    opencc_t od;
-};
-
 void
 SimpTradConverter::simpToTrad (const gchar *in, String &out)
 {
-    static OpenCC opencc;
-    glong size;
-    gunichar *in_ucs4 = g_utf8_to_ucs4_fast (in, -1, &size);
-
-    opencc.convert ((wchar_t *)in_ucs4, size, out);
+    static opencc::converter conv (OPENCC_CONVERT_SIMP_TO_TRAD);
+    gunichar *in_ucs4 = g_utf8_to_ucs4_fast (in, -1, NULL);
+    std::wstring inbuf((wchar_t *) in_ucs4), outbuf;
     g_free (in_ucs4);
+
+    if (conv.convert (inbuf, outbuf) == OPENCC_CONVERT_ERROR)
+    {
+        g_warning ("An error occurs in SimpTradConverter:");
+        conv.perror ();
+        return;
+    }
+
+    out << (const gunichar *) outbuf.c_str ();
 }
 
 #else
