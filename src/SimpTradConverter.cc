@@ -26,6 +26,7 @@
 
 #include <cstdlib>
 #include <cwchar>
+// #include <bits/extc++.h>
 #include <glib-object.h>
 
 #ifdef HAVE_OPENCC
@@ -46,11 +47,11 @@ void
 SimpTradConverter::simpToTrad (const gchar *in, String &out)
 {
     static opencc::converter conv (OPENCC_CONVERT_SIMP_TO_TRAD);
-    gunichar *in_ucs4 = g_utf8_to_ucs4_fast (in, -1, NULL);
-    std::wstring inbuf((wchar_t *) in_ucs4), outbuf;
-    g_free (in_ucs4);
+    static std::wstring outbuf;
 
-    if (conv.convert (inbuf, outbuf) == OPENCC_CONVERT_ERROR)
+    gunichar *in_ucs4 = g_utf8_to_ucs4_fast (in, -1, NULL);
+
+    if (conv.convert ((wchar_t*) in_ucs4, outbuf) < 0)
     {
         g_warning ("An error occurs in SimpTradConverter:");
         conv.perror ();
@@ -58,6 +59,7 @@ SimpTradConverter::simpToTrad (const gchar *in, String &out)
     }
 
     out << (const gunichar *) outbuf.c_str ();
+    g_free (in_ucs4);
 }
 
 #else
