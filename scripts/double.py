@@ -1,6 +1,6 @@
 import pydict
 
-for name, (sheng, yun) in pydict.SHUANGPIN_SCHEMAS.items():
+for name, (sheng, yun) in pydict.SHUANGPIN_SCHEMAS:
     print "static const gint double_pinyin_%s_sheng[] = {" % name.lower()
     for c in "abcdefghijklmnopqrstuvwxyz;":
         s = sheng.get(c, "VOID")
@@ -8,6 +8,8 @@ for name, (sheng, yun) in pydict.SHUANGPIN_SCHEMAS.items():
             s = "ZERO"
         else:
             s = s.upper()
+        if s == "VOID" and c in ("a", "e", "o"):
+            s = "AEO"
         print "    PINYIN_ID_%s // %s" % ((s + ",").ljust(5), c.upper())
     print "};"
     
@@ -33,6 +35,6 @@ static const struct {
     const gint  (&sheng)[27];
     const gint  (&yun)[27][2];
 } double_pinyin_map [] = {'''
-for name, (sheng, yun) in pydict.SHUANGPIN_SCHEMAS.items():
+for name, (sheng, yun) in pydict.SHUANGPIN_SCHEMAS:
     print "    { double_pinyin_%s_sheng, double_pinyin_%s_yun}," %  (name.lower(), name.lower())
 print "};"

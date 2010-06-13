@@ -23,6 +23,7 @@
 
 namespace PY {
 
+#define DEFINE_DOUBLE_PINYIN_TABLES
 #include "DoublePinyinTable.h"
 
 /*

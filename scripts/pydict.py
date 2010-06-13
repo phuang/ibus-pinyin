@@ -285,6 +285,43 @@ ABC_SHUANGPIN_YUNMU_DICT = {
     "z" : ("iao",),
 }
 
+ZGPY_SHUANGPIN_SHENGMU_DICT = {
+    "a" : "ch", "b" : "b", "c" : "c", "d" : "d", "f" : "f", "g" : "g",
+    "h" : "h", "i" : "sh","j" : "j", "k" : "k", "l" : "l",
+    "m" : "m", "n" : "n", "o" : "'", "p" : "p", "q" : "q",
+    "r" : "r", "s" : "s", "t" : "t", "u" : "zh",
+    "w" : "w", "x" : "x", "y" : "y", "z" : "z"
+}
+
+ZGPY_SHUANGPIN_YUNMU_DICT = {
+    "a" : ("a", ),
+    "b" : ("iao", ),
+    "d" : ("ie", ),
+    "e" : ("e", ),
+    "f" : ("ian", ),
+    "g" : ("iang", "uang"),
+    "h" : ("ong", "iong"),
+    "i" : ("i", ),
+    "j" : ("er", "iu"),
+    "k" : ("ei", ),
+    "l" : ("uan", ),
+    "m" : ("un", ),
+    "n" : ("ue", "ui"),
+    "o" : ("uo", "o"),
+    "p" : ("ai", ),
+    "q" : ("ao", ),
+    "r" : ("an", ),
+    "s" : ("ang", ),
+    "t" : ("eng", "ng"),
+    "u" : ("u", ),
+    "v" : ("v", ),
+    "w" : ("en", ),
+    "x" : ("ia", "ua"),
+    "y" : ("in", "uai"),
+    "z" : ("ou" ,),
+    ";" : ("ing", )
+}
+
 PYJJ_SHUANGPIN_SHENGMU_DICT = {
     "a" : "'", "b" : "b", "c" : "c", "d" : "d", "f" : "f", "g" : "g",
     "h" : "h", "i" : "sh","j" : "j", "k" : "k", "l" : "l",
@@ -322,48 +359,49 @@ PYJJ_SHUANGPIN_YUNMU_DICT = {
     "z" : ("un",),
 }
 
-ZGPY_SHUANGPIN_SHENGMU_DICT = {
-    "a": "ch", "b" : "b", "c" : "c", "d" : "d", "f" : "f", "g" : "g",
-    "h" : "h", "i" : "sh","j" : "j", "k" : "k", "l" : "l",
+XHE_SHUANGPIN_SHENGMU_DICT = {
+    "b" : "b", "c" : "c", "d" : "d", "f" : "f", "g" : "g",
+    "h" : "h", "i" : "ch", "j" : "j", "k" : "k", "l" : "l",
     "m" : "m", "n" : "n", "o" : "'", "p" : "p", "q" : "q",
-    "r" : "r", "s" : "s", "t" : "t", "u" : "zh",
+    "r" : "r", "s" : "s", "t" : "t", "u" : "sh", "v" : "zh",
     "w" : "w", "x" : "x", "y" : "y", "z" : "z"
 }
 
-ZGPY_SHUANGPIN_YUNMU_DICT = {
-    "a" : ("a", ),
-    "b" : ("iao", ),
-    "d" : ("ie", ),
-    "e" : ("e", ),
-    "f" : ("ian", ),
-    "g" : ("iang", "uang"),
-    "h" : ("ong", "iong"),
-    "i" : ("i", ),
-    "j" : ("er", "iu"),
-    "k" : ("ei", ),
-    "l" : ("uan", ),
-    "m" : ("un", ),
-    "n" : ("ue", "ui"),
+XHE_SHUANGPIN_YUNMU_DICT = {
+    "a" : ("a",),
+    "b" : ("in",),
+    "c" : ("ao",),
+    "d" : ("ai",),
+    "e" : ("e",),
+    "f" : ("en",),
+    "g" : ("eng", "ng"),
+    "h" : ("ang",),
+    "i" : ("i",),
+    "j" : ("an",),
+    "k" : ("uai", "ing"),
+    "l" : ("iang", "uang"),
+    "m" : ("ian",),
+    "n" : ("iao",),
     "o" : ("uo", "o"),
-    "p" : ("ai", ),
-    "q" : ("ao", ),
-    "r" : ("an", ),
-    "s" : ("ang", ),
-    "t" : ("eng", "ng"),
-    "u" : ("u", ),
-    "v" : ("v", ),
-    "w" : ("en", ),
+    "p" : ("ie",),
+    "q" : ("iu",),
+    "r" : ("uan",),
+    "s" : ("ong", "iong"),
+    "t" : ("ue",),
+    "u" : ("u",),
+    "v" : ("v", "ui"),
+    "w" : ("ei",),
     "x" : ("ia", "ua"),
-    "y" : ("in", "uai"),
-    "z" : ("ou" ,),
-    ";" : ("ing", )
+    "y" : ("un",),
+    "z" : ("ou",),
 }
 
-SHUANGPIN_SCHEMAS = {
-    N_("MSPY") : (MSPY_SHUANGPIN_SHENGMU_DICT, MSPY_SHUANGPIN_YUNMU_DICT),
-    N_("ZRM")  : (ZRM_SHUANGPIN_SHENGMU_DICT, ZRM_SHUANGPIN_YUNMU_DICT),
-    N_("ABC")  : (ABC_SHUANGPIN_SHENGMU_DICT, ABC_SHUANGPIN_YUNMU_DICT),
-    N_("ZGPY") : (ZGPY_SHUANGPIN_SHENGMU_DICT, ZGPY_SHUANGPIN_YUNMU_DICT),
-    N_("PYJJ") : (PYJJ_SHUANGPIN_SHENGMU_DICT, PYJJ_SHUANGPIN_YUNMU_DICT)
-}
+SHUANGPIN_SCHEMAS = [
+    (N_("MSPY"), (MSPY_SHUANGPIN_SHENGMU_DICT, MSPY_SHUANGPIN_YUNMU_DICT)),
+    (N_("ZRM"),  (ZRM_SHUANGPIN_SHENGMU_DICT,  ZRM_SHUANGPIN_YUNMU_DICT)),
+    (N_("ABC"),  (ABC_SHUANGPIN_SHENGMU_DICT,  ABC_SHUANGPIN_YUNMU_DICT)),
+    (N_("ZGPY"), (ZGPY_SHUANGPIN_SHENGMU_DICT, ZGPY_SHUANGPIN_YUNMU_DICT)),
+    (N_("PYJJ"), (PYJJ_SHUANGPIN_SHENGMU_DICT, PYJJ_SHUANGPIN_YUNMU_DICT)),
+    (N_("XHE"),  (XHE_SHUANGPIN_SHENGMU_DICT,  XHE_SHUANGPIN_YUNMU_DICT)),
+]
 

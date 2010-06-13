@@ -1644,6 +1644,9 @@ koterpilla, Zerng07
       <row>
         <col id="0" translatable="yes">PYJJ</col>
       </row>
+      <row>
+        <col id="0" translatable="yes">XHE</col>
+      </row>
     </data>
   </object>
   <object class="GtkAdjustment" id="LookupTablePageSize">

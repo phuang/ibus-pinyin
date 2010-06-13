@@ -19,8 +19,10 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 #include "Config.h"
+
 #include "Types.h"
 #include "Bus.h"
+#include "DoublePinyinTable.h"
 
 namespace PY {
 
@@ -322,7 +324,7 @@ PinyinConfig::readDefaultValues (void)
     /* double pinyin */
     m_double_pinyin = read (CONFIG_DOUBLE_PINYIN, false);
     m_double_pinyin_schema = read (CONFIG_DOUBLE_PINYIN_SCHEMA, 0);
-    if (m_double_pinyin_schema >= 5) {
+    if (m_double_pinyin_schema > DOUBLE_PINYIN_LAST) {
         m_double_pinyin_schema = 0;
         g_warn_if_reached ();
     }
@@ -374,7 +376,7 @@ PinyinConfig::valueChanged (const std::string & section,
         m_double_pinyin = normalizeGValue (value, false);
     else if (CONFIG_DOUBLE_PINYIN_SCHEMA == name) {
         m_double_pinyin_schema = normalizeGValue (value, 0);
-        if (m_double_pinyin_schema >= 5) {
+        if (m_double_pinyin_schema > DOUBLE_PINYIN_LAST) {
             m_double_pinyin_schema = 0;
             g_warn_if_reached ();
         }

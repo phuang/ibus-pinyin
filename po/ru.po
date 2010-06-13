@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-06-05 08:18+0800\n"
+"POT-Creation-Date: 2010-06-13 15:16+0800\n"
 "PO-Revision-Date: 2009-10-14 09:44+0300\n"
 "Last-Translator: Alexey Kotlyarov <koterpillar@gmail.com>\n"
 "Language-Team: Russian\n"
@@ -296,26 +296,30 @@ msgid "Vertical"
 msgstr ""
 
 #: ../setup/ibus-pinyin-preferences.ui.h:64
+msgid "XHE"
+msgstr ""
+
+#: ../setup/ibus-pinyin-preferences.ui.h:65
 msgid "ZGPY"
 msgstr "ZGPY"
 
-#: ../setup/ibus-pinyin-preferences.ui.h:65
+#: ../setup/ibus-pinyin-preferences.ui.h:66
 msgid "ZRM"
 msgstr "ZRM"
 
-#: ../setup/ibus-pinyin-preferences.ui.h:66
+#: ../setup/ibus-pinyin-preferences.ui.h:67
 msgid "[,] [.] flip page"
 msgstr "Использовать клавиши [,] [.] для переключения страниц"
 
-#: ../setup/ibus-pinyin-preferences.ui.h:67
+#: ../setup/ibus-pinyin-preferences.ui.h:68
 msgid "[-] [=] flip page"
 msgstr "Использовать клавиши [-] [=] для переключения страниц"
 
-#: ../setup/ibus-pinyin-preferences.ui.h:68
+#: ../setup/ibus-pinyin-preferences.ui.h:69
 msgid "[Shift] select candidate"
 msgstr "Использовать [Shift] для выбора кандидатов"
 
-#: ../setup/ibus-pinyin-preferences.ui.h:69
+#: ../setup/ibus-pinyin-preferences.ui.h:70
 msgid "http://ibus.googlecode.com"
 msgstr "http://ibus.googlecode.com"
 
