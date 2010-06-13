@@ -18,8 +18,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-#ifndef __SIMP_TRAD_CONVERTER_H_
-#define __SIMP_TRAD_CONVERTER_H_
+#ifndef __PY_SIMP_TRAD_CONVERTER_H_
+#define __PY_SIMP_TRAD_CONVERTER_H_
 
 #include <glib.h>
 

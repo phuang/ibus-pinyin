@@ -18,8 +18,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-#ifndef __DYNAMIC_SPECIAL_PHRASE_H_
-#define __DYNAMIC_SPECIAL_PHRASE_H_
+#ifndef __PY_DYNAMIC_SPECIAL_PHRASE_H_
+#define __PY_DYNAMIC_SPECIAL_PHRASE_H_
 
 #include <ctime>
 #include <string>

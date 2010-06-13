@@ -18,8 +18,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-#ifndef __DOUBLE_PINYIN_TABLE_H_
-#define __DOUBLE_PINYIN_TABLE_H_
+#ifndef __PY_DOUBLE_PINYIN_TABLE_H_
+#define __PY_DOUBLE_PINYIN_TABLE_H_
 
 #define DOUBLE_PINYIN_MSPY  (0)
 #define DOUBLE_PINYIN_ZRM   (1)
@@ -394,4 +394,4 @@ static const struct {
 };
 #endif //DEFINE_DOUBLE_PINYIN_TABLE
 
-#endif //__DOUBLE_PINYIN_TABLE_H_
+#endif //__PY_DOUBLE_PINYIN_TABLE_H_
