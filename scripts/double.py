@@ -1,7 +1,7 @@
 import pydict
 
 for name, (sheng, yun) in pydict.SHUANGPIN_SCHEMAS:
-    print "static const gint double_pinyin_%s_sheng[] = {" % name.lower()
+    print "static const gint8 double_pinyin_%s_sheng[] = {" % name.lower()
     for c in "abcdefghijklmnopqrstuvwxyz;":
         s = sheng.get(c, "VOID")
         if s == "'":
@@ -13,7 +13,7 @@ for name, (sheng, yun) in pydict.SHUANGPIN_SCHEMAS:
         print "    PINYIN_ID_%s // %s" % ((s + ",").ljust(5), c.upper())
     print "};"
     
-    print "static const gint double_pinyin_%s_yun[][2] = {" % name.lower()
+    print "static const gint8 double_pinyin_%s_yun[][2] = {" % name.lower()
     for c in "abcdefghijklmnopqrstuvwxyz;":
         s = yun.get(c, ("VOID", "VOID"))
         if len(s) == 1:
@@ -32,8 +32,8 @@ for name, (sheng, yun) in pydict.SHUANGPIN_SCHEMAS:
 
 print '''
 static const struct {
-    const gint  (&sheng)[27];
-    const gint  (&yun)[27][2];
+    const gint8  (&sheng)[27];
+    const gint8  (&yun)[27][2];
 } double_pinyin_map [] = {'''
 for name, (sheng, yun) in pydict.SHUANGPIN_SCHEMAS:
     print "    { double_pinyin_%s_sheng, double_pinyin_%s_yun}," %  (name.lower(), name.lower())

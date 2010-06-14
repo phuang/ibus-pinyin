@@ -329,7 +329,7 @@ DoublePinyinEditor::isPinyin (gint i)
         return NULL;
     }
 
-    gint sheng = ID_TO_SHENG (i);
+    gint8 sheng = ID_TO_SHENG (i);
 
     if (sheng == PINYIN_ID_VOID) {
         return NULL;
@@ -342,8 +342,8 @@ inline const Pinyin *
 DoublePinyinEditor::isPinyin (gint i, gint j)
 {
     const Pinyin *pinyin;
-    gint sheng = ID_TO_SHENG (i);
-    const gint *yun = ID_TO_YUNS (j);
+    gint8 sheng = ID_TO_SHENG (i);
+    const gint8 *yun = ID_TO_YUNS (j);
 
     if (sheng == PINYIN_ID_VOID || yun[0] == PINYIN_ID_VOID)
         return NULL;
