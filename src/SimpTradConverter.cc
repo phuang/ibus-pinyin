@@ -24,22 +24,17 @@
 
 #include "SimpTradConverter.h"
 
-#include <cstdlib>
-#include <glib-object.h>
-
 #ifdef HAVE_OPENCC
 #  include <opencc.h>
 #else
 #  include <cstring>
+#  include <cstdlib>
 #endif
 
 #include "Types.h"
 #include "String.h"
 
 namespace PY {
-#ifndef HAVE_OPENCC
-#include "SimpTradConverterTable.h"
-#endif
 
 #ifdef HAVE_OPENCC
 
@@ -94,6 +89,8 @@ static gint _cmp (gconstpointer p1, gconstpointer p2)
     return _xcmp (pp[0], pp[1], s2[0]);
 }
 
+#include "SimpTradConverterTable.h"
+
 void
 SimpTradConverter::simpToTrad (const gchar *in, String &out)
 {
@@ -109,7 +106,7 @@ SimpTradConverter::simpToTrad (const gchar *in, String &out)
 
     begin = 0;
     pend = in + std::strlen (in);
-    len = g_utf8_strlen (in, -1);   // len in charactoers
+    len = g_utf8_strlen (in, -1);   // length in charactoers
     pp[0] = in;
 
     while (pp[0] != pend) {
