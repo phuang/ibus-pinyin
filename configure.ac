@@ -175,7 +175,7 @@ AC_MSG_RESULT([
 Build options:
     Version                     $VERSION
     Install prefix              $prefix
-    Use opencc                  $have_opencc
+    Use opencc                  $enable_opencc
     Build database android      $enable_db_android
     Build database open-phrase  $enable_db_open_phrase
 ])
