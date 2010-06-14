@@ -113,11 +113,19 @@ AC_SUBST(ENV)
 # check python
 AM_PATH_PYTHON([2.5])
 
-# check opencc
-PKG_CHECK_MODULES(OPENCC, [opencc], [
-    AC_DEFINE(HAVE_OPENCC, 1, [Define if found opencc])
-    have_opencc=yes
-], [have_opencc=no])
+# --enable-opencc
+AC_ARG_ENABLE(opencc,
+    AC_HELP_STRING([--enable-opencc],
+        [Use opencc for simplified and traditional Chinese conversion]),
+        [enable_opencc=$enableval],
+        [enable_opencc=no]
+)
+if test x"$enable_opencc" = x"yes"; then
+    # check opencc
+    PKG_CHECK_MODULES(OPENCC, [opencc], [
+        AC_DEFINE(HAVE_OPENCC, 1, [Define if found opencc])
+    ])
+fi
 
 # define GETTEXT_* variables
 GETTEXT_PACKAGE=ibus-pinyin
