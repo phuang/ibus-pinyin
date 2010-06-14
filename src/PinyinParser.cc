@@ -285,7 +285,7 @@ bopomofo_cmp (const void *p1, const void *p2)
     const wchar_t *s1 = (wchar_t *) p1;
     const Pinyin *s2 = *(const Pinyin **) p2;
 
-    return std::wcscmp (s1,s2->bopomofo);
+    return std::wcscmp (s1, s2->bopomofo);
 }
 
 gboolean
