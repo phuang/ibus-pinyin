@@ -385,7 +385,7 @@ XHE_SHUANGPIN_YUNMU_DICT = {
     "o" : ("uo", "o"),
     "p" : ("ie",),
     "q" : ("iu",),
-    "r" : ("uan",),
+    "r" : ("uan", "er"),
     "s" : ("ong", "iong"),
     "t" : ("ue",),
     "u" : ("u",),

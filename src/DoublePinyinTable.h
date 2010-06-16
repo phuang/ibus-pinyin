@@ -370,7 +370,7 @@ static const gint8 double_pinyin_xhe_yun[][2] = {
     { PINYIN_ID_UO,   PINYIN_ID_O    }, // O
     { PINYIN_ID_IE,   PINYIN_ID_VOID }, // P
     { PINYIN_ID_IU,   PINYIN_ID_VOID }, // Q
-    { PINYIN_ID_UAN,  PINYIN_ID_VOID }, // R
+    { PINYIN_ID_UAN,  PINYIN_ID_ER   }, // R
     { PINYIN_ID_ONG,  PINYIN_ID_IONG }, // S
     { PINYIN_ID_UE,   PINYIN_ID_VOID }, // T
     { PINYIN_ID_U,    PINYIN_ID_VOID }, // U
