@@ -169,16 +169,59 @@ ExtEditor::processPageKey(guint keyval){
 
 gboolean
 ExtEditor::processLabelKey(guint keyval){
-    //TODO: implement this according to enum ExtEditorLabelMode.
+    //According to enum ExtEditorLabelMode.
 
+    switch(m_mode){
+    case LABEL_LIST_DIGIT:
+        switch(keyval){
+        case 1 ... 9:
+            selectCandidateInPage(keyval - '1');
+            return TRUE;
+            break;
+        case 0:
+            selectCandidateInPage(9);
+            return TRUE;
+            break;
+        }
+        break;
+    case LABEL_LIST_ALPHA:
+        switch(keyval){
+        case 'a' ... 'k':
+            selectCandidateInPage(keyval - 'a');
+            return TRUE;
+            break;
+        case 'A' ... 'K':
+            selectCandidateInPage(keyval - 'A');
+            return TRUE;
+            break;
+        }
+        break;
+    }
     return FALSE;
 }
 
 gboolean
 ExtEditor::processSpace(guint keyval){
-    //TODO:: implement this.
+    if (!(keyval == IBUS_Return || keyval == IBUS_KP_Enter))
+        return FALSE;
 
-    return FALSE;
+    guint cursor_pos = m_lookup_table.cursorPos();
+
+    switch(m_mode){
+    case LABEL_LIST_NUMBERS:
+        //TODO: implement number mode.
+        break;
+    case LABEL_LIST_COMMANDS:
+    case LABEL_LIST_DIGIT:
+    case LABEL_LIST_ALPHA:
+        selectCandidateInPage(cursor_pos);
+        break;
+    case LABEL_LIST_SINGLE:
+        g_return_val_if_fail(cursor_pos == 0 , FALSE);
+        selectCandidateInPage(cursor_pos);
+        break;
+    }
+    return TRUE;
 }
 
 void
