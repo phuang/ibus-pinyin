@@ -269,31 +269,85 @@ ExtEditor::candidateClicked (guint index, guint button, guint state)
 }
 
 gboolean
-ExtEditor::selectCandidateInPage (guint i)
+ExtEditor::selectCandidateInPage (guint index)
 {
     guint page_size = m_lookup_table.pageSize();
     guint cursor_pos = m_lookup_table.cursorPos();
 
-    if (G_UNLIKELY(i >= page_size))
+    if (G_UNLIKELY(index >= page_size))
         return FALSE;
-    i += (cursor_pos / page_size) * page_size;
+    index += (cursor_pos / page_size) * page_size;
 
-    return selectCandidate (i);
+    return selectCandidate (index);
 }
 
 gboolean
-ExtEditor::selectCandidate (guint i)
+ExtEditor::selectCandidate (guint index)
 {
     switch(m_mode){
     case LABEL_LIST_NUMBERS:
         //TODO: implement pinyin extension i number mode.
         break;
     case LABEL_LIST_COMMANDS:
+        {
+            std::string prefix = m_text.substr(1, 2);
+            int len = prefix.length();
+            const char * prefix_str = prefix.c_str();
+            const GArray * commands = ibus_engine_plugin_get_available_commands(m_lua_plugin);
+            int match_count = -1;
+            for (int i = 0; i < commands->len; ++i) {
+                lua_command_t * command = &g_array_index(commands, lua_command_t, i);
+                if ( strncmp(prefix_str, command->command_name, len) == 0 ){
+                    match_count++;
+                }
+                if ( match_count == index ) {
+                    m_text.clear();
+                    m_text = "i";
+                    m_text += command->command_name;
+                    break;
+                }
+            }
+            updateStateFromInput();
+            update();
+        }
+        return TRUE;
         break;
     case LABEL_LIST_DIGIT:
     case LABEL_LIST_ALPHA:
+        {
+            g_return_val_if_fail(m_result_num > 1, FALSE);
+            g_return_val_if_fail(index < m_result_num, FALSE);
+
+            const lua_command_candidate_t * candidate = g_array_index(m_candidates, lua_command_candidate_t *, index);
+            if ( candidate->content ){
+                StaticText text(candidate->content);
+                commitText(text);
+                m_text.clear();
+            } else if (candidate->suggest){
+                m_text += candidate->suggest;
+            }
+
+            updateStateFromInput();
+            update();
+            return TRUE;
+        }
         break;
     case LABEL_LIST_SINGLE:
+        {
+            g_return_val_if_fail(m_result_num == 1, FALSE);
+            g_return_val_if_fail(m_result_num == 0, FALSE);
+            if ( m_candidate->content ){
+                StaticText text(m_candidate->content);
+                commitText(text);
+                m_text.clear();
+            } else if (m_candidate->suggest){
+                m_text += m_candidate->suggest;
+            }
+
+            updateStateFromInput();
+            update();
+            return TRUE;
+        }
         break;
     }
     return FALSE;
@@ -422,7 +476,7 @@ ExtEditor::fillCommand(std::string command_name, const char * argument){
             ibus_engine_plugin_free_candidate((lua_command_candidate_t *)m_candidate);
             m_candidate = NULL;
         }else{
-            for ( int i = 0; i < result_num; ++i){
+            for ( int i = 0; i < m_result_num; ++i){
                 const lua_command_candidate_t * candidate = g_array_index(m_candidates, lua_command_candidate_t *, i);
                 ibus_engine_plugin_free_candidate((lua_command_candidate_t *)candidate);
             }
