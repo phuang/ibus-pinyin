@@ -1,5 +1,7 @@
 #include "ExtEditor.h"
 
+#define _(text) (dgettext (GETTEXT_PACKAGE, text))
+
 namespace PY {
 
 /* Write digit/alpha/none Label generator here.
@@ -570,6 +572,8 @@ ExtEditor::fillCommand(std::string command_name, const char * argument){
         result = "";
         if ( m_candidate->content ){
             result = m_candidate->content;
+            if (strstr(result.c_str(), "\n"))
+                result = _("(Character Chart)");
         }
         if ( m_candidate->suggest && m_candidate-> help ){
             result += m_candidate->suggest;
@@ -587,6 +591,8 @@ ExtEditor::fillCommand(std::string command_name, const char * argument){
             result = "";
             if ( candidate->content ){
                 result = candidate->content;
+                if (strstr(result.c_str(), "\n"))
+                    result = _("(Character Chart)");
             }
             if ( candidate->suggest && candidate-> help ){
                 result += candidate->suggest;
