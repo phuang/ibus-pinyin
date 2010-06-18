@@ -20,7 +20,10 @@
  */
 #include "ExtEditor.h"
 
-#define _(text) (dgettext (GETTEXT_PACKAGE, text))
+#include "Config.h"
+
+#define _(text) text
+// (dgettext (GETTEXT_PACKAGE, text))
 
 namespace PY {
 
@@ -29,7 +32,7 @@ namespace PY {
  */
 
 ExtEditor::ExtEditor (PinyinProperties & props, Config & config)
-    : Editor (props),
+    : Editor (props, config),
       m_mode(LABEL_NONE),
       m_result_num(0),
       m_candidate(NULL),
@@ -147,27 +150,27 @@ ExtEditor::processPageKey(guint keyval){
     switch (keyval) {
     //For 2000-10-10 16:30 input.
     case IBUS_comma:
-        if (Config::commaPeriodPage ()) {
+        if (m_config.commaPeriodPage ()) {
             pageUp ();
             return TRUE;
         }
         break;
 #if 0
     case IBUS_minus:
-        if (Config::minusEqualPage ()) {
+        if (m_config.minusEqualPage ()) {
             pageUp ();
             return TRUE;
         }
         break;
 #endif
     case IBUS_period:
-        if (Config::commaPeriodPage ()) {
+        if (m_config.commaPeriodPage ()) {
             pageDown ();
             return TRUE;
         }
         break;
     case IBUS_equal:
-        if (Config::minusEqualPage ()) {
+        if (m_config.minusEqualPage ()) {
             pageDown ();
             return TRUE;
         }
@@ -634,8 +637,8 @@ void
 ExtEditor::clearLookupTable()
 {
     m_lookup_table.clear ();
-    m_lookup_table.setPageSize (Config::pageSize ());
-    m_lookup_table.setOrientation (Config::orientation ());
+    m_lookup_table.setPageSize (m_config.pageSize ());
+    m_lookup_table.setOrientation (m_config.orientation ());
 }
 
 void
