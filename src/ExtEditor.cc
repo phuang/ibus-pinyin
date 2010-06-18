@@ -482,6 +482,16 @@ ExtEditor::updateStateFromInput()
             m_auxiliary_text += " ";
             m_auxiliary_text += m_text.substr(1,2);
 
+            const char * argment = NULL;
+            std::string arg = "";
+            if (m_text.length() > 3) {
+                arg = m_text.substr(3);
+                argment = arg.c_str();
+                m_auxiliary_text += " ";
+                m_auxiliary_text += argment;
+            }
+            /* finish auxiliary text computing here. */
+
             const lua_command_t * command = ibus_engine_plugin_lookup_command(m_lua_plugin, command_name.c_str());
             if ( NULL == command) {
                 m_mode = LABEL_NONE;
@@ -498,15 +508,6 @@ ExtEditor::updateStateFromInput()
                 m_mode = LABEL_LIST_ALPHA;
             else
                 m_mode = LABEL_LIST_NONE;
-
-            const char * argment = NULL;
-            std::string arg = "";
-            if (m_text.length() > 3) {
-                arg = m_text.substr(3);
-                argment = arg.c_str();
-                m_auxiliary_text += " ";
-                m_auxiliary_text += argment;
-            }
 
             fillCommand(command_name, argment);
         }
