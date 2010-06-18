@@ -42,19 +42,13 @@ void
 SimpTradConverter::simpToTrad (const gchar *in, String &out)
 {
     static opencc::converter conv (OPENCC_CONVERT_SIMP_TO_TRAD);
-    static std::wstring outbuf;
+    static std::string inbuf, outbuf;
 
-    gunichar *in_ucs4 = g_utf8_to_ucs4_fast (in, -1, NULL);
+    inbuf = (const char *) in;
 
-    if (conv.convert ((wchar_t*) in_ucs4, outbuf) < 0)
-    {
-        g_warning ("An error occurs in SimpTradConverter:");
-        conv.perror ();
-        return;
-    }
+    conv.convert (inbuf, outbuf);
 
-    out << (const gunichar *) outbuf.c_str ();
-    g_free (in_ucs4);
+    out << outbuf.c_str ();
 }
 
 #else
