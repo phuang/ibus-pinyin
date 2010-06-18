@@ -233,6 +233,8 @@ ExtEditor::processLabelKey(guint keyval){
             break;
         }
         break;
+    default:
+        break;
     }
     return FALSE;
 }
@@ -256,6 +258,8 @@ ExtEditor::processSpace(guint keyval){
     case LABEL_LIST_SINGLE:
         g_return_val_if_fail(cursor_pos == 0 , FALSE);
         selectCandidateInPage(cursor_pos);
+        break;
+    default:
         break;
     }
     return TRUE;
@@ -291,7 +295,8 @@ ExtEditor::removeCharBefore()
     }
 
     m_text.erase(m_cursor - 1, 1);
-    m_cursor = std::max(0, (int)(m_cursor - 1));
+    m_cursor = std::max(0, static_cast<int>(m_cursor - 1));
+    return TRUE;
 }
 
 gboolean
@@ -308,6 +313,7 @@ ExtEditor::removeCharAfter()
     }
     m_text.erase(m_cursor, 1);
     m_cursor = std::min(m_cursor, (guint)m_text.length());
+    return TRUE;
 }
 
 void
@@ -375,12 +381,12 @@ ExtEditor::selectCandidate (guint index)
             const char * prefix_str = prefix.c_str();
             const GArray * commands = ibus_engine_plugin_get_available_commands(m_lua_plugin);
             int match_count = -1;
-            for (int i = 0; i < commands->len; ++i) {
+            for (int i = 0; i < static_cast<int>(commands->len); ++i) {
                 lua_command_t * command = &g_array_index(commands, lua_command_t, i);
                 if ( strncmp(prefix_str, command->command_name, len) == 0 ){
                     match_count++;
                 }
-                if ( match_count == index ) {
+                if ( match_count == static_cast<int>(index) ) {
                     m_text.clear();
                     m_text = "i";
                     m_text += command->command_name;
@@ -396,7 +402,7 @@ ExtEditor::selectCandidate (guint index)
     case LABEL_LIST_ALPHA:
         {
             g_return_val_if_fail(m_result_num > 1, FALSE);
-            g_return_val_if_fail(index < m_result_num, FALSE);
+            g_return_val_if_fail(static_cast<int>(index) < m_result_num, FALSE);
 
             const lua_command_candidate_t * candidate = g_array_index(m_candidates, lua_command_candidate_t *, index);
             if ( candidate->content ){
@@ -428,6 +434,8 @@ ExtEditor::selectCandidate (guint index)
             update();
             return TRUE;
         }
+        break;
+    default:
         break;
     }
     return FALSE;
@@ -534,7 +542,7 @@ ExtEditor::fillCommandCandidates(std::string prefix)
     int len = prefix.length();
     const char * prefix_str = prefix.c_str();
     const GArray * commands = ibus_engine_plugin_get_available_commands(m_lua_plugin);
-    for ( int i = 0; i < commands->len; ++i){
+    for ( int i = 0; i < static_cast<int>(commands->len); ++i){
         lua_command_t * command = &g_array_index(commands, lua_command_t, i);
         if ( strncmp(prefix_str, command->command_name, len) == 0){
             std::string candidate = command->command_name;
