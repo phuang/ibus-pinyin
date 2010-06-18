@@ -18,9 +18,15 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-#include "ExtEditor.h"
+
+#include <string>
 
 #include "Config.h"
+#include "Pointer.h"
+#include "LookupTable.h"
+
+#include "Editor.h"
+#include "ExtEditor.h"
 
 #define _(text) text
 // (dgettext (GETTEXT_PACKAGE, text))

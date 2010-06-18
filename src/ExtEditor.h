@@ -28,10 +28,6 @@ extern "C" {
 #include <lauxlib.h>
 #include "lua-plugin.h"
 }
-#include <string>
-#include "Editor.h"
-#include "Pointer.h"
-#include "LookupTable.h"
 
 namespace PY {
 
