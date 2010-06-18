@@ -51,13 +51,14 @@ public:
     void clear (void)                       { ibus_lookup_table_clear (*this); }
     void setCursorVisable (gboolean visable){ ibus_lookup_table_set_cursor_visible (*this, visable); }
     void setLabel (guint index, IBusText *text) { ibus_lookup_table_set_label (*this, index, text); }
-
     void appendCandidate (IBusText *text)   { ibus_lookup_table_append_candidate (*this, text); }
+    void appendLabel (IBusText *text)       { ibus_lookup_table_append_label (*this, text); }
 
     operator IBusLookupTable * (void) const
     {
         return get<IBusLookupTable> ();
     }
+
 };
 
 };

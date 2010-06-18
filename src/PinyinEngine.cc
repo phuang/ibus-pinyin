@@ -99,11 +99,9 @@ PinyinEngine::processKeyEvent (guint keyval, guint keycode, guint modifiers)
                 case IBUS_grave:
                     m_input_mode = MODE_PUNCT;
                     break;
-                #if 0
                 case IBUS_i:
                     m_input_mode = MODE_EXTENSION;
                     break;
-                #endif
                 }
             }
             else {

@@ -20,6 +20,7 @@
 
 SUBDIRS = \
 	data \
+	lua \
 	src \
 	setup \
 	m4 \

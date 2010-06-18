@@ -121,11 +121,15 @@ ibus_engine_pinyin_CXXFLAGS = \
 	-DGETTEXT_PACKAGE=\"@GETTEXT_PACKAGE@\" \
 	-DPKGDATADIR=\"$(pkgdatadir)\" \
 	-DLIBEXECDIR=\"$(libexecdir)\" \
+	-I../lua/ \
 	$(NULL)
+
 ibus_engine_pinyin_LDADD = \
 	@IBUS_LIBS@ \
 	@SQLITE_LIBS@ \
 	@OPENCC_LIBS@ \
+	-L../lua/ \
+	-lpylua \
 	$(NULL)
 
 if HAVE_LIBUUID
