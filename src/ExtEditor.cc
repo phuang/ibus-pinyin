@@ -61,6 +61,9 @@ ExtEditor::processKeyEvent (guint keyval, guint keycode, guint modifiers)
     if (processLabelKey(keyval))
         return TRUE;
 
+    if (processSpace(keyval))
+        return TRUE;
+
     m_cursor = std::min(m_cursor, (guint)m_text.length());
 
     /* Remember the input string. */
@@ -105,9 +108,13 @@ ExtEditor::processEditKey(guint keyval){
     case IBUS_Delete:
     case IBUS_KP_Delete:
         removeCharAfter();
+        updateStateFromInput();
+        update();
         return TRUE;
     case IBUS_BackSpace:
         removeCharBefore();
+        updateStateFromInput();
+        update();
         return TRUE;
     }
     return FALSE;
@@ -202,7 +209,7 @@ ExtEditor::processLabelKey(guint keyval){
 
 gboolean
 ExtEditor::processSpace(guint keyval){
-    if (!(keyval == IBUS_Return || keyval == IBUS_KP_Enter))
+    if (!(keyval == IBUS_space || keyval == IBUS_KP_Space))
         return FALSE;
 
     guint cursor_pos = m_lookup_table.cursorPos();
@@ -378,7 +385,7 @@ ExtEditor::selectCandidate (guint index)
     case LABEL_LIST_SINGLE:
         {
             g_return_val_if_fail(m_result_num == 1, FALSE);
-            g_return_val_if_fail(m_result_num == 0, FALSE);
+            g_return_val_if_fail(index == 0, FALSE);
             if ( m_candidate->content ){
                 StaticText text(m_candidate->content);
                 commitText(text);
@@ -463,7 +470,7 @@ ExtEditor::updateStateFromInput()
             if (m_text.length() > 3) {
                 arg = m_text.substr(3);
                 argment = arg.c_str();
-                m_auxiliary_text += "";
+                m_auxiliary_text += " ";
                 m_auxiliary_text += argment;
             }
 
