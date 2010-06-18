@@ -216,24 +216,20 @@ ExtEditor::processLabelKey(guint keyval){
     case LABEL_LIST_DIGIT:
         switch(keyval){
         case 1 ... 9:
-            selectCandidateInPage(keyval - '1');
-            return TRUE;
+            return selectCandidateInPage(keyval - '1');
             break;
         case 0:
-            selectCandidateInPage(9);
-            return TRUE;
+            return selectCandidateInPage(9);
             break;
         }
         break;
     case LABEL_LIST_ALPHA:
         switch(keyval){
         case 'a' ... 'k':
-            selectCandidateInPage(keyval - 'a');
-            return TRUE;
+            return selectCandidateInPage(keyval - 'a');
             break;
         case 'A' ... 'K':
-            selectCandidateInPage(keyval - 'A');
-            return TRUE;
+            return selectCandidateInPage(keyval - 'A');
             break;
         }
         break;
@@ -404,7 +400,7 @@ ExtEditor::selectCandidate (guint index)
 
             const lua_command_candidate_t * candidate = g_array_index(m_candidates, lua_command_candidate_t *, index);
             if ( candidate->content ){
-                StaticText text(candidate->content);
+                Text text(candidate->content);
                 commitText(text);
                 m_text.clear();
             } else if (candidate->suggest){
@@ -413,15 +409,15 @@ ExtEditor::selectCandidate (guint index)
 
             updateStateFromInput();
             update();
-            return TRUE;
         }
+        return TRUE;
         break;
     case LABEL_LIST_SINGLE:
         {
             g_return_val_if_fail(m_result_num == 1, FALSE);
             g_return_val_if_fail(index == 0, FALSE);
             if ( m_candidate->content ){
-                StaticText text(m_candidate->content);
+                Text text(m_candidate->content);
                 commitText(text);
                 m_text.clear();
             } else if (m_candidate->suggest){
@@ -445,12 +441,14 @@ ExtEditor::updateStateFromInput()
     if ( !m_text.length() ) {
         m_preedit_text = "";
         m_auxiliary_text = "";
+        m_cursor = 0;
         clearLookupTable();
-        return false;
+        return FALSE;
     }
+
     if ( ! 'i' == m_text[0] ){
         g_warning("i is expected in m_input string.\n");
-        return false;
+        return FALSE;
     }
 
     m_auxiliary_text = "i";
