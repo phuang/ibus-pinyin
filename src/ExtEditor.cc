@@ -39,8 +39,8 @@ ExtEditor::resetLuaState()
 gboolean
 ExtEditor::processKeyEvent (guint keyval, guint keycode, guint modifiers)
 {
-    modifiers &= (IBUS_SHIFT_MASK |
-                  IBUS_CONTROL_MASK |
+    //IBUS_SHIFT_MASK is removed.
+    modifiers &= (IBUS_CONTROL_MASK |
                   IBUS_MOD1_MASK |
                   IBUS_SUPER_MASK |
                   IBUS_HYPER_MASK |
@@ -123,18 +123,21 @@ ExtEditor::processEditKey(guint keyval){
 gboolean
 ExtEditor::processPageKey(guint keyval){
     switch (keyval) {
+    //For 2000-10-10 16:30 input.
     case IBUS_comma:
         if (Config::commaPeriodPage ()) {
             pageUp ();
             return TRUE;
         }
         break;
+#if 0
     case IBUS_minus:
         if (Config::minusEqualPage ()) {
             pageUp ();
             return TRUE;
         }
         break;
+#endif
     case IBUS_period:
         if (Config::commaPeriodPage ()) {
             pageDown ();
