@@ -46,7 +46,12 @@ SimpTradConverter::simpToTrad (const gchar *in, String &out)
 
     inbuf = (const char *) in;
 
-    conv.convert (inbuf, outbuf);
+    if (conv.convert (inbuf, outbuf) == -1)
+    {
+        g_warning ("An error occurs in SimpTradConverter:");
+        conv.perror ();
+        return;
+    }
 
     out << outbuf.c_str ();
 }
