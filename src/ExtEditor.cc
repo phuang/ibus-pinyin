@@ -295,7 +295,7 @@ ExtEditor::removeCharBefore()
     }
 
     m_text.erase(m_cursor - 1, 1);
-    m_cursor = std::max(0, static_cast<int>(m_cursor - 1));
+    m_cursor = std::max(0, static_cast<int>(m_cursor) - 1);
     return TRUE;
 }
 
