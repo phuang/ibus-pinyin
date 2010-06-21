@@ -26,6 +26,7 @@ libpylua_la_SOURCES = \
 	lua-plugin.h \
 	lua-plugin.c \
 	lua-plugin-init.c \
+	lmyoslib.c \
 	$(NULL)
 
 libpylua_la_CFLAGS = \

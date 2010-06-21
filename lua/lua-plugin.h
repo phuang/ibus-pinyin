@@ -5,6 +5,8 @@
 
 #define LUA_IMELIBNAME   "ime"
 LUALIB_API int (luaopen_ime) (lua_State * L);
+LUALIB_API int (luaopen_myos) (lua_State * L);
+
 #define LUA_IMELIB_CONTEXT "__context"
 
 typedef struct{

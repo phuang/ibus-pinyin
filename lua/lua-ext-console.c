@@ -44,23 +44,24 @@ int print_lua_call_result(IBusEnginePlugin * plugin, size_t num){
     for ( i = 0; i < results->len; ++i) {
       const lua_command_candidate_t * result = g_array_index(results, const lua_command_candidate_t *, i);
       if (result->content)
-          printf("%d.%s >\t", i, result->content);
+          printf("%d.%s >\t", (int)i, result->content);
       else{
-          printf("%d. %s [%s]\t", i, result->suggest, result->help);
+          printf("%d. %s [%s]\t", (int)i, result->suggest, result->help);
       }
     }
     printf("\n");
   }
+  return 0;
 }
 
 int do_lua_call(IBusEnginePlugin * plugin, const char * command_name, const char * argument){
   const lua_command_t * command;
   size_t num;
 
-  g_return_if_fail(2 == strlen(command_name));
+  g_return_val_if_fail(2 == strlen(command_name), 2);
   command = ibus_engine_plugin_lookup_command(plugin, command_name);
   if ( NULL == command) {
-    fprintf(stderr, "command %s doesn't exist.\n", command);
+    fprintf(stderr, "command %s doesn't exist.\n", command_name);
     return 1;
   }
 

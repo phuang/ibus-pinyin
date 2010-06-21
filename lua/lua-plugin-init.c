@@ -12,7 +12,7 @@ static const luaL_Reg lualibs[] = {
   {"", luaopen_base},
   {LUA_TABLIBNAME, luaopen_table},
   {LUA_IOLIBNAME, luaopen_io},
-  {LUA_OSLIBNAME, luaopen_os},
+  {LUA_OSLIBNAME, luaopen_myos},
   {LUA_STRLIBNAME, luaopen_string},
   {LUA_MATHLIBNAME, luaopen_math},
   {LUA_IMELIBNAME, luaopen_ime},
@@ -202,7 +202,7 @@ static int ime_register_trigger(lua_State * L){
   for ( i = 0; i < num; ++i) {
     lua_pushinteger(L, i + 1);
     lua_gettable(L, 3);
-    fprintf(stderr, "%d:%s\t", i + 1, lua_tostring(L, -1));
+    fprintf(stderr, "%d:%s\t", (int)i + 1, lua_tostring(L, -1));
     lua_pop(L, 1);
   }
   fprintf(stderr, "\n");
@@ -213,7 +213,7 @@ static int ime_register_trigger(lua_State * L){
   for ( i = 0; i < num; ++i) {
     lua_pushinteger(L, i + 1);
     lua_gettable(L, 4);
-    fprintf(stderr, "%d:%s\t", i + 1, lua_tostring(L, -1));
+    fprintf(stderr, "%d:%s\t", (int) i + 1, lua_tostring(L, -1));
   }
   fprintf(stderr, "\n");
 

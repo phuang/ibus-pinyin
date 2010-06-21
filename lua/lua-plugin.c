@@ -148,9 +148,9 @@ gboolean ibus_engine_plugin_add_command(IBusEnginePlugin * plugin, lua_command_t
   lua_command_t new_command;
   lua_command_clone(command, &new_command);
 
-  g_array_append_val(priv->lua_commands, new_command);
+  g_array_append_val(lua_commands, new_command);
   /* Note: need to improve speed here? */
-  g_array_sort(priv->lua_commands, compare_command);
+  g_array_sort(lua_commands, compare_command);
 
   return TRUE;
 }
