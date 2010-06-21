@@ -46,7 +46,7 @@ ExtEditor::ExtEditor (PinyinProperties & props, Config & config)
 {
     m_lua_plugin = ibus_engine_plugin_new();
 
-    loadLuaScript("../lua/base.lua");
+    loadLuaScript(PKGDATADIR "/base.lua");
 
     m_text = "";
     m_cursor = 0;
