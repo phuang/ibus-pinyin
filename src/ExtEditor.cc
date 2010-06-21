@@ -542,13 +542,15 @@ ExtEditor::fillCommandCandidates(std::string prefix)
     int len = prefix.length();
     const char * prefix_str = prefix.c_str();
     const GArray * commands = ibus_engine_plugin_get_available_commands(m_lua_plugin);
+    int count = -1;
     for ( int i = 0; i < static_cast<int>(commands->len); ++i){
         lua_command_t * command = &g_array_index(commands, lua_command_t, i);
         if ( strncmp(prefix_str, command->command_name, len) == 0){
+            count++;
             std::string candidate = command->command_name;
             candidate += ".";
             candidate += command->description;
-            m_lookup_table.appendLabel(Text(""));
+            m_lookup_table.setLabel(count, Text(""));
             m_lookup_table.appendCandidate(Text(candidate));
         }
     }
@@ -588,17 +590,18 @@ ExtEditor::fillCommand(std::string command_name, const char * argument){
 
     //Generate labels according to m_mode
     if ( LABEL_LIST_DIGIT == m_mode ) {
-        //skip codes, as this is the default behavior of lookup table.
+        for ( int i = 1; i <= 10; ++i )
+            m_lookup_table.setLabel( i - 1, Text(i - 1 + '0') );
     }
 
     if ( LABEL_LIST_ALPHA == m_mode) {
         for ( int i = 1; i <= 10; ++i )
-            m_lookup_table.appendLabel( Text(i - 1 + 'a') );
+            m_lookup_table.setLabel( i - 1, Text(i - 1 + 'a') );
     }
 
     if ( LABEL_LIST_NONE == m_mode || LABEL_LIST_SINGLE == m_mode) {
         for ( int i = 1; i <= 10; ++i)
-            m_lookup_table.appendLabel(Text(""));
+            m_lookup_table.setLabel( i - 1, Text(""));
     }
 
     //Generate candidates
