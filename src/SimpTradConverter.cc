@@ -3,6 +3,7 @@
  * ibus-pinyin - The Chinese PinYin engine for IBus
  *
  * Copyright (c) 2008-2010 Peng Huang <shawn.p.huang@gmail.com>
+ * Copyright (c) 2010 BYVoid <byvoid1@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -41,12 +42,12 @@ namespace PY {
 void
 SimpTradConverter::simpToTrad (const gchar *in, String &out)
 {
-    static opencc::converter conv (OPENCC_CONVERT_SIMP_TO_TRAD);
+    static opencc::converter conv (opencc::converter::CONFIG_SIMP_TO_TRAD);
     static std::string inbuf, outbuf;
 
     inbuf = (const char *) in;
 
-    if (conv.convert (inbuf, outbuf) == -1)
+    if (conv == -1 || conv.convert (inbuf, outbuf) == -1)
     {
         g_warning ("An error occurs in SimpTradConverter:");
         conv.perror ();
