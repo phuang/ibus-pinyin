@@ -181,6 +181,7 @@ static int ime_register_command(lua_State * L){
   lua_command_t new_command;
   size_t l;
 
+  memset(&new_command, 0, sizeof(new_command));
   new_command.command_name = luaL_checklstring(L, 1, &l);
   if ( 2 != l ){
     return luaL_error(L, "ime_register_command is called with command_name: %s, whose length is not 2.\n", new_command.command_name);

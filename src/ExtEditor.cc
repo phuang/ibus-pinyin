@@ -224,10 +224,10 @@ ExtEditor::processLabelKey (guint keyval)
     switch (m_mode) {
     case LABEL_LIST_DIGIT:
         switch (keyval) {
-        case 1 ... 9:
+        case '1' ... '9':
             return selectCandidateInPage (keyval - '1');
             break;
-        case 0:
+        case '0':
             return selectCandidateInPage (9);
             break;
         }
@@ -528,7 +528,7 @@ ExtEditor::updateStateFromInput (void)
                 m_mode = LABEL_NONE;
                 clearLookupTable ();
                 m_lookup_table.clear ();
-                return false;
+                return FALSE;
             }
 
             if ( command->help ){
@@ -623,7 +623,7 @@ ExtEditor::fillCommand (std::string command_name, const char * argument)
     //Generate labels according to m_mode
     if ( LABEL_LIST_DIGIT == m_mode ) {
         for ( int i = 1; i <= 10; ++i )
-            m_lookup_table.setLabel ( i - 1, Text (i - 1 + '0') );
+            m_lookup_table.setLabel ( i - 1, Text (i - 1 + '1') );
     }
 
     if ( LABEL_LIST_ALPHA == m_mode) {
