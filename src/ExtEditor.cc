@@ -531,6 +531,12 @@ ExtEditor::updateStateFromInput (void)
                 return false;
             }
 
+            if ( command->help ){
+                m_auxiliary_text += "\t[";
+                m_auxiliary_text += command->help;
+                m_auxiliary_text += "]";
+            }
+
             std::string label = command->leading;
 
             if ( "digit" == label )
