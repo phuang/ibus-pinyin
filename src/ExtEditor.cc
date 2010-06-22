@@ -269,11 +269,11 @@ ExtEditor::processSpace (guint keyval)
     case LABEL_LIST_COMMANDS:
     case LABEL_LIST_DIGIT:
     case LABEL_LIST_ALPHA:
-        selectCandidateInPage (cursor_pos);
+        selectCandidate (cursor_pos);
         break;
     case LABEL_LIST_SINGLE:
         g_return_val_if_fail (cursor_pos == 0 , FALSE);
-        selectCandidateInPage (cursor_pos);
+        selectCandidate (cursor_pos);
         break;
     default:
         break;
@@ -421,6 +421,7 @@ ExtEditor::selectCandidate (guint index)
                     m_text.clear ();
                     m_text = "i";
                     m_text += command->command_name;
+                    m_cursor = m_text.length ();
                     break;
                 }
             }
@@ -442,6 +443,7 @@ ExtEditor::selectCandidate (guint index)
                 m_text.clear ();
             } else if (candidate->suggest) {
                 m_text += candidate->suggest;
+                m_cursor += strlen(candidate->suggest);
             }
 
             updateStateFromInput ();
