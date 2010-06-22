@@ -28,16 +28,6 @@ typedef struct _lua_command_candidate_t lua_command_candidate_t;
 
 namespace PY {
 
-enum ExtEditorLabelMode{
-    LABEL_NONE,
-    LABEL_LIST_NUMBERS,
-    LABEL_LIST_COMMANDS,
-    LABEL_LIST_NONE,
-    LABEL_LIST_DIGIT,
-    LABEL_LIST_ALPHA,
-    LABEL_LIST_SINGLE,
-    LABEL_LAST,
-};
 
 class ExtEditor : public Editor {
 public:
@@ -81,7 +71,17 @@ private:
     gboolean removeCharBefore (void);
     gboolean removeCharAfter (void);
 
-    ExtEditorLabelMode m_mode;
+    enum LabelMode{
+        LABEL_NONE,
+        LABEL_LIST_NUMBERS,
+        LABEL_LIST_COMMANDS,
+        LABEL_LIST_NONE,
+        LABEL_LIST_DIGIT,
+        LABEL_LIST_ALPHA,
+        LABEL_LIST_SINGLE,
+        LABEL_LAST,
+    };
+    LabelMode m_mode;
     Pointer<IBusEnginePlugin> m_lua_plugin;
 
     std::string m_preedit_text;
