@@ -67,6 +67,7 @@ private:
     gboolean processLabelKey (guint keyval);
 
     gboolean processSpace (guint keyval);
+    gboolean processEnter (guint keyval);
 
     gboolean removeCharBefore (void);
     gboolean removeCharAfter (void);

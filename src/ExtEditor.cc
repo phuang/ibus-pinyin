@@ -98,6 +98,9 @@ ExtEditor::processKeyEvent (guint keyval, guint keycode, guint modifiers)
     if (processSpace (keyval))
         return TRUE;
 
+    if (processEnter (keyval))
+        return TRUE;
+
     m_cursor = std::min (m_cursor, (guint)m_text.length ());
 
     /* Remember the input string. */
@@ -269,6 +272,21 @@ ExtEditor::processSpace (guint keyval)
     default:
         break;
     }
+    return TRUE;
+}
+
+gboolean
+ExtEditor::processEnter(guint keyval)
+{
+    if ( !(keyval == IBUS_KP_Enter ) )
+        return FALSE;
+
+    if ( m_text.length() == 0 )
+        return FALSE;
+
+    Text text(m_text);
+    commitText(text);
+    reset();
     return TRUE;
 }
 
