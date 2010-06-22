@@ -31,7 +31,7 @@ LUALIB_API int (luaopen_myos) (lua_State * L);
 
 #define LUA_IMELIB_CONTEXT "__context"
 
-typedef struct{
+typedef struct _lua_command_t{
   const char * command_name;
   const char * lua_function_name;
   const char * description;
@@ -39,13 +39,13 @@ typedef struct{
   const char * help; /* optional. */
 } lua_command_t;
 
-typedef struct{
+typedef struct _lua_command_candidate_t{
   const char * suggest;
   const char * help;
   const char * content;
 } lua_command_candidate_t;
 
-typedef struct{
+typedef struct _lua_trigger_t{
   const char * lua_function_name;
   const char * description;
   /*< private, skip it, and register it into Special Table directly with * wildcard. >*/
