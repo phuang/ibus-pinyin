@@ -52,34 +52,34 @@ public:
     virtual void reset (void);
     virtual void candidateClicked (guint index, guint button, guint state);
 
-    int loadLuaScript(std::string filename);
-    void resetLuaState();
+    int loadLuaScript (std::string filename);
+    void resetLuaState (void);
 
 private:
-    bool updateStateFromInput();
+    bool updateStateFromInput (void);
 
     /* Fill lookup table, and update preedit string. */
-    bool fillCommandCandidates();
-    bool fillCommandCandidates(std::string prefix);
-    bool fillCommand(std::string command_name, const char * argument);
+    bool fillCommandCandidates (void);
+    bool fillCommandCandidates (std::string prefix);
+    bool fillCommand (std::string command_name, const char * argument);
 
     /* Auxiliary functions for lookup table */
-    void clearLookupTable();
-    void updateLookupTable();
+    void clearLookupTable (void);
+    void updateLookupTable (void);
     gboolean selectCandidateInPage (guint index);
     gboolean selectCandidate (guint index);
 
-    void updatePreeditText();
-    void updateAuxiliaryText();
+    void updatePreeditText (void);
+    void updateAuxiliaryText (void);
 
-    gboolean processEditKey(guint keyval);
-    gboolean processPageKey(guint keyval);
-    gboolean processLabelKey(guint keyval);
+    gboolean processEditKey (guint keyval);
+    gboolean processPageKey (guint keyval);
+    gboolean processLabelKey (guint keyval);
 
-    gboolean processSpace(guint keyval);
+    gboolean processSpace (guint keyval);
 
-    gboolean removeCharBefore();
-    gboolean removeCharAfter();
+    gboolean removeCharBefore (void);
+    gboolean removeCharAfter (void);
 
     ExtEditorLabelMode m_mode;
     Pointer<IBusEnginePlugin> m_lua_plugin;

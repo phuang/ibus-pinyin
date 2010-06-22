@@ -46,31 +46,27 @@ namespace PY {
 
 ExtEditor::ExtEditor (PinyinProperties & props, Config & config)
     : Editor (props, config),
-      m_mode(LABEL_NONE),
-      m_result_num(0),
-      m_candidate(NULL),
-      m_candidates(NULL)
+      m_mode (LABEL_NONE),
+      m_result_num (0),
+      m_candidate (NULL),
+      m_candidates (NULL)
 {
-    m_lua_plugin = ibus_engine_plugin_new();
+    m_lua_plugin = ibus_engine_plugin_new ();
 
-    loadLuaScript(PKGDATADIR "/base.lua");
-
-    m_text = "";
-    m_cursor = 0;
-    m_lookup_table.clear();
+    loadLuaScript (PKGDATADIR "/base.lua");
 }
 
 int
-ExtEditor::loadLuaScript(std::string filename)
+ExtEditor::loadLuaScript (std::string filename)
 {
-    return ibus_engine_plugin_load_lua_script(m_lua_plugin, filename.c_str());
+    return ibus_engine_plugin_load_lua_script (m_lua_plugin, filename.c_str ());
 }
 
 void
-ExtEditor::resetLuaState()
+ExtEditor::resetLuaState ()
 {
-  g_object_unref(m_lua_plugin);
-  m_lua_plugin = ibus_engine_plugin_new();
+  g_object_unref (m_lua_plugin);
+  m_lua_plugin = ibus_engine_plugin_new ();
 }
 
 
@@ -88,78 +84,80 @@ ExtEditor::processKeyEvent (guint keyval, guint keycode, guint modifiers)
         return FALSE;
 
     //handle backspace/delete here.
-    if (processEditKey(keyval))
+    if (processEditKey (keyval))
         return TRUE;
 
     //handle page/cursor up/down here.
-    if (processPageKey(keyval))
+    if (processPageKey (keyval))
         return TRUE;
 
     //handle label key select here.
-    if (processLabelKey(keyval))
+    if (processLabelKey (keyval))
         return TRUE;
 
-    if (processSpace(keyval))
+    if (processSpace (keyval))
         return TRUE;
 
-    m_cursor = std::min(m_cursor, (guint)m_text.length());
+    m_cursor = std::min (m_cursor, (guint)m_text.length ());
 
     /* Remember the input string. */
-    switch(m_cursor){
+    switch (m_cursor) {
     case 0: //Empty input string.
         {
-            g_return_val_if_fail( 'i' == keyval, FALSE);
+            g_return_val_if_fail ( 'i' == keyval, FALSE);
             if ( 'i' == keyval ) {
-                m_text.insert(m_cursor, keyval);
+                m_text.insert (m_cursor, keyval);
                 m_cursor++;
             }
         }
         break;
     case 1 ... 2: // Only contains 'i' in input string.
         {
-            g_return_val_if_fail( 'i' == m_text[0], FALSE);
-            if ( isalnum(keyval) ) {
-                m_text.insert(m_cursor, keyval);
+            g_return_val_if_fail ( 'i' == m_text[0], FALSE);
+            if ( isalnum (keyval) ) {
+                m_text.insert (m_cursor, keyval);
                 m_cursor++;
             }
         }
         break;
     default: //Here is the appended argment.
         {
-            g_return_val_if_fail( 'i' == m_text[0], FALSE);
-            if (isprint(keyval)){
-                m_text.insert(m_cursor, keyval);
+            g_return_val_if_fail ( 'i' == m_text[0], FALSE);
+            if (isprint (keyval)) {
+                m_text.insert (m_cursor, keyval);
                 m_cursor++;
             }
         }
         break;
     }
-    /* Deal other staff with updateStateFromInput(). */
-    updateStateFromInput();
-    update();
+    /* Deal other staff with updateStateFromInput (). */
+    updateStateFromInput ();
+    update ();
     return TRUE;
 }
 
 gboolean
-ExtEditor::processEditKey(guint keyval){
-    switch (keyval){
+ExtEditor::processEditKey (guint keyval)
+{
+    switch (keyval) {
     case IBUS_Delete:
     case IBUS_KP_Delete:
-        removeCharAfter();
-        updateStateFromInput();
-        update();
+        removeCharAfter ();
+        updateStateFromInput ();
+        update ();
         return TRUE;
     case IBUS_BackSpace:
-        removeCharBefore();
-        updateStateFromInput();
-        update();
+        removeCharBefore ();
+        updateStateFromInput ();
+        update ();
         return TRUE;
     }
     return FALSE;
 }
 
 gboolean
-ExtEditor::processPageKey(guint keyval){
+ExtEditor::processPageKey (guint keyval)
+{
     switch (keyval) {
     //For 2000-10-10 16:30 input.
     case IBUS_comma:
@@ -216,27 +214,28 @@ ExtEditor::processPageKey(guint keyval){
 }
 
 gboolean
-ExtEditor::processLabelKey(guint keyval){
+ExtEditor::processLabelKey (guint keyval)
+{
     //According to enum ExtEditorLabelMode.
 
-    switch(m_mode){
+    switch (m_mode) {
     case LABEL_LIST_DIGIT:
-        switch(keyval){
+        switch (keyval) {
         case 1 ... 9:
-            return selectCandidateInPage(keyval - '1');
+            return selectCandidateInPage (keyval - '1');
             break;
         case 0:
-            return selectCandidateInPage(9);
+            return selectCandidateInPage (9);
             break;
         }
         break;
     case LABEL_LIST_ALPHA:
-        switch(keyval){
+        switch (keyval) {
         case 'a' ... 'k':
-            return selectCandidateInPage(keyval - 'a');
+            return selectCandidateInPage (keyval - 'a');
             break;
         case 'A' ... 'K':
-            return selectCandidateInPage(keyval - 'A');
+            return selectCandidateInPage (keyval - 'A');
             break;
         }
         break;
@@ -247,24 +246,25 @@ ExtEditor::processLabelKey(guint keyval){
 }
 
 gboolean
-ExtEditor::processSpace(guint keyval){
+ExtEditor::processSpace (guint keyval)
+{
     if (!(keyval == IBUS_space || keyval == IBUS_KP_Space))
         return FALSE;
 
-    guint cursor_pos = m_lookup_table.cursorPos();
+    guint cursor_pos = m_lookup_table.cursorPos ();
 
-    switch(m_mode){
+    switch (m_mode) {
     case LABEL_LIST_NUMBERS:
         //TODO: implement number mode.
         break;
     case LABEL_LIST_COMMANDS:
     case LABEL_LIST_DIGIT:
     case LABEL_LIST_ALPHA:
-        selectCandidateInPage(cursor_pos);
+        selectCandidateInPage (cursor_pos);
         break;
     case LABEL_LIST_SINGLE:
-        g_return_val_if_fail(cursor_pos == 0 , FALSE);
-        selectCandidateInPage(cursor_pos);
+        g_return_val_if_fail (cursor_pos == 0 , FALSE);
+        selectCandidateInPage (cursor_pos);
         break;
     default:
         break;
@@ -275,51 +275,51 @@ ExtEditor::processSpace(guint keyval){
 void
 ExtEditor::pageUp (void)
 {
-    if (G_LIKELY(m_lookup_table.pageUp())) {
-        update();
+    if (G_LIKELY(m_lookup_table.pageUp ())) {
+        update ();
     }
 }
 
 void
 ExtEditor::pageDown (void)
 {
-    if (G_LIKELY(m_lookup_table.pageDown())) {
-        update();
+    if (G_LIKELY(m_lookup_table.pageDown ())) {
+        update ();
     }
 }
 
 gboolean
-ExtEditor::removeCharBefore()
+ExtEditor::removeCharBefore (void)
 {
     if (G_UNLIKELY( m_cursor <= 0 )) {
         m_cursor = 0;
         return FALSE;
     }
 
-    if (G_UNLIKELY( m_cursor > m_text.length() )) {
-        m_cursor = m_text.length();
+    if (G_UNLIKELY( m_cursor > m_text.length () )) {
+        m_cursor = m_text.length ();
         return FALSE;
     }
 
-    m_text.erase(m_cursor - 1, 1);
-    m_cursor = std::max(0, static_cast<int>(m_cursor) - 1);
+    m_text.erase (m_cursor - 1, 1);
+    m_cursor = std::max (0, static_cast<int>(m_cursor) - 1);
     return TRUE;
 }
 
 gboolean
-ExtEditor::removeCharAfter()
+ExtEditor::removeCharAfter (void)
 {
     if (G_UNLIKELY( m_cursor < 0 )) {
         m_cursor = 0;
         return FALSE;
     }
 
-    if (G_UNLIKELY( m_cursor >= m_text.length() )) {
-        m_cursor = m_text.length();
+    if (G_UNLIKELY( m_cursor >= m_text.length () )) {
+        m_cursor = m_text.length ();
         return FALSE;
     }
-    m_text.erase(m_cursor, 1);
-    m_cursor = std::min(m_cursor, (guint)m_text.length());
+    m_text.erase (m_cursor, 1);
+    m_cursor = std::min (m_cursor, (guint)m_text.length ());
     return TRUE;
 }
 
@@ -327,7 +327,7 @@ void
 ExtEditor::cursorUp (void)
 {
     if (G_LIKELY (m_lookup_table.cursorUp ())) {
-        update();
+        update ();
     }
 }
 
@@ -335,24 +335,24 @@ void
 ExtEditor::cursorDown (void)
 {
     if (G_LIKELY (m_lookup_table.cursorDown ())) {
-        update();
+        update ();
     }
 }
 
 void
 ExtEditor::update (void)
 {
-    updateLookupTable();
-    updatePreeditText();
-    updateAuxiliaryText();
+    updateLookupTable ();
+    updatePreeditText ();
+    updateAuxiliaryText ();
 }
 
 void
 ExtEditor::reset (void)
 {
     m_text = "";
-    updateStateFromInput();
-    update();
+    updateStateFromInput ();
+    update ();
 }
 
 void
@@ -364,8 +364,8 @@ ExtEditor::candidateClicked (guint index, guint button, guint state)
 gboolean
 ExtEditor::selectCandidateInPage (guint index)
 {
-    guint page_size = m_lookup_table.pageSize();
-    guint cursor_pos = m_lookup_table.cursorPos();
+    guint page_size = m_lookup_table.pageSize ();
+    guint cursor_pos = m_lookup_table.cursorPos ();
 
     if (G_UNLIKELY(index >= page_size))
         return FALSE;
@@ -377,68 +377,68 @@ ExtEditor::selectCandidateInPage (guint index)
 gboolean
 ExtEditor::selectCandidate (guint index)
 {
-    switch(m_mode){
+    switch (m_mode) {
     case LABEL_LIST_NUMBERS:
         //TODO: implement pinyin extension i number mode.
         break;
     case LABEL_LIST_COMMANDS:
         {
-            std::string prefix = m_text.substr(1, 2);
-            int len = prefix.length();
-            const char * prefix_str = prefix.c_str();
-            const GArray * commands = ibus_engine_plugin_get_available_commands(m_lua_plugin);
+            std::string prefix = m_text.substr (1, 2);
+            int len = prefix.length ();
+            const char * prefix_str = prefix.c_str ();
+            const GArray * commands = ibus_engine_plugin_get_available_commands (m_lua_plugin);
             int match_count = -1;
             for (int i = 0; i < static_cast<int>(commands->len); ++i) {
-                lua_command_t * command = &g_array_index(commands, lua_command_t, i);
-                if ( strncmp(prefix_str, command->command_name, len) == 0 ){
+                lua_command_t * command = &g_array_index (commands, lua_command_t, i);
+                if ( strncmp (prefix_str, command->command_name, len) == 0 ) {
                     match_count++;
                 }
                 if ( match_count == static_cast<int>(index) ) {
-                    m_text.clear();
+                    m_text.clear ();
                     m_text = "i";
                     m_text += command->command_name;
                     break;
                 }
             }
-            updateStateFromInput();
-            update();
+            updateStateFromInput ();
+            update ();
         }
         return TRUE;
         break;
     case LABEL_LIST_DIGIT:
     case LABEL_LIST_ALPHA:
         {
-            g_return_val_if_fail(m_result_num > 1, FALSE);
-            g_return_val_if_fail(static_cast<int>(index) < m_result_num, FALSE);
+            g_return_val_if_fail (m_result_num > 1, FALSE);
+            g_return_val_if_fail (static_cast<int>(index) < m_result_num, FALSE);
 
-            const lua_command_candidate_t * candidate = g_array_index(m_candidates, lua_command_candidate_t *, index);
-            if ( candidate->content ){
-                Text text(candidate->content);
-                commitText(text);
-                m_text.clear();
-            } else if (candidate->suggest){
+            const lua_command_candidate_t * candidate = g_array_index (m_candidates, lua_command_candidate_t *, index);
+            if ( candidate->content ) {
+                Text text (candidate->content);
+                commitText (text);
+                m_text.clear ();
+            } else if (candidate->suggest) {
                 m_text += candidate->suggest;
             }
 
-            updateStateFromInput();
-            update();
+            updateStateFromInput ();
+            update ();
         }
         return TRUE;
         break;
     case LABEL_LIST_SINGLE:
         {
-            g_return_val_if_fail(m_result_num == 1, FALSE);
-            g_return_val_if_fail(index == 0, FALSE);
-            if ( m_candidate->content ){
-                Text text(m_candidate->content);
-                commitText(text);
-                m_text.clear();
-            } else if (m_candidate->suggest){
+            g_return_val_if_fail (m_result_num == 1, FALSE);
+            g_return_val_if_fail (index == 0, FALSE);
+            if ( m_candidate->content ) {
+                Text text (m_candidate->content);
+                commitText (text);
+                m_text.clear ();
+            } else if (m_candidate->suggest) {
                 m_text += m_candidate->suggest;
             }
 
-            updateStateFromInput();
-            update();
+            updateStateFromInput ();
+            update ();
             return TRUE;
         }
         break;
@@ -449,67 +449,67 @@ ExtEditor::selectCandidate (guint index)
 }
 
 bool
-ExtEditor::updateStateFromInput()
+ExtEditor::updateStateFromInput (void)
 {
     /* Do parse and candidates update here. */
     /* prefix i double check here. */
-    if ( !m_text.length() ) {
+    if ( !m_text.length () ) {
         m_preedit_text = "";
         m_auxiliary_text = "";
         m_cursor = 0;
-        clearLookupTable();
+        clearLookupTable ();
         return FALSE;
     }
 
-    if ( ! 'i' == m_text[0] ){
-        g_warning("i is expected in m_input string.\n");
+    if ( ! 'i' == m_text[0] ) {
+        g_warning ("i is expected in m_input string.\n");
         return FALSE;
     }
 
     m_auxiliary_text = "i";
 
     m_mode = LABEL_LIST_COMMANDS;
-    if ( 1 == m_text.length() ){
-        fillCommandCandidates();
+    if ( 1 == m_text.length () ) {
+        fillCommandCandidates ();
         return true;
     }
     /* Check m_text len, and update auxiliary string meanwhile.
-     * 1. only "i", dispatch to fillCommandCandidates(void).
+     * 1. only "i", dispatch to fillCommandCandidates (void).
      * 2. "i" with one charactor,
-     *      dispatch to fillCommandCandidates(std::string).
+     *      dispatch to fillCommandCandidates (std::string).
      * 3. "i" with two charactor or more,
-     *      dispatch to fillCommand(std::string, const char * argument).
+     *      dispatch to fillCommand (std::string, const char * argument).
      */
 
-    if ( isalpha(m_text[1])){
+    if ( isalpha (m_text[1])) {
         m_mode = LABEL_LIST_COMMANDS;
-        if ( m_text.length() == 2){
-            fillCommandCandidates(m_text.substr(1,1).c_str());
+        if ( m_text.length () == 2) {
+            fillCommandCandidates (m_text.substr (1,1).c_str ());
 
             m_auxiliary_text += " ";
-            m_auxiliary_text += m_text.substr(1, 1);
+            m_auxiliary_text += m_text.substr (1, 1);
             return true;
-        } else if ( m_text.length() >= 3) {
-            std::string command_name = m_text.substr(1,2);
+        } else if ( m_text.length () >= 3) {
+            std::string command_name = m_text.substr (1,2);
 
             m_auxiliary_text += " ";
-            m_auxiliary_text += m_text.substr(1,2);
+            m_auxiliary_text += m_text.substr (1,2);
 
             const char * argment = NULL;
             std::string arg = "";
-            if (m_text.length() > 3) {
-                arg = m_text.substr(3);
-                argment = arg.c_str();
+            if (m_text.length () > 3) {
+                arg = m_text.substr (3);
+                argment = arg.c_str ();
                 m_auxiliary_text += " ";
                 m_auxiliary_text += argment;
             }
             /* finish auxiliary text computing here. */
 
-            const lua_command_t * command = ibus_engine_plugin_lookup_command(m_lua_plugin, command_name.c_str());
+            const lua_command_t * command = ibus_engine_plugin_lookup_command (m_lua_plugin, command_name.c_str ());
             if ( NULL == command) {
                 m_mode = LABEL_NONE;
-                clearLookupTable();
-                m_lookup_table.clear();
+                clearLookupTable ();
+                m_lookup_table.clear ();
                 return false;
             }
 
@@ -522,43 +522,43 @@ ExtEditor::updateStateFromInput()
             else
                 m_mode = LABEL_LIST_NONE;
 
-            fillCommand(command_name, argment);
+            fillCommand (command_name, argment);
         }
     }
-    else if ( isdigit(m_text[1]) ){
+    else if ( isdigit (m_text[1]) ) {
         m_mode = LABEL_LIST_NUMBERS;
         //Generate Chinese number.
-        //fillChineseNumber(). (Label use digit.)
+        //fillChineseNumber (). (Label use digit.)
     }
 
     return true;
 }
 
 bool
-ExtEditor::fillCommandCandidates()
+ExtEditor::fillCommandCandidates (void)
 {
-    return fillCommandCandidates("");
+    return fillCommandCandidates ("");
 }
 
 bool
-ExtEditor::fillCommandCandidates(std::string prefix)
+ExtEditor::fillCommandCandidates (std::string prefix)
 {
-    clearLookupTable();
+    clearLookupTable ();
 
     /* fill candidates here. */
-    int len = prefix.length();
-    const char * prefix_str = prefix.c_str();
-    const GArray * commands = ibus_engine_plugin_get_available_commands(m_lua_plugin);
+    int len = prefix.length ();
+    const char * prefix_str = prefix.c_str ();
+    const GArray * commands = ibus_engine_plugin_get_available_commands (m_lua_plugin);
     int count = -1;
-    for ( int i = 0; i < static_cast<int>(commands->len); ++i){
-        lua_command_t * command = &g_array_index(commands, lua_command_t, i);
-        if ( strncmp(prefix_str, command->command_name, len) == 0){
+    for ( int i = 0; i < static_cast<int>(commands->len); ++i) {
+        lua_command_t * command = &g_array_index (commands, lua_command_t, i);
+        if ( strncmp (prefix_str, command->command_name, len) == 0) {
             count++;
             std::string candidate = command->command_name;
             candidate += ".";
             candidate += command->description;
-            m_lookup_table.setLabel(count, Text(""));
-            m_lookup_table.appendCandidate(Text(candidate));
+            m_lookup_table.setLabel (count, Text (""));
+            m_lookup_table.appendCandidate (Text (candidate));
         }
     }
 
@@ -566,62 +566,63 @@ ExtEditor::fillCommandCandidates(std::string prefix)
 }
 
 bool
-ExtEditor::fillCommand(std::string command_name, const char * argument){
-    const lua_command_t * command = ibus_engine_plugin_lookup_command(m_lua_plugin, command_name.c_str());
+ExtEditor::fillCommand (std::string command_name, const char * argument)
+{
+    const lua_command_t * command = ibus_engine_plugin_lookup_command (m_lua_plugin, command_name.c_str ());
     if ( NULL == command )
         return false;
 
     if ( m_result_num != 0) {
         if ( m_result_num == 1) {
-            ibus_engine_plugin_free_candidate((lua_command_candidate_t *)m_candidate);
+            ibus_engine_plugin_free_candidate ((lua_command_candidate_t *)m_candidate);
             m_candidate = NULL;
         }else{
-            for ( int i = 0; i < m_result_num; ++i){
-                const lua_command_candidate_t * candidate = g_array_index(m_candidates, lua_command_candidate_t *, i);
-                ibus_engine_plugin_free_candidate((lua_command_candidate_t *)candidate);
+            for ( int i = 0; i < m_result_num; ++i) {
+                const lua_command_candidate_t * candidate = g_array_index (m_candidates, lua_command_candidate_t *, i);
+                ibus_engine_plugin_free_candidate ((lua_command_candidate_t *)candidate);
             }
 
-            g_array_free(m_candidates, TRUE);
+            g_array_free (m_candidates, TRUE);
             m_candidates = NULL;
         }
         m_result_num = 0;
-        g_assert(m_candidates == NULL && m_candidate == NULL);
+        g_assert (m_candidates == NULL && m_candidate == NULL);
     }
 
-    m_result_num = ibus_engine_plugin_call(m_lua_plugin, command->lua_function_name, argument);
+    m_result_num = ibus_engine_plugin_call (m_lua_plugin, command->lua_function_name, argument);
 
     if ( 1 == m_result_num )
         m_mode = LABEL_LIST_SINGLE;
 
-    clearLookupTable();
+    clearLookupTable ();
 
     //Generate labels according to m_mode
     if ( LABEL_LIST_DIGIT == m_mode ) {
         for ( int i = 1; i <= 10; ++i )
-            m_lookup_table.setLabel( i - 1, Text(i - 1 + '0') );
+            m_lookup_table.setLabel ( i - 1, Text (i - 1 + '0') );
     }
 
     if ( LABEL_LIST_ALPHA == m_mode) {
         for ( int i = 1; i <= 10; ++i )
-            m_lookup_table.setLabel( i - 1, Text(i - 1 + 'a') );
+            m_lookup_table.setLabel ( i - 1, Text (i - 1 + 'a') );
     }
 
     if ( LABEL_LIST_NONE == m_mode || LABEL_LIST_SINGLE == m_mode) {
         for ( int i = 1; i <= 10; ++i)
-            m_lookup_table.setLabel( i - 1, Text(""));
+            m_lookup_table.setLabel ( i - 1, Text (""));
     }
 
     //Generate candidates
     std::string result;
-    if ( 1 == m_result_num ){
-        m_candidate = ibus_engine_plugin_get_retval(m_lua_plugin);
+    if ( 1 == m_result_num ) {
+        m_candidate = ibus_engine_plugin_get_retval (m_lua_plugin);
         result = "";
-        if ( m_candidate->content ){
+        if ( m_candidate->content ) {
             result = m_candidate->content;
-            if (strstr(result.c_str(), "\n"))
+            if (strstr (result.c_str (), "\n"))
                 result = _("(Character Chart)");
         }
-        if ( m_candidate->suggest && m_candidate-> help ){
+        if ( m_candidate->suggest && m_candidate-> help ) {
             result += m_candidate->suggest;
             result += " ";
             result += "[";
@@ -629,18 +630,18 @@ ExtEditor::fillCommand(std::string command_name, const char * argument){
             result += "]";
         }
 
-        m_lookup_table.appendCandidate(Text(result));
-    }else if (m_result_num > 1){
-        m_candidates = ibus_engine_plugin_get_retvals(m_lua_plugin);
-        for ( int i = 0; i < m_result_num; ++i){
-            const lua_command_candidate_t * candidate = g_array_index(m_candidates, lua_command_candidate_t *, i);
+        m_lookup_table.appendCandidate (Text (result));
+    }else if (m_result_num > 1) {
+        m_candidates = ibus_engine_plugin_get_retvals (m_lua_plugin);
+        for ( int i = 0; i < m_result_num; ++i) {
+            const lua_command_candidate_t * candidate = g_array_index (m_candidates, lua_command_candidate_t *, i);
             result = "";
-            if ( candidate->content ){
+            if ( candidate->content ) {
                 result = candidate->content;
-                if (strstr(result.c_str(), "\n"))
+                if (strstr (result.c_str (), "\n"))
                     result = _("(Character Chart)");
             }
-            if ( candidate->suggest && candidate-> help ){
+            if ( candidate->suggest && candidate-> help ) {
                 result += candidate->suggest;
                 result += " ";
                 result += "[";
@@ -648,7 +649,7 @@ ExtEditor::fillCommand(std::string command_name, const char * argument){
                 result += "]";
             }
 
-            m_lookup_table.appendCandidate(Text(result));
+            m_lookup_table.appendCandidate (Text (result));
         }
     }
 
@@ -657,7 +658,7 @@ ExtEditor::fillCommand(std::string command_name, const char * argument){
 
 
 void
-ExtEditor::clearLookupTable()
+ExtEditor::clearLookupTable (void)
 {
     m_lookup_table.clear ();
     m_lookup_table.setPageSize (m_config.pageSize ());
@@ -665,7 +666,7 @@ ExtEditor::clearLookupTable()
 }
 
 void
-ExtEditor::updateLookupTable()
+ExtEditor::updateLookupTable (void)
 {
     if (m_lookup_table.size ()) {
         Editor::updateLookupTable (m_lookup_table, TRUE);
@@ -676,19 +677,21 @@ ExtEditor::updateLookupTable()
 }
 
 void
-ExtEditor::updatePreeditText(){
-    if( G_UNLIKELY(m_preedit_text.empty()) ){
+ExtEditor::updatePreeditText (void)
+{
+    if ( G_UNLIKELY(m_preedit_text.empty ()) ) {
         hidePreeditText ();
         return;
     }
 
-    StaticText preedit_text(m_preedit_text);
-    Editor::updatePreeditText(preedit_text, m_cursor, TRUE);
+    StaticText preedit_text (m_preedit_text);
+    Editor::updatePreeditText (preedit_text, m_cursor, TRUE);
 }
 
 void
-ExtEditor::updateAuxiliaryText(){
-    if( G_UNLIKELY(m_auxiliary_text.empty()) ){
+ExtEditor::updateAuxiliaryText (void)
+{
+    if ( G_UNLIKELY(m_auxiliary_text.empty ()) ) {
         hideAuxiliaryText ();
         return;
     }

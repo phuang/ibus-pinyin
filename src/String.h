@@ -127,6 +127,11 @@ public:
         return *this;
     }
 
+    gchar operator[] (gint i)
+    {
+        return std::string::operator[] (i);
+    }
+
     String & operator<< (const std::string &str)
     {
         return operator<< (str.c_str ());
