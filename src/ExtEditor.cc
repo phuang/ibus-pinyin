@@ -53,13 +53,19 @@ ExtEditor::ExtEditor (PinyinProperties & props, Config & config)
 {
     m_lua_plugin = ibus_engine_plugin_new ();
 
-    loadLuaScript (PKGDATADIR "/base.lua");
+    gchar * path = g_build_filename (g_get_user_config_dir (),
+                                     "ibus", "pinyin", "base.lua", NULL);
+    loadLuaScript ( ".." G_DIR_SEPARATOR_S "lua" G_DIR_SEPARATOR_S "base.lua")||
+        loadLuaScript (path) ||
+        loadLuaScript (PKGDATADIR G_DIR_SEPARATOR_S "base.lua");
+
+    g_free(path);
 }
 
 int
 ExtEditor::loadLuaScript (std::string filename)
 {
-    return ibus_engine_plugin_load_lua_script (m_lua_plugin, filename.c_str ());
+    return !ibus_engine_plugin_load_lua_script (m_lua_plugin, filename.c_str ());
 }
 
 void
@@ -278,15 +284,15 @@ ExtEditor::processSpace (guint keyval)
 gboolean
 ExtEditor::processEnter(guint keyval)
 {
-    if ( !(keyval == IBUS_KP_Enter ) )
+    if ( !(keyval == IBUS_Return) )
         return FALSE;
 
-    if ( m_text.length() == 0 )
+    if ( m_text.length () == 0 )
         return FALSE;
 
     Text text(m_text);
-    commitText(text);
-    reset();
+    commitText (text);
+    reset ();
     return TRUE;
 }
 
