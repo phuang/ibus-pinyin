@@ -541,7 +541,7 @@ ExtEditor::updateStateFromInput (void)
 
             if ( command->help ){
                 int space_len = std::max ( 0, m_aux_text_len
-                                           - (int) strlen (command->help)
+                                           - (int) g_utf8_strlen (command->help, -1)
                                            - 2 /* length of "[...]" */);
                 m_auxiliary_text.append(space_len, ' ');
 
