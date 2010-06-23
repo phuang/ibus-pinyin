@@ -23,6 +23,10 @@
 #ifndef LUA_PLUGIN_H
 #define LUA_PLUGIN_H
 
+#include <lua.h>
+#include <lualib.h>
+#include <lauxlib.h>
+
 #include <glib-object.h>
 
 #define LUA_IMELIBNAME   "ime"

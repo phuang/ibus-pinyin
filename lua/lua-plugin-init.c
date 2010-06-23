@@ -24,10 +24,6 @@
 #include <string.h>
 #include <glib.h>
 
-#include "lua.h"
-#include "lualib.h"
-#include "lauxlib.h"
-
 #include "lua-plugin.h"
 
 static const luaL_Reg lualibs[] = {

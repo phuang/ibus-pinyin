@@ -23,10 +23,6 @@
 #include <stdio.h>
 #include <glib.h>
 
-#include "lua.h"
-#include "lualib.h"
-#include "lauxlib.h"
-
 #include "lua-plugin.h"
 
 int main(int argc, char * argv[]){
