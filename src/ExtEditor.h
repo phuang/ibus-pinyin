@@ -94,6 +94,8 @@ private:
     int m_result_num;
     const lua_command_candidate_t * m_candidate;
     GArray * m_candidates;
+
+    const static int m_aux_text_len = 50;
 };
 
 };

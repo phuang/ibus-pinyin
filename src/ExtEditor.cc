@@ -540,7 +540,12 @@ ExtEditor::updateStateFromInput (void)
             }
 
             if ( command->help ){
-                m_auxiliary_text += "\t[";
+                int space_len = std::max ( 0, m_aux_text_len
+                                           - (int) strlen (command->help)
+                                           - 2 /* length of "[...]" */);
+                m_auxiliary_text.append(space_len, ' ');
+
+                m_auxiliary_text += "[";
                 m_auxiliary_text += command->help;
                 m_auxiliary_text += "]";
             }
