@@ -38,9 +38,9 @@ extern "C" {
 namespace PY {
 
 /* forward declaration function about Chinese Number. */
-static std::string translate_to_simplest(int num);
-static std::string translate_to_simplified(int num);
-static std::string translate_to_traditional(int num);
+static std::string translate_to_simplest(gint64 num);
+static std::string translate_to_simplified(gint64 num);
+static std::string translate_to_traditional(gint64 num);
 
 
 /* Write digit/alpha/none Label generator here.
@@ -582,7 +582,7 @@ ExtEditor::updateStateFromInput (void)
         m_auxiliary_text += number;
 
         //Generate Chinese number.
-        int num = atoi(number.c_str());
+        gint64 num = atoll (number.c_str ());
         fillChineseNumber (num);
     }
 
@@ -712,7 +712,7 @@ ExtEditor::fillCommand (std::string command_name, const char * argument)
 }
 
 bool
-ExtEditor::fillChineseNumber(int num)
+ExtEditor::fillChineseNumber(gint64 num)
 {
     clearLookupTable();
 
@@ -806,7 +806,7 @@ static unit_t units[] ={
     {"",   0, true},
 };
 
-static std::string translate_to_simplest(int num)
+static std::string translate_to_simplest(gint64 num)
 {
     std::string result = "";
     if ( num == 0 )
@@ -820,7 +820,7 @@ static std::string translate_to_simplest(int num)
     return result;
 }
 
-static std::string translate_to_longform(int num, const char * number[10])
+static std::string translate_to_longform(gint64 num, const char * number[10])
 {
     std::string result = "";
     int cur_pos = -1;
@@ -867,12 +867,12 @@ static std::string translate_to_longform(int num, const char * number[10])
     return result;
 }
 
-static std::string translate_to_simplified(int num)
+static std::string translate_to_simplified(gint64 num)
 {
     return translate_to_longform(num, numbers[1]);
 }
 
-static std::string translate_to_traditional(int num)
+static std::string translate_to_traditional(gint64 num)
 {
     if ( 0 == num )
         return numbers[0][0];
