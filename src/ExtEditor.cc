@@ -567,8 +567,10 @@ ExtEditor::updateStateFromInput (void)
     }
     else if ( isdigit (m_text[1]) ) {
         m_mode = LABEL_LIST_NUMBERS;
+        std::string number = m_text.substr(1);
         //Generate Chinese number.
-        //fillChineseNumber (). (Label use digit.)
+        int num = atoi(number.c_str());
+        fillChineseNumber (num);
     }
 
     return true;
@@ -696,6 +698,36 @@ ExtEditor::fillCommand (std::string command_name, const char * argument)
     return true;
 }
 
+bool
+ExtEditor::fillChineseNumber(int num)
+{
+    clearLookupTable();
+
+    if ( LABEL_LIST_NUMBERS == m_mode) {
+        for ( int i = 1; i <= 10; ++i )
+            m_lookup_table.setLabel ( i - 1, Text (i - 1 + 'a') );
+    }
+
+    std::string result = translate_to_simplified(num);
+    if ( !result.empty() ){
+        Text text(result);
+        m_lookup_table.appendCandidate(text);
+    }
+
+    result = translate_to_traditional(num);
+    if ( !result.empty() ){
+        Text text(result);
+        m_lookup_table.appendCandidate(text);
+    }
+
+    result = translate_to_simplest(num);
+    if ( !result.empty() ){
+        Text text(result);
+        m_lookup_table.appendCandidate(text);
+    }
+
+    return TRUE;
+}
 
 void
 ExtEditor::clearLookupTable (void)

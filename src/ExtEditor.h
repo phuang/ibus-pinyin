@@ -53,6 +53,8 @@ private:
     bool fillCommandCandidates (std::string prefix);
     bool fillCommand (std::string command_name, const char * argument);
 
+    bool fillChineseNumber(int num);
+
     /* Auxiliary functions for lookup table */
     void clearLookupTable (void);
     void updateLookupTable (void);
