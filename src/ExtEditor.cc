@@ -37,6 +37,12 @@ extern "C" {
 
 namespace PY {
 
+/* forward declaration function about Chinese Number. */
+static std::string translate_to_simplest(int num);
+static std::string translate_to_simplified(int num);
+static std::string translate_to_traditional(int num);
+
+
 /* Write digit/alpha/none Label generator here.
  * foreach (results): 1, from get_retval; 2..n from get_retvals.
  */
@@ -261,7 +267,7 @@ ExtEditor::processSpace (guint keyval)
 
     switch (m_mode) {
     case LABEL_LIST_NUMBERS:
-        //TODO: implement number mode.
+        selectCandidate (cursor_pos);
         break;
     case LABEL_LIST_COMMANDS:
     case LABEL_LIST_DIGIT:
@@ -734,6 +740,99 @@ ExtEditor::updateAuxiliaryText (void)
     Editor::updateAuxiliaryText (aux_text, TRUE);
 }
 
+static const char * numbers [2][10] = {
+    {"零", "壹", "贰", "叁", "肆", "伍", "陆", "柒", "捌", "玖",},
+    {"〇", "一", "二", "三", "四", "五", "六", "七", "八", "九",},
+};
+
+struct unit_t{
+    const char * unit_zh_name;
+    const int digits;
+    const bool persist;
+};
+
+static unit_t units[] ={
+    {"兆", 12, true},
+    {"亿", 8, true},
+    {"万", 4, true},
+    {"千", 3, false},
+    {"百", 2, false},
+    {"十", 1, false},
+    {"",   0, true},
+};
+
+static std::string translate_to_simplest(int num)
+{
+    std::string result = "";
+    if ( num == 0 )
+        result = numbers[1][0];
+    while (num > 0) {
+        int remains = num % 10;
+        num = num / 10;
+        result = std::string ( numbers[1][remains] ) + result;
+    }
+
+    return result;
+}
+
+static std::string translate_to_longform(int num, const char * number[10])
+{
+    std::string result = "";
+    int cur_pos = -1;
+    bool eat_zero = false;
+
+    while (num > 0) {
+        int remains = num % 10;
+        num = num / 10;
+        cur_pos ++;
+        std::string unit = "";
+        int pos = cur_pos;
+        size_t i = 6;
+        while ( pos > 0 ) {
+            for ( i = 0; i < sizeof (units)/ sizeof(units[0]); ++i) {
+                pos = pos % units[i].digits;
+                if ( pos == 0 )
+                    break;
+            }
+        }
+
+        if ( units[i].persist ) {
+            result = std::string (units[i].unit_zh_name) + result;
+            eat_zero = true;
+        }
+
+        if ( remains == 0){
+            if ( eat_zero ) continue;
+
+            result = std::string (number[0]) + result;
+            eat_zero = true;
+            continue;
+        }else{
+            eat_zero = false;
+        }
+
+        if (num == 0 && remains == 1 && i == 5)
+            result = std::string (units[i].unit_zh_name) + result;
+        else if (units[i].persist)
+            result = std::string (number[remains]) + result;
+        else
+            result = std::string (number[remains]) + std::string (units[i].unit_zh_name) + result;
+    }
+
+    return result;
+}
+
+static std::string translate_to_simplified(int num)
+{
+    return translate_to_longform(num, numbers[1]);
+}
+
+static std::string translate_to_traditional(int num)
+{
+    if ( 0 == num )
+        return numbers[0][0];
+    return translate_to_longform(num, numbers[0]);
+}
 
 };
 
