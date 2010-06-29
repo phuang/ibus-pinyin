@@ -241,6 +241,7 @@ ExtEditor::processLabelKey (guint keyval)
             break;
         }
         break;
+    case LABEL_LIST_NUMBERS:
     case LABEL_LIST_ALPHA:
         switch (keyval) {
         case 'a' ... 'k':
@@ -406,7 +407,16 @@ ExtEditor::selectCandidate (guint index)
 {
     switch (m_mode) {
     case LABEL_LIST_NUMBERS:
-        //TODO: implement pinyin extension i number mode.
+        {
+            if ( index >= m_lookup_table.size() )
+                return FALSE;
+
+            IBusText * candidate = m_lookup_table.getCandidate(index);
+            Text text(candidate);
+            commitText(text);
+            reset();
+            return TRUE;
+        }
         break;
     case LABEL_LIST_COMMANDS:
         {
@@ -568,6 +578,9 @@ ExtEditor::updateStateFromInput (void)
     else if ( isdigit (m_text[1]) ) {
         m_mode = LABEL_LIST_NUMBERS;
         std::string number = m_text.substr(1);
+        m_auxiliary_text += " ";
+        m_auxiliary_text += number;
+
         //Generate Chinese number.
         int num = atoi(number.c_str());
         fillChineseNumber (num);

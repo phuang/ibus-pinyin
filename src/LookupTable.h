@@ -53,6 +53,7 @@ public:
     void setLabel (guint index, IBusText *text) { ibus_lookup_table_set_label (*this, index, text); }
     void appendCandidate (IBusText *text)   { ibus_lookup_table_append_candidate (*this, text); }
     void appendLabel (IBusText *text)       { ibus_lookup_table_append_label (*this, text); }
+    IBusText * getCandidate(guint index)    { return ibus_lookup_table_get_candidate(*this, index); }
 
     operator IBusLookupTable * (void) const
     {
