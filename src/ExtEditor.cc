@@ -791,9 +791,9 @@ static const char * numbers [2][10] = {
 };
 
 struct unit_t{
-    const char * unit_zh_name;
-    const int digits;
-    const bool persist;
+    const char * unit_zh_name;  // Chinese Character
+    const int digits;           // Position in string.
+    const bool persist;         // Whether to force eating zero and force inserting into result string.
 };
 
 static unit_t units[] ={
