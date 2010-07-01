@@ -29,6 +29,8 @@ extern "C" {
 #include "Pointer.h"
 #include "LookupTable.h"
 
+#include "DynamicSpecialPhrase.h"
+
 #include "Editor.h"
 #include "ExtEditor.h"
 
@@ -708,24 +710,26 @@ ExtEditor::fillChineseNumber(gint64 num)
 {
     clearLookupTable();
 
+    DynamicSpecialPhrase phrase ("", 0);
+
     if ( LABEL_LIST_NUMBERS == m_mode) {
         for ( int i = 1; i <= 10; ++i )
             m_lookup_table.setLabel ( i - 1, Text (i - 1 + 'a') );
     }
 
-    std::string result = translate_to_simplified(num);
+    std::string result = phrase.simplified_number(num);
     if ( !result.empty() ){
         Text text(result);
         m_lookup_table.appendCandidate(text);
     }
 
-    result = translate_to_traditional(num);
+    result = phrase.traditional_number(num);
     if ( !result.empty() ){
         Text text(result);
         m_lookup_table.appendCandidate(text);
     }
 
-    result = translate_to_simplest(num);
+    result = phrase.simplest_cn_number(num);
     if ( !result.empty() ){
         Text text(result);
         m_lookup_table.appendCandidate(text);

@@ -194,7 +194,7 @@ static unit_t units[] ={
     {"",   0, true},
 };
 
-inline const std::string
+const std::string
 DynamicSpecialPhrase::simplest_cn_number(gint64 num)
 {
     std::string result = "";
@@ -257,13 +257,13 @@ translate_to_longform(gint64 num, const char * number[10])
     return result;
 }
 
-inline const std::string
+const std::string
 DynamicSpecialPhrase::simplified_number(gint64 num)
 {
     return translate_to_longform(num, numbers[1]);
 }
 
-inline const std::string
+const std::string
 DynamicSpecialPhrase::traditional_number(gint64 num)
 {
     if ( 0 == num )
