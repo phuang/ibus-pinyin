@@ -23,7 +23,9 @@
 #include <string>
 #include "RawEditor.h"
 #include "PunctEditor.h"
+#ifdef IBUS_BUILD_LUA_EXTENSION
 #include "ExtEditor.h"
+#endif
 #include "BopomofoEditor.h"
 #include "FallbackEditor.h"
 #include "Config.h"
@@ -45,7 +47,11 @@ BopomofoEngine::BopomofoEngine (IBusEngine *engine)
     m_editors[MODE_PUNCT].reset (new PunctEditor (m_props, BopomofoConfig::instance ()));
 
     m_editors[MODE_RAW].reset (new RawEditor (m_props, BopomofoConfig::instance ()));
+#ifdef IBUS_BUILD_LUA_EXTENSION
     m_editors[MODE_EXTENSION].reset (new ExtEditor (m_props, BopomofoConfig::instance ()));
+#else
+    m_editors[MODE_EXTENSION].reset (new Editor (m_props, BopomofoConfig::instance ()));
+#endif
 
     m_props.signalUpdateProperty ().connect (bind (&BopomofoEngine::updateProperty, this, _1));
 

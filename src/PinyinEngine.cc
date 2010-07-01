@@ -23,7 +23,9 @@
 #include "Config.h"
 #include "PunctEditor.h"
 #include "RawEditor.h"
+#ifdef IBUS_BUILD_LUA_EXTENSION
 #include "ExtEditor.h"
+#endif
 #include "FullPinyinEditor.h"
 #include "DoublePinyinEditor.h"
 #include "FallbackEditor.h"
@@ -47,7 +49,11 @@ PinyinEngine::PinyinEngine (IBusEngine *engine)
 
     m_editors[MODE_PUNCT].reset (new PunctEditor (m_props, PinyinConfig::instance ()));
     m_editors[MODE_RAW].reset (new RawEditor (m_props, PinyinConfig::instance ()));
+#ifdef IBUS_BUILD_LUA_EXTENSION
     m_editors[MODE_EXTENSION].reset (new ExtEditor (m_props, PinyinConfig::instance ()));
+#else
+    m_editors[MODE_EXTENSION].reset (new Editor (m_props, PinyinConfig::instance ()));
+#endif
 
     m_props.signalUpdateProperty ().connect (bind (&PinyinEngine::updateProperty, this, _1));
 
@@ -99,9 +105,11 @@ PinyinEngine::processKeyEvent (guint keyval, guint keycode, guint modifiers)
                 case IBUS_grave:
                     m_input_mode = MODE_PUNCT;
                     break;
+#ifdef IBUS_BUILD_LUA_EXTENSION
                 case IBUS_i:
                     m_input_mode = MODE_EXTENSION;
                     break;
+#endif
                 }
             }
             else {

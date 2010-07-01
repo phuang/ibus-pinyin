@@ -106,11 +106,6 @@ BOOST_FIND_HEADER([boost/signals2.hpp])
 #     sigc++-2.0
 # ])
 
-# check lua
-PKG_CHECK_MODULES(LUA, [
-    lua
-])
-
 # check env
 AC_PATH_PROG(ENV, env)
 AC_SUBST(ENV)
@@ -168,6 +163,13 @@ AC_ARG_ENABLE(lua-extension,
         fi
     ],
     [enable_lua_extension=yes]
+)
+
+# check lua
+PKG_CHECK_MODULES(LUA, [
+    lua
+], [],
+[enable_lua_extension=no]
 )
 
 AM_CONDITIONAL(IBUS_BUILD_LUA_EXTENSION, [test x"$enable_lua_extension" = x"yes"])

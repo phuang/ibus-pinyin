@@ -49,7 +49,6 @@ ibus_engine_pinyin_c_sources = \
 	DoublePinyinEditor.cc \
 	Editor.cc \
 	Engine.cc \
-	ExtEditor.cc \
 	FallbackEditor.cc \
 	FullPinyinEditor.cc \
 	HalfFullConverter.cc \
@@ -107,6 +106,11 @@ ibus_engine_pinyin_h_sources = \
 	Types.h \
 	Util.h \
 	$(NULL)
+
+if IBUS_BUILD_LUA_EXTENSION
+ibus_engine_pinyin_c_sources += ExtEditor.cc
+endif
+
 ibus_engine_pinyin_SOURCES = \
 	$(ibus_engine_pinyin_c_sources) \
 	$(ibus_engine_pinyin_h_sources) \
@@ -121,21 +125,33 @@ ibus_engine_pinyin_CXXFLAGS = \
 	-DGETTEXT_PACKAGE=\"@GETTEXT_PACKAGE@\" \
 	-DPKGDATADIR=\"$(pkgdatadir)\" \
 	-DLIBEXECDIR=\"$(libexecdir)\" \
-	-I../lua/ \
 	$(NULL)
 
 ibus_engine_pinyin_LDADD = \
 	@IBUS_LIBS@ \
 	@SQLITE_LIBS@ \
 	@OPENCC_LIBS@ \
-	-L../lua/ \
-	-lpylua \
 	$(NULL)
 
 if HAVE_LIBUUID
 ibus_engine_pinyin_CXXFLAGS += $(LIBUUID_CFLAGS)
 ibus_engine_pinyin_LDADD += $(LIBUUID_LIBS)
 endif
+
+if IBUS_BUILD_LUA_EXTENSION
+    ibus_engine_pinyin_CXXFLAGS +=  \
+	-DIBUS_BUILD_LUA_EXTENSION \
+	-I../lua/ \
+	$(NULL)
+endif
+
+if IBUS_BUILD_LUA_EXTENSION
+    ibus_engine_pinyin_LDADD += \
+	-L../lua/ \
+	-lpylua \
+	$(NULL)
+endif
+
 
 # if HAVE_BOOST_SIGNALS2
 # # do nothing
