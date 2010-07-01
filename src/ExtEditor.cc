@@ -32,9 +32,6 @@ extern "C" {
 #include "Editor.h"
 #include "ExtEditor.h"
 
-#define _(text) text
-// (dgettext (GETTEXT_PACKAGE, text))
-
 namespace PY {
 
 /* forward declaration function about Chinese Number. */
@@ -675,7 +672,7 @@ ExtEditor::fillCommand (std::string command_name, const char * argument)
         if ( m_candidate->content ) {
             result = m_candidate->content;
             if (strstr (result.c_str (), "\n"))
-                result = _("(Character Chart)");
+                result = "(字符画)";
         }
         if ( m_candidate->suggest && m_candidate-> help ) {
             result += m_candidate->suggest;
@@ -694,7 +691,7 @@ ExtEditor::fillCommand (std::string command_name, const char * argument)
             if ( candidate->content ) {
                 result = candidate->content;
                 if (strstr (result.c_str (), "\n"))
-                    result = _("(Character Chart)");
+                    result = "(字符画)";
             }
             if ( candidate->suggest && candidate-> help ) {
                 result += candidate->suggest;
