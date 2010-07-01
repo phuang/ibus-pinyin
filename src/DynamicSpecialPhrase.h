@@ -46,6 +46,11 @@ public:
     const std::string minsec_cn (guint i);
     const std::string variable (const std::string &name);
 
+    /* declaration function about Chinese Number. */
+    const std::string simplest_cn_number(gint64 num);
+    const std::string simplified_number(gint64 num);
+    const std::string traditional_number(gint64 num);
+
 private:
     std::string m_text;
     std::tm m_time;

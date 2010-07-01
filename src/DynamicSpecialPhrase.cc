@@ -173,6 +173,104 @@ DynamicSpecialPhrase::minsec_cn (guint i)
     return std::string (num[i / 10 + 10]) + num[i % 10];
 }
 
+static const char * numbers [2][10] = {
+    {"零", "壹", "贰", "叁", "肆", "伍", "陆", "柒", "捌", "玖",},
+    {"〇", "一", "二", "三", "四", "五", "六", "七", "八", "九",},
+};
+
+struct unit_t{
+    const char * unit_zh_name;  // Chinese Character
+    const int digits;           // Position in string.
+    const bool persist;         // Whether to force eating zero and force inserting into result string.
+};
+
+static unit_t units[] ={
+    {"兆", 12, true},
+    {"亿", 8, true},
+    {"万", 4, true},
+    {"千", 3, false},
+    {"百", 2, false},
+    {"十", 1, false},
+    {"",   0, true},
+};
+
+inline const std::string
+DynamicSpecialPhrase::simplest_cn_number(gint64 num)
+{
+    std::string result = "";
+    if ( num == 0 )
+        result = numbers[1][0];
+    while (num > 0) {
+        int remains = num % 10;
+        num = num / 10;
+        result = std::string ( numbers[1][remains] ) + result;
+    }
+
+    return result;
+}
+
+static inline const std::string
+translate_to_longform(gint64 num, const char * number[10])
+{
+    std::string result = "";
+    int cur_pos = -1;
+    bool eat_zero = false;
+
+    while (num > 0) {
+        int remains = num % 10;
+        num = num / 10;
+        cur_pos ++;
+        std::string unit = "";
+        int pos = cur_pos;
+        size_t i = 6;
+        while ( pos > 0 ) {
+            for ( i = 0; i < sizeof (units)/ sizeof(units[0]); ++i) {
+                pos = pos % units[i].digits;
+                if ( pos == 0 )
+                    break;
+            }
+        }
+
+        if ( units[i].persist ) {
+            result = std::string (units[i].unit_zh_name) + result;
+            eat_zero = true;
+        }
+
+        if ( remains == 0){
+            if ( eat_zero ) continue;
+
+            result = std::string (number[0]) + result;
+            eat_zero = true;
+            continue;
+        }else{
+            eat_zero = false;
+        }
+
+        if (num == 0 && remains == 1 && i == 5)
+            result = std::string (units[i].unit_zh_name) + result;
+        else if (units[i].persist)
+            result = std::string (number[remains]) + result;
+        else
+            result = std::string (number[remains]) + std::string (units[i].unit_zh_name) + result;
+    }
+
+    return result;
+}
+
+inline const std::string
+DynamicSpecialPhrase::simplified_number(gint64 num)
+{
+    return translate_to_longform(num, numbers[1]);
+}
+
+inline const std::string
+DynamicSpecialPhrase::traditional_number(gint64 num)
+{
+    if ( 0 == num )
+        return numbers[0][0];
+    return translate_to_longform(num, numbers[0]);
+}
+
 inline const std::string
 DynamicSpecialPhrase::variable (const std::string &name)
 {
