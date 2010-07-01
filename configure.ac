@@ -157,6 +157,21 @@ AC_ARG_ENABLE(db-open-phrase,
 )
 AM_CONDITIONAL(IBUS_BUILD_DB_OPEN_PHRASE, [test x"$enable_db_open_phrase" = x"yes" ])
 
+# --disable-lua-extension
+AC_ARG_ENABLE(lua-extension,
+    AS_HELP_STRING([--disable-lua-extension],
+         [build lua extension]),
+    [   if test "$enableval" = yes; then
+            enable_lua_extension = no
+        else
+            enable_lua_extension = yes
+        fi
+    ],
+    [enable_lua_extension=yes]
+)
+
+AM_CONDITIONAL(IBUS_BUILD_LUA_EXTENSION, [test x"$enable_lua_extension" = x"yes"])
+
 # OUTPUT files
 AC_CONFIG_FILES([ po/Makefile.in
 Makefile
@@ -184,5 +199,6 @@ Build options:
     Use opencc                  $enable_opencc
     Build database android      $enable_db_android
     Build database open-phrase  $enable_db_open_phrase
+    Build lua extension         $enable_lua_extension
 ])
 
