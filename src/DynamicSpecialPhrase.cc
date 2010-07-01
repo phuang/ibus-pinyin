@@ -184,7 +184,7 @@ struct unit_t{
     const bool persist;         // Whether to force eating zero and force inserting into result string.
 };
 
-static unit_t units[] ={
+static unit_t units_simplified[] ={
     {"兆", 12, true},
     {"亿", 8, true},
     {"万", 4, true},
@@ -193,6 +193,17 @@ static unit_t units[] ={
     {"十", 1, false},
     {"",   0, true},
 };
+
+static unit_t units_traditional[] ={
+    {"兆", 12, true},
+    {"亿", 8, true},
+    {"万", 4, true},
+    {"仟", 3, false},
+    {"佰", 2, false},
+    {"拾", 1, false},
+    {"",   0, true},
+};
+
 
 const std::string
 DynamicSpecialPhrase::simplest_cn_number(gint64 num)
@@ -210,7 +221,7 @@ DynamicSpecialPhrase::simplest_cn_number(gint64 num)
 }
 
 static inline const std::string
-translate_to_longform(gint64 num, const char * number[10])
+translate_to_longform(gint64 num, const char * number[10], unit_t units[])
 {
     std::string result = "";
     int cur_pos = -1;
@@ -224,7 +235,7 @@ translate_to_longform(gint64 num, const char * number[10])
         int pos = cur_pos;
         size_t i = 6;
         while ( pos > 0 ) {
-            for ( i = 0; i < sizeof (units)/ sizeof(units[0]); ++i) {
+            for ( i = 0; i < 7; ++i) {
                 pos = pos % units[i].digits;
                 if ( pos == 0 )
                     break;
@@ -260,7 +271,7 @@ translate_to_longform(gint64 num, const char * number[10])
 const std::string
 DynamicSpecialPhrase::simplified_number(gint64 num)
 {
-    return translate_to_longform(num, numbers[1]);
+    return translate_to_longform(num, numbers[1], units_simplified);
 }
 
 const std::string
@@ -268,7 +279,7 @@ DynamicSpecialPhrase::traditional_number(gint64 num)
 {
     if ( 0 == num )
         return numbers[0][0];
-    return translate_to_longform(num, numbers[0]);
+    return translate_to_longform(num, numbers[0], units_traditional);
 }
 
 inline const std::string
