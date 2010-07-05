@@ -18,18 +18,14 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-if IBUS_BUILD_LUA_EXTENSION
 lua_script_DATA = base.lua \
 	 $(NULL)
-endif
 
 lua_scriptdir = $(pkgdatadir)
 
-if IBUS_BUILD_LUA_EXTENSION
 noinst_LTLIBRARIES = \
 	libpylua.la \
 	$(NULL)
-endif
 
 libpylua_la_SOURCES = \
 	lua-plugin.h \
@@ -48,12 +44,10 @@ libpylua_la_LIBADD = \
 	@LUA_LIBS@ \
 	$(NULL)
 
-if IBUS_BUILD_LUA_EXTENSION
 TESTS = \
     lua-ext-console \
 	test-lua-plugin \
 	$(NULL)
-endif
 
 noinst_PROGRAMS = \
 	$(TESTS) \

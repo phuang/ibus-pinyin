@@ -152,17 +152,12 @@ AC_ARG_ENABLE(db-open-phrase,
 )
 AM_CONDITIONAL(IBUS_BUILD_DB_OPEN_PHRASE, [test x"$enable_db_open_phrase" = x"yes" ])
 
-# --disable-lua-extension
+# --enable-lua-extension
 AC_ARG_ENABLE(lua-extension,
-    AS_HELP_STRING([--disable-lua-extension],
+    AS_HELP_STRING([--enable-lua-extension],
          [build lua extension]),
-    [   if test "$enableval" = yes; then
-            enable_lua_extension = no
-        else
-            enable_lua_extension = yes
-        fi
-    ],
-    [enable_lua_extension=yes]
+    [enable_lua_extension=$enableval],
+    [enable_lua_extension=no]
 )
 
 # check lua

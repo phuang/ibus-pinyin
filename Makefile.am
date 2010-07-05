@@ -18,9 +18,13 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
+if IBUS_BUILD_LUA_EXTENSION
+LUADIR=lua
+endif
+
 SUBDIRS = \
 	data \
-	lua \
+	$(LUADIR) \
 	src \
 	setup \
 	m4 \
