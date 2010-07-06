@@ -3,7 +3,7 @@
 <component>
 	<name>org.freedesktop.IBus.Pinyin</name>
 	<description>Pinyin Component</description>
-	<exec>${libexecdir}/ibus-engine-pinyin --ibus</exec>
+	<exec>/bin/env XDG_CACHE_HOME=/home/chronos/user/.cache ${libexecdir}/ibus-engine-pinyin --ibus</exec>
 	<version>@VERSION@</version>
 	<author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
 	<license>GPL</license>

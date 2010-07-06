@@ -15,3 +15,8 @@ We use the pre-processed file, rawdict_utf16_65105_freq.sql, instead.
 - m4/boost.m4
 
 Pass $CXXFLAGS to $ac_cpp to make cross-compilation of ibus-pinyin easy.
+
+- src/pinyin.xml.in.in
+
+Change the cache directory from g_get_user_cache_dir() + "/ibus/pinyin", which is usually ~/.cache/ibus/pinyin, to /home/chronos/user/.cache/ibus/pinyin since the g_get_user_cache_dir is shared among all Chrome OS users.
+
