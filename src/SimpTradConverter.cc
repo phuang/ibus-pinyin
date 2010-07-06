@@ -39,42 +39,52 @@ namespace PY {
 
 #ifdef HAVE_OPENCC
 
+class opencc {
+    static const int BUFFER_SIZE = 64;
+public:
+    opencc (void)
+    {
+        m_od = opencc_open (OPENCC_DEFAULT_CONFIG_SIMP_TO_TRAD);
+        g_assert (m_od != NULL);
+    }
+
+    ~opencc (void)
+    {
+        opencc_close(m_od);
+    }
+
+    void convert (const gchar *in, String &out)
+    {
+        glong n_char;
+        gunichar *in_ucs4 = g_utf8_to_ucs4_fast (in, -1, &n_char);
+
+        wchar_t *pinbuf = (wchar_t *)in_ucs4;
+        size_t inbuf_left = n_char;
+        while (inbuf_left != 0) {
+            wchar_t *poutbuf = (wchar_t *)m_buffer;
+            size_t outbuf_left = BUFFER_SIZE;
+            size_t retval = opencc_convert(m_od, &pinbuf, &inbuf_left, &poutbuf, &outbuf_left);
+            if (retval == (size_t) -1) {
+                /* append left chars in pinbuf */
+                g_warning ("opencc_convert return failed");
+                out << (gunichar *) pinbuf;
+                break;
+            }
+            *poutbuf = L'\0';
+            out << m_buffer;
+        }
+        g_free (in_ucs4);
+    }
+private:
+    opencc_t m_od;
+    gunichar m_buffer[BUFFER_SIZE + 1];
+};
+
 void
 SimpTradConverter::simpToTrad (const gchar *in, String &out)
 {
-    const static int BUFFER_SIZE = 64;
-    static gunichar buf[BUFFER_SIZE + 1];
-    gunichar *in_ucs4;
-    wchar_t * pinbuf, * poutbuf;
-    size_t inbuf_left, outbuf_left;
-    
-    in_ucs4 = g_utf8_to_ucs4_fast (in, -1, NULL);
-    pinbuf = (wchar_t *)in_ucs4;
-    poutbuf = (wchar_t *)buf;
-    inbuf_left = std::wcslen ((wchar_t *) pinbuf);
-    outbuf_left = BUFFER_SIZE;
-
-    opencc_t od = opencc_open(OPENCC_DEFAULT_CONFIG_SIMP_TO_TRAD);
-
-    size_t retv;
-    while ((retv = opencc_convert(od, &pinbuf, &inbuf_left, &poutbuf, &outbuf_left)) > 0)
-    {
-        if (retv == (size_t) -1)
-        {
-            g_warning ("SimpTradConverter:");
-            opencc_perror("Opencc:");
-            g_free (in_ucs4);
-            return;
-        }
-
-        *poutbuf = L'\0';
-        out << buf;
-        outbuf_left = BUFFER_SIZE;
-        poutbuf = (wchar_t *)buf;
-    }
-
-    opencc_close(od);
-    g_free (in_ucs4);
+    static opencc opencc;
+    opencc.convert (in, out);
 }
 
 #else
