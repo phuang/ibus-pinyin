@@ -140,6 +140,7 @@ endif
 
 if IBUS_BUILD_LUA_EXTENSION
     ibus_engine_pinyin_CXXFLAGS +=  \
+	@LUA_CFLAGS@ \
 	-DIBUS_BUILD_LUA_EXTENSION \
 	-I../lua/ \
 	$(NULL)
@@ -147,6 +148,7 @@ endif
 
 if IBUS_BUILD_LUA_EXTENSION
     ibus_engine_pinyin_LDADD += \
+	@LUA_LIBS@ \
 	-L../lua/ \
 	-lpylua \
 	$(NULL)
