@@ -169,8 +169,18 @@ AC_ARG_ENABLE(lua-extension,
 PKG_CHECK_MODULES(LUA, [
     lua
 ], [],
-[enable_lua_extension=no]
+[has_lua_extension=no]
 )
+
+if test x"$has_lua_extension" = x"no";
+then
+    PKG_CHECK_MODULES(LUA, [
+        lua5.1
+    ], [],
+    [enable_lua_extension=no]
+    );
+fi
+
 
 AM_CONDITIONAL(IBUS_BUILD_LUA_EXTENSION, [test x"$enable_lua_extension" = x"yes"])
 
