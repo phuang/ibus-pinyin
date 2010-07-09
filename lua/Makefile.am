@@ -78,3 +78,7 @@ lua_ext_console_CFLAGS = \
 lua_ext_console_LDADD = \
     libpylua.la \
     $(NULL)
+
+EXTRA_DIST = \
+	base.lua \
+	$(NULL)

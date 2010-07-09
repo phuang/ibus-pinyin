@@ -158,7 +158,6 @@ AC_ARG_ENABLE(lua-extension,
          [do not build lua extension]),
     [enable_lua_extension=$enableval],
     [enable_lua_extension=yes]
-
 )
 
 # check lua
