@@ -107,6 +107,9 @@ PinyinEngine::processKeyEvent (guint keyval, guint keycode, guint modifiers)
                     break;
 #ifdef IBUS_BUILD_LUA_EXTENSION
                 case IBUS_i:
+                    // do not enable lua extension when use double pinyin.
+                    if (PinyinConfig::instance ().doublePinyin ())
+                        break;
                     m_input_mode = MODE_EXTENSION;
                     break;
 #endif
