@@ -61,19 +61,19 @@ public:
 protected:
     bool read (const gchar * name, bool defval);
     gint read (const gchar * name, gint defval);
-    const gchar * read (const gchar * name, const gchar * defval);
+    std::string read (const gchar * name, const gchar * defval);
 
     virtual void readDefaultValues (void);
 
-    virtual gboolean valueChanged (const std::string & section,
-                                   const std::string & name,
-                                   const GValue  *value);
+    virtual gboolean valueChanged (const std::string  &section,
+                                   const std::string  &name,
+                                   GVariant           *value);
 private:
-    static void valueChangedCallback (IBusConfig    *config,
-                                      const gchar   *section,
-                                      const gchar   *name,
-                                      const GValue  *value,
-                                      Config        *self);
+    static void valueChangedCallback (IBusConfig     *config,
+                                      const gchar    *section,
+                                      const gchar    *name,
+                                      GVariant       *value,
+                                      Config         *self);
 
 protected:
     std::string m_section;
@@ -116,9 +116,9 @@ protected:
     PinyinConfig (Bus & bus);
     virtual void readDefaultValues (void);
 
-    virtual gboolean valueChanged (const std::string & section,
-                                   const std::string & name,
-                                   const GValue  *value);
+    virtual gboolean valueChanged (const std::string &section,
+                                   const std::string &name,
+                                   GVariant          *value);
 
 private:
     static std::unique_ptr<PinyinConfig> m_instance;
@@ -134,9 +134,9 @@ protected:
     BopomofoConfig (Bus & bus);
     virtual void readDefaultValues (void);
 
-    virtual gboolean valueChanged (const std::string & section,
-                                   const std::string & name,
-                                   const GValue  *value);
+    virtual gboolean valueChanged (const std::string &section,
+                                   const std::string &name,
+                                   GVariant          *value);
 
 private:
     static std::unique_ptr<BopomofoConfig> m_instance;
