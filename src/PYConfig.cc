@@ -153,16 +153,15 @@ inline bool
 Config::read (const gchar * name,
               bool          defval)
 {
-    GValue value = {0};
-    if (ibus_config_get_value (get<IBusConfig> (), m_section.c_str (), name, &value)) {
-        if (G_VALUE_TYPE (&value) == G_TYPE_BOOLEAN)
-            return g_value_get_boolean (&value);
+    GVariant *value = NULL;
+    if ((value = ibus_config_get_value (get<IBusConfig> (), m_section.c_str (), name)) != NULL) {
+        if (g_variant_classify (value) == G_VARIANT_CLASS_BOOLEAN)
+            return g_variant_get_boolean (value);
     }
 
     // write default value to config
-    g_value_init (&value, G_TYPE_BOOLEAN);
-    g_value_set_boolean (&value, defval);
-    ibus_config_set_value (get<IBusConfig> (), m_section.c_str (), name, &value);
+    value = g_variant_new ("b", defval);
+    ibus_config_set_value (get<IBusConfig> (), m_section.c_str (), name, value);
 
     return defval;
 }
@@ -171,66 +170,64 @@ inline gint
 Config::read (const gchar * name,
               gint          defval)
 {
-    GValue value = {0};
-    if (ibus_config_get_value (get<IBusConfig> (), m_section.c_str (), name, &value)) {
-        if (G_VALUE_TYPE (&value) == G_TYPE_INT)
-            return g_value_get_int (&value);
+    GVariant *value = NULL;
+    if ((value = ibus_config_get_value (get<IBusConfig> (), m_section.c_str (), name)) != NULL) {
+        if (g_variant_classify (value) == G_VARIANT_CLASS_INT32)
+            return g_variant_get_int32 (value);
     }
 
     // write default value to config
-    g_value_init (&value, G_TYPE_INT);
-    g_value_set_int (&value, defval);
-    ibus_config_set_value (get<IBusConfig> (), m_section.c_str (), name, &value);
+    value = g_variant_new ("i", defval);
+    ibus_config_set_value (get<IBusConfig> (), m_section.c_str (), name, value);
 
     return defval;
 }
 
-inline const gchar *
+inline std::string
 Config::read (const gchar * name,
               const gchar * defval)
 {
-    GValue value = {0};
-    if (ibus_config_get_value (get<IBusConfig> (), m_section.c_str (), name, &value)) {
-        if (G_VALUE_TYPE (&value) == G_TYPE_STRING)
-            return g_value_get_string (&value);
+    GVariant *value = NULL;
+    if ((value = ibus_config_get_value (get<IBusConfig> (), m_section.c_str (), name)) != NULL) {
+        if (g_variant_classify (value) == G_VARIANT_CLASS_STRING)
+            return g_variant_get_string (value, NULL);
     }
 
     // write default value to config
-    g_value_init (&value, G_TYPE_STRING);
-    g_value_set_static_string (&value, defval);
-    ibus_config_set_value (get<IBusConfig> (), m_section.c_str (), name, &value);
+    value = g_variant_new ("s", defval);
+    ibus_config_set_value (get<IBusConfig> (), m_section.c_str (), name, value);
 
     return defval;
 }
 
 static inline bool
-normalizeGValue (const GValue *value, bool defval)
+normalizeGValue (GVariant *value, bool defval)
 {
-    if (value == NULL || G_VALUE_TYPE (value) != G_TYPE_BOOLEAN)
+    if (value == NULL || g_variant_classify (value) != G_VARIANT_CLASS_BOOLEAN)
         return defval;
-    return g_value_get_boolean (value);
+    return g_variant_get_boolean (value);
 }
 
 static inline gint
-normalizeGValue (const GValue *value, gint defval)
+normalizeGValue (GVariant *value, gint defval)
 {
-    if (value == NULL || G_VALUE_TYPE (value) != G_TYPE_INT)
+    if (value == NULL || g_variant_classify (value) != G_VARIANT_CLASS_INT32)
         return defval;
-    return g_value_get_int (value);
+    return g_variant_get_int32 (value);
 }
 
-static inline const gchar *
-normalizeGValue (const GValue *value, const gchar * defval)
+static inline std::string
+normalizeGValue (GVariant *value, const gchar * defval)
 {
-    if (value == NULL || G_VALUE_TYPE (value) != G_TYPE_STRING)
+    if (value == NULL || g_variant_classify (value) != G_VARIANT_CLASS_STRING)
         return defval;
-    return g_value_get_string (value);
+    return g_variant_get_string (value, NULL);
 }
 
 gboolean
-Config::valueChanged (const std::string & section,
-                      const std::string & name,
-                      const GValue  *value)
+Config::valueChanged (const std::string &section,
+                      const std::string &name,
+                      GVariant          *value)
 {
     if (m_section != section)
         return FALSE;
@@ -275,11 +272,11 @@ Config::valueChanged (const std::string & section,
 }
 
 void
-Config::valueChangedCallback (IBusConfig    *config,
-                              const gchar   *section,
-                              const gchar   *name,
-                              const GValue  *value,
-                              Config        *self)
+Config::valueChangedCallback (IBusConfig  *config,
+                              const gchar *section,
+                              const gchar *name,
+                              GVariant    *value,
+                              Config      *self)
 {
     self->valueChanged (section, name, value);
 }
@@ -361,9 +358,9 @@ PinyinConfig::readDefaultValues (void)
 }
 
 gboolean
-PinyinConfig::valueChanged (const std::string & section,
-                      const std::string & name,
-                      const GValue  *value)
+PinyinConfig::valueChanged (const std::string &section,
+                            const std::string &name,
+                            GVariant          *value)
 {
     if (m_section != section)
         return FALSE;
@@ -463,9 +460,9 @@ BopomofoConfig::readDefaultValues (void)
 }
 
 gboolean
-BopomofoConfig::valueChanged (const std::string & section,
-                              const std::string & name,
-                              const GValue  *value)
+BopomofoConfig::valueChanged (const std::string &section,
+                              const std::string &name,
+                              GVariant          *value)
 {
     if (m_section != section)
         return FALSE;
