@@ -18,8 +18,14 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-lua_script_DATA = base.lua \
-	 $(NULL)
+EXTRA_DIST = \
+	base.lua \
+	test.lua \
+	$(NULL)
+
+lua_script_DATA = \
+	base.lua \
+	$(NULL)
 
 lua_scriptdir = $(pkgdatadir)
 
@@ -45,11 +51,11 @@ libpylua_la_LIBADD = \
 	$(NULL)
 
 TESTS = \
-    lua-ext-console \
 	test-lua-plugin \
 	$(NULL)
 
 noinst_PROGRAMS = \
+    lua-ext-console \
 	$(TESTS) \
 	$(NULL)
 
@@ -60,6 +66,7 @@ test_lua_plugin_SOURCES = \
 test_lua_plugin_CFLAGS = \
 	@IBUS_CFLAGS@ \
 	@LUA_CFLAGS@ \
+	-DLUASCRIPTDIR=\"$(top_srcdir)/lua\" \
 	$(NULL)
 
 test_lua_plugin_LDADD = \
