@@ -33,7 +33,7 @@ int main(int argc, char * argv[]){
   IBusEnginePlugin * plugin;
   plugin = ibus_engine_plugin_new();
 
-  ibus_engine_plugin_load_lua_script(plugin, "test.lua");
+  ibus_engine_plugin_load_lua_script(plugin, LUASCRIPTDIR G_DIR_SEPARATOR_S "test.lua");
   
   g_object_unref(plugin);
 
