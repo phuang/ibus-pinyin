@@ -386,12 +386,12 @@ static const struct {
     const gint8  (&sheng)[27];
     const gint8  (&yun)[27][2];
 } double_pinyin_map [] = {
-    { double_pinyin_mspy_sheng, double_pinyin_mspy_yun},
-    { double_pinyin_zrm_sheng, double_pinyin_zrm_yun},
-    { double_pinyin_abc_sheng, double_pinyin_abc_yun},
-    { double_pinyin_zgpy_sheng, double_pinyin_zgpy_yun},
-    { double_pinyin_pyjj_sheng, double_pinyin_pyjj_yun},
-    { double_pinyin_xhe_sheng, double_pinyin_xhe_yun},
+    { double_pinyin_mspy_sheng, double_pinyin_mspy_yun },
+    { double_pinyin_zrm_sheng,  double_pinyin_zrm_yun  },
+    { double_pinyin_abc_sheng,  double_pinyin_abc_yun  },
+    { double_pinyin_zgpy_sheng, double_pinyin_zgpy_yun },
+    { double_pinyin_pyjj_sheng, double_pinyin_pyjj_yun },
+    { double_pinyin_xhe_sheng,  double_pinyin_xhe_yun  },
 };
 #endif //DEFINE_DOUBLE_PINYIN_TABLE
 
