@@ -136,10 +136,12 @@ FallbackEditor::processPunctForTraditionalChinese (guint keyval, guint keycode, 
     case ':':
         commit ("："); return TRUE;
     case '\'':
-        commit ("，");
+        commit (m_quote ? "‘" : "’");
+        m_quote = !m_quote;
         return TRUE;
     case '"':
-        commit ("；");
+        commit (m_double_quote ? "“" : "”");
+        m_double_quote = !m_double_quote;
         return TRUE;
     case ',':
         commit ("，"); return TRUE;
@@ -153,8 +155,6 @@ FallbackEditor::processPunctForTraditionalChinese (guint keyval, guint keycode, 
         commit ("《"); return TRUE;
     case '>':
         commit ("》"); return TRUE;
-    case '/':
-        commit ("。"); return TRUE;
     case '?':
         commit ("？"); return TRUE;
     }
