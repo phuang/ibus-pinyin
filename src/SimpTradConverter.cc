@@ -58,10 +58,10 @@ public:
         glong n_char;
         gunichar *in_ucs4 = g_utf8_to_ucs4_fast (in, -1, &n_char);
 
-        wchar_t *pinbuf = (wchar_t *)in_ucs4;
+        ucs4_t *pinbuf = (ucs4_t *)in_ucs4;
         size_t inbuf_left = n_char;
         while (inbuf_left != 0) {
-            wchar_t *poutbuf = (wchar_t *)m_buffer;
+            ucs4_t *poutbuf = (ucs4_t *)m_buffer;
             size_t outbuf_left = BUFFER_SIZE;
             size_t retval = opencc_convert(m_od, &pinbuf, &inbuf_left, &poutbuf, &outbuf_left);
             if (retval == (size_t) -1) {
