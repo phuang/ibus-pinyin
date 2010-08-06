@@ -1,5 +1,23 @@
-#include <ctime>
-#include <cstdio>
+/* vim:set et ts=4 sts=4:
+ *
+ * ibus-pinyin - The Chinese PinYin engine for IBus
+ *
+ * Copyright (c) 2008-2010 Peng Huang <shawn.p.huang@gmail.com>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2, or (at your option)
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ */
 #include "DynamicSpecialPhrase.h"
 
 namespace PY {
@@ -153,6 +171,115 @@ DynamicSpecialPhrase::minsec_cn (guint i)
         "五十", "六十"
     };
     return std::string (num[i / 10 + 10]) + num[i % 10];
+}
+
+static const char * numbers [2][10] = {
+    {"零", "壹", "贰", "叁", "肆", "伍", "陆", "柒", "捌", "玖",},
+    {"〇", "一", "二", "三", "四", "五", "六", "七", "八", "九",},
+};
+
+struct unit_t{
+    const char * unit_zh_name;  // Chinese Character
+    const int digits;           // Position in string.
+    const bool persist;         // Whether to force eating zero and force inserting into result string.
+};
+
+static unit_t units_simplified[] ={
+    {"兆", 12, true},
+    {"亿", 8, true},
+    {"万", 4, true},
+    {"千", 3, false},
+    {"百", 2, false},
+    {"十", 1, false},
+    {"",   0, true},
+};
+
+static unit_t units_traditional[] ={
+    {"兆", 12, true},
+    {"亿", 8, true},
+    {"万", 4, true},
+    {"仟", 3, false},
+    {"佰", 2, false},
+    {"拾", 1, false},
+    {"",   0, true},
+};
+
+
+const std::string
+DynamicSpecialPhrase::simplest_cn_number(gint64 num)
+{
+    std::string result = "";
+    if ( num == 0 )
+        result = numbers[1][0];
+    while (num > 0) {
+        int remains = num % 10;
+        num = num / 10;
+        result = std::string ( numbers[1][remains] ) + result;
+    }
+
+    return result;
+}
+
+static inline const std::string
+translate_to_longform(gint64 num, const char * number[10], unit_t units[])
+{
+    std::string result = "";
+    int cur_pos = -1;
+    bool eat_zero = false;
+
+    while (num > 0) {
+        int remains = num % 10;
+        num = num / 10;
+        cur_pos ++;
+        std::string unit = "";
+        int pos = cur_pos;
+        size_t i = 6;
+        while ( pos > 0 ) {
+            for ( i = 0; i < 7; ++i) {
+                pos = pos % units[i].digits;
+                if ( pos == 0 )
+                    break;
+            }
+        }
+
+        if ( units[i].persist ) {
+            result = std::string (units[i].unit_zh_name) + result;
+            eat_zero = true;
+        }
+
+        if ( remains == 0){
+            if ( eat_zero ) continue;
+
+            result = std::string (number[0]) + result;
+            eat_zero = true;
+            continue;
+        }else{
+            eat_zero = false;
+        }
+
+        if (num == 0 && remains == 1 && i == 5)
+            result = std::string (units[i].unit_zh_name) + result;
+        else if (units[i].persist)
+            result = std::string (number[remains]) + result;
+        else
+            result = std::string (number[remains]) + std::string (units[i].unit_zh_name) + result;
+    }
+
+    return result;
+}
+
+const std::string
+DynamicSpecialPhrase::simplified_number(gint64 num)
+{
+    return translate_to_longform(num, numbers[1], units_simplified);
+}
+
+const std::string
+DynamicSpecialPhrase::traditional_number(gint64 num)
+{
+    if ( 0 == num )
+        return numbers[0][0];
+    return translate_to_longform(num, numbers[0], units_traditional);
 }
 
 inline const std::string

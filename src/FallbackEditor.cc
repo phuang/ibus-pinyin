@@ -1,22 +1,170 @@
+/* vim:set et ts=4 sts=4:
+ *
+ * ibus-pinyin - The Chinese PinYin engine for IBus
+ *
+ * Copyright (c) 2008-2010 Peng Huang <shawn.p.huang@gmail.com>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2, or (at your option)
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ */
 #include "FallbackEditor.h"
 #include "HalfFullConverter.h"
+#include "PinyinProperties.h"
 
 namespace PY {
 
-#define CMSHM_MASK              \
-        (IBUS_CONTROL_MASK |    \
-         IBUS_MOD1_MASK |       \
-         IBUS_SUPER_MASK |      \
-         IBUS_HYPER_MASK |      \
-         IBUS_META_MASK)
+inline gboolean
+FallbackEditor::processPunctForSimplifiedChinese (guint keyval, guint keycode, guint modifiers)
+{
+    switch (keyval) {
+    case '`':
+        commit ("·"); return TRUE;
+    case '~':
+        commit ("～"); return TRUE;
+    case '!':
+        commit ("！"); return TRUE;
+    // case '@':
+    // case '#':
+    case '$':
+        commit ("￥"); return TRUE;
+    // case '%':
+    case '^':
+        commit ("……"); return TRUE;
+    // case '&':
+    // case '*':
+    case '(':
+        commit ("（"); return TRUE;
+    case ')':
+        commit ("）"); return TRUE;
+    // case '-':
+    case '_':
+        commit ("——"); return TRUE;
+    // case '=':
+    // case '+':
+    case '[':
+        commit ("【"); return TRUE;
+    case ']':
+        commit ("】"); return TRUE;
+    case '{':
+        commit ("『"); return TRUE;
+    case '}':
+        commit ("』"); return TRUE;
+    case '\\':
+        commit ("、"); return TRUE;
+    // case '|':
+    case ';':
+        commit ("；"); return TRUE;
+    case ':':
+        commit ("："); return TRUE;
+    case '\'':
+        commit (m_quote ? "‘" : "’");
+        m_quote = !m_quote;
+        return TRUE;
+    case '"':
+        commit (m_double_quote ? "“" : "”");
+        m_double_quote = !m_double_quote;
+        return TRUE;
+    case ',':
+        commit ("，"); return TRUE;
+    case '.':
+        if (m_prev_committed_char >= '0' && m_prev_committed_char <= '9')
+            commit (keyval);
+        else
+            commit ("。");
+        return TRUE;
+    case '<':
+        commit ("《"); return TRUE;
+    case '>':
+        commit ("》"); return TRUE;
+    // case '/':
+    case '?':
+        commit ("？"); return TRUE;
+    }
+    return FALSE;
+}
 
-#define CMSHM_FILTER(modifiers)  \
-    (modifiers & (CMSHM_MASK))
+inline gboolean
+FallbackEditor::processPunctForTraditionalChinese (guint keyval, guint keycode, guint modifiers)
+{
+    switch (keyval) {
+    case '~':
+        commit ("～"); return TRUE;
+    case '!':
+        commit ("！"); return TRUE;
+    // case '@':
+    // case '#':
+    case '$':
+        commit ("￥"); return TRUE;
+    // case '%':
+    case '^':
+        commit ("……"); return TRUE;
+    // case '&':
+    // case '*':
+    case '(':
+        commit ("（"); return TRUE;
+    case ')':
+        commit ("）"); return TRUE;
+    // case '-':
+    case '_':
+        commit ("——"); return TRUE;
+    // case '=':
+    // case '+':
+    case '[':
+        commit ("「"); return TRUE;
+    case ']':
+        commit ("」"); return TRUE;
+    case '{':
+        commit ("『"); return TRUE;
+    case '}':
+        commit ("』"); return TRUE;
+    case '\\':
+        commit ("、"); return TRUE;
+    // case '|':
+    case ';':
+        commit ("；"); return TRUE;
+    case ':':
+        commit ("："); return TRUE;
+    case '\'':
+        commit (m_quote ? "‘" : "’");
+        m_quote = !m_quote;
+        return TRUE;
+    case '"':
+        commit (m_double_quote ? "“" : "”");
+        m_double_quote = !m_double_quote;
+        return TRUE;
+    case ',':
+        commit ("，"); return TRUE;
+    case '.':
+        if (m_prev_committed_char >= '0' && m_prev_committed_char <= '9')
+            commit (keyval);
+        else
+            commit ("。");
+        return TRUE;
+    case '<':
+        commit ("《"); return TRUE;
+    case '>':
+        commit ("》"); return TRUE;
+    case '?':
+        commit ("？"); return TRUE;
+    }
+    return FALSE;
+}
 
 inline gboolean
 FallbackEditor::processPunct (guint keyval, guint keycode, guint modifiers)
 {
-    guint cmshm_modifiers = CMSHM_FILTER (modifiers);
+    guint cmshm_modifiers = cmshm_filter (modifiers);
 
     if (G_UNLIKELY (keyval == IBUS_period && cmshm_modifiers == IBUS_CONTROL_MASK)) {
         m_props.toggleModeFullPunct ();
@@ -38,69 +186,13 @@ FallbackEditor::processPunct (guint keyval, guint keycode, guint modifiers)
     else {
         /* Chinese mode */
         if (m_props.modeFullPunct ()) {
-            switch (keyval) {
-            case '`':
-                commit ("·"); return TRUE;
-            case '~':
-                commit ("～"); return TRUE;
-            case '!':
-                commit ("！"); return TRUE;
-            // case '@':
-            // case '#':
-            case '$':
-                commit ("￥"); return TRUE;
-            // case '%':
-            case '^':
-                commit ("……"); return TRUE;
-            // case '&':
-            // case '*':
-            case '(':
-                commit ("（"); return TRUE;
-            case ')':
-                commit ("）"); return TRUE;
-            // case '-':
-            case '_':
-                commit ("——"); return TRUE;
-            // case '=':
-            // case '+':
-            case '[':
-                commit ("【"); return TRUE;
-            case ']':
-                commit ("】"); return TRUE;
-            case '{':
-                commit ("『"); return TRUE;
-            case '}':
-                commit ("』"); return TRUE;
-            case '\\':
-                commit ("、"); return TRUE;
-            // case '|':
-            case ';':
-                commit ("；"); return TRUE;
-            case ':':
-                commit ("："); return TRUE;
-            case '\'':
-                commit (m_quote ? "‘" : "’");
-                m_quote = !m_quote;
-                return TRUE;
-            case '"':
-                commit (m_double_quote ? "“" : "”");
-                m_double_quote = !m_double_quote;
-                return TRUE;
-            case ',':
-                commit ("，"); return TRUE;
-            case '.':
-                if (m_prev_committed_char >= '0' && m_prev_committed_char <= '9')
-                    commit (keyval);
-                else
-                    commit ("。");
-                return TRUE;
-            case '<':
-                commit ("《"); return TRUE;
-            case '>':
-                commit ("》"); return TRUE;
-            // case '/':
-            case '?':
-                commit ("？"); return TRUE;
+            if (m_props.modeSimp ()) {
+                if (processPunctForSimplifiedChinese (keyval, keycode, modifiers))
+                    return TRUE;
+            }
+            else {
+                if (processPunctForTraditionalChinese (keyval, keycode, modifiers))
+                    return TRUE;
             }
         }
         commit (m_props.modeFull () ? HalfFullConverter::toFull (keyval) : keyval);
@@ -185,6 +277,5 @@ FallbackEditor::reset (void) {
     m_double_quote = TRUE;
     m_prev_committed_char = 0;
 }
-
 
 };

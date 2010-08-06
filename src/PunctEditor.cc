@@ -1,24 +1,35 @@
-#include <cstdio>
+/* vim:set et ts=4 sts=4:
+ *
+ * ibus-pinyin - The Chinese PinYin engine for IBus
+ *
+ * Copyright (c) 2008-2010 Peng Huang <shawn.p.huang@gmail.com>
+ * Copyright (c) 2010 BYVoid <byvoid1@gmail.com>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2, or (at your option)
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ */
+#include "Config.h"
 #include "PunctEditor.h"
-
-#define CMSHM_MASK              \
-        (IBUS_CONTROL_MASK |    \
-         IBUS_MOD1_MASK |       \
-         IBUS_SUPER_MASK |      \
-         IBUS_HYPER_MASK |      \
-         IBUS_META_MASK)
-
-#define CMSHM_FILTER(modifiers)  \
-    (modifiers & (CMSHM_MASK))
 
 namespace PY {
 
 #include "PunctTable.h"
 
-PunctEditor::PunctEditor (PinyinProperties & props)
-    : Editor (props),
+PunctEditor::PunctEditor (PinyinProperties & props, Config & config)
+    : Editor (props, config),
       m_punct_mode (MODE_DISABLE),
-      m_lookup_table (Config::pageSize ())
+      m_lookup_table (m_config.pageSize ())
 {
 }
 
@@ -66,9 +77,9 @@ PunctEditor::insert (gchar ch)
 inline gboolean
 PunctEditor::processSpace (guint keyval, guint keycode, guint modifiers)
 {
-    if (!m_text)
+    if (m_punct_mode != MODE_INIT && m_punct_mode != MODE_NORMAL)
         return FALSE;
-    if (CMSHM_FILTER (modifiers) != 0)
+    if (cmshm_filter (modifiers) != 0)
         return TRUE;
     commit ();
     return TRUE;
@@ -77,7 +88,7 @@ PunctEditor::processSpace (guint keyval, guint keycode, guint modifiers)
 gboolean
 PunctEditor::processPunct (guint keyval, guint keycode, guint modifiers)
 {
-    if (CMSHM_FILTER (modifiers) != 0)
+    if (cmshm_filter (modifiers) != 0)
         return TRUE;
 
     if (m_punct_mode == MODE_DISABLE) {
@@ -213,9 +224,7 @@ void
 PunctEditor::pageUp (void)
 {
     if (G_LIKELY (m_lookup_table.pageUp ())) {
-        if (m_punct_mode == MODE_NORMAL) {
-            m_selected_puncts[m_cursor - 1] = m_punct_candidates[m_lookup_table.cursorPos ()];
-        }
+        m_selected_puncts[m_cursor - 1] = m_punct_candidates[m_lookup_table.cursorPos ()];
         updateLookupTableFast (m_lookup_table, TRUE);
         updatePreeditText ();
         updateAuxiliaryText ();
@@ -226,9 +235,7 @@ void
 PunctEditor::pageDown (void)
 {
     if (G_LIKELY (m_lookup_table.pageDown ())) {
-        if (m_punct_mode == MODE_NORMAL) {
-            m_selected_puncts[m_cursor - 1] = m_punct_candidates[m_lookup_table.cursorPos ()];
-        }
+        m_selected_puncts[m_cursor - 1] = m_punct_candidates[m_lookup_table.cursorPos ()];
         updateLookupTableFast (m_lookup_table, TRUE);
         updatePreeditText ();
         updateAuxiliaryText ();
@@ -239,9 +246,7 @@ void
 PunctEditor::cursorUp (void)
 {
     if (G_LIKELY (m_lookup_table.cursorUp ())) {
-        if (m_punct_mode == MODE_NORMAL) {
-            m_selected_puncts[m_cursor - 1] = m_punct_candidates[m_lookup_table.cursorPos ()];
-        }
+        m_selected_puncts[m_cursor - 1] = m_punct_candidates[m_lookup_table.cursorPos ()];
         updateLookupTableFast (m_lookup_table, TRUE);
         updatePreeditText ();
         updateAuxiliaryText ();
@@ -252,9 +257,7 @@ void
 PunctEditor::cursorDown (void)
 {
     if (G_LIKELY (m_lookup_table.cursorDown ())) {
-        if (m_punct_mode == MODE_NORMAL) {
-            m_selected_puncts[m_cursor - 1] = m_punct_candidates[m_lookup_table.cursorPos ()];
-        }
+        m_selected_puncts[m_cursor - 1] = m_punct_candidates[m_lookup_table.cursorPos ()];
         updateLookupTableFast (m_lookup_table, TRUE);
         updatePreeditText ();
         updateAuxiliaryText ();
@@ -414,6 +417,7 @@ PunctEditor::commit (const gchar *str)
 {
     StaticText text(str);
     commitText (text);
+    reset ();
 }
 
 void
@@ -425,7 +429,6 @@ PunctEditor::commit (void)
         m_buffer << *it;
     }
 
-    reset ();
     commit (m_buffer);
 }
 
@@ -488,12 +491,12 @@ void
 PunctEditor::fillLookupTable (void)
 {
     m_lookup_table.clear ();
-    m_lookup_table.setPageSize (Config::pageSize ());
-    m_lookup_table.setOrientation (Config::orientation ());
+    m_lookup_table.setPageSize (m_config.pageSize ());
+    m_lookup_table.setOrientation (m_config.orientation ());
 
     for (std::vector<const gchar *>::iterator it = m_punct_candidates.begin ();
          it != m_punct_candidates.end (); it++) {
-        Text text (*it);
+        StaticText text (*it);
         // text.appendAttribute (IBUS_ATTR_TYPE_FOREGROUND, 0x004466, 0, -1);
         m_lookup_table.appendCandidate (text);
     }

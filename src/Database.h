@@ -1,15 +1,38 @@
-/* vim:set et sts=4: */
-#ifndef __PY_DATABASE_H__
-#define __PY_DATABASE_H__
+/* vim:set et ts=4 sts=4:
+ *
+ * ibus-pinyin - The Chinese PinYin engine for IBus
+ *
+ * Copyright (c) 2008-2010 Peng Huang <shawn.p.huang@gmail.com>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2, or (at your option)
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ */
+#ifndef __PY_DATABASE_H_
+#define __PY_DATABASE_H_
 
-#include <sqlite3.h>
 #include <boost/shared_ptr.hpp>
+#include <boost/scoped_ptr.hpp>
 #include "String.h"
 #include "Types.h"
-#include "PinyinArray.h"
 #include "PhraseArray.h"
 
+typedef struct sqlite3 sqlite3;
+
 namespace PY {
+
+class PinyinArray;
+struct Phrase;
 
 class SQLStmt;
 typedef boost::shared_ptr<SQLStmt> SQLStmtPtr;
@@ -32,12 +55,12 @@ private:
     guint m_option;
     SQLStmtPtr m_stmt;
 };
-typedef boost::shared_ptr<Query> QueryPtr;
 
 class Database {
-private:
-    Database ();
+public:
     ~Database ();
+protected:
+    Database ();
 
 public:
     SQLStmtPtr query (const PinyinArray   & pinyin,
@@ -51,11 +74,12 @@ public:
     void conditionsDouble (void);
     void conditionsTriple (void);
 
-    static Database & instance (void) {return m_instance; }
+    static void init (void);
+    static Database & instance (void) { return *m_instance; }
 
 private:
-    gboolean init (void);
-    gboolean initUserDatabase (const gchar *userdb);
+    gboolean open (void);
+    gboolean openUserDB (const gchar *userdb);
     void prefetch (void);
     void phraseSql (const Phrase & p, String & sql);
     void phraseWhereSql (const Phrase & p, String & sql);
@@ -68,7 +92,7 @@ private:
     String m_buffer;     /* temp buffer */
 
 private:
-    static Database m_instance;
+    static boost::scoped_ptr<Database> m_instance;
 };
 
 

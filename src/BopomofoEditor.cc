@@ -1,21 +1,46 @@
-#include "Config.h"
+/* vim:set et ts=4 sts=4:
+ *
+ * ibus-pinyin - The Chinese PinYin engine for IBus
+ *
+ * Copyright (c) 2008-2010 Peng Huang <shawn.p.huang@gmail.com>
+ * Copyright (c) 2010 BYVoid <byvoid1@gmail.com>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2, or (at your option)
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ */
 #include "BopomofoEditor.h"
+#include "Config.h"
+#include "PinyinProperties.h"
 #include "SimpTradConverter.h"
 
-#define CMSHM_MASK              \
-        (IBUS_CONTROL_MASK |    \
-         IBUS_MOD1_MASK |       \
-         IBUS_SUPER_MASK |      \
-         IBUS_HYPER_MASK |      \
-         IBUS_META_MASK)
-
-#define CMSHM_FILTER(modifiers)  \
-    (modifiers & (CMSHM_MASK))
-
 namespace PY {
+#include "BopomofoKeyboard.h"
 
-BopomofoEditor::BopomofoEditor (PinyinProperties & props)
-    : PinyinEditor (props),
+const static gchar * bopomofo_select_keys[] = {
+    "1234567890",
+    "asdfghjkl;",
+    "1qaz2wsxed",
+    "asdfzxcvgb",
+    "1234qweras",
+    "aoeu;qjkix",
+    "aoeuhtnsid",
+    "aoeuidhtns",
+    "qweasdzxcr"
+};
+
+BopomofoEditor::BopomofoEditor (PinyinProperties & props, Config & config)
+    : PhoneticEditor (props, config),
       m_select_mode (FALSE)
 {
 }
@@ -28,7 +53,7 @@ void
 BopomofoEditor::reset (void)
 {
     m_select_mode = FALSE;
-    PinyinEditor::reset ();
+    PhoneticEditor::reset ();
 }
 
 gboolean
@@ -40,7 +65,7 @@ BopomofoEditor::insert (gint ch)
 
     m_text.insert (m_cursor++, ch);
 
-    if (G_UNLIKELY (!(Config::option () & PINYIN_INCOMPLETE_PINYIN))) {
+    if (G_UNLIKELY (!(m_config.option () & PINYIN_INCOMPLETE_PINYIN))) {
         updateSpecialPhrases ();
         updatePinyin ();
     }
@@ -212,108 +237,86 @@ BopomofoEditor::moveCursorToEnd (void)
     return TRUE;
 }
 
-inline gboolean
-BopomofoEditor::processSpace (guint keyval, guint keycode, guint modifiers)
+gboolean
+BopomofoEditor::processGuideKey (guint keyval, guint keycode, guint modifiers)
 {
-    if (!m_text)
+    if (!m_config.guideKey ())
         return FALSE;
-    if (CMSHM_FILTER (modifiers) != 0)
+
+    if (G_UNLIKELY (cmshm_filter (modifiers) != 0))
+        return FALSE;
+
+    if (G_LIKELY (m_select_mode))
+        return FALSE;
+
+    if (G_UNLIKELY (keyval == IBUS_space)) {
+        m_select_mode = TRUE;
+        updateLookupTable ();
         return TRUE;
-    if (m_lookup_table.size () != 0) {
-        selectCandidate (m_lookup_table.cursorPos ());
     }
-    else {
-        commit ();
-    }
-    return TRUE;
+
+    return FALSE;
 }
 
 gboolean
-BopomofoEditor::processNumber (guint keyval, guint keycode, guint modifiers)
+BopomofoEditor::processAuxiliarySelectKey (guint keyval, guint keycode, guint modifiers)
 {
-    guint i;
-
-    if (!m_text)
+    if (G_UNLIKELY (cmshm_filter (modifiers) != 0))
         return FALSE;
 
-    m_select_mode = TRUE;
+    guint i;
 
     switch (keyval) {
-    case IBUS_0:
     case IBUS_KP_0:
         i = 9;
-        break;
-    case IBUS_1 ... IBUS_9:
-        i = keyval - IBUS_1;
+        if (!m_config.auxiliarySelectKeyKP ())
+            return FALSE;
         break;
     case IBUS_KP_1 ... IBUS_KP_9:
         i = keyval - IBUS_KP_1;
+        if (!m_config.auxiliarySelectKeyKP ())
+            return FALSE;
+        break;
+    case IBUS_F1 ... IBUS_F10:
+        i = keyval - IBUS_F1;
+        if (!m_config.auxiliarySelectKeyF ())
+            return FALSE;
         break;
     default:
         return FALSE;
     }
 
+    m_select_mode = TRUE;
     selectCandidateInPage (i);
 
     return TRUE;
 }
 
 gboolean
-BopomofoEditor::processNumberWithShift (guint keyval, guint keycode, guint modifiers)
+BopomofoEditor::processSelectKey (guint keyval, guint keycode, guint modifiers)
 {
-    guint i;
-
-    if (!m_text)
+    if (G_UNLIKELY (!m_text))
         return FALSE;
-    if (G_UNLIKELY ((modifiers & IBUS_SHIFT_MASK) == 0))
+
+    if (G_LIKELY (!m_select_mode && ((modifiers & IBUS_MOD1_MASK) == 0)))
+        return FALSE;
+
+    const gchar * pos = strchr (bopomofo_select_keys[m_config.selectKeys ()], keyval);
+    if (pos == NULL)
         return FALSE;
 
     m_select_mode = TRUE;
 
-    switch (keyval) {
-    case IBUS_exclam:
-        i = 0;
-        break;
-    case IBUS_at:
-        i = 1;
-        break;
-    case IBUS_numbersign:
-        i = 2;
-        break;
-    case IBUS_dollar:
-        i = 3;
-        break;
-    case IBUS_percent:
-        i = 4;
-        break;
-    case IBUS_asciicircum:
-        i = 5;
-        break;
-    case IBUS_ampersand:
-        i = 6;
-        break;
-    case IBUS_asterisk:
-        i = 7;
-        break;
-    case IBUS_parenleft:
-        i = 8;
-        break;
-    case IBUS_parenright:
-        i = 9;
-        break;
-    default:
-        return FALSE;
-    }
-
+    guint i = pos - bopomofo_select_keys[m_config.selectKeys ()];
     selectCandidateInPage (i);
 
     return TRUE;
 }
 
-inline gboolean
+gboolean
 BopomofoEditor::processBopomofo (guint keyval, guint keycode, guint modifiers)
 {
-    if (G_UNLIKELY (CMSHM_FILTER(modifiers) != 0))
+    if (G_UNLIKELY (cmshm_filter (modifiers) != 0))
         return m_text ? TRUE : FALSE;
 
     if (keyvalToBopomofo (keyval) == BOPOMOFO_ZERO)
@@ -335,18 +338,17 @@ BopomofoEditor::processKeyEvent (guint keyval, guint keycode, guint modifiers)
                   IBUS_META_MASK |
                   IBUS_LOCK_MASK);
 
-    if (m_select_mode == TRUE && processNumber (keyval, keycode, modifiers) == TRUE)
+
+    if (G_UNLIKELY (processGuideKey (keyval, keycode, modifiers)))
         return TRUE;
-    if (processNumberWithShift (keyval, keycode, modifiers) == TRUE)
+    if (G_UNLIKELY (processSelectKey (keyval, keycode, modifiers) == TRUE))
         return TRUE;
-    if (processBopomofo (keyval, keycode ,modifiers))
+    if (G_UNLIKELY (processAuxiliarySelectKey (keyval, keycode, modifiers)))
+        return TRUE;
+    if (G_UNLIKELY (processBopomofo (keyval, keycode ,modifiers)))
         return TRUE;
 
     switch (keyval) {
-    /* Bopomofo */
-    case IBUS_KP_0 ... IBUS_KP_9:
-        return processNumber (keyval, keycode, modifiers);
-
     case IBUS_space:
         m_select_mode = TRUE;
         return processSpace (keyval, keycode, modifiers);
@@ -361,7 +363,7 @@ BopomofoEditor::processKeyEvent (guint keyval, guint keycode, guint modifiers)
     case IBUS_KP_Page_Down:
     case IBUS_Tab:
         m_select_mode = TRUE;
-        return PinyinEditor::processKeyEvent (keyval, keycode, modifiers);
+        return PhoneticEditor::processFunctionKey (keyval, keycode, modifiers);
 
     case IBUS_BackSpace:
     case IBUS_Delete:
@@ -375,10 +377,10 @@ BopomofoEditor::processKeyEvent (guint keyval, guint keycode, guint modifiers)
     case IBUS_End:
     case IBUS_KP_End:
         m_select_mode = FALSE;
-        return PinyinEditor::processKeyEvent (keyval, keycode, modifiers);
+        return PhoneticEditor::processFunctionKey (keyval, keycode, modifiers);
 
     default:
-        return PinyinEditor::processKeyEvent (keyval, keycode, modifiers);
+        return PhoneticEditor::processFunctionKey (keyval, keycode, modifiers);
     }
 
 }
@@ -398,7 +400,7 @@ BopomofoEditor::updatePinyin (void)
 
         m_pinyin_len = PinyinParser::parseBopomofo (bopomofo,            // bopomofo
                                                     m_cursor,            // text length
-                                                    Config::option (),   // option
+                                                    m_config.option (),   // option
                                                     m_pinyin,            // result
                                                     MAX_PHRASE_LEN);     // max result length
     }
@@ -417,8 +419,6 @@ BopomofoEditor::updateAuxiliaryText (void)
     }
 
     m_buffer.clear ();
-
-    updateAuxiliaryTextBefore (m_buffer);
 
     guint si = 0;
     guint m_text_len = m_text.length();
@@ -444,8 +444,6 @@ BopomofoEditor::updateAuxiliaryText (void)
     if (m_cursor == m_text.length ())
         m_buffer << '|';
 
-    updateAuxiliaryTextAfter (m_buffer);
-
     StaticText aux_text (m_buffer);
     Editor::updateAuxiliaryText (aux_text, TRUE);
 }
@@ -453,30 +451,35 @@ BopomofoEditor::updateAuxiliaryText (void)
 void
 BopomofoEditor::commit (void)
 {
-    if (G_UNLIKELY (empty ()))
+    if (G_UNLIKELY (m_buffer.empty ()))
         return;
 
     m_buffer.clear ();
 
-    m_buffer << m_phrase_editor.selectedString ();
+    if (m_select_mode) {
+        m_buffer << m_phrase_editor.selectedString ();
 
-    const gchar *p;
+        const gchar *p;
 
-    if (m_selected_special_phrase.empty ()) {
-        p = textAfterPinyin (m_buffer.utf8Length ());
+        if (m_selected_special_phrase.empty ()) {
+            p = textAfterPinyin (m_buffer.utf8Length ());
+        }
+        else {
+            m_buffer << m_selected_special_phrase;
+            p = textAfterCursor ();
+        }
+
+        while (*p != '\0') {
+            m_buffer.appendUnichar ((gunichar)bopomofo_char[keyvalToBopomofo (*p++)]);
+        }
     }
     else {
-        m_buffer << m_selected_special_phrase;
-        p = textAfterCursor ();
-    }
-
-    while (*p != '\0') {
-        m_buffer.appendUnichar ((gunichar)bopomofo_char[keyvalToBopomofo (*p++)]);
+        m_buffer << m_text;
     }
 
     m_phrase_editor.commit ();
     reset ();
-    PinyinEditor::commit ((const gchar *)m_buffer);
+    PhoneticEditor::commit ((const gchar *)m_buffer);
 }
 
 void
@@ -559,6 +562,67 @@ BopomofoEditor::updatePreeditText (void)
                                         edit_begin, edit_end);
     }
     Editor::updatePreeditText (preedit_text, edit_begin, TRUE);
+}
+
+void
+BopomofoEditor::updateLookupTableLabel ()
+{
+    std::string str;
+    guint color = m_select_mode ? 0x000000 : 0xBBBBBB;
+    for (const gchar *p = bopomofo_select_keys[m_config.selectKeys ()]; *p; p++)
+    {
+        guint i = p - bopomofo_select_keys[m_config.selectKeys ()];
+        if (i >= m_config.pageSize ())
+            break;
+        str = *p;
+        str += ".";
+        Text text_label (str);
+        text_label.appendAttribute (IBUS_ATTR_TYPE_FOREGROUND, color, 0, -1);
+        m_lookup_table.setLabel (i, text_label);
+    }
+    if (m_config.guideKey ())
+        m_lookup_table.setCursorVisable (m_select_mode);
+    else
+        m_lookup_table.setCursorVisable (TRUE);
+}
+
+void
+BopomofoEditor::updateLookupTableFast ()
+{
+    updateLookupTableLabel ();
+    PhoneticEditor::updateLookupTableFast ();
+}
+
+void
+BopomofoEditor::updateLookupTable ()
+{
+    m_lookup_table.setPageSize (m_config.pageSize ());
+    m_lookup_table.setOrientation (m_config.orientation ());
+    updateLookupTableLabel ();
+    PhoneticEditor::updateLookupTable ();
+}
+
+static gint
+keyboard_cmp (gconstpointer p1, gconstpointer p2)
+{
+    const gint s1 = GPOINTER_TO_INT (p1);
+    const guint8 *s2 = (const guint8 *) p2;
+    return s1 - s2[0];
+}
+
+gint
+BopomofoEditor::keyvalToBopomofo(gint ch)
+{
+    const gint keyboard = m_config.bopomofoKeyboardMapping ();
+    const guint8 *brs;
+    brs = (const guint8 *) std::bsearch (GINT_TO_POINTER (ch),
+                                       bopomofo_keyboard[keyboard],
+                                       G_N_ELEMENTS (bopomofo_keyboard[keyboard]),
+                                       sizeof(bopomofo_keyboard[keyboard][0]),
+                                       keyboard_cmp);
+    if (G_UNLIKELY (brs == NULL))
+        return BOPOMOFO_ZERO;
+    return brs[1];
 }
 
 };

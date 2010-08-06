@@ -2,7 +2,7 @@
 #
 # ibus-pinyin - The Chinese PinYin engine for IBus
 #
-# Copyright (c) 2007-2008 Peng Huang <shawn.p.huang@gmail.com>
+# Copyright (c) 2008-2010 Peng Huang <shawn.p.huang@gmail.com>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -19,10 +19,10 @@
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 # if not 1, append datestamp to the version number.
-m4_define([ibus_released], [0])
+m4_define([ibus_released], [1])
 m4_define([ibus_major_version], [1])
 m4_define([ibus_minor_version], [3])
-m4_define([ibus_micro_version], [5])
+m4_define([ibus_micro_version], [10])
 m4_define(ibus_maybe_datestamp,
     m4_esyscmd([if test x]ibus_released[ != x1; then date +.%Y%m%d | tr -d '\n\r'; fi]))
 
@@ -110,8 +110,22 @@ BOOST_FIND_HEADER([boost/signals2.hpp])
 AC_PATH_PROG(ENV, env)
 AC_SUBST(ENV)
 
-#check python
+# check python
 AM_PATH_PYTHON([2.5])
+
+# --enable-opencc
+AC_ARG_ENABLE(opencc,
+    AC_HELP_STRING([--enable-opencc],
+        [Use opencc for simplified and traditional Chinese conversion]),
+        [enable_opencc=$enableval],
+        [enable_opencc=no]
+)
+if test x"$enable_opencc" = x"yes"; then
+    # check opencc
+    PKG_CHECK_MODULES(OPENCC, [opencc], [
+        AC_DEFINE(HAVE_OPENCC, 1, [Define if found opencc])
+    ])
+fi
 
 # define GETTEXT_* variables
 GETTEXT_PACKAGE=ibus-pinyin
@@ -138,10 +152,38 @@ AC_ARG_ENABLE(db-open-phrase,
 )
 AM_CONDITIONAL(IBUS_BUILD_DB_OPEN_PHRASE, [test x"$enable_db_open_phrase" = x"yes" ])
 
+# --disable-lua-extension
+AC_ARG_ENABLE(lua-extension,
+    AS_HELP_STRING([--disable-lua-extension],
+         [do not build lua extension]),
+    [enable_lua_extension=$enableval],
+    [enable_lua_extension=yes]
+)
+
+# check lua
+PKG_CHECK_MODULES(LUA, [
+    lua >= 5.1
+], [],
+[has_lua_extension=no]
+)
+
+if test x"$has_lua_extension" = x"no";
+then
+    PKG_CHECK_MODULES(LUA, [
+        lua5.1
+    ], [],
+    [enable_lua_extension=no]
+    );
+fi
+
+
+AM_CONDITIONAL(IBUS_BUILD_LUA_EXTENSION, [test x"$enable_lua_extension" = x"yes"])
+
 # OUTPUT files
 AC_CONFIG_FILES([ po/Makefile.in
 Makefile
 ibus-pinyin.spec
+lua/Makefile
 src/Makefile
 src/pinyin.xml.in
 setup/Makefile
@@ -161,7 +203,9 @@ AC_MSG_RESULT([
 Build options:
     Version                     $VERSION
     Install prefix              $prefix
+    Use opencc                  $enable_opencc
     Build database android      $enable_db_android
     Build database open-phrase  $enable_db_open_phrase
+    Build lua extension         $enable_lua_extension
 ])
 

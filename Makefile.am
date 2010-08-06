@@ -2,7 +2,7 @@
 #
 # ibus-pinyin - The Chinese PinYin engine for IBus
 #
-# Copyright (c) 2007-2008 Peng Huang <shawn.p.huang@gmail.com>
+# Copyright (c) 2008-2010 Peng Huang <shawn.p.huang@gmail.com>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -18,8 +18,13 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
+if IBUS_BUILD_LUA_EXTENSION
+LUADIR=lua
+endif
+
 SUBDIRS = \
 	data \
+	$(LUADIR) \
 	src \
 	setup \
 	m4 \
@@ -27,6 +32,8 @@ SUBDIRS = \
 	$(NULL)
 
 DISTCHECK_CONFIGURE_FLAGS = \
+	CFLAGS='-g3 -O3 -Wall' \
+	CXXFLAGS='-g3 -O3 -Wall' \
 	--enable-db-android \
 	--enable-db-open-phrase \
 	$(NULL)
@@ -68,6 +75,36 @@ srpm: dist @PACKAGE_NAME@.spec
 			--define "_rpmdir `pwd`/rpm" \
 			--define "_specdir `pwd`" \
 			@PACKAGE_NAME@.spec
+
+.PHONY: debian/changelog
+debian/changelog:
+	$(AM_V_GEN) \
+	( \
+		date=`date -R`; \
+		version=@VERSION@; \
+		serie=$(serie); \
+		if test -z "$$serie"; then \
+		  serie=lucid; \
+		fi; \
+		if test -z "$$release"; then \
+		  release=1; \
+		fi; \
+		s=`cat debian/changelog.in`; \
+		eval "echo \"$${s}\""; \
+	) > $@
+
+ppa: dist debian/changelog
+	$(AM_V_GEN) \
+	( \
+		mkdir ppa; \
+		cd ppa; \
+		tar zxvf ../$(distdir).tar.gz ; \
+		cd $(distdir); \
+		cp -a ../../debian . ; \
+		cd debian; \
+		debuild -S -sa ; \
+	)
+
 upload: dist
 	./tools/googlecode_upload.py \
 		-s "ibus-pinyin（拼音）source code" \

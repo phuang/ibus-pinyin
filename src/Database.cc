@@ -1,12 +1,27 @@
-/* vim:set et sts=4: */
-#include <cstring>
-#include <cstdio>
-#include <cstdlib>
-#include <cstdarg>
-#include <glib.h>
-#include <sqlite3.h>
+/* vim:set et ts=4 sts=4:
+ *
+ * ibus-pinyin - The Chinese PinYin engine for IBus
+ *
+ * Copyright (c) 2008-2010 Peng Huang <shawn.p.huang@gmail.com>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2, or (at your option)
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ */
 #include "Database.h"
+#include <sqlite3.h>
 #include "Util.h"
+#include "PinyinArray.h"
 
 namespace PY {
 
@@ -20,7 +35,7 @@ namespace PY {
 
 #define DB_PREFETCH_LEN     (6)
 
-Database Database::m_instance;
+boost::scoped_ptr<Database> Database::m_instance;
 
 class Conditions : public std::vector<std::string> {
 public:
@@ -149,8 +164,8 @@ Query::fill (PhraseArray &phrases, gint count)
             phrase.len = m_pinyin_len;
 
             for (guint i = 0, column = DB_COLUMN_S0; i < m_pinyin_len; i++) {
-                phrase.pinyin_id[i][0] = m_stmt->columnInt (column++);
-                phrase.pinyin_id[i][1] = m_stmt->columnInt (column++);
+                phrase.pinyin_id[i].sheng = m_stmt->columnInt (column++);
+                phrase.pinyin_id[i].yun = m_stmt->columnInt (column++);
             }
 
             phrases.push_back (phrase);
@@ -170,7 +185,7 @@ Query::fill (PhraseArray &phrases, gint count)
 Database::Database (void)
     : m_db (NULL)
 {
-    init ();
+    open ();
 }
 
 Database::~Database (void)
@@ -195,7 +210,7 @@ Database::executeSQL (const gchar *sql)
 }
 
 gboolean
-Database::init (void)
+Database::open (void)
 {
     gboolean retval;
 
@@ -257,10 +272,10 @@ Database::init (void)
              << G_DIR_SEPARATOR_S << "pinyin";
     g_mkdir_with_parents (m_buffer, 0750);
     m_buffer << G_DIR_SEPARATOR_S << "user-1.3.db";
-    retval = initUserDatabase (m_buffer);
+    retval = openUserDB (m_buffer);
     if (!retval) {
         g_warning ("Can not open user database %s", m_buffer.c_str ());
-        if (!initUserDatabase (":memory:"))
+        if (!openUserDB (":memory:"))
             goto _failed;
     }
 
@@ -278,7 +293,7 @@ _failed:
 }
 
 gboolean
-Database::initUserDatabase (const gchar *userdb)
+Database::openUserDB (const gchar *userdb)
 {
     m_sql.printf ("ATTACH DATABASE \"%s\" AS userdb;", userdb);
     if (!executeSQL (m_sql))
@@ -427,8 +442,8 @@ Database::query (const PinyinArray &pinyin,
         gboolean fs1, fs2;
         p = pinyin[i + pinyin_begin];
 
-        fs1 = pinyin_option_check_sheng (option, p->sheng_id, p->fsheng_id);
-        fs2 = pinyin_option_check_sheng (option, p->sheng_id, p->fsheng_id_2);
+        fs1 = pinyin_option_check_sheng (option, p->pinyin_id[0].sheng, p->pinyin_id[1].sheng);
+        fs2 = pinyin_option_check_sheng (option, p->pinyin_id[0].sheng, p->pinyin_id[2].sheng);
 
         if (G_LIKELY (i > 0))
             conditions.appendPrintf (0, conditions.size (),
@@ -439,65 +454,65 @@ Database::query (const PinyinArray &pinyin,
                 if (fs1 && fs2 == 0) {
                     conditions.double_ ();
                     conditions.appendPrintf (0, conditions.size ()  >> 1,
-                                               "s%d=%d", i, p->sheng_id);
+                                               "s%d=%d", i, p->pinyin_id[0].sheng);
                     conditions.appendPrintf (conditions.size () >> 1, conditions.size (),
-                                               "s%d=%d", i, p->fsheng_id);
+                                               "s%d=%d", i, p->pinyin_id[1].sheng);
                 }
                 else if (fs1 == 0 && fs2) {
                     conditions.double_ ();
                     conditions.appendPrintf (0, conditions.size ()  >> 1,
-                                               "s%d=%d", i, p->sheng_id);
+                                               "s%d=%d", i, p->pinyin_id[0].sheng);
                     conditions.appendPrintf (conditions.size () >> 1, conditions.size (),
-                                               "s%d=%d", i, p->fsheng_id_2);
+                                               "s%d=%d", i, p->pinyin_id[2].sheng);
                 }
                 else {
                     gint len = conditions.size ();
                     conditions.triple ();
                     conditions.appendPrintf (0, len,
-                                               "s%d=%d", i, p->sheng_id);
+                                               "s%d=%d", i, p->pinyin_id[0].sheng);
                     conditions.appendPrintf (len, len << 1,
-                                               "s%d=%d", i, p->fsheng_id);
+                                               "s%d=%d", i, p->pinyin_id[1].sheng);
                     conditions.appendPrintf (len << 1, conditions.size (),
-                                               "s%d=%d", i, p->fsheng_id_2);
+                                               "s%d=%d", i, p->pinyin_id[2].sheng);
                 }
             }
             else {
                 if (fs1 && fs2 == 0) {
                     conditions.appendPrintf (0, conditions.size (),
-                                               "s%d IN (%d,%d)", i, p->sheng_id, p->fsheng_id);
+                                               "s%d IN (%d,%d)", i, p->pinyin_id[0].sheng, p->pinyin_id[1].sheng);
                 }
                 else if (fs1 == 0 && fs2) {
                     conditions.appendPrintf (0, conditions.size (),
-                                               "s%d IN (%d,%d)", i, p->sheng_id, p->fsheng_id_2);
+                                               "s%d IN (%d,%d)", i, p->pinyin_id[0].sheng, p->pinyin_id[2].sheng);
                 }
                 else {
                     conditions.appendPrintf (0, conditions.size (),
-                                               "s%d IN (%d,%d,%d)", i, p->sheng_id, p->fsheng_id, p->fsheng_id_2);
+                                               "s%d IN (%d,%d,%d)", i, p->pinyin_id[0].sheng, p->pinyin_id[1].sheng, p->pinyin_id[2].sheng);
                 }
             }
         }
         else {
             conditions.appendPrintf (0, conditions.size (),
-                                       "s%d=%d", i, p->sheng_id);
+                                       "s%d=%d", i, p->pinyin_id[0].sheng);
         }
 
-        if (p->yun_id != PINYIN_ID_ZERO) {
-            if (pinyin_option_check_yun (option, p->yun_id, p->fyun_id)) {
+        if (p->pinyin_id[0].yun != PINYIN_ID_ZERO) {
+            if (pinyin_option_check_yun (option, p->pinyin_id[0].yun, p->pinyin_id[1].yun)) {
                 if (G_LIKELY (i < DB_INDEX_SIZE)) {
                     conditions.double_ ();
                     conditions.appendPrintf (0, conditions.size ()  >> 1,
-                                               " AND y%d=%d", i, p->yun_id);
+                                               " AND y%d=%d", i, p->pinyin_id[0].yun);
                     conditions.appendPrintf (conditions.size () >> 1, conditions.size (),
-                                               " and y%d=%d", i, p->fyun_id);
+                                               " and y%d=%d", i, p->pinyin_id[1].yun);
                 }
                 else {
                     conditions.appendPrintf (0, conditions.size (),
-                                               " AND y%d IN (%d,%d)", i, p->yun_id, p->fyun_id);
+                                               " AND y%d IN (%d,%d)", i, p->pinyin_id[0].yun, p->pinyin_id[1].yun);
                 }
             }
             else {
                 conditions.appendPrintf (0, conditions.size (),
-                                           " AND y%d=%d", i, p->yun_id);
+                                           " AND y%d=%d", i, p->pinyin_id[0].yun);
             }
         }
     }
@@ -537,11 +552,11 @@ inline void
 Database::phraseWhereSql (const Phrase & p, String & sql)
 {
     sql << " WHERE";
-    sql << " s0=" << p.pinyin_id[0][0]
-        << " AND y0=" << p.pinyin_id[0][1];
+    sql << " s0=" << p.pinyin_id[0].sheng
+        << " AND y0=" << p.pinyin_id[0].yun;
     for (guint i = 1; i < p.len; i++) {
-        sql << " AND s" << i << '=' << p.pinyin_id[i][0]
-            << " AND y" << i << '=' << p.pinyin_id[i][1];
+        sql << " AND s" << i << '=' << p.pinyin_id[i].sheng
+            << " AND y" << i << '=' << p.pinyin_id[i].yun;
     }
     sql << " AND phrase=\"" << p.phrase << "\"";
 
@@ -556,7 +571,7 @@ Database::phraseSql (const Phrase & p, String & sql)
         << ','   << p.freq;                 /* freq */
 
     for (guint i = 0; i < p.len; i++) {
-        sql << ',' << p.pinyin_id[i][0] << ',' << p.pinyin_id[i][1];
+        sql << ',' << p.pinyin_id[i].sheng << ',' << p.pinyin_id[i].yun;
     }
 
     sql << ");\n";
@@ -595,6 +610,14 @@ Database::remove (const Phrase & phrase)
     m_sql << "COMMIT;\n";
 
     executeSQL (m_sql);
+}
+
+void
+Database::init (void)
+{
+    if (m_instance == NULL) {
+        m_instance.reset (new Database ());
+    }
 }
 
 };

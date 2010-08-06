@@ -1,8 +1,26 @@
-/* vim:set et sts=4: */
+/* vim:set et ts=4 sts=4:
+ *
+ * ibus-pinyin - The Chinese PinYin engine for IBus
+ *
+ * Copyright (c) 2008-2010 Peng Huang <shawn.p.huang@gmail.com>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2, or (at your option)
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ */
 
 #include <cstring>
 #include <cstdlib>
-#include <glib.h>
 #include "PinyinParser.h"
 
 namespace PY {
@@ -267,7 +285,7 @@ bopomofo_cmp (const void *p1, const void *p2)
     const wchar_t *s1 = (wchar_t *) p1;
     const Pinyin *s2 = *(const Pinyin **) p2;
 
-    return std::wcscmp (s1,s2->bopomofo);
+    return std::wcscmp (s1, s2->bopomofo);
 }
 
 gboolean

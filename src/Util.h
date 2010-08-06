@@ -1,3 +1,23 @@
+/* vim:set et ts=4 sts=4:
+ *
+ * ibus-pinyin - The Chinese PinYin engine for IBus
+ *
+ * Copyright (c) 2008-2010 Peng Huang <shawn.p.huang@gmail.com>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2, or (at your option)
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ */
 #ifndef __PY_UTIL_H_
 #define __PY_UTIL_H_
 
@@ -15,11 +35,47 @@
 #include <cstdlib>
 #include <string>
 
+#include <ibus.h>
+
 namespace PY {
+
+// mask for Ctrl, Alt, Super, Hyper, Meta
+const guint CMSHM_MASK = IBUS_CONTROL_MASK |
+                         IBUS_MOD1_MASK |
+                         IBUS_SUPER_MASK |
+                         IBUS_HYPER_MASK |
+                         IBUS_META_MASK;
+// mask for Shift, Ctrl, Alt, Super, Hyper, Meta
+const guint SCMSHM_MASK = CMSHM_MASK | IBUS_SHIFT_MASK;
+
+inline guint
+cmshm_filter (guint modifiers)
+{
+    return modifiers & CMSHM_MASK;
+}
+
+inline guint
+scmshm_filter (guint modifiers)
+{
+    return modifiers & SCMSHM_MASK;
+}
+
+inline gboolean
+cmshm_test (guint modifiers, guint mask)
+{
+    return cmshm_filter (modifiers) == mask;
+}
+
+inline gboolean
+scmshm_test (guint modifiers, guint mask)
+{
+    return scmshm_filter (modifiers) == mask;
+}
 
 class UUID {
 public:
-    UUID (void) {
+    UUID (void)
+    {
         uuid_t u;
 #if defined(HAVE_UUID_CREATE)
         gchar* uuid;
@@ -33,7 +89,8 @@ public:
 #endif
     }
 
-    operator const gchar * (void) const {
+    operator const gchar * (void) const
+    {
         return m_uuid;        
     }
 
@@ -43,7 +100,8 @@ private:
 
 class Uname {
 public:
-    Uname (void) {
+    Uname (void)
+    {
         uname (&m_buf);
     }
 
@@ -54,20 +112,23 @@ private:
 
 class Hostname : public Uname {
 public:
-    operator const gchar * (void) const {
+    operator const gchar * (void) const
+    {
         return hostname ();
     }
 };
 
 class Env : public std::string {
 public:
-    Env (const gchar *name) {
+    Env (const gchar *name)
+    {
         gchar *str;
         str = std::getenv (name);
         assign (str != NULL ? str : "");
     }
 
-    operator const gchar *(void) const {
+    operator const gchar *(void) const
+    {
         return c_str();
     }
 };

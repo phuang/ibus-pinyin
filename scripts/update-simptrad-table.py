@@ -1,4 +1,7 @@
 #!/usr/bin/env python
+import sys
+sys.path.append(".")
+
 from ZhConversion import *
 from valid_hanzi import *
 from sctc import *
@@ -51,16 +54,15 @@ def get_records():
     maxlen = max(map(lambda (k,v): len(k), records))
     for i in range(1,  maxlen - 1):
         records = filter_more(records, i)
-
+    records = map(lambda (k, v): (k.encode("utf8"), v.encode("utf8")), records)
     records.sort()
     return maxlen, records
 
 def main():
-
-    print "const wchar_t * const simp_to_trad[][2] = {"
+    print "static const gchar *simp_to_trad[][2] = {"
     maxlen, records = get_records()
     for s, ts in records:
-        print '    { L"%s", L"%s" },' % (s.encode("utf8"), ts.encode("utf8"))
+        print '    { "%s", "%s" },' % (s, ts)
     print "};"
     print '#define SIMP_TO_TRAD_MAX_LEN (%d)' % maxlen
 

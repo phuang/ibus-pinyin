@@ -1,6 +1,26 @@
-/* vim:set et sts=4: */
-#ifndef __PY_BOPOMOFO_ENGINE_H__
-#define __PY_BOPOMOFO_ENGINE_H__
+/* vim:set et ts=4 sts=4:
+ *
+ * ibus-pinyin - The Chinese PinYin engine for IBus
+ *
+ * Copyright (c) 2008-2010 Peng Huang <shawn.p.huang@gmail.com>
+ * Copyright (c) 2010 BYVoid <byvoid1@gmail.com>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2, or (at your option)
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ */
+#ifndef __PY_BOPOMOFO_ENGINE_H_
+#define __PY_BOPOMOFO_ENGINE_H_
 
 #include "Engine.h"
 #include "PinyinProperties.h"
@@ -12,29 +32,17 @@ public:
     BopomofoEngine (IBusEngine *engine);
     ~BopomofoEngine (void);
 
+    // virtual functions
     gboolean processKeyEvent (guint keyval, guint keycode, guint modifiers);
     void focusIn (void);
-    void focusOut (void) {
-        reset ();
-    }
-
-    void reset (void) {
-        m_prev_pressed_key = IBUS_VoidSymbol;
-        m_input_mode = MODE_INIT;
-        for (gint i = 0; i < MODE_LAST; i++) {
-            m_editors[i]->reset ();
-        }
-        m_fallback_editor->reset ();
-    }
-
-
-    void enable (void) {}
-    void disable (void) {}
+    void focusOut (void);
+    void reset (void);
+    void enable (void);
+    void disable (void);
     void pageUp (void);
     void pageDown (void);
     void cursorUp (void);
     void cursorDown (void);
-
     gboolean propertyActivate (const gchar *prop_name, guint prop_state);
     void candidateClicked (guint index, guint button, guint state);
 
@@ -46,18 +54,7 @@ private:
     void connectEditorSignals (EditorPtr editor);
 
 private:
-    void slotCommitText (Text & text);
-    void slotUpdatePreeditText (Text & text, guint cursor, gboolean visible);
-    void slotShowPreeditText (void);
-    void slotHidePreeditText (void);
-    void slotUpdateAuxiliaryText (Text & text, gboolean visible);
-    void slotShowAuxiliaryText (void);
-    void slotHideAuxiliaryText (void);
-    void slotUpdateLookupTable (LookupTable &table, gboolean visible);
-    void slotUpdateLookupTableFast (LookupTable &table, gboolean visible);
-    void slotShowLookupTable (void);
-    void slotHideLookupTable (void);
-    void slotUpdateProperty (Property & prop);
+    void commitText (Text & text);
 
 private:
     PinyinProperties m_props;

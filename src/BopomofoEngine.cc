@@ -1,41 +1,59 @@
-/* vim:set et sts=4: */
-
-#include <libintl.h>
+/* vim:set et ts=4 sts=4:
+ *
+ * ibus-pinyin - The Chinese PinYin engine for IBus
+ *
+ * Copyright (c) 2008-2010 Peng Huang <shawn.p.huang@gmail.com>
+ * Copyright (c) 2010 BYVoid <byvoid1@gmail.com>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2, or (at your option)
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ */
+#include "BopomofoEngine.h"
 #include <string>
-#include <cstdlib>
 #include "RawEditor.h"
 #include "PunctEditor.h"
+#ifdef IBUS_BUILD_LUA_EXTENSION
 #include "ExtEditor.h"
-#include "FullPinyinEditor.h"
-#include "DoublePinyinEditor.h"
+#endif
 #include "BopomofoEditor.h"
-#include "BopomofoEngine.h"
-#include "HalfFullConverter.h"
+#include "FallbackEditor.h"
 #include "Config.h"
-#include "Text.h"
-#include "Util.h"
-
-#define _(text) (dgettext (GETTEXT_PACKAGE, text))
 
 namespace PY {
 
 /* constructor */
 BopomofoEngine::BopomofoEngine (IBusEngine *engine)
     : Engine (engine),
+      m_props (BopomofoConfig::instance ()),
       m_prev_pressed_key (IBUS_VoidSymbol),
       m_input_mode (MODE_INIT),
-      m_fallback_editor (new FallbackEditor (m_props))
+      m_fallback_editor (new FallbackEditor (m_props, BopomofoConfig::instance ()))
 {
     gint i;
 
     /* create editors */
-    m_editors[MODE_INIT].reset (new BopomofoEditor (m_props));
-    m_editors[MODE_PUNCT].reset (new PunctEditor (m_props));
+    m_editors[MODE_INIT].reset (new BopomofoEditor (m_props, BopomofoConfig::instance ()));
+    m_editors[MODE_PUNCT].reset (new PunctEditor (m_props, BopomofoConfig::instance ()));
 
-    m_editors[MODE_RAW].reset (new RawEditor (m_props));
-    m_editors[MODE_EXTENSION].reset (new ExtEditor (m_props));
+    m_editors[MODE_RAW].reset (new RawEditor (m_props, BopomofoConfig::instance ()));
+#ifdef IBUS_BUILD_LUA_EXTENSION
+    m_editors[MODE_EXTENSION].reset (new ExtEditor (m_props, BopomofoConfig::instance ()));
+#else
+    m_editors[MODE_EXTENSION].reset (new Editor (m_props, BopomofoConfig::instance ()));
+#endif
 
-    m_props.signalUpdateProperty ().connect (bind (&BopomofoEngine::slotUpdateProperty, this, _1));
+    m_props.signalUpdateProperty ().connect (bind (&BopomofoEngine::updateProperty, this, _1));
 
     for (i = MODE_INIT; i < MODE_LAST; i++) {
         connectEditorSignals (m_editors[i]);
@@ -48,14 +66,6 @@ BopomofoEngine::BopomofoEngine (IBusEngine *engine)
 BopomofoEngine::~BopomofoEngine (void)
 {
 }
-
-
-#define CASHM_MASK       \
-    (IBUS_CONTROL_MASK | \
-    IBUS_MOD1_MASK |     \
-    IBUS_SUPER_MASK |    \
-    IBUS_HYPER_MASK |    \
-    IBUS_META_MASK)
 
 gboolean
 BopomofoEngine::processKeyEvent (guint keyval, guint keycode, guint modifiers)
@@ -77,10 +87,17 @@ BopomofoEngine::processKeyEvent (guint keyval, guint keycode, guint modifiers)
         return TRUE;
     }
 
+    /* Toggle simp/trad Chinese Mode when hotkey Ctrl + Shift + F pressed */
+    if (keyval == IBUS_F && scmshm_test (modifiers, (IBUS_SHIFT_MASK | IBUS_CONTROL_MASK))) {
+        m_props.toggleModeSimp();
+        m_prev_pressed_key = IBUS_F;
+        return TRUE;
+    }
+
     if (m_props.modeChinese ()) {
         if (G_UNLIKELY (m_input_mode == MODE_INIT &&
                         m_editors[MODE_INIT]->text ().empty () &&
-                        (modifiers & CASHM_MASK) == 0) &&
+                        (cmshm_filter (modifiers)) == 0) &&
                         keyval == IBUS_grave) {
             /* if BopomofoEditor is empty and get a grave key,
              * switch current editor to PunctEditor */
@@ -110,6 +127,34 @@ BopomofoEngine::focusIn (void)
 }
 
 void
+BopomofoEngine::focusOut (void)
+{
+    reset ();
+}
+
+void
+BopomofoEngine::reset (void)
+{
+    m_prev_pressed_key = IBUS_VoidSymbol;
+    m_input_mode = MODE_INIT;
+    for (gint i = 0; i < MODE_LAST; i++) {
+        m_editors[i]->reset ();
+    }
+    m_fallback_editor->reset ();
+}
+
+void
+BopomofoEngine::enable (void)
+{
+    m_props.reset ();
+}
+
+void
+BopomofoEngine::disable (void)
+{
+}
+
+void
 BopomofoEngine::pageUp (void)
 {
     m_editors[m_input_mode]->pageUp ();
@@ -136,7 +181,7 @@ BopomofoEngine::cursorDown (void)
 inline void
 BopomofoEngine::showSetupDialog (void)
 {
-    g_spawn_command_line_async (LIBEXECDIR"/ibus-setup-pinyin", NULL);
+    g_spawn_command_line_async (LIBEXECDIR"/ibus-setup-pinyin bopomofo", NULL);
 }
 
 gboolean
@@ -160,9 +205,9 @@ BopomofoEngine::candidateClicked (guint index, guint button, guint state)
 }
 
 void
-BopomofoEngine::slotCommitText (Text & text)
+BopomofoEngine::commitText (Text & text)
 {
-    commitText (text);
+    Engine::commitText (text);
     if (m_input_mode != MODE_INIT)
         m_input_mode = MODE_INIT;
     if (text.text ())
@@ -172,99 +217,33 @@ BopomofoEngine::slotCommitText (Text & text)
 }
 
 void
-BopomofoEngine::slotUpdatePreeditText (Text & text, guint cursor, gboolean visible)
-{
-    updatePreeditText (text, cursor, visible);
-}
-
-void
-BopomofoEngine::slotShowPreeditText (void)
-{
-    showPreeditText ();
-}
-
-void
-BopomofoEngine::slotHidePreeditText (void)
-{
-    hidePreeditText ();
-}
-
-void
-BopomofoEngine::slotUpdateAuxiliaryText (Text & text, gboolean visible)
-{
-    updateAuxiliaryText (text, visible);
-}
-
-void
-BopomofoEngine::slotShowAuxiliaryText (void)
-{
-    showAuxiliaryText ();
-}
-
-void
-BopomofoEngine::slotHideAuxiliaryText (void)
-{
-    hideAuxiliaryText ();
-}
-
-void
-BopomofoEngine::slotUpdateLookupTable (LookupTable & table, gboolean visible)
-{
-    updateLookupTable (table, visible);
-}
-
-void
-BopomofoEngine::slotUpdateLookupTableFast (LookupTable & table, gboolean visible)
-{
-    updateLookupTableFast (table, visible);
-}
-
-void
-BopomofoEngine::slotShowLookupTable (void)
-{
-    showLookupTable ();
-}
-
-void
-BopomofoEngine::slotHideLookupTable (void)
-{
-    hideLookupTable ();
-}
-
-void
-BopomofoEngine::slotUpdateProperty (Property & prop)
-{
-    updateProperty (prop);
-}
-
-void
 BopomofoEngine::connectEditorSignals (EditorPtr editor)
 {
     editor->signalCommitText ().connect (
-        bind (&BopomofoEngine::slotCommitText, this, _1));
+        bind (&BopomofoEngine::commitText, this, _1));
 
     editor->signalUpdatePreeditText ().connect (
-        bind (&BopomofoEngine::slotUpdatePreeditText, this, _1, _2, _3));
+        bind (&BopomofoEngine::updatePreeditText, this, _1, _2, _3));
     editor->signalShowPreeditText ().connect (
-        bind (&BopomofoEngine::slotShowPreeditText, this));
+        bind (&BopomofoEngine::showPreeditText, this));
     editor->signalHidePreeditText ().connect (
-        bind (&BopomofoEngine::slotHidePreeditText, this));
+        bind (&BopomofoEngine::hidePreeditText, this));
 
     editor->signalUpdateAuxiliaryText ().connect (
-        bind (&BopomofoEngine::slotUpdateAuxiliaryText, this, _1, _2));
+        bind (&BopomofoEngine::updateAuxiliaryText, this, _1, _2));
     editor->signalShowAuxiliaryText ().connect (
-        bind (&BopomofoEngine::slotShowAuxiliaryText, this));
+        bind (&BopomofoEngine::showAuxiliaryText, this));
     editor->signalHideAuxiliaryText ().connect (
-        bind (&BopomofoEngine::slotHideAuxiliaryText, this));
+        bind (&BopomofoEngine::hideAuxiliaryText, this));
 
     editor->signalUpdateLookupTable ().connect (
-        bind (&BopomofoEngine::slotUpdateLookupTable, this, _1, _2));
+        bind (&BopomofoEngine::updateLookupTable, this, _1, _2));
     editor->signalUpdateLookupTableFast ().connect (
-        bind (&BopomofoEngine::slotUpdateLookupTableFast, this, _1, _2));
+        bind (&BopomofoEngine::updateLookupTableFast, this, _1, _2));
     editor->signalShowLookupTable ().connect (
-        bind (&BopomofoEngine::slotShowLookupTable, this));
+        bind (&BopomofoEngine::showLookupTable, this));
     editor->signalHideLookupTable ().connect (
-        bind (&BopomofoEngine::slotHideLookupTable, this));
+        bind (&BopomofoEngine::hideLookupTable, this));
 }
 
 };

@@ -1,17 +1,40 @@
-#include "Config.h"
+/* vim:set et ts=4 sts=4:
+ *
+ * ibus-pinyin - The Chinese PinYin engine for IBus
+ *
+ * Copyright (c) 2008-2010 Peng Huang <shawn.p.huang@gmail.com>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2, or (at your option)
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ */
 #include "PhraseEditor.h"
+#include "Config.h"
+#include "Database.h"
+#include "PinyinProperties.h"
 #include "SimpTradConverter.h"
 
 namespace PY {
 
-PhraseEditor::PhraseEditor (PinyinProperties & props)
+PhraseEditor::PhraseEditor (PinyinProperties & props, Config & config)
     : m_candidates (32),
       m_selected_phrases (8),
       m_selected_string (32),
       m_candidate_0_phrases (8),
       m_pinyin (16),
       m_cursor (0),
-      m_props (props)
+      m_props (props),
+      m_config (config)
 {
 }
 
@@ -42,6 +65,13 @@ PhraseEditor::resetCandidate (guint i)
 
     updateCandidates ();
     return TRUE;
+}
+
+void
+PhraseEditor::commit (void)
+{
+    Database::instance ().commit (m_selected_phrases);
+    reset ();
 }
 
 gboolean
@@ -94,7 +124,7 @@ PhraseEditor::updateCandidates (void)
     m_query.reset (new Query (m_pinyin,
                               m_cursor,
                               m_pinyin.size () - m_cursor,
-                              Config::option ()));
+                              m_config.option ()));
     fillCandidates ();
 }
 
@@ -117,11 +147,28 @@ PhraseEditor::updateTheFirstCandidate (void)
         Query query (m_pinyin,
                      begin,
                      end - begin,
-                     Config::option ());
+                     m_config.option ());
         ret = query.fill (m_candidate_0_phrases, 1);
         g_assert (ret == 1);
         begin += m_candidate_0_phrases.back ().len;
     }
+}
+
+gboolean
+PhraseEditor::fillCandidates (void)
+{
+    if (G_UNLIKELY (m_query.get () == NULL)) {
+        return FALSE;
+    }
+
+    gint ret = m_query->fill (m_candidates, FILL_GRAN);
+
+    if (G_UNLIKELY (ret < FILL_GRAN)) {
+        /* got all candidates from query */
+        m_query.reset ();
+    }
+
+    return ret > 0 ? TRUE : FALSE;
 }
 
 };

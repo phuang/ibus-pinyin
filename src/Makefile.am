@@ -2,7 +2,7 @@
 #
 # ibus-pinyin - The Chinese PinYin engine for IBus
 #
-# Copyright (c) 2007-2008 Peng Huang <shawn.p.huang@gmail.com>
+# Copyright (c) 2008-2010 Peng Huang <shawn.p.huang@gmail.com>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -33,7 +33,15 @@
 # 
 
 libexec_PROGRAMS = ibus-engine-pinyin
-ibus_engine_c_sources = \
+ibus_engine_pinyin_built_c_sources = \
+	$(NULL)
+ibus_engine_pinyin_built_h_sources = \
+	BopomofoKeyboard.h \
+	PinyinParserTable.h \
+	PunctTable.h \
+	SimpTradConverterTable.h \
+	$(NULL)
+ibus_engine_pinyin_c_sources = \
 	BopomofoEditor.cc \
 	BopomofoEngine.cc \
 	Config.cc \
@@ -41,11 +49,11 @@ ibus_engine_c_sources = \
 	DoublePinyinEditor.cc \
 	Editor.cc \
 	Engine.cc \
-	ExtEditor.cc \
 	FallbackEditor.cc \
 	FullPinyinEditor.cc \
 	HalfFullConverter.cc \
 	Main.cc \
+	PhoneticEditor.cc \
 	PhraseEditor.cc \
 	PinyinEditor.cc \
 	PinyinEngine.cc \
@@ -57,12 +65,7 @@ ibus_engine_c_sources = \
 	SpecialPhrase.cc \
 	SpecialPhraseTable.cc \
 	$(NULL)
-ibus_engine_built_h_sources = \
-	PinyinParserTable.h \
-	PunctTable.h \
-	SimpTradConverterTable.h \
-	$(NULL)
-ibus_engine_h_sources = \
+ibus_engine_pinyin_h_sources = \
 	Bopomofo.h \
 	BopomofoEditor.h \
 	BopomofoEngine.h \
@@ -79,6 +82,7 @@ ibus_engine_h_sources = \
 	HalfFullConverter.h \
 	LookupTable.h \
 	Object.h \
+	PhoneticEditor.h \
 	Phrase.h \
 	PhraseArray.h \
 	PhraseEditor.h \
@@ -86,17 +90,14 @@ ibus_engine_h_sources = \
 	PinyinEditor.h \
 	PinyinEngine.h \
 	PinyinParser.h \
-	PinyinParserTable.h \
 	PinyinProperties.h \
 	Pointer.h \
 	Property.h \
 	PunctEditor.h \
-	PunctTable.h \
 	RawEditor.h \
 	Regex.h \
 	Signal.h \
 	SimpTradConverter.h \
-	SimpTradConverterTable.h \
 	SpecialPhrase.h \
 	DynamicSpecialPhrase.h \
 	SpecialPhraseTable.h \
@@ -105,29 +106,54 @@ ibus_engine_h_sources = \
 	Types.h \
 	Util.h \
 	$(NULL)
+
+if IBUS_BUILD_LUA_EXTENSION
+ibus_engine_pinyin_c_sources += ExtEditor.cc
+endif
+
 ibus_engine_pinyin_SOURCES = \
-	$(ibus_engine_c_sources) \
-	$(ibus_engine_h_sources) \
-	$(ibus_engine__built_c_sources) \
-	$(ibus_engine__built_h_sources) \
+	$(ibus_engine_pinyin_c_sources) \
+	$(ibus_engine_pinyin_h_sources) \
+	$(ibus_engine_pinyin_built_c_sources) \
+	$(ibus_engine_pinyin_built_h_sources) \
 	$(NULL)
 ibus_engine_pinyin_CXXFLAGS = \
 	@IBUS_CFLAGS@ \
 	@SQLITE_CFLAGS@ \
 	@BOOST_CPPFLAGS@ \
+	@OPENCC_CFLAGS@ \
 	-DGETTEXT_PACKAGE=\"@GETTEXT_PACKAGE@\" \
 	-DPKGDATADIR=\"$(pkgdatadir)\" \
 	-DLIBEXECDIR=\"$(libexecdir)\" \
 	$(NULL)
+
 ibus_engine_pinyin_LDADD = \
 	@IBUS_LIBS@ \
 	@SQLITE_LIBS@ \
+	@OPENCC_LIBS@ \
 	$(NULL)
 
 if HAVE_LIBUUID
 ibus_engine_pinyin_CXXFLAGS += $(LIBUUID_CFLAGS)
 ibus_engine_pinyin_LDADD += $(LIBUUID_LIBS)
 endif
+
+if IBUS_BUILD_LUA_EXTENSION
+    ibus_engine_pinyin_CXXFLAGS +=  \
+	@LUA_CFLAGS@ \
+	-DIBUS_BUILD_LUA_EXTENSION \
+	-I$(top_srcdir)/lua/ \
+	$(NULL)
+endif
+
+if IBUS_BUILD_LUA_EXTENSION
+    ibus_engine_pinyin_LDADD += \
+	@LUA_LIBS@ \
+	-L../lua/ \
+	-lpylua \
+	$(NULL)
+endif
+
 
 # if HAVE_BOOST_SIGNALS2
 # # do nothing
@@ -163,6 +189,9 @@ CLEANFILES = \
 	ZhConversion.* \
 	$(NULL)
 
+BopomofoKeyboard.h:
+	$(PYTHON) $(top_srcdir)/scripts/genbopomofokeyboard.py > $@
+
 PinyinParserTable.h:
 	$(PYTHON) $(top_srcdir)/scripts/genpytable.py > $@
 
@@ -170,7 +199,7 @@ PunctTable.h:
 	$(PYTHON) $(top_srcdir)/scripts/genpuncttable.py > $@
 
 SimpTradConverterTable.h:
-	$(PYTHON) $(srcdir)/update-simptrad-table.py > $@
+	$(PYTHON) $(top_srcdir)/scripts/update-simptrad-table.py > $@
 
 update-simptrad-table:
 	$(RM) ZhConversion.php ZhConversion.py SimpTradConverterTable.h
@@ -200,5 +229,5 @@ ZhConversion.php:
 	svn cat http://svn.wikimedia.org/svnroot/mediawiki/trunk/phase3/includes/ZhConversion.php > $@
 
 ZhConversion.py: ZhConversion.php
-	php php_2_py.php > $@
+	php $(top_srcdir)/scripts/php_2_py.php > $@
 
