@@ -293,10 +293,10 @@ class PreferencesDialog:
             ("FuzzyPinyin_ANG_AN", True),
             ("FuzzyPinyin_ENG_EN", True),
             ("FuzzyPinyin_ING_IN", True),
-            ("FuzzyPinyin_IAN_IANG", False),
-            ("FuzzyPinyin_UAN_UANG", False),
-            ("FuzzyPinyin_IANG_IAN", False),
-            ("FuzzyPinyin_UANG_UAN", False),
+            ("FuzzyPinyin_IAN_IANG", True),
+            ("FuzzyPinyin_UAN_UANG", True),
+            ("FuzzyPinyin_IANG_IAN", True),
+            ("FuzzyPinyin_UANG_UAN", True),
         ]
 
         def __fuzzy_pinyin_toggled_cb(widget):
