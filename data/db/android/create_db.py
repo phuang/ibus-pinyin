@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-import sqlite3
 from pydict import *
 from id import *
 from valid_hanzi import *
@@ -29,6 +28,7 @@ def read_phrases(filename):
         yield hanzi, freq, pinyin
 
 def create_db(filename):
+    # import sqlite3
     # con = sqlite3.connect("main.db")
     # con.execute ("PRAGMA synchronous = NORMAL;")
     # con.execute ("PRAGMA temp_store = MEMORY;")
