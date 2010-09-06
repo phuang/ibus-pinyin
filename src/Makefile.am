@@ -36,10 +36,10 @@ libexec_PROGRAMS = ibus-engine-pinyin
 ibus_engine_pinyin_built_c_sources = \
 	$(NULL)
 ibus_engine_pinyin_built_h_sources = \
-	BopomofoKeyboard.h \
-	PinyinParserTable.h \
-	PunctTable.h \
-	SimpTradConverterTable.h \
+	PYBopomofoKeyboard.h \
+	PYPinyinParserTable.h \
+	PYPunctTable.h \
+	PYSimpTradConverterTable.h \
 	$(NULL)
 ibus_engine_pinyin_c_sources = \
 	PYBopomofoEditor.cc \
@@ -189,23 +189,23 @@ CLEANFILES = \
 	ZhConversion.* \
 	$(NULL)
 
-BopomofoKeyboard.h:
+PYBopomofoKeyboard.h:
 	$(PYTHON) $(top_srcdir)/scripts/genbopomofokeyboard.py > $@
 
-PinyinParserTable.h:
+PYPinyinParserTable.h:
 	$(PYTHON) $(top_srcdir)/scripts/genpytable.py > $@
 
-PunctTable.h:
+PYPunctTable.h:
 	$(PYTHON) $(top_srcdir)/scripts/genpuncttable.py > $@
 
-SimpTradConverterTable.h:
+PYSimpTradConverterTable.h:
 	$(PYTHON) $(top_srcdir)/scripts/update-simptrad-table.py > $@
 
 update-simptrad-table:
-	$(RM) ZhConversion.php ZhConversion.py SimpTradConverterTable.h
+	$(RM) ZhConversion.php ZhConversion.py PYSimpTradConverterTable.h
 	$(MAKE) ZhConversion.php
 	$(MAKE) ZhConversion.py
-	$(MAKE) SimpTradConverterTable.h
+	$(MAKE) PYSimpTradConverterTable.h
 
 pinyin.xml: pinyin.xml.in
 	$(AM_V_GEN) \

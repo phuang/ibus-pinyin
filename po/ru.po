@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-06-13 15:16+0800\n"
+"POT-Creation-Date: 2010-09-06 10:38+0800\n"
 "PO-Revision-Date: 2009-10-14 09:44+0300\n"
 "Last-Translator: Alexey Kotlyarov <koterpillar@gmail.com>\n"
 "Language-Team: Russian\n"
@@ -17,46 +17,46 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
 "10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
-#: ../src/Main.cc:90
+#: ../src/PYMain.cc:90
 msgid "Pinyin input method"
 msgstr "Метод ввода пиньинь"
 
-#: ../src/Main.cc:99
+#: ../src/PYMain.cc:99
 #, fuzzy
 msgid "Pinyin (debug)"
 msgstr "Пиньинь"
 
-#: ../src/Main.cc:100
+#: ../src/PYMain.cc:100
 #, fuzzy
 msgid "Pinyin input method (debug)"
 msgstr "Метод ввода пиньинь"
 
-#: ../src/Main.cc:109
+#: ../src/PYMain.cc:109
 msgid "Bopomofo (debug)"
 msgstr ""
 
-#: ../src/Main.cc:110
+#: ../src/PYMain.cc:110
 #, fuzzy
 msgid "Bopomofo input method (debug)"
 msgstr "Метод ввода пиньинь"
 
-#: ../src/PinyinProperties.cc:42 ../setup/ibus-pinyin-preferences.ui.h:24
+#: ../src/PYPinyinProperties.cc:42 ../setup/ibus-pinyin-preferences.ui.h:24
 msgid "Chinese"
 msgstr "Китайский"
 
-#: ../src/PinyinProperties.cc:49
+#: ../src/PYPinyinProperties.cc:49
 msgid "Full/Half width"
 msgstr "Полная/половинная ширина"
 
-#: ../src/PinyinProperties.cc:56
+#: ../src/PYPinyinProperties.cc:56
 msgid "Full/Half width punctuation"
 msgstr "Знаки препинания полной/половинной ширины"
 
-#: ../src/PinyinProperties.cc:63
+#: ../src/PYPinyinProperties.cc:63
 msgid "Simplfied/Traditional Chinese"
 msgstr "Упрощенные/традиционные иероглифы"
 
-#: ../src/PinyinProperties.cc:66 ../src/PinyinProperties.cc:68
+#: ../src/PYPinyinProperties.cc:66 ../src/PYPinyinProperties.cc:68
 #: ../setup/ibus-pinyin-preferences.ui.h:55
 #, fuzzy
 msgid "Preferences"

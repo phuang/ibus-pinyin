@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ibus-pinyin 1.2.99\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-06-13 15:16+0800\n"
+"POT-Creation-Date: 2010-09-06 10:38+0800\n"
 "PO-Revision-Date: 2009-09-20 16:05+8\n"
 "Last-Translator: Peng Huang <shawn.p.huang@gmail.com>\n"
 "Language-Team: Peng Huang <shawn.p.huang@gmail.com>\n"
@@ -15,43 +15,43 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../src/Main.cc:90
+#: ../src/PYMain.cc:90
 msgid "Pinyin input method"
 msgstr "拼音输入法"
 
-#: ../src/Main.cc:99
+#: ../src/PYMain.cc:99
 msgid "Pinyin (debug)"
 msgstr "拼音（调试）"
 
-#: ../src/Main.cc:100
+#: ../src/PYMain.cc:100
 msgid "Pinyin input method (debug)"
 msgstr "拼音输入法（调试）"
 
-#: ../src/Main.cc:109
+#: ../src/PYMain.cc:109
 msgid "Bopomofo (debug)"
 msgstr "注音（调试）"
 
-#: ../src/Main.cc:110
+#: ../src/PYMain.cc:110
 msgid "Bopomofo input method (debug)"
 msgstr "注音输入法（调试）"
 
-#: ../src/PinyinProperties.cc:42 ../setup/ibus-pinyin-preferences.ui.h:24
+#: ../src/PYPinyinProperties.cc:42 ../setup/ibus-pinyin-preferences.ui.h:24
 msgid "Chinese"
 msgstr "中文"
 
-#: ../src/PinyinProperties.cc:49
+#: ../src/PYPinyinProperties.cc:49
 msgid "Full/Half width"
 msgstr "全角/半角"
 
-#: ../src/PinyinProperties.cc:56
+#: ../src/PYPinyinProperties.cc:56
 msgid "Full/Half width punctuation"
 msgstr "半角符号"
 
-#: ../src/PinyinProperties.cc:63
+#: ../src/PYPinyinProperties.cc:63
 msgid "Simplfied/Traditional Chinese"
 msgstr "简体/繁体中文"
 
-#: ../src/PinyinProperties.cc:66 ../src/PinyinProperties.cc:68
+#: ../src/PYPinyinProperties.cc:66 ../src/PYPinyinProperties.cc:68
 #: ../setup/ibus-pinyin-preferences.ui.h:55
 msgid "Preferences"
 msgstr "首选项"
