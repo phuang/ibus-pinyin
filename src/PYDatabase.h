@@ -21,8 +21,7 @@
 #ifndef __PY_DATABASE_H_
 #define __PY_DATABASE_H_
 
-#include <boost/shared_ptr.hpp>
-#include <boost/scoped_ptr.hpp>
+#include "PYUtil.h"
 #include "PYString.h"
 #include "PYTypes.h"
 #include "PYPhraseArray.h"
@@ -35,7 +34,7 @@ class PinyinArray;
 struct Phrase;
 
 class SQLStmt;
-typedef boost::shared_ptr<SQLStmt> SQLStmtPtr;
+typedef std::shared_ptr<SQLStmt> SQLStmtPtr;
 
 class Database;
 
@@ -92,7 +91,7 @@ private:
     String m_buffer;     /* temp buffer */
 
 private:
-    static boost::scoped_ptr<Database> m_instance;
+    static std::unique_ptr<Database> m_instance;
 };
 
 

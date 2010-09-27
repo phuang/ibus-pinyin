@@ -21,7 +21,7 @@
 #ifndef __PY_PHRASE_EDITOR_H_
 #define __PY_PHRASE_EDITOR_H_
 
-#include <boost/shared_ptr.hpp>
+#include "PYUtil.h"
 #include "PYString.h"
 #include "PYPhraseArray.h"
 #include "PYPinyinArray.h"
@@ -125,7 +125,7 @@ private:
     PinyinArray m_pinyin;
     guint m_cursor;
     PinyinProperties & m_props;
-    boost::shared_ptr<Query> m_query;
+    std::shared_ptr<Query> m_query;
     Config    & m_config;
 };
 

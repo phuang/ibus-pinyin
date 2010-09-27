@@ -117,15 +117,26 @@ ibus_engine_pinyin_SOURCES = \
 	$(ibus_engine_pinyin_built_c_sources) \
 	$(ibus_engine_pinyin_built_h_sources) \
 	$(NULL)
+
+
 ibus_engine_pinyin_CXXFLAGS = \
 	@IBUS_CFLAGS@ \
 	@SQLITE_CFLAGS@ \
-	@BOOST_CPPFLAGS@ \
 	@OPENCC_CFLAGS@ \
 	-DGETTEXT_PACKAGE=\"@GETTEXT_PACKAGE@\" \
 	-DPKGDATADIR=\"$(pkgdatadir)\" \
 	-DLIBEXECDIR=\"$(libexecdir)\" \
 	$(NULL)
+
+if HAVE_BOOST
+ibus_engine_pinyin_CXXFLAGS += \
+	@BOOST_CPPFLAGS@ \
+	$(NULL)
+else
+ibus_engine_pinyin_CXXFLAGS += \
+	-std=c++0x \
+	$(NULL)
+endif
 
 ibus_engine_pinyin_LDADD = \
 	@IBUS_LIBS@ \
@@ -153,17 +164,6 @@ if IBUS_BUILD_LUA_EXTENSION
 	-lpylua \
 	$(NULL)
 endif
-
-
-# if HAVE_BOOST_SIGNALS2
-# # do nothing
-# else
-# ibus_engine_pinyin_CXXFLAGS += $(LIBUUID_CFLAGS)
-# ibus_engine_pinyin_LDADD += \
-# 	$(BOOST_SIGNALS_LDFLAGS) \
-# 	$(BOOST_SIGNALS_LIBS) \
-# 	$(NULL)
-# endif
 
 BUILT_SOURCES = \
 	$(ibus_engine_built_c_sources) \

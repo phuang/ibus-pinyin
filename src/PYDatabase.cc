@@ -35,7 +35,7 @@ namespace PY {
 
 #define DB_PREFETCH_LEN     (6)
 
-boost::scoped_ptr<Database> Database::m_instance;
+std::unique_ptr<Database> Database::m_instance;
 
 class Conditions : public std::vector<std::string> {
 public:

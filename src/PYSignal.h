@@ -26,28 +26,84 @@
 #  include <config.h>
 #endif
 
-#ifdef HAVE_BOOST_SIGNALS2_HPP
-#  include <boost/signals2.hpp>
-#elif HAVE_BOOST_SIGNALS_HPP
-#  include <boost/signals.hpp>
-#else
-#  error "Can not find boost.signals2 or boost.signal"
-#endif
+#ifdef __GXX_EXPERIMENTAL_CXX0X__
 
-#include <boost/bind.hpp>
+#  include <functional>
 
 namespace PY {
 
-using boost::bind;
+using namespace std::placeholders;
 
-#if HAVE_BOOST_SIGNALS2_HPP
-namespace bs2 = boost::signals2;
-template <typename Signature>
-struct signal : public bs2::signal_type <Signature, bs2::keywords::mutex_type<bs2::dummy_mutex> >::type { };
-#elif HAVE_BOOST_SIGNALS_HPP
-using boost::signal;
-#endif
+// implement signal templates
+template<typename R  = void,
+         typename T1 = void,
+         typename T2 = void,
+         typename T3 = void>
+struct signal
+{
+};
+
+template<typename R, typename T1, typename T2, typename T3>
+struct signal< R(), T1, T2, T3>
+{
+    typedef std::function<R()> func_type;
+    void connect (func_type f) { m_func = f; }
+    R operator ()() const { m_func (); }
+private:
+    func_type m_func;
+};
+
+template<typename R, typename T1, typename T2, typename T3>
+struct signal< R(T1), T2, T3>
+{
+    typedef std::function<R(T1)> func_type;
+    void connect (func_type f) { m_func = f; }
+    R operator ()(T1 a1) const { return m_func (a1); }
+private:
+    func_type m_func;
+};
+
+template<typename R, typename T1, typename T2, typename T3>
+struct signal< R(T1, T2), T3>
+{
+    typedef std::function<R(T1, T2)> func_type;
+    void connect (func_type f) { m_func = f; }
+    R operator ()(T1 a1, T2 a2) const { return m_func (a1, a2); }
+private:
+    func_type m_func;
+};
+
+template<typename R, typename T1, typename T2, typename T3>
+struct signal< R(T1, T2, T3)>
+{
+    typedef std::function<R(T1, T2, T3)> func_type;
+    void connect (func_type f) {m_func = f; }
+    R operator ()(T1 a1, T2 a2, T3 a3) const { return m_func (a1, a2, a3); }
+private:
+    func_type m_func;
+};
 
 };
 
-#endif
+#else // __GXX_EXPERIMENTAL_CXX0X__
+
+#  include <boost/signals2.hpp>
+#  include <boost/bind.hpp>
+
+namespace std {
+    // import boost::bind into std namespace
+    using boost::bind;
+};
+
+namespace PY {
+    // use boost::signal2
+    namespace bs2 = boost::signals2;
+    template <typename Signature>
+    struct signal : public bs2::signal_type
+        <Signature, bs2::keywords::mutex_type<bs2::dummy_mutex> >::type { };
+
+};
+
+#endif // __GXX_EXPERIMENTAL_CXX0X__
+#endif // __PY_SIGNAL_H_
+

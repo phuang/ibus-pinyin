@@ -22,8 +22,8 @@
 #define __PY_CONFIG_H_
 
 #include <string>
-#include <boost/scoped_ptr.hpp>
 #include <ibus.h>
+#include "PYUtil.h"
 #include "PYObject.h"
 
 namespace PY {
@@ -118,7 +118,7 @@ protected:
                                    const GValue  *value);
 
 private:
-    static boost::scoped_ptr<PinyinConfig> m_instance;
+    static std::unique_ptr<PinyinConfig> m_instance;
 };
 
 /* Bopomof Config */
@@ -136,7 +136,7 @@ protected:
                                    const GValue  *value);
 
 private:
-    static boost::scoped_ptr<BopomofoConfig> m_instance;
+    static std::unique_ptr<BopomofoConfig> m_instance;
 };
 
 };

@@ -22,6 +22,8 @@
 #ifndef __PY_PUNCT_EDITOR_
 #define __PY_PUNCT_EDITOR_
 
+#include <vector>
+
 #include "PYLookupTable.h"
 #include "PYEditor.h"
 

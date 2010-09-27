@@ -48,8 +48,8 @@ const gchar * const CONFIG_GUIDE_KEY                 = "GuideKey";
 const gchar * const CONFIG_AUXILIARY_SELECT_KEY_F    = "AuxiliarySelectKey_F";
 const gchar * const CONFIG_AUXILIARY_SELECT_KEY_KP   = "AuxiliarySelectKey_KP";
 
-boost::scoped_ptr<PinyinConfig> PinyinConfig::m_instance;
-boost::scoped_ptr<BopomofoConfig> BopomofoConfig::m_instance;
+std::unique_ptr<PinyinConfig> PinyinConfig::m_instance;
+std::unique_ptr<BopomofoConfig> BopomofoConfig::m_instance;
 
 Config::Config (Bus & bus, const std::string & name)
     : Object (ibus_bus_get_config (bus)),

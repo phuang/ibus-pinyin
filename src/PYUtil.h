@@ -35,6 +35,23 @@
 #include <cstdlib>
 #include <string>
 
+#ifdef __GXX_EXPERIMENTAL_CXX0X__
+#  include <memory>
+#else
+#  include <boost/shared_ptr.hpp>
+#  include <boost/scoped_ptr.hpp>
+
+namespace std {
+    // import boost::shared_ptr to std namespace
+    using boost::shared_ptr;
+    // import boost::scoped_ptr to std namespace, and rename to unique_ptr
+    // XXX: the unique_ptr can transfer the pointer ownership,
+    //      but scoped_ptr cannot.
+    template<typename T> class unique_ptr : public boost::scoped_ptr<T> {};
+};
+
+#endif
+
 #include <ibus.h>
 
 namespace PY {

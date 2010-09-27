@@ -25,12 +25,12 @@
 #include <string>
 #include <vector>
 #include <glib.h>
-#include <boost/shared_ptr.hpp>
+#include "PYUtil.h"
 
 namespace PY {
 
 class SpecialPhrase;
-typedef boost::shared_ptr<SpecialPhrase> SpecialPhrasePtr;
+typedef std::shared_ptr<SpecialPhrase> SpecialPhrasePtr;
 
 class SpecialPhraseTable {
 private:

@@ -88,30 +88,27 @@ AC_CHECK_FUNCS([uuid_create], [], [
 
 AM_CONDITIONAL(HAVE_LIBUUID, test x"$HAVE_LIBUUID" = x"yes")
 
-# check boost
-BOOST_REQUIRE([1.39])
-BOOST_FIND_HEADER([boost/signals2.hpp])
-# BOOST_FIND_HEADER([boost/signals2.hpp], [
-#     HAVE_BOOST_SIGNALS2=no
-#     BOOST_SIGNALS([s])
-# ], [
-#     AC_DEFINE(HAVE_BOOST_SIGNALS2_HPP, 1, [Define if found boost.signals2])
-#     HAVE_BOOST_SGINALS2=yes
-# ])
-# 
-# AM_CONDITIONAL(HAVE_BOOST_SIGNALS2, test x"$HAVE_BOOST_SIGNALS2" = x"yes")
-# 
-# check sigc
-# PKG_CHECK_MODULES(SIGC, [
-#     sigc++-2.0
-# ])
-
 # check env
 AC_PATH_PROG(ENV, env)
 AC_SUBST(ENV)
 
 # check python
 AM_PATH_PYTHON([2.5])
+
+# --disble-boost
+AC_ARG_ENABLE(boost,
+    AC_HELP_STRING([--disable-boost],
+        [Do not use boost and use stdc++0x to replace boost.]),
+        [enable_boost=$enableval],
+        [enable_boost=yes]
+)
+if test x"$enable_boost" = x"yes"; then
+    # check boost
+    BOOST_REQUIRE([1.39])
+    BOOST_FIND_HEADER([boost/bind.hpp])
+    BOOST_FIND_HEADER([boost/signals2.hpp])
+fi
+AM_CONDITIONAL(HAVE_BOOST, test x"$enable_boost" = x"yes")
 
 # --enable-opencc
 AC_ARG_ENABLE(opencc,
@@ -203,6 +200,7 @@ AC_MSG_RESULT([
 Build options:
     Version                     $VERSION
     Install prefix              $prefix
+    Use boost                   $enable_boost
     Use opencc                  $enable_opencc
     Build database android      $enable_db_android
     Build database open-phrase  $enable_db_open_phrase

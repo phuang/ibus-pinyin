@@ -22,7 +22,6 @@
 #define __PY_EDITOR_H_
 
 #include <glib.h>
-#include <boost/shared_ptr.hpp>
 #include "PYSignal.h"
 #include "PYString.h"
 #include "PYUtil.h"
@@ -35,7 +34,7 @@ class PinyinProperties;
 class Config;
 
 class Editor;
-typedef boost::shared_ptr<Editor> EditorPtr;
+typedef std::shared_ptr<Editor> EditorPtr;
 
 class Editor {
 public:

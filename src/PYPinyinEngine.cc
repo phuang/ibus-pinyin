@@ -55,7 +55,7 @@ PinyinEngine::PinyinEngine (IBusEngine *engine)
     m_editors[MODE_EXTENSION].reset (new Editor (m_props, PinyinConfig::instance ()));
 #endif
 
-    m_props.signalUpdateProperty ().connect (bind (&PinyinEngine::updateProperty, this, _1));
+    m_props.signalUpdateProperty ().connect (std::bind (&PinyinEngine::updateProperty, this, _1));
 
     for (i = MODE_INIT; i < MODE_LAST; i++) {
         connectEditorSignals (m_editors[i]);
@@ -264,30 +264,30 @@ void
 PinyinEngine::connectEditorSignals (EditorPtr editor)
 {
     editor->signalCommitText ().connect (
-        bind (&PinyinEngine::commitText, this, _1));
+        std::bind (&PinyinEngine::commitText, this, _1));
 
     editor->signalUpdatePreeditText ().connect (
-        bind (&PinyinEngine::updatePreeditText, this, _1, _2, _3));
+        std::bind (&PinyinEngine::updatePreeditText, this, _1, _2, _3));
     editor->signalShowPreeditText ().connect (
-        bind (&PinyinEngine::showPreeditText, this));
+        std::bind (&PinyinEngine::showPreeditText, this));
     editor->signalHidePreeditText ().connect (
-        bind (&PinyinEngine::hidePreeditText, this));
+        std::bind (&PinyinEngine::hidePreeditText, this));
 
     editor->signalUpdateAuxiliaryText ().connect (
-        bind (&PinyinEngine::updateAuxiliaryText, this, _1, _2));
+        std::bind (&PinyinEngine::updateAuxiliaryText, this, _1, _2));
     editor->signalShowAuxiliaryText ().connect (
-        bind (&PinyinEngine::showAuxiliaryText, this));
+        std::bind (&PinyinEngine::showAuxiliaryText, this));
     editor->signalHideAuxiliaryText ().connect (
-        bind (&PinyinEngine::hideAuxiliaryText, this));
+        std::bind (&PinyinEngine::hideAuxiliaryText, this));
 
     editor->signalUpdateLookupTable ().connect (
-        bind (&PinyinEngine::updateLookupTable, this, _1, _2));
+        std::bind (&PinyinEngine::updateLookupTable, this, _1, _2));
     editor->signalUpdateLookupTableFast ().connect (
-        bind (&PinyinEngine::updateLookupTableFast, this, _1, _2));
+        std::bind (&PinyinEngine::updateLookupTableFast, this, _1, _2));
     editor->signalShowLookupTable ().connect (
-        bind (&PinyinEngine::showLookupTable, this));
+        std::bind (&PinyinEngine::showLookupTable, this));
     editor->signalHideLookupTable ().connect (
-        bind (&PinyinEngine::hideLookupTable, this));
+        std::bind (&PinyinEngine::hideLookupTable, this));
 }
 
 };
