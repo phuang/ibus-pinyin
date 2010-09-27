@@ -105,6 +105,18 @@ ppa: dist debian/changelog
 		debuild -S -sa ; \
 	)
 
+dpkg: dist debian/changelog
+	$(AM_V_GEN) \
+	( \
+		mkdir ppa; \
+		cd ppa; \
+		tar zxvf ../$(distdir).tar.gz ; \
+		cd $(distdir); \
+		cp -a ../../debian . ; \
+		cd debian; \
+		debuild -b ; \
+	)
+
 upload: dist
 	./tools/googlecode_upload.py \
 		-s "ibus-pinyin（拼音）source code" \
