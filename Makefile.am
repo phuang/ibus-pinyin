@@ -114,7 +114,7 @@ dpkg: dist debian/changelog
 		cd $(distdir); \
 		cp -a ../../debian . ; \
 		cd debian; \
-		debuild -b ; \
+		debuild -b -uc -us; \
 	)
 
 upload: dist

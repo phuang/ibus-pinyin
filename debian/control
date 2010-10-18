@@ -4,8 +4,8 @@ Priority: optional
 Maintainer: LI Daobing <lidaobing@debian.org>
 Build-Depends: debhelper (>= 7), autotools-dev, pkg-config,
  libibus-dev (>= 1.2.99), libsqlite3-dev (>= 3.6), sqlite3, uuid-dev,
- python-support, intltool (>= 0.35.0), libboost-signals-dev (>= 1.39),
- libopencc-dev (>= 0.0.4~pre.1), liblua5.1-0-dev
+ python-support, intltool (>= 0.35.0), libopencc-dev (>= 0.0.4~pre.1),
+ liblua5.1-0-dev
 Standards-Version: 3.8.4
 Homepage: http://code.google.com/p/ibus
 Vcs-Bzr: lp:~lidaobing/ibus/ibus-pinyin

@@ -32,7 +32,7 @@ endif
 ifneq "$(wildcard /usr/share/misc/config.guess)" ""
 	cp -f /usr/share/misc/config.guess config.guess
 endif
-	dh_auto_configure -- --enable-opencc --enable-lua-extension
+	dh_auto_configure -- --enable-opencc --enable-lua-extension --disable-boost
 
 build: build-stamp
 
