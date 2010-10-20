@@ -56,6 +56,7 @@ public:
     gboolean guideKey (void) const              { return m_guide_key; }
     gboolean auxiliarySelectKeyF (void) const   { return m_auxiliary_select_key_f; }
     gboolean auxiliarySelectKeyKP (void) const  { return m_auxiliary_select_key_kp; }
+    gboolean enterKey (void) const  { return m_enter_key; }
 
 protected:
     bool read (const gchar * name, bool defval);
@@ -101,6 +102,8 @@ protected:
     gboolean m_guide_key;
     gboolean m_auxiliary_select_key_f;
     gboolean m_auxiliary_select_key_kp;
+
+    gboolean m_enter_key;
 };
 
 /* PinyinConfig */

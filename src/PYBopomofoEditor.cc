@@ -456,7 +456,12 @@ BopomofoEditor::commit (void)
 
     m_buffer.clear ();
 
-    if (m_select_mode) {
+    if (!m_select_mode && m_config.enterKey ()) {
+        m_phrase_editor.selectCandidate(0);
+    }
+
+
+    if (m_select_mode || m_config.enterKey ()) {
         m_buffer << m_phrase_editor.selectedString ();
 
         const gchar *p;

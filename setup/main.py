@@ -196,6 +196,9 @@ class PreferencesDialog:
         self.__auxiliary_select_key_f = self.__builder.get_object("AuxiliarySelectKey_F")
         self.__auxiliary_select_key_kp = self.__builder.get_object("AuxiliarySelectKey_KP")
 
+        # other
+        self.__enter_key = self.__builder.get_object("CommitFirstCandidate")
+
         # read value
         self.__bopomofo_keyboard_mapping.set_active(self.__get_value("BopomofoKeyboardMapping", 0))
         self.__incomplete_bopomofo.set_active(self.__get_value("IncompletePinyin", False))
@@ -203,6 +206,7 @@ class PreferencesDialog:
         self.__guide_key.set_active(self.__get_value("GuideKey", 1))
         self.__auxiliary_select_key_f.set_active(self.__get_value("AuxiliarySelectKey_F", 1))
         self.__auxiliary_select_key_kp.set_active(self.__get_value("AuxiliarySelectKey_KP", 1))
+        self.__enter_key.set_active(self.__get_value("EnterKey", True))
 
         # connect signals
         def __bopomofo_keyboard_mapping_changed_cb(widget):
@@ -216,6 +220,7 @@ class PreferencesDialog:
         self.__guide_key.connect("toggled", self.__toggled_cb, "GuideKey")
         self.__auxiliary_select_key_f.connect("toggled", self.__toggled_cb, "AuxiliarySelectKey_F")
         self.__auxiliary_select_key_kp.connect("toggled", self.__toggled_cb, "AuxiliarySelectKey_KP")
+        self.__enter_key.connect("toggled", self.__toggled_cb, "EnterKey")
 
     def __init_input_custom(self):
         # others
