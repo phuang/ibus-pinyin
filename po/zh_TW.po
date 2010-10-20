@@ -307,3 +307,15 @@ msgstr "[Shift]鍵選詞"
 #: ../setup/ibus-pinyin-preferences.ui.h:70
 msgid "http://ibus.googlecode.com"
 msgstr "http://ibus.googlecode.com"
+
+msgid "Feature of Enter key:"
+msgstr "Enter 鍵功能："
+
+msgid "<b>Other</b>"
+msgstr "<b>其他</b>"
+
+msgid "Commit original text"
+msgstr "輸出原本的英文字"
+
+msgid "Commit first candidate"
+msgstr "輸出第一個候選詞"
