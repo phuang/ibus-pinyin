@@ -291,7 +291,8 @@ bopomofo_cmp (const void *p1, const void *p2)
 gboolean
 PinyinParser::isBopomofoToneChar (const wchar_t ch)
 {
-    return ch == bopomofo_char[BOPOMOFO_TONE_2]
+    return ch == bopomofo_char[BOPOMOFO_TONE_1]
+        || ch == bopomofo_char[BOPOMOFO_TONE_2]
         || ch == bopomofo_char[BOPOMOFO_TONE_3]
         || ch == bopomofo_char[BOPOMOFO_TONE_4]
         || ch == bopomofo_char[BOPOMOFO_TONE_5];

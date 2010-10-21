@@ -345,7 +345,7 @@ BopomofoEditor::processKeyEvent (guint keyval, guint keycode, guint modifiers)
         return TRUE;
     if (G_UNLIKELY (processAuxiliarySelectKey (keyval, keycode, modifiers)))
         return TRUE;
-    if (G_UNLIKELY (processBopomofo (keyval, keycode ,modifiers)))
+    if (m_select_mode == FALSE && G_UNLIKELY (processBopomofo (keyval, keycode ,modifiers)))
         return TRUE;
 
     switch (keyval) {
@@ -429,7 +429,7 @@ BopomofoEditor::updateAuxiliaryText (void)
         for (guint sj = 0; m_pinyin[i]->bopomofo[sj] == bopomofo_char[keyvalToBopomofo(m_text.c_str()[si])] ; si++,sj++);
         if (si < m_text_len) {
             gint ch = keyvalToBopomofo(m_text.c_str()[si]);
-            if (ch >= BOPOMOFO_TONE_2 && ch <= BOPOMOFO_TONE_5) {
+            if (ch >= BOPOMOFO_TONE_1 && ch <= BOPOMOFO_TONE_5) {
                 m_buffer.appendUnichar(bopomofo_char[ch]);
                 ++si;
             }

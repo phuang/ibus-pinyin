@@ -25,8 +25,9 @@
 #include "PYBopomofo.h"
 
 static const guint8
-bopomofo_keyboard[][41][2] = {
+bopomofo_keyboard[][42][2] = {
     {
+        { ' ' , BOPOMOFO_TONE_1 },
         { ',' , BOPOMOFO_E2     },
         { '-' , BOPOMOFO_ER     },
         { '.' , BOPOMOFO_OU     },
@@ -70,6 +71,7 @@ bopomofo_keyboard[][41][2] = {
         { 'z' , BOPOMOFO_F      },
     },
     {
+        { ' ' , BOPOMOFO_TONE_1 },
         { '\'', BOPOMOFO_V      },
         { ',' , BOPOMOFO_E2     },
         { '-' , BOPOMOFO_I      },
@@ -113,6 +115,7 @@ bopomofo_keyboard[][41][2] = {
         { 'z' , BOPOMOFO_TONE_4 },
     },
     {
+        { ' ' , BOPOMOFO_TONE_1 },
         { '\'', BOPOMOFO_C      },
         { ',' , BOPOMOFO_ZH     },
         { '-' , BOPOMOFO_ENG    },
@@ -156,6 +159,7 @@ bopomofo_keyboard[][41][2] = {
         { 'z' , BOPOMOFO_AO     },
     },
     {
+        { ' ' , BOPOMOFO_TONE_1 },
         { ',' , BOPOMOFO_TONE_3 },
         { '-' , BOPOMOFO_H      },
         { '.' , BOPOMOFO_TONE_4 },

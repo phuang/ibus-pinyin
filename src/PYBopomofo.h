@@ -62,10 +62,11 @@
 #define BOPOMOFO_ANG        (35)
 #define BOPOMOFO_ENG        (36)
 #define BOPOMOFO_ER         (37)
-#define BOPOMOFO_TONE_2     (38)
-#define BOPOMOFO_TONE_3     (39)
-#define BOPOMOFO_TONE_4     (40)
-#define BOPOMOFO_TONE_5     (41)
+#define BOPOMOFO_TONE_1     (38)
+#define BOPOMOFO_TONE_2     (39)
+#define BOPOMOFO_TONE_3     (40)
+#define BOPOMOFO_TONE_4     (41)
+#define BOPOMOFO_TONE_5     (42)
 
 const static wchar_t bopomofo_char[] = {
     L'\0', L'ㄅ', L'ㄆ', L'ㄇ', L'ㄈ', L'ㄉ', L'ㄊ', L'ㄋ', L'ㄌ', L'ㄍ', L'ㄎ',
@@ -74,7 +75,7 @@ const static wchar_t bopomofo_char[] = {
     L'ㄧ', L'ㄨ', L'ㄩ', L'ㄚ', L'ㄛ', L'ㄜ', L'ㄝ', L'ㄞ', L'ㄟ', L'ㄠ', L'ㄡ',
     L'ㄢ', L'ㄣ', L'ㄤ', L'ㄥ', L'ㄦ',
 
-    L'ˊ', L'ˇ', L'ˋ', L'˙',
+    L'ˉ', L'ˊ', L'ˇ', L'ˋ', L'˙',
 };
 
 #endif /* __PY_BOPOMOFO_H_ */
