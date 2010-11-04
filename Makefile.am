@@ -97,6 +97,7 @@ ppa: dist debian/changelog
 	$(AM_V_GEN) \
 	( \
 		mkdir ppa; \
+		cp $(distdir).tar.gz ppa/@PACKAGE_NAME@_@PACKAGE_VERSION@.orig.tar.gz ; \
 		cd ppa; \
 		tar zxvf ../$(distdir).tar.gz ; \
 		cd $(distdir); \
