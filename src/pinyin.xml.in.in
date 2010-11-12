@@ -16,7 +16,8 @@
 			<language>zh</language>
 			<license>GPL</license>
 			<author>Peng Huang &lt;shawn.p.huang@gmail.com&gt;
-BYVoid &lt;byvoid1@gmail.com&gt;</author>
+BYVoid &lt;byvoid1@gmail.com&gt;
+Peng Wu &lt;alexepico@gmail.com&gt;</author>
 			<icon>${pkgdatadir}/icons/ibus-pinyin.svg</icon>
 			<layout>us</layout>
 			<longname>Pinyin</longname>
@@ -28,7 +29,8 @@ BYVoid &lt;byvoid1@gmail.com&gt;</author>
 			<language>zh</language>
 			<license>GPL</license>
 			<author>BYVoid &lt;byvoid1@gmail.com&gt;
-Peng Huang &lt;shawn.p.huang@gmail.com&gt;</author>
+Peng Huang &lt;shawn.p.huang@gmail.com&gt;
+Peng Wu &lt;alexepico@gmail.com&gt;</author>
 			<icon>${pkgdatadir}/icons/ibus-bopomofo.svg</icon>
 			<layout>us</layout>
 			<longname>Bopomofo</longname>
