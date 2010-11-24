@@ -131,6 +131,21 @@ start_component (void)
     ibus_main ();
 }
 
+#include <signal.h>
+
+static void
+sigterm_cb (int sig)
+{
+    PY::Database::finalize ();
+    ::exit (EXIT_FAILURE);
+}
+
+static void
+atexit_cb (void)
+{
+    PY::Database::finalize ();
+}
+
 int
 main (gint argc, gchar **argv)
 {
@@ -147,6 +162,10 @@ main (gint argc, gchar **argv)
         g_print ("Option parsing failed: %s\n", error->message);
         exit (-1);
     }
+
+    ::signal (SIGTERM, sigterm_cb);
+    ::signal (SIGINT, sigterm_cb);
+    g_atexit (atexit_cb);
 
     start_component ();
     return 0;

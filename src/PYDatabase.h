@@ -74,21 +74,26 @@ public:
     void conditionsTriple (void);
 
     static void init (void);
+    static void finalize (void);
     static Database & instance (void) { return *m_instance; }
 
 private:
     gboolean open (void);
-    gboolean openUserDB (const gchar *userdb);
+    gboolean loadUserDB (void);
+    gboolean saveUserDB (void);
     void prefetch (void);
     void phraseSql (const Phrase & p, String & sql);
     void phraseWhereSql (const Phrase & p, String & sql);
-    gboolean executeSQL (const gchar *sql);
+    gboolean executeSQL (const gchar *sql, sqlite3 *db = NULL);
+    void modified (void);
+    static gboolean timeoutCallback (gpointer data);
 
 private:
     sqlite3 *m_db;              /* sqlite3 database */
 
     String m_sql;        /* sql stmt */
     String m_buffer;     /* temp buffer */
+    guint m_timeout_id;
 
 private:
     static std::unique_ptr<Database> m_instance;

@@ -19,6 +19,8 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 #include "PYDatabase.h"
+#include <glib.h>
+#include <glib/gstdio.h>
 #include <sqlite3.h>
 #include "PYUtil.h"
 #include "PYPinyinArray.h"
@@ -183,13 +185,18 @@ Query::fill (PhraseArray &phrases, gint count)
 }
 
 Database::Database (void)
-    : m_db (NULL)
+    : m_db (NULL),
+      m_timeout_id (0)
 {
     open ();
 }
 
 Database::~Database (void)
 {
+    if (m_timeout_id != 0) {
+        saveUserDB ();
+        g_source_remove (m_timeout_id);
+    }
     if (m_db) {
         if (sqlite3_close (m_db) != SQLITE_OK) {
             g_warning ("close sqlite database failed!");
@@ -198,10 +205,13 @@ Database::~Database (void)
 }
 
 inline gboolean
-Database::executeSQL (const gchar *sql)
+Database::executeSQL (const gchar *sql, sqlite3 *db)
 {
-    gchar *errmsg;
-    if (sqlite3_exec (m_db, sql, NULL, NULL, &errmsg) != SQLITE_OK) {
+    if (db == NULL)
+        db = m_db;
+
+    gchar *errmsg = NULL;
+    if (sqlite3_exec (db, sql, NULL, NULL, &errmsg) != SQLITE_OK) {
         g_warning ("%s: %s", errmsg, sql);
         sqlite3_free (errmsg);
         return FALSE;
@@ -212,60 +222,58 @@ Database::executeSQL (const gchar *sql)
 gboolean
 Database::open (void)
 {
-    gboolean retval;
-
+    do {
 #if (SQLITE_VERSION_NUMBER >= 3006000)
-    sqlite3_initialize ();
+        sqlite3_initialize ();
 #endif
+        static const gchar * maindb [] = {
+            PKGDATADIR"/db/local.db",
+            PKGDATADIR"/db/open-phrase.db",
+            PKGDATADIR"/db/android.db",
+            "main.db",
+        };
 
-    static const gchar * maindb [] = {
-        PKGDATADIR"/db/local.db",
-        PKGDATADIR"/db/open-phrase.db",
-        PKGDATADIR"/db/android.db",
-        "main.db",
-    };
+        guint i;
+        for (i = 0; i < G_N_ELEMENTS (maindb); i++) {
+            if (!g_file_test(maindb[i], G_FILE_TEST_IS_REGULAR))
+                continue;
+            if (sqlite3_open_v2 (maindb[i], &m_db,
+                SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE, NULL) == SQLITE_OK) {
+                g_message ("Use database %s", maindb[i]);
+                break;
+            }
+        }
 
-    guint i;
-    for (i = 0; i < G_N_ELEMENTS (maindb); i++) {
-        if (!g_file_test(maindb[i], G_FILE_TEST_IS_REGULAR))
-            continue;
-        if (sqlite3_open_v2 (maindb[i], &m_db,
-            SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE, NULL) == SQLITE_OK) {
-            g_message ("Use database %s", maindb[i]);
+        if (i == G_N_ELEMENTS (maindb)) {
+            g_warning ("can not open main database");
             break;
         }
-    }
 
-    if (i == G_N_ELEMENTS (maindb)) {
-        g_warning ("can not open main database");
-        goto _failed;
-    }
+        m_sql.clear ();
 
-    m_sql.clear ();
+        /* Set synchronous=OFF, write user database will become much faster.
+         * It will cause user database corrupted, if the operatering system
+         * crashes or computer loses power.
+         * */
+        m_sql << "PRAGMA synchronous=OFF;\n";
 
-#if 1
-    /* Set synchronous=OFF, write user database will become much faster.
-     * It will cause user database corrupted, if the operatering system
-     * crashes or computer loses power.
-     * */
-    m_sql << "PRAGMA synchronous=NORMAL;\n";
-#endif
+        /* Set the cache size for better performance */
+        m_sql << "PRAGMA cache_size=" DB_CACHE_SIZE ";\n";
 
-    /* Set the cache size for better performance */
-    m_sql << "PRAGMA cache_size=" DB_CACHE_SIZE ";\n";
+        /* Using memory for temp store */
+        // m_sql << "PRAGMA temp_store=MEMORY;\n";
 
-    /* Using memory for temp store */
-    m_sql << "PRAGMA temp_store=MEMORY;\n";
+        /* Set journal mode */
+        // m_sql << "PRAGMA journal_mode=PERSIST;\n";
 
-    /* Set journal mode */
-    m_sql << "PRAGMA journal_mode=PERSIST;\n";
+        /* Using EXCLUSIVE locking mode on databases
+         * for better performance */
+        m_sql << "PRAGMA locking_mode=EXCLUSIVE;\n";
+        if (!executeSQL (m_sql))
+            break;
 
-    /* Using EXCLUSIVE locking mode on databases
-     * for better performance */
-    m_sql << "PRAGMA locking_mode=EXCLUSIVE;\n";
-    if (!executeSQL (m_sql))
-        goto _failed;
-
+        loadUserDB ();
+#if 0
     /* Attach user database */
     m_buffer = g_get_user_cache_dir ();
     m_buffer << G_DIR_SEPARATOR_S << "ibus"
@@ -278,13 +286,14 @@ Database::open (void)
         if (!openUserDB (":memory:"))
             goto _failed;
     }
+#endif
 
-    /* prefetch some tables */
-    // prefetch ();
+        /* prefetch some tables */
+        // prefetch ();
 
-    return TRUE;
+        return TRUE;
+    } while (0);
 
-_failed:
     if (m_db) {
         sqlite3_close (m_db);
         m_db = NULL;
@@ -293,57 +302,115 @@ _failed:
 }
 
 gboolean
-Database::openUserDB (const gchar *userdb)
+Database::loadUserDB (void)
 {
-    m_sql.printf ("ATTACH DATABASE \"%s\" AS userdb;", userdb);
-    if (!executeSQL (m_sql))
-        return FALSE;
+    sqlite3 *userdb = NULL;
+    do {
+        /* Attach user database */
+        m_sql.printf ("ATTACH DATABASE \":memory:\" AS userdb;");
+        if (!executeSQL (m_sql))
+            break;
 
-    m_sql = "BEGIN TRANSACTION;\n";
-    /* create desc table*/
-    m_sql << "CREATE TABLE IF NOT EXISTS userdb.desc (name PRIMARY KEY, value TEXT);\n";
-    m_sql << "INSERT OR IGNORE INTO userdb.desc VALUES " << "('version', '1.2.0');\n"
-          << "INSERT OR IGNORE INTO userdb.desc VALUES " << "('uuid', '" << UUID () << "');\n"
-          << "INSERT OR IGNORE INTO userdb.desc VALUES " << "('hostname', '" << Hostname () << "');\n"
-          << "INSERT OR IGNORE INTO userdb.desc VALUES " << "('username', '" << Env ("USERNAME") << "');\n"
-          << "INSERT OR IGNORE INTO userdb.desc VALUES " << "('create-time', datetime());\n"
-          << "INSERT OR IGNORE INTO userdb.desc VALUES " << "('attach-time', datetime());\n";
+        m_buffer = g_get_user_cache_dir ();
+        m_buffer << G_DIR_SEPARATOR_S << "ibus"
+                 << G_DIR_SEPARATOR_S << "pinyin";
+        g_mkdir_with_parents (m_buffer, 0750);
+        m_buffer << G_DIR_SEPARATOR_S << "user-1.3.db";
 
-    /* create phrase tables */
-    for (guint i = 0; i < MAX_PHRASE_LEN; i++) {
-        m_sql.appendPrintf ("CREATE TABLE IF NOT EXISTS userdb.py_phrase_%d (user_freq, phrase TEXT, freq INTEGER ", i);
-        for (guint j = 0; j <= i; j++)
-            m_sql.appendPrintf (",s%d INTEGER, y%d INTEGER", j, j);
-        m_sql << ");\n";
-    }
+        gint flags = SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE;
+        if (sqlite3_open_v2 (m_buffer, &userdb, flags, NULL) != SQLITE_OK &&
+            sqlite3_open_v2 (":memory:", &userdb, flags, NULL) != SQLITE_OK)
+            break;
 
-    /* create index */
-    m_sql << "CREATE UNIQUE INDEX IF NOT EXISTS " << "userdb.index_0_0 ON py_phrase_0(s0,y0,phrase);\n";
-    m_sql << "CREATE UNIQUE INDEX IF NOT EXISTS " << "userdb.index_1_0 ON py_phrase_1(s0,y0,s1,y1,phrase);\n";
-    m_sql << "CREATE INDEX IF NOT EXISTS " << "userdb.index_1_1 ON py_phrase_1(s0,s1,y1);\n";
-    for (guint i = 2; i < MAX_PHRASE_LEN; i++) {
-        m_sql << "CREATE UNIQUE INDEX IF NOT EXISTS " << "userdb.index_" << i << "_0 ON py_phrase_" << i
-              << "(s0,y0";
-        for (guint j = 1; j <= i; j++)
-            m_sql << ",s" << j << ",y" << j;
-        m_sql << ",phrase);\n";
-        m_sql << "CREATE INDEX IF NOT EXISTS " << "userdb.index_" << i << "_1 ON py_phrase_" << i << "(s0,s1,s2,y2);\n";
-    }
-    m_sql << "COMMIT;";
+        m_sql = "BEGIN TRANSACTION;\n";
+        /* create desc table*/
+        m_sql << "CREATE TABLE IF NOT EXISTS desc (name PRIMARY KEY, value TEXT);\n";
+        m_sql << "INSERT OR IGNORE INTO desc VALUES " << "('version', '1.2.0');\n"
+              << "INSERT OR IGNORE INTO desc VALUES " << "('uuid', '" << UUID () << "');\n"
+              << "INSERT OR IGNORE INTO desc VALUES " << "('hostname', '" << Hostname () << "');\n"
+              << "INSERT OR IGNORE INTO desc VALUES " << "('username', '" << Env ("USERNAME") << "');\n"
+              << "INSERT OR IGNORE INTO desc VALUES " << "('create-time', datetime());\n"
+              << "INSERT OR IGNORE INTO desc VALUES " << "('attach-time', datetime());\n";
 
-    if (!executeSQL (m_sql))
-        goto _failed;
+        /* create phrase tables */
+        for (guint i = 0; i < MAX_PHRASE_LEN; i++) {
+            m_sql.appendPrintf ("CREATE TABLE IF NOT EXISTS py_phrase_%d (user_freq, phrase TEXT, freq INTEGER ", i);
+            for (guint j = 0; j <= i; j++)
+                m_sql.appendPrintf (",s%d INTEGER, y%d INTEGER", j, j);
+            m_sql << ");\n";
+        }
 
-    m_sql  = "UPDATE userdb.desc SET value=datetime() WHERE name='attach-time';";
+        /* create index */
+        m_sql << "CREATE UNIQUE INDEX IF NOT EXISTS " << "index_0_0 ON py_phrase_0(s0,y0,phrase);\n";
+        m_sql << "CREATE UNIQUE INDEX IF NOT EXISTS " << "index_1_0 ON py_phrase_1(s0,y0,s1,y1,phrase);\n";
+        m_sql << "CREATE INDEX IF NOT EXISTS " << "index_1_1 ON py_phrase_1(s0,s1,y1);\n";
+        for (guint i = 2; i < MAX_PHRASE_LEN; i++) {
+            m_sql << "CREATE UNIQUE INDEX IF NOT EXISTS " << "index_" << i << "_0 ON py_phrase_" << i
+                  << "(s0,y0";
+            for (guint j = 1; j <= i; j++)
+                m_sql << ",s" << j << ",y" << j;
+            m_sql << ",phrase);\n";
+            m_sql << "CREATE INDEX IF NOT EXISTS " << "index_" << i << "_1 ON py_phrase_" << i << "(s0,s1,s2,y2);\n";
+        }
+        m_sql << "COMMIT;";
 
-    if (!executeSQL (m_sql))
-        goto _failed;
+        if (!executeSQL (m_sql, userdb))
+            break;
 
-    return TRUE;
+        sqlite3_backup *backup = sqlite3_backup_init (m_db, "userdb", userdb, "main");
 
-_failed:
-    m_sql = "DETACH DATABASE userdb;";
-    executeSQL (m_sql);
+        if (backup) {
+            sqlite3_backup_step (backup, -1);
+            sqlite3_backup_finish (backup);
+        }
+
+        sqlite3_close (userdb);
+        return TRUE;
+    } while (0);
+
+    if (userdb)
+        sqlite3_close (userdb);
+    return FALSE;
+}
+
+gboolean
+Database::saveUserDB (void)
+{
+    m_buffer = g_get_user_cache_dir ();
+    m_buffer << G_DIR_SEPARATOR_S << "ibus"
+             << G_DIR_SEPARATOR_S << "pinyin";
+    g_mkdir_with_parents (m_buffer, 0750);
+    m_buffer << G_DIR_SEPARATOR_S << "user-1.3.db";
+
+    String tmpfile = m_buffer + "-tmp";
+    sqlite3 *userdb = NULL;
+    do {
+
+        /* remove tmpfile if it exist */
+        g_unlink (tmpfile);
+
+        gint flags = SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE;
+        if (sqlite3_open_v2 (tmpfile, &userdb, flags, NULL) != SQLITE_OK)
+            break;
+
+        sqlite3_backup *backup = sqlite3_backup_init (userdb, "main", m_db, "userdb");
+
+        if (backup == NULL)
+            break;
+
+        sqlite3_backup_step (backup, -1);
+        sqlite3_backup_finish (backup);
+        sqlite3_close (userdb);
+
+        g_rename (tmpfile, m_buffer);
+
+        return TRUE;
+    } while (0);
+
+    if (userdb != NULL)
+        sqlite3_close (userdb);
+    g_unlink (tmpfile);
+
     return FALSE;
 }
 
@@ -357,6 +424,30 @@ Database::prefetch (void)
     // g_debug ("prefetching ...");
     executeSQL (m_sql);
     // g_debug ("done");
+}
+
+gboolean
+Database::timeoutCallback (gpointer data)
+{
+    Database *self = static_cast<Database*> (data);
+
+    if (self->saveUserDB ()) {
+        self->m_timeout_id = 0;
+        return FALSE;
+    }
+
+    return TRUE;
+}
+
+void
+Database::modified (void)
+{
+    if (m_timeout_id != 0)
+        return;
+
+    m_timeout_id = g_timeout_add (60000, // one minute
+                                  Database::timeoutCallback,
+                                  static_cast<gpointer> (this));
 }
 
 inline static gboolean
@@ -598,6 +689,7 @@ Database::commit (const PhraseArray  &phrases)
     m_sql << "COMMIT;\n";
 
     executeSQL (m_sql);
+    modified ();
 }
 
 void
@@ -610,6 +702,7 @@ Database::remove (const Phrase & phrase)
     m_sql << "COMMIT;\n";
 
     executeSQL (m_sql);
+    modified ();
 }
 
 void
@@ -618,6 +711,12 @@ Database::init (void)
     if (m_instance == NULL) {
         m_instance.reset (new Database ());
     }
+}
+
+void
+Database::finalize (void)
+{
+    m_instance.reset (NULL);
 }
 
 };
