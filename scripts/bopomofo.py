@@ -13,6 +13,14 @@ const static gunichar bopomofo_char[] = {
 };
 '''
 
+bopomofo_tone_map = {
+    ""  : 1,
+    "ˊ" : 2,
+    "ˇ" : 3,
+    "ˋ" : 4,
+    "˙" : 0,
+}
+
 bopomofo_pinyin_map = {
     "ㄅ" : "b",
     "ㄅㄚ" : "ba",
