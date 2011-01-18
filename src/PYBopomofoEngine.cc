@@ -82,9 +82,19 @@ BopomofoEngine::processKeyEvent (guint keyval, guint keycode, guint modifiers)
                 if (!m_editors[MODE_INIT]->text ().empty ())
                     m_editors[MODE_INIT]->reset ();
                 m_props.toggleModeChinese ();
+                return TRUE;
             }
         }
-        return TRUE;
+
+        if (m_input_mode == MODE_INIT &&
+            m_editors[MODE_INIT]->text ().empty ()) {
+            /* If it is init mode, and no any previouse input text,
+             * we will let client applications to handle release key event */
+            return FALSE;
+        }
+        else {
+            return TRUE;
+        }
     }
 
     /* Toggle simp/trad Chinese Mode when hotkey Ctrl + Shift + F pressed */
