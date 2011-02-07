@@ -36,6 +36,7 @@ namespace PY {
 #define DB_COLUMN_S0        (3)
 
 #define DB_PREFETCH_LEN     (6)
+#define DB_BACKUP_TIMEOUT   (60)
 
 std::unique_ptr<Database> Database::m_instance;
 
@@ -185,14 +186,16 @@ Query::fill (PhraseArray &phrases, gint count)
 }
 
 Database::Database (void)
-    : m_db (NULL),
-      m_timeout_id (0)
+    : m_db (NULL)
+    , m_timeout_id (0)
+    , m_timer (g_timer_new ())
 {
     open ();
 }
 
 Database::~Database (void)
 {
+    g_timer_destroy (m_timer);
     if (m_timeout_id != 0) {
         saveUserDB ();
         g_source_remove (m_timeout_id);
@@ -431,7 +434,11 @@ Database::timeoutCallback (gpointer data)
 {
     Database *self = static_cast<Database*> (data);
 
-    if (self->saveUserDB ()) {
+    /* Get elapsed time since last modification of database. */
+    guint elapsed = (guint)g_timer_elapsed (self->m_timer, NULL);
+
+    if (elapsed >= DB_BACKUP_TIMEOUT &&
+        self->saveUserDB ()) {
         self->m_timeout_id = 0;
         return FALSE;
     }
@@ -442,12 +449,15 @@ Database::timeoutCallback (gpointer data)
 void
 Database::modified (void)
 {
+    /* Restart the timer */
+    g_timer_start (m_timer);
+
     if (m_timeout_id != 0)
         return;
 
-    m_timeout_id = g_timeout_add (60000, // one minute
-                                  Database::timeoutCallback,
-                                  static_cast<gpointer> (this));
+    m_timeout_id = g_timeout_add_seconds (DB_BACKUP_TIMEOUT,
+                                          Database::timeoutCallback,
+                                          static_cast<gpointer> (this));
 }
 
 inline static gboolean

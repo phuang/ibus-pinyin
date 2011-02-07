@@ -94,6 +94,7 @@ private:
     String m_sql;        /* sql stmt */
     String m_buffer;     /* temp buffer */
     guint m_timeout_id;
+    GTimer *m_timer;
 
 private:
     static std::unique_ptr<Database> m_instance;
