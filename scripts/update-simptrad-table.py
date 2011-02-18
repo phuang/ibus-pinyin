@@ -4,7 +4,6 @@ sys.path.append(".")
 
 from ZhConversion import *
 from valid_hanzi import *
-from sctc import *
 
 def convert(s, d, n):
     out = u""
