@@ -113,10 +113,12 @@ static const struct {
     { "FuzzyPinyin_ENG_EN",     PINYIN_FUZZY_ENG_EN,        TRUE  },
     { "FuzzyPinyin_IN_ING",     PINYIN_FUZZY_IN_ING,        TRUE  },
     { "FuzzyPinyin_ING_IN",     PINYIN_FUZZY_ING_IN,        TRUE  },
+#if 0
     { "FuzzyPinyin_IAN_IANG",   PINYIN_FUZZY_IAN_IANG,      TRUE  },
     { "FuzzyPinyin_IANG_IAN",   PINYIN_FUZZY_IANG_IAN,      TRUE  },
     { "FuzzyPinyin_UAN_UANG",   PINYIN_FUZZY_UAN_UANG,      TRUE  },
     { "FuzzyPinyin_UANG_UAN",   PINYIN_FUZZY_UANG_UAN,      TRUE  },
+#endif
 };
 
 void
@@ -299,6 +301,7 @@ static const struct {
     { "CorrectPinyin_UE_VE",    PINYIN_CORRECT_UE_TO_VE,    TRUE },
     { "CorrectPinyin_V_U",      PINYIN_CORRECT_V_TO_U,      TRUE },
     { "CorrectPinyin_VE_UE",    PINYIN_CORRECT_V_TO_U,      TRUE },
+    { "CorrectPinyin_ON_ONG",   PINYIN_CORRECT_ON_TO_ONG,   FALSE },
 };
 
 PinyinConfig::PinyinConfig (Bus & bus)

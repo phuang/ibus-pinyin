@@ -252,6 +252,7 @@ class PreferencesDialog:
             ("CorrectPinyin_UEN_UN", True),
             ("CorrectPinyin_UE_VE", True),
             ("CorrectPinyin_V_U", True),
+            ("CorrectPinyin_ON_ONG", True),
         ]
 
         def __correct_pinyin_toggled_cb(widget):
@@ -298,10 +299,10 @@ class PreferencesDialog:
             ("FuzzyPinyin_ANG_AN", True),
             ("FuzzyPinyin_ENG_EN", True),
             ("FuzzyPinyin_ING_IN", True),
-            ("FuzzyPinyin_IAN_IANG", True),
-            ("FuzzyPinyin_UAN_UANG", True),
-            ("FuzzyPinyin_IANG_IAN", True),
-            ("FuzzyPinyin_UANG_UAN", True),
+            # ("FuzzyPinyin_IAN_IANG", True),
+            # ("FuzzyPinyin_UAN_UANG", True),
+            # ("FuzzyPinyin_IANG_IAN", True),
+            # ("FuzzyPinyin_UANG_UAN", True),
         ]
 
         def __fuzzy_pinyin_toggled_cb(widget):
@@ -322,30 +323,36 @@ class PreferencesDialog:
             widget.connect("toggled", self.__toggled_cb, name)
 
     def __convert_fuzzy_pinyin_to_bopomofo(self):
-        self.__builder.get_object("FuzzyPinyin_C_CH").set_label("ㄘ => ㄔ")
-        self.__builder.get_object("FuzzyPinyin_Z_ZH").set_label("ㄗ => ㄓ")
-        self.__builder.get_object("FuzzyPinyin_S_SH").set_label("ㄙ => ㄕ")
-        self.__builder.get_object("FuzzyPinyin_CH_C").set_label("ㄔ => ㄘ")
-        self.__builder.get_object("FuzzyPinyin_ZH_Z").set_label("ㄓ => ㄗ")
-        self.__builder.get_object("FuzzyPinyin_SH_S").set_label("ㄕ => ㄙ")
-        self.__builder.get_object("FuzzyPinyin_L_N").set_label("ㄌ => ㄋ")
-        self.__builder.get_object("FuzzyPinyin_F_H").set_label("ㄈ => ㄏ")
-        self.__builder.get_object("FuzzyPinyin_L_R").set_label("ㄌ => ㄖ")
-        self.__builder.get_object("FuzzyPinyin_K_G").set_label("ㄎ => ㄍ")
-        self.__builder.get_object("FuzzyPinyin_N_L").set_label("ㄋ => ㄌ")
-        self.__builder.get_object("FuzzyPinyin_H_F").set_label("ㄏ => ㄈ")
-        self.__builder.get_object("FuzzyPinyin_R_L").set_label("ㄖ => ㄌ")
-        self.__builder.get_object("FuzzyPinyin_G_K").set_label("ㄍ => ㄎ")
-        self.__builder.get_object("FuzzyPinyin_AN_ANG").set_label("ㄢ => ㄤ")
-        self.__builder.get_object("FuzzyPinyin_EN_ENG").set_label("ㄣ => ㄥ")
-        self.__builder.get_object("FuzzyPinyin_IN_ING").set_label("ㄧㄣ => ㄧㄥ")
-        self.__builder.get_object("FuzzyPinyin_ANG_AN").set_label("ㄤ => ㄢ")
-        self.__builder.get_object("FuzzyPinyin_ENG_EN").set_label("ㄥ => ㄣ")
-        self.__builder.get_object("FuzzyPinyin_ING_IN").set_label("ㄧㄥ => ㄧㄣ")
-        self.__builder.get_object("FuzzyPinyin_IAN_IANG").set_label("ㄧㄢ => ㄧㄤ")
-        self.__builder.get_object("FuzzyPinyin_UAN_UANG").set_label("ㄨㄢ => ㄨㄤ")
-        self.__builder.get_object("FuzzyPinyin_IANG_IAN").set_label("ㄧㄤ => ㄧㄢ")
-        self.__builder.get_object("FuzzyPinyin_UANG_UAN").set_label("ㄨㄤ => ㄨㄢ")
+        options = [
+            ("FuzzyPinyin_C_CH",   "ㄘ => ㄔ"),
+            ("FuzzyPinyin_Z_ZH",   "ㄗ => ㄓ"),
+            ("FuzzyPinyin_S_SH",   "ㄙ => ㄕ"),
+            ("FuzzyPinyin_CH_C",   "ㄔ => ㄘ"),
+            ("FuzzyPinyin_ZH_Z",   "ㄓ => ㄗ"),
+            ("FuzzyPinyin_SH_S",   "ㄕ => ㄙ"),
+            ("FuzzyPinyin_L_N",    "ㄌ => ㄋ"),
+            ("FuzzyPinyin_F_H",    "ㄈ => ㄏ"),
+            ("FuzzyPinyin_L_R",    "ㄌ => ㄖ"),
+            ("FuzzyPinyin_K_G",    "ㄎ => ㄍ"),
+            ("FuzzyPinyin_N_L",    "ㄋ => ㄌ"),
+            ("FuzzyPinyin_H_F",    "ㄏ => ㄈ"),
+            ("FuzzyPinyin_R_L",    "ㄖ => ㄌ"),
+            ("FuzzyPinyin_G_K",    "ㄍ => ㄎ"),
+            ("FuzzyPinyin_AN_ANG", "ㄢ => ㄤ"),
+            ("FuzzyPinyin_EN_ENG", "ㄣ => ㄥ"),
+            ("FuzzyPinyin_IN_ING", "ㄧㄣ => ㄧㄥ"),
+            ("FuzzyPinyin_ANG_AN", "ㄤ => ㄢ"),
+            ("FuzzyPinyin_ENG_EN", "ㄥ => ㄣ"),
+            ("FuzzyPinyin_ING_IN", "ㄧㄥ => ㄧㄣ"),
+            # ("FuzzyPinyin_IAN_IANG", "ㄧㄢ => ㄧㄤ"),
+            # ("FuzzyPinyin_UAN_UANG", "ㄨㄢ => ㄨㄤ"),
+            # ("FuzzyPinyin_IANG_IAN", "ㄧㄤ => ㄧㄢ"),
+            # ("FuzzyPinyin_UANG_UAN", "ㄨㄤ => ㄨㄢ"),
+        ]
+
+        for name, label in options:
+            self.__builder.get_object(name).set_label(label)
+
 
     def __init_dictionary(self):
         # page Dictionary

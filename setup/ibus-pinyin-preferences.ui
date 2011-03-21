@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <requires lib="gtk+" version="2.14"/>
   <!-- interface-naming-policy project-wide -->
@@ -9,7 +9,6 @@
     <property name="window_position">center-always</property>
     <property name="icon_name">gtk-preferences</property>
     <property name="type_hint">normal</property>
-    <property name="has_separator">False</property>
     <child internal-child="vbox">
       <object class="GtkVBox" id="dialog-vbox1">
         <property name="visible">True</property>
@@ -698,7 +697,18 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <placeholder/>
+                                  <object class="GtkCheckButton" id="CorrectPinyin_ON_ONG">
+                                    <property name="label">on =&gt; ong</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="receives_default">False</property>
+                                    <property name="active">True</property>
+                                    <property name="draw_indicator">True</property>
+                                  </object>
+                                  <packing>
+                                    <property name="top_attach">5</property>
+                                    <property name="bottom_attach">6</property>
+                                  </packing>
                                 </child>
                                 <child>
                                   <placeholder/>
@@ -940,8 +950,7 @@
                                     <property name="label" translatable="yes">Feature of Enter key:</property>
                                   </object>
                                   <packing>
-                                    <property name="top_attach">3</property>
-                                    <property name="bottom_attach">4</property>
+                                    <property name="position">0</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -955,10 +964,7 @@
                                     <property name="group">CommitOriginalText</property>
                                   </object>
                                   <packing>
-                                    <property name="left_attach">2</property>
-                                    <property name="right_attach">3</property>
-                                    <property name="top_attach">3</property>
-                                    <property name="bottom_attach">4</property>
+                                    <property name="position">1</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -970,10 +976,7 @@
                                     <property name="draw_indicator">True</property>
                                   </object>
                                   <packing>
-                                    <property name="left_attach">1</property>
-                                    <property name="right_attach">2</property>
-                                    <property name="top_attach">3</property>
-                                    <property name="bottom_attach">4</property>
+                                    <property name="position">2</property>
                                   </packing>
                                 </child>
                               </object>
@@ -1030,7 +1033,7 @@
                         <child>
                           <object class="GtkTable" id="table1">
                             <property name="visible">True</property>
-                            <property name="n_rows">14</property>
+                            <property name="n_rows">12</property>
                             <property name="n_columns">2</property>
                             <property name="column_spacing">6</property>
                             <property name="row_spacing">6</property>
@@ -1342,68 +1345,6 @@
                                 <property name="right_attach">2</property>
                                 <property name="top_attach">10</property>
                                 <property name="bottom_attach">11</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkCheckButton" id="FuzzyPinyin_UAN_UANG">
-                                <property name="label">uan =&gt; uang</property>
-                                <property name="visible">True</property>
-                                <property name="sensitive">False</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">False</property>
-                                <property name="active">True</property>
-                                <property name="draw_indicator">True</property>
-                              </object>
-                              <packing>
-                                <property name="top_attach">12</property>
-                                <property name="bottom_attach">13</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkCheckButton" id="FuzzyPinyin_UANG_UAN">
-                                <property name="label">uang =&gt; uan</property>
-                                <property name="visible">True</property>
-                                <property name="sensitive">False</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">False</property>
-                                <property name="draw_indicator">True</property>
-                              </object>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="right_attach">2</property>
-                                <property name="top_attach">12</property>
-                                <property name="bottom_attach">13</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkCheckButton" id="FuzzyPinyin_IAN_IANG">
-                                <property name="label">ian =&gt; iang</property>
-                                <property name="visible">True</property>
-                                <property name="sensitive">False</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">False</property>
-                                <property name="active">True</property>
-                                <property name="draw_indicator">True</property>
-                              </object>
-                              <packing>
-                                <property name="top_attach">11</property>
-                                <property name="bottom_attach">12</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkCheckButton" id="FuzzyPinyin_IANG_IAN">
-                                <property name="label">iang =&gt; ian</property>
-                                <property name="visible">True</property>
-                                <property name="sensitive">False</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">False</property>
-                                <property name="draw_indicator">True</property>
-                              </object>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="right_attach">2</property>
-                                <property name="top_attach">11</property>
-                                <property name="bottom_attach">12</property>
                               </packing>
                             </child>
                             <child>

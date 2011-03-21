@@ -25,7 +25,8 @@ auto_correct = [
     ("ui", "uei"),
     ("un", "uen"),
 #    ("ue", "ve"),
-    ("ve", "ue")
+    ("ve", "ue"),
+    ("ong", "on"),
 ]
 
 auto_correct_ext = [

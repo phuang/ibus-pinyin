@@ -190,16 +190,24 @@ CLEANFILES = \
 	$(NULL)
 
 PYBopomofoKeyboard.h:
-	$(PYTHON) $(top_srcdir)/scripts/genbopomofokeyboard.py > $@
+	$(AM_V_GEN) \
+	$(PYTHON) $(top_srcdir)/scripts/genbopomofokeyboard.py > $@ || \
+		( $(RM) $@; exit 1 )
 
 PYPinyinParserTable.h:
-	$(PYTHON) $(top_srcdir)/scripts/genpytable.py > $@
+	$(AM_V_GEN) \
+	$(PYTHON) $(top_srcdir)/scripts/genpytable.py > $@ || \
+		( $(RM) $@; exit 1 )
 
 PYPunctTable.h:
-	$(PYTHON) $(top_srcdir)/scripts/genpuncttable.py > $@
+	$(AM_V_GEN) \
+	$(PYTHON) $(top_srcdir)/scripts/genpuncttable.py > $@ || \
+		( $(RM) $@; exit 1 )
 
 PYSimpTradConverterTable.h:
-	$(PYTHON) $(top_srcdir)/scripts/update-simptrad-table.py > $@
+	$(AM_V_GEN) \
+	$(PYTHON) $(top_srcdir)/scripts/update-simptrad-table.py > $@ || \
+		( $(RM) $@; exit 1 )
 
 update-simptrad-table:
 	$(RM) ZhConversion.php ZhConversion.py PYSimpTradConverterTable.h
@@ -224,10 +232,13 @@ test: ibus-engine-pinyin
 # test: ibus-engine-pinyin
 # 	$(ENV) G_DEBUG=fatal_warnings \
 # 	$(builddir)/ibus-engine-pinyin
-
 ZhConversion.php:
-	svn cat http://svn.wikimedia.org/svnroot/mediawiki/trunk/phase3/includes/ZhConversion.php > $@
+	$(AM_V_GEN) \
+	svn cat http://svn.wikimedia.org/svnroot/mediawiki/trunk/phase3/includes/ZhConversion.php > $@ || \
+		( $(RM) $@; exit 1 )
 
 ZhConversion.py: ZhConversion.php
-	php $(top_srcdir)/scripts/php_2_py.php > $@
+	$(AM_V_GEN) \
+	php $(top_srcdir)/scripts/php_2_py.php > $@ || \
+		( $(RM) $@; exit 1 )
 
