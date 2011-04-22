@@ -173,8 +173,17 @@ then
     );
 fi
 
-
 AM_CONDITIONAL(IBUS_BUILD_LUA_EXTENSION, [test x"$enable_lua_extension" = x"yes"])
+
+# --disable-english-input-mode
+AC_ARG_ENABLE(english-input-mode,
+    AS_HELP_STRING([--disable-english-input-mode],
+    [do not build english input mode]),
+    [enable_english_input_mode=$enableval],
+    [enable_english_input_mode=yes]
+)
+
+AM_CONDITIONAL(IBUS_BUILD_ENGLISH_INPUT_MODE, [test x"$enable_english_input_mode" = x"yes"])
 
 # OUTPUT files
 AC_CONFIG_FILES([ po/Makefile.in
@@ -205,5 +214,6 @@ Build options:
     Build database android      $enable_db_android
     Build database open-phrase  $enable_db_open_phrase
     Build lua extension         $enable_lua_extension
+    Build english input mode    $enable_english_input_mode
 ])
 

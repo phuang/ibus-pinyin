@@ -18,9 +18,25 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
+WORDLIST = wordlist
+ENGLISH_AWK = english.awk
+ENGLISH_DB = english.db
 
 SUBDIRS = \
 	db \
 	icons \
 	$(NULL)
 
+
+EXTRA_DIST = \
+	$(WORDLIST) \
+	$(ENGLISH_AWK) \
+	$(NULL)
+
+english_db_DATA = \
+        $(ENGLISH_DB) \
+        $(NULL)
+english_dbdir = $(pkgdatadir)/db
+
+$(ENGLISH_DB): $(WORDLIST)
+	$(AWK) -f english.awk $< |sqlite3 $@

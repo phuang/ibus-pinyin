@@ -105,10 +105,15 @@ ibus_engine_pinyin_h_sources = \
 	PYText.h \
 	PYTypes.h \
 	PYUtil.h \
+	PYEnglishEditor.h \
 	$(NULL)
 
 if IBUS_BUILD_LUA_EXTENSION
 ibus_engine_pinyin_c_sources += PYExtEditor.cc
+endif
+
+if IBUS_BUILD_ENGLISH_INPUT_MODE
+ibus_engine_pinyin_c_sources += PYEnglishEditor.cc
 endif
 
 ibus_engine_pinyin_SOURCES = \
@@ -162,6 +167,12 @@ if IBUS_BUILD_LUA_EXTENSION
 	@LUA_LIBS@ \
 	-L../lua/ \
 	-lpylua \
+	$(NULL)
+endif
+
+if IBUS_BUILD_ENGLISH_INPUT_MODE
+   ibus_engine_pinyin_CXXFLAGS += \
+	-DIBUS_BUILD_ENGLISH_INPUT_MODE \
 	$(NULL)
 endif
 
