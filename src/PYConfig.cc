@@ -312,7 +312,7 @@ PinyinConfig::PinyinConfig (Bus & bus)
 void
 PinyinConfig::init (Bus & bus)
 {
-    if (m_instance == NULL) {
+    if (m_instance.get () == NULL) {
         m_instance.reset (new PinyinConfig (bus));
         m_instance->readDefaultValues ();
     }
@@ -435,7 +435,7 @@ BopomofoConfig::BopomofoConfig (Bus & bus)
 void
 BopomofoConfig::init (Bus & bus)
 {
-    if (m_instance == NULL) {
+    if (m_instance.get () == NULL) {
         m_instance.reset (new BopomofoConfig (bus));
         m_instance->readDefaultValues ();
     }

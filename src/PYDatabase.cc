@@ -718,7 +718,7 @@ Database::remove (const Phrase & phrase)
 void
 Database::init (void)
 {
-    if (m_instance == NULL) {
+    if (m_instance.get () == NULL) {
         m_instance.reset (new Database ());
     }
 }
