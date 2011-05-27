@@ -27,16 +27,22 @@ SUBDIRS = \
 	icons \
 	$(NULL)
 
+english_db_DATA = \
+        $(ENGLISH_DB) \
+        $(NULL)
+english_dbdir = $(pkgdatadir)/db
+
+$(ENGLISH_DB): $(WORDLIST) $(ENGLISH_AWK)
+	$(AM_V_GEN) \
+	$(RM) $@; \
+	$(AWK) -f $(srcdir)/$(ENGLISH_AWK) $(srcdir)/$(WORDLIST) | @SQLITE3@ $@ || \
+		( $(RM) $@ ; exit 1 )
 
 EXTRA_DIST = \
 	$(WORDLIST) \
 	$(ENGLISH_AWK) \
 	$(NULL)
 
-english_db_DATA = \
-        $(ENGLISH_DB) \
-        $(NULL)
-english_dbdir = $(pkgdatadir)/db
-
-$(ENGLISH_DB): $(WORDLIST)
-	$(AWK) -f english.awk $< |sqlite3 $@
+CLEANFILES = \
+	$(ENGLISH_DB) \
+	$(NULL)

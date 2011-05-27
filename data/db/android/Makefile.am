@@ -48,7 +48,7 @@ EXTRA_DIST = \
 	$(NULL)
 
 CLEANFILES = \
-	android.db \
+	$(main_db_DATA) \
 	$(NULL)
 
 DISTCLEANFILES = \

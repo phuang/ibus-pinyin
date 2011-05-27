@@ -95,12 +95,12 @@ AC_SUBST(ENV)
 # check python
 AM_PATH_PYTHON([2.5])
 
-# --disble-boost
+# --enable-boost
 AC_ARG_ENABLE(boost,
-    AC_HELP_STRING([--disable-boost],
-        [Do not use boost and use stdc++0x to replace boost.]),
+    AC_HELP_STRING([--enable-boost],
+        [Use boost to replace stdc++0x.]),
         [enable_boost=$enableval],
-        [enable_boost=yes]
+        [enable_boost=no]
 )
 if test x"$enable_boost" = x"yes"; then
     # check boost

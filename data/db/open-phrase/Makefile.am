@@ -31,7 +31,7 @@ DBTAR = pinyin-database-$(DBVER).tar.bz2
 
 $(DBTAR):
 	$(AM_V_GEN) \
-	wget http://ibus.googlecode.com/files/$(DBTAR) && \
+	wget http://ibus.googlecode.com/files/$(DBTAR) || \
 	( $(RM) $@; exit 1)
 
 stamp-db: $(DBTAR)
