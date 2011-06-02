@@ -530,7 +530,7 @@ PunctEditor::updatePunctCandidates (gchar ch)
 
     m_punct_candidates.clear();
 
-    brs = (const gchar ***) std::bsearch ((void *) ch,
+    brs = (const gchar ***) std::bsearch (reinterpret_cast<void *>(ch),
                                           punct_table,
                                           G_N_ELEMENTS (punct_table),
                                           sizeof(punct_table[0]),
