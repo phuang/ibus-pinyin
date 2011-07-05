@@ -49,6 +49,34 @@ const gchar * const CONFIG_AUXILIARY_SELECT_KEY_F    = "AuxiliarySelectKey_F";
 const gchar * const CONFIG_AUXILIARY_SELECT_KEY_KP   = "AuxiliarySelectKey_KP";
 const gchar * const CONFIG_ENTER_KEY                 = "EnterKey";
 
+const guint PINYIN_DEFAULT_OPTION =
+        PINYIN_INCOMPLETE_PINYIN |
+        PINYIN_FUZZY_C_CH |
+        // PINYIN_FUZZY_CH_C |
+        PINYIN_FUZZY_Z_ZH |
+        // PINYIN_FUZZY_ZH_Z |
+        PINYIN_FUZZY_S_SH |
+        // PINYIN_FUZZY_SH_S |
+        PINYIN_FUZZY_L_N |
+        // PINYIN_FUZZY_N_L |
+        PINYIN_FUZZY_F_H |
+        // PINYIN_FUZZY_H_F |
+        // PINYIN_FUZZY_L_R |
+        // PINYIN_FUZZY_R_L |
+        PINYIN_FUZZY_K_G |
+        PINYIN_FUZZY_G_K |
+        PINYIN_FUZZY_AN_ANG |
+        PINYIN_FUZZY_ANG_AN |
+        PINYIN_FUZZY_EN_ENG |
+        PINYIN_FUZZY_ENG_EN |
+        PINYIN_FUZZY_IN_ING |
+        PINYIN_FUZZY_ING_IN |
+        // PINYIN_FUZZY_IAN_IANG |
+        // PINYIN_FUZZY_IANG_IAN |
+        // PINYIN_FUZZY_UAN_UANG |
+        // PINYIN_FUZZY_UANG_UAN |
+        0;
+
 std::unique_ptr<PinyinConfig> PinyinConfig::m_instance;
 std::unique_ptr<BopomofoConfig> BopomofoConfig::m_instance;
 
@@ -56,7 +84,21 @@ Config::Config (Bus & bus, const std::string & name)
     : Object (ibus_bus_get_config (bus)),
       m_section ("engine/" + name)
 {
-    m_option = PINYIN_INCOMPLETE_PINYIN | PINYIN_CORRECT_ALL;
+    initDefaultValues ();
+    g_signal_connect (get<IBusConfig> (),
+                      "value-changed",
+                      G_CALLBACK (valueChangedCallback),
+                      this);
+}
+
+Config::~Config (void)
+{
+}
+
+void
+Config::initDefaultValues (void)
+{
+    m_option = PINYIN_DEFAULT_OPTION;
     m_option_mask = PINYIN_INCOMPLETE_PINYIN | PINYIN_CORRECT_ALL;
 
     m_orientation = IBUS_ORIENTATION_HORIZONTAL;
@@ -75,55 +117,63 @@ Config::Config (Bus & bus, const std::string & name)
     m_init_full_punct = TRUE;
     m_init_simp_chinese = TRUE;
     m_special_phrases = TRUE;
-
-    g_signal_connect (get<IBusConfig> (),
-                      "value-changed",
-                      G_CALLBACK (valueChangedCallback),
-                      this);
-}
-
-Config::~Config (void)
-{
 }
 
 static const struct {
     const gchar * const name;
     guint option;
-    bool defval;
 } options [] = {
-    { "IncompletePinyin",       PINYIN_INCOMPLETE_PINYIN,   TRUE },
+    { "IncompletePinyin",       PINYIN_INCOMPLETE_PINYIN},
     /* fuzzy pinyin */
-    { "FuzzyPinyin_C_CH",       PINYIN_FUZZY_C_CH,          TRUE  },
-    { "FuzzyPinyin_CH_C",       PINYIN_FUZZY_CH_C,          FALSE },
-    { "FuzzyPinyin_Z_ZH",       PINYIN_FUZZY_Z_ZH,          TRUE  },
-    { "FuzzyPinyin_ZH_Z",       PINYIN_FUZZY_ZH_Z,          FALSE },
-    { "FuzzyPinyin_S_SH",       PINYIN_FUZZY_S_SH,          TRUE  },
-    { "FuzzyPinyin_SH_S",       PINYIN_FUZZY_SH_S,          FALSE },
-    { "FuzzyPinyin_L_N",        PINYIN_FUZZY_L_N,           TRUE  },
-    { "FuzzyPinyin_N_L",        PINYIN_FUZZY_N_L,           FALSE },
-    { "FuzzyPinyin_F_H",        PINYIN_FUZZY_F_H,           TRUE  },
-    { "FuzzyPinyin_H_F",        PINYIN_FUZZY_H_F,           FALSE },
-    { "FuzzyPinyin_L_R",        PINYIN_FUZZY_L_R,           FALSE },
-    { "FuzzyPinyin_R_L",        PINYIN_FUZZY_R_L,           FALSE },
-    { "FuzzyPinyin_K_G",        PINYIN_FUZZY_K_G,           TRUE  },
-    { "FuzzyPinyin_G_K",        PINYIN_FUZZY_G_K,           TRUE  },
-    { "FuzzyPinyin_AN_ANG",     PINYIN_FUZZY_AN_ANG,        TRUE  },
-    { "FuzzyPinyin_ANG_AN",     PINYIN_FUZZY_ANG_AN,        TRUE  },
-    { "FuzzyPinyin_EN_ENG",     PINYIN_FUZZY_EN_ENG,        TRUE  },
-    { "FuzzyPinyin_ENG_EN",     PINYIN_FUZZY_ENG_EN,        TRUE  },
-    { "FuzzyPinyin_IN_ING",     PINYIN_FUZZY_IN_ING,        TRUE  },
-    { "FuzzyPinyin_ING_IN",     PINYIN_FUZZY_ING_IN,        TRUE  },
+    { "FuzzyPinyin_C_CH",       PINYIN_FUZZY_C_CH      },
+    { "FuzzyPinyin_CH_C",       PINYIN_FUZZY_CH_C      },
+    { "FuzzyPinyin_Z_ZH",       PINYIN_FUZZY_Z_ZH      },
+    { "FuzzyPinyin_ZH_Z",       PINYIN_FUZZY_ZH_Z      },
+    { "FuzzyPinyin_S_SH",       PINYIN_FUZZY_S_SH      },
+    { "FuzzyPinyin_SH_S",       PINYIN_FUZZY_SH_S      },
+    { "FuzzyPinyin_L_N",        PINYIN_FUZZY_L_N       },
+    { "FuzzyPinyin_N_L",        PINYIN_FUZZY_N_L       },
+    { "FuzzyPinyin_F_H",        PINYIN_FUZZY_F_H       },
+    { "FuzzyPinyin_H_F",        PINYIN_FUZZY_H_F       },
+    { "FuzzyPinyin_L_R",        PINYIN_FUZZY_L_R       },
+    { "FuzzyPinyin_R_L",        PINYIN_FUZZY_R_L       },
+    { "FuzzyPinyin_K_G",        PINYIN_FUZZY_K_G       },
+    { "FuzzyPinyin_G_K",        PINYIN_FUZZY_G_K       },
+    { "FuzzyPinyin_AN_ANG",     PINYIN_FUZZY_AN_ANG    },
+    { "FuzzyPinyin_ANG_AN",     PINYIN_FUZZY_ANG_AN    },
+    { "FuzzyPinyin_EN_ENG",     PINYIN_FUZZY_EN_ENG    },
+    { "FuzzyPinyin_ENG_EN",     PINYIN_FUZZY_ENG_EN    },
+    { "FuzzyPinyin_IN_ING",     PINYIN_FUZZY_IN_ING    },
+    { "FuzzyPinyin_ING_IN",     PINYIN_FUZZY_ING_IN    },
 #if 0
-    { "FuzzyPinyin_IAN_IANG",   PINYIN_FUZZY_IAN_IANG,      TRUE  },
-    { "FuzzyPinyin_IANG_IAN",   PINYIN_FUZZY_IANG_IAN,      TRUE  },
-    { "FuzzyPinyin_UAN_UANG",   PINYIN_FUZZY_UAN_UANG,      TRUE  },
-    { "FuzzyPinyin_UANG_UAN",   PINYIN_FUZZY_UANG_UAN,      TRUE  },
+    { "FuzzyPinyin_IAN_IANG",   PINYIN_FUZZY_IAN_IANG  },
+    { "FuzzyPinyin_IANG_IAN",   PINYIN_FUZZY_IANG_IAN  },
+    { "FuzzyPinyin_UAN_UANG",   PINYIN_FUZZY_UAN_UANG  },
+    { "FuzzyPinyin_UANG_UAN",   PINYIN_FUZZY_UANG_UAN  },
 #endif
 };
 
 void
 Config::readDefaultValues (void)
 {
+#if defined(HAVE_IBUS_CONFIG_GET_VALUES)
+    /* read all values together */
+    initDefaultValues ();
+    GVariant *values =
+            ibus_config_get_values (get<IBusConfig> (), m_section.c_str ());
+    g_return_if_fail (values != NULL);
+
+    GVariantIter iter;
+    gchar *name;
+    GVariant *value;
+    g_variant_iter_init (&iter, values);
+    while (g_variant_iter_next (&iter, "{sv}", &name, &value)) {
+        valueChanged (m_section, name, value);
+        g_free (name);
+        g_variant_unref (value);
+    }
+    g_variant_unref (values);
+#else
     /* others */
     m_orientation = read (CONFIG_ORIENTATION, 0);
     if (m_orientation != IBUS_ORIENTATION_VERTICAL &&
@@ -145,11 +195,15 @@ Config::readDefaultValues (void)
 
     /* read values */
     for (guint i = 0; i < G_N_ELEMENTS (options); i++) {
-        if (read (options[i].name, options[i].defval))
+        if (read (options[i].name,
+                  (options[i].option & PINYIN_DEFAULT_OPTION) != 0)) {
             m_option |= options[i].option;
-        else
+        }
+        else {
             m_option &= ~options[i].option;
+        }
     }
+#endif
 }
 
 inline bool
@@ -204,7 +258,7 @@ Config::read (const gchar * name,
 }
 
 static inline bool
-normalizeGValue (GVariant *value, bool defval)
+normalizeGVariant (GVariant *value, bool defval)
 {
     if (value == NULL || g_variant_classify (value) != G_VARIANT_CLASS_BOOLEAN)
         return defval;
@@ -212,7 +266,7 @@ normalizeGValue (GVariant *value, bool defval)
 }
 
 static inline gint
-normalizeGValue (GVariant *value, gint defval)
+normalizeGVariant (GVariant *value, gint defval)
 {
     if (value == NULL || g_variant_classify (value) != G_VARIANT_CLASS_INT32)
         return defval;
@@ -220,7 +274,7 @@ normalizeGValue (GVariant *value, gint defval)
 }
 
 static inline std::string
-normalizeGValue (GVariant *value, const gchar * defval)
+normalizeGVariant (GVariant *value, const std::string &defval)
 {
     if (value == NULL || g_variant_classify (value) != G_VARIANT_CLASS_STRING)
         return defval;
@@ -237,7 +291,7 @@ Config::valueChanged (const std::string &section,
 
     /* lookup table page size */
     if (CONFIG_ORIENTATION == name) {
-        m_orientation = normalizeGValue (value, 0);
+        m_orientation = normalizeGVariant (value, IBUS_ORIENTATION_HORIZONTAL);
         if (m_orientation != IBUS_ORIENTATION_VERTICAL &&
             m_orientation != IBUS_ORIENTATION_HORIZONTAL) {
             m_orientation = IBUS_ORIENTATION_HORIZONTAL;
@@ -245,7 +299,7 @@ Config::valueChanged (const std::string &section,
         }
     }
     else if (CONFIG_PAGE_SIZE == name) {
-        m_page_size = normalizeGValue (value, 5);
+        m_page_size = normalizeGVariant (value, 5);
         if (m_page_size > 10) {
             m_page_size = 5;
             g_warn_if_reached ();
@@ -253,7 +307,7 @@ Config::valueChanged (const std::string &section,
     }
     /* fuzzy pinyin */
     else if (CONFIG_FUZZY_PINYIN == name) {
-        if (normalizeGValue (value, TRUE))
+        if (normalizeGVariant (value, false))
             m_option_mask |= PINYIN_FUZZY_ALL;
         else
             m_option_mask &= ~PINYIN_FUZZY_ALL;
@@ -262,7 +316,8 @@ Config::valueChanged (const std::string &section,
         for (guint i = 0; i < G_N_ELEMENTS (options); i++) {
             if (G_LIKELY (options[i].name != name))
                 continue;
-            if (normalizeGValue (value, options[i].defval))
+            if (normalizeGVariant (value,
+                    (options[i].option & PINYIN_DEFAULT_OPTION) != 0))
                 m_option |= options[i].option;
             else
                 m_option &= ~options[i].option;
@@ -271,7 +326,6 @@ Config::valueChanged (const std::string &section,
         return FALSE;
     }
     return TRUE;
-
 }
 
 void
@@ -284,24 +338,21 @@ Config::valueChangedCallback (IBusConfig  *config,
     self->valueChanged (section, name, value);
 }
 
-
-
 static const struct {
     const gchar * const name;
     guint option;
-    bool defval;
 } pinyin_options [] = {
     /* correct */
-    { "CorrectPinyin_GN_NG",    PINYIN_CORRECT_GN_TO_NG,    TRUE },
-    { "CorrectPinyin_GN_NG",    PINYIN_CORRECT_GN_TO_NG,    TRUE },
-    { "CorrectPinyin_MG_NG",    PINYIN_CORRECT_MG_TO_NG,    TRUE },
-    { "CorrectPinyin_IOU_IU",   PINYIN_CORRECT_IOU_TO_IU,   TRUE },
-    { "CorrectPinyin_UEI_UI",   PINYIN_CORRECT_UEI_TO_UI,   TRUE },
-    { "CorrectPinyin_UEN_UN",   PINYIN_CORRECT_UEN_TO_UN,   TRUE },
-    { "CorrectPinyin_UE_VE",    PINYIN_CORRECT_UE_TO_VE,    TRUE },
-    { "CorrectPinyin_V_U",      PINYIN_CORRECT_V_TO_U,      TRUE },
-    { "CorrectPinyin_VE_UE",    PINYIN_CORRECT_V_TO_U,      TRUE },
-    { "CorrectPinyin_ON_ONG",   PINYIN_CORRECT_ON_TO_ONG,   FALSE },
+    { "CorrectPinyin_GN_NG",    PINYIN_CORRECT_GN_TO_NG    },
+    { "CorrectPinyin_GN_NG",    PINYIN_CORRECT_GN_TO_NG    },
+    { "CorrectPinyin_MG_NG",    PINYIN_CORRECT_MG_TO_NG    },
+    { "CorrectPinyin_IOU_IU",   PINYIN_CORRECT_IOU_TO_IU   },
+    { "CorrectPinyin_UEI_UI",   PINYIN_CORRECT_UEI_TO_UI   },
+    { "CorrectPinyin_UEN_UN",   PINYIN_CORRECT_UEN_TO_UN   },
+    { "CorrectPinyin_UE_VE",    PINYIN_CORRECT_UE_TO_VE    },
+    { "CorrectPinyin_V_U",      PINYIN_CORRECT_V_TO_U      },
+    { "CorrectPinyin_VE_UE",    PINYIN_CORRECT_V_TO_U      },
+    { "CorrectPinyin_ON_ONG",   PINYIN_CORRECT_ON_TO_ONG   },
 };
 
 PinyinConfig::PinyinConfig (Bus & bus)
@@ -322,6 +373,7 @@ void
 PinyinConfig::readDefaultValues (void)
 {
     Config::readDefaultValues ();
+#if !defined(HAVE_IBUS_CONFIG_GET_VALUES)
     /* double pinyin */
     m_double_pinyin = read (CONFIG_DOUBLE_PINYIN, false);
     m_double_pinyin_schema = read (CONFIG_DOUBLE_PINYIN_SCHEMA, 0);
@@ -353,12 +405,13 @@ PinyinConfig::readDefaultValues (void)
 
     /* read values */
     for (guint i = 0; i < G_N_ELEMENTS (pinyin_options); i++) {
-        if (read (pinyin_options[i].name, pinyin_options[i].defval))
+        if (read (pinyin_options[i].name,
+                (pinyin_options[i].option & PINYIN_DEFAULT_OPTION) != 0))
             m_option |= pinyin_options[i].option;
         else
             m_option &= ~pinyin_options[i].option;
     }
-
+#endif
 }
 
 gboolean
@@ -374,39 +427,39 @@ PinyinConfig::valueChanged (const std::string &section,
 
     /* double pinyin */
     if (CONFIG_DOUBLE_PINYIN == name)
-        m_double_pinyin = normalizeGValue (value, false);
+        m_double_pinyin = normalizeGVariant (value, false);
     else if (CONFIG_DOUBLE_PINYIN_SCHEMA == name) {
-        m_double_pinyin_schema = normalizeGValue (value, 0);
+        m_double_pinyin_schema = normalizeGVariant (value, 0);
         if (m_double_pinyin_schema > DOUBLE_PINYIN_LAST) {
             m_double_pinyin_schema = 0;
             g_warn_if_reached ();
         }
     }
     else if (CONFIG_DOUBLE_PINYIN_SHOW_RAW == name)
-        m_double_pinyin_show_raw = normalizeGValue (value, false);
+        m_double_pinyin_show_raw = normalizeGVariant (value, false);
     /* init states */
     else if (CONFIG_INIT_CHINESE == name)
-        m_init_chinese = normalizeGValue (value, true);
+        m_init_chinese = normalizeGVariant (value, true);
     else if (CONFIG_INIT_FULL == name)
-        m_init_full = normalizeGValue (value, true);
+        m_init_full = normalizeGVariant (value, true);
     else if (CONFIG_INIT_FULL_PUNCT == name)
-        m_init_full_punct = normalizeGValue (value, true);
+        m_init_full_punct = normalizeGVariant (value, true);
     else if (CONFIG_INIT_SIMP_CHINESE == name)
-        m_init_simp_chinese = normalizeGValue (value, true);
+        m_init_simp_chinese = normalizeGVariant (value, true);
     else if (CONFIG_SPECIAL_PHRASES == name)
-        m_special_phrases = normalizeGValue (value, true);
+        m_special_phrases = normalizeGVariant (value, true);
     /* others */
     else if (CONFIG_SHIFT_SELECT_CANDIDATE == name)
-        m_shift_select_candidate = normalizeGValue (value, false);
+        m_shift_select_candidate = normalizeGVariant (value, false);
     else if (CONFIG_MINUS_EQUAL_PAGE == name)
-        m_minus_equal_page = normalizeGValue (value, true);
+        m_minus_equal_page = normalizeGVariant (value, true);
     else if (CONFIG_COMMA_PERIOD_PAGE == name)
-        m_comma_period_page = normalizeGValue (value, true);
+        m_comma_period_page = normalizeGVariant (value, true);
     else if (CONFIG_AUTO_COMMIT == name)
-        m_auto_commit = normalizeGValue (value, false);
+        m_auto_commit = normalizeGVariant (value, false);
     /* correct pinyin */
     else if (CONFIG_CORRECT_PINYIN == name) {
-        if (normalizeGValue (value, TRUE))
+        if (normalizeGVariant (value, true))
             m_option_mask |= PINYIN_CORRECT_ALL;
         else
             m_option_mask &= ~PINYIN_CORRECT_ALL;
@@ -415,7 +468,8 @@ PinyinConfig::valueChanged (const std::string &section,
         for (guint i = 0; i < G_N_ELEMENTS (pinyin_options); i++) {
             if (G_LIKELY (pinyin_options[i].name != name))
                 continue;
-            if (normalizeGValue (value, pinyin_options[i].defval))
+            if (normalizeGVariant (value,
+                    (pinyin_options[i].option & PINYIN_DEFAULT_OPTION) != 0))
                 m_option |= pinyin_options[i].option;
             else
                 m_option &= ~pinyin_options[i].option;
@@ -425,7 +479,6 @@ PinyinConfig::valueChanged (const std::string &section,
     }
     return TRUE;
 }
-
 
 BopomofoConfig::BopomofoConfig (Bus & bus)
     : Config (bus, "Bopomofo")
@@ -445,7 +498,7 @@ void
 BopomofoConfig::readDefaultValues (void)
 {
     Config::readDefaultValues ();
-
+#if !defined(HAVE_IBUS_CONFIG_GET_VALUES)
     /* init states */
     m_init_chinese = read (CONFIG_INIT_CHINESE, true);
     m_init_full = read (CONFIG_INIT_FULL, false);
@@ -462,6 +515,7 @@ BopomofoConfig::readDefaultValues (void)
     m_auxiliary_select_key_f = read (CONFIG_AUXILIARY_SELECT_KEY_F, true);
     m_auxiliary_select_key_kp = read (CONFIG_AUXILIARY_SELECT_KEY_KP, true);
     m_enter_key = read (CONFIG_ENTER_KEY, true);
+#endif
 }
 
 gboolean
@@ -477,29 +531,29 @@ BopomofoConfig::valueChanged (const std::string &section,
 
     /* init states */
     if (CONFIG_INIT_CHINESE == name)
-        m_init_chinese = normalizeGValue (value, true);
+        m_init_chinese = normalizeGVariant (value, true);
     else if (CONFIG_INIT_FULL == name)
-        m_init_full = normalizeGValue (value, true);
+        m_init_full = normalizeGVariant (value, true);
     else if (CONFIG_INIT_FULL_PUNCT == name)
-        m_init_full_punct = normalizeGValue (value, true);
+        m_init_full_punct = normalizeGVariant (value, true);
     else if (CONFIG_INIT_SIMP_CHINESE == name)
-        m_init_simp_chinese = normalizeGValue (value, false);
+        m_init_simp_chinese = normalizeGVariant (value, false);
     else if (CONFIG_SPECIAL_PHRASES == name)
-        m_special_phrases = normalizeGValue (value, false);
+        m_special_phrases = normalizeGVariant (value, false);
     else if (CONFIG_BOPOMOFO_KEYBOARD_MAPPING == name)
-        m_bopomofo_keyboard_mapping = normalizeGValue (value, 0);
+        m_bopomofo_keyboard_mapping = normalizeGVariant (value, 0);
     else if (CONFIG_SELECT_KEYS == name) {
-        m_select_keys = normalizeGValue (value, 0);
+        m_select_keys = normalizeGVariant (value, 0);
         if (m_select_keys >= 9) m_select_keys = 0;
     }
     else if (CONFIG_GUIDE_KEY == name)
-        m_guide_key = normalizeGValue (value, true);
+        m_guide_key = normalizeGVariant (value, true);
     else if (CONFIG_AUXILIARY_SELECT_KEY_F == name)
-        m_auxiliary_select_key_f = normalizeGValue (value, true);
+        m_auxiliary_select_key_f = normalizeGVariant (value, true);
     else if (CONFIG_AUXILIARY_SELECT_KEY_KP == name)
-        m_auxiliary_select_key_kp = normalizeGValue (value, true);
+        m_auxiliary_select_key_kp = normalizeGVariant (value, true);
     else if (CONFIG_ENTER_KEY == name)
-        m_enter_key = normalizeGValue (value, true);
+        m_enter_key = normalizeGVariant (value, true);
     else
         return FALSE;
     return TRUE;

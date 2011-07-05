@@ -88,6 +88,16 @@ AC_CHECK_FUNCS([uuid_create], [], [
 
 AM_CONDITIONAL(HAVE_LIBUUID, test x"$HAVE_LIBUUID" = x"yes")
 
+# check if ibus_config_get_values, which is available in ibus-1.3.99+ (git master)
+save_CFLAGS="$CFLAGS"
+save_LIBS="$LIBS"
+CFLAGS="$CFLAGS $IBUS_CFLAGS"
+LIBS="$LIBS $IBUS_LIBS"
+AC_CHECK_FUNCS([ibus_config_get_values])
+CFLAGS="$save_CFLAGS"
+LIBS="$save_LIBS"
+
+
 # check env
 AC_PATH_PROG(ENV, env)
 AC_SUBST(ENV)

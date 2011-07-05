@@ -21,6 +21,10 @@
 #ifndef __PY_CONFIG_H_
 #define __PY_CONFIG_H_
 
+#ifdef HAVE_CONFIG_H
+#  include <config.h>
+#endif
+
 #include <string>
 #include <ibus.h>
 #include "PYUtil.h"
@@ -30,7 +34,7 @@ namespace PY {
 
 class Bus;
 
-class Config : Object {
+class Config : public Object {
 protected:
     Config (Bus & bus, const std::string & name);
     virtual ~Config (void);
@@ -62,9 +66,9 @@ protected:
     bool read (const gchar * name, bool defval);
     gint read (const gchar * name, gint defval);
     std::string read (const gchar * name, const gchar * defval);
+    void initDefaultValues (void);
 
     virtual void readDefaultValues (void);
-
     virtual gboolean valueChanged (const std::string  &section,
                                    const std::string  &name,
                                    GVariant           *value);
