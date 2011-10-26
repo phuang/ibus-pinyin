@@ -76,7 +76,12 @@ start_component (void)
     Bus bus;
 
     if (!bus.isConnected ()) {
-        g_warning ("Can not connect to ibus");
+        g_warning ("Can not connect to ibus!");
+        exit (0);
+    }
+
+    if (!ibus_bus_get_config (bus)) {
+        g_warning ("IBus config component is not ready!");
         exit (0);
     }
 
