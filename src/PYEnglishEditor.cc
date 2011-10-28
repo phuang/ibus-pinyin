@@ -357,7 +357,7 @@ EnglishEditor::EnglishEditor (PinyinProperties & props, Config &config)
     gchar *path = g_build_filename (g_get_user_cache_dir (),
                                      "ibus", "pinyin", "english-user.db", NULL);
 
-    bool result = m_english_database->openDatabase
+    gboolean result = m_english_database->openDatabase
         (".." G_DIR_SEPARATOR_S "data" G_DIR_SEPARATOR_S "english.db",
          "english-user.db") ||
         m_english_database->openDatabase
@@ -406,26 +406,20 @@ EnglishEditor::processKeyEvent (guint keyval, guint keycode, guint modifiers)
     m_cursor = std::min (m_cursor, (guint)m_text.length ());
 
     /* Remember the input string. */
-    switch (m_cursor) {
-    case 0: //Empty input string
-        {
-            g_return_val_if_fail ('v' == keyval, FALSE);
-            if ( 'v' == keyval ) {
-                m_text.insert (m_cursor, keyval);
-                m_cursor++;
-            }
-        }
-        break;
-    default: //append string
-        {
-            g_return_val_if_fail ('v' == m_text[0], FALSE);
-            if (isalpha (keyval)) {
-                m_text.insert (m_cursor, keyval);
-                m_cursor++;
-            }
-        }
-        break;
+    if (m_cursor == 0) {
+        g_return_val_if_fail ('v' == keyval, FALSE);
+        m_text = "v";
+        m_cursor ++;
     }
+    else {
+        g_return_val_if_fail ('v' == m_text[0], FALSE);
+        if ((keyval >= 'a' && keyval <= 'z') ||
+            (keyval >= 'A' && keyval <= 'Z')) {
+            m_text.insert (m_cursor, keyval);
+            m_cursor++;
+        }
+    }
+
     /* Deal other staff with updateStateFromInput (). */
     updateStateFromInput ();
     update ();
@@ -579,12 +573,12 @@ EnglishEditor::selectCandidate (guint index)
     return TRUE;
 }
 
-bool
+gboolean
 EnglishEditor::updateStateFromInput (void)
 {
     /* Do parse and candidates update here. */
     /* prefix v double check here. */
-    if (!m_text.length ()) {
+    if (m_text.empty ()) {
         m_preedit_text = "";
         m_auxiliary_text = "";
         m_cursor = 0;
@@ -592,8 +586,10 @@ EnglishEditor::updateStateFromInput (void)
         return FALSE;
     }
 
-    if (!'v' == m_text[0]) {
+    if ('v' != m_text[0]) {
         g_warning ("v is expected in m_text string.\n");
+        m_auxiliary_text = "";
+        clearLookupTable ();
         return FALSE;
     }
 
@@ -610,9 +606,9 @@ EnglishEditor::updateStateFromInput (void)
 
     /* lookup table candidate fill here. */
     std::vector<std::string> words;
-    bool retval = m_english_database->listWords (prefix.c_str (), words);
+    gboolean retval = m_english_database->listWords (prefix.c_str (), words);
     if (!retval)
-        return false;
+        return FALSE;
 
     clearLookupTable ();
     std::vector<std::string>::iterator iter;
@@ -620,7 +616,7 @@ EnglishEditor::updateStateFromInput (void)
         Text text (*iter);
         m_lookup_table.appendCandidate (text);
     }
-    return true;
+    return TRUE;
 }
 
 /* Auxiliary Functions */
@@ -752,18 +748,18 @@ EnglishEditor::removeCharAfter (void)
     return TRUE;
 }
 
-bool
+gboolean
 EnglishEditor::train (const char *word, float delta)
 {
     float freq = 0;
-    bool retval = m_english_database->getWordInfo (word, freq);
+    gboolean retval = m_english_database->getWordInfo (word, freq);
     if (retval) {
         freq += delta;
         m_english_database->updateWord (word, freq);
     } else {
         m_english_database->insertWord (word, delta);
     }
-    return true;
+    return TRUE;
 }
 
 #if 0

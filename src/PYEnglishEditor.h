@@ -46,7 +46,7 @@ public:
     virtual void candidateClicked (guint index, guint button, guint state);
 
 private:
-    bool updateStateFromInput (void);
+    gboolean updateStateFromInput (void);
 
     void clearLookupTable (void);
     void updateLookupTable (void);
@@ -66,7 +66,7 @@ private:
     gboolean processEditKey(guint keyval);
     gboolean processPageKey(guint keyval);
 
-    bool train(const char *word, float delta);
+    gboolean train(const char *word, float delta);
 
     /* variables */
     LookupTable m_lookup_table;
