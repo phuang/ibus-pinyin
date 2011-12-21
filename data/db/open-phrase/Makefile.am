@@ -18,8 +18,6 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-
-if IBUS_BUILD_DB_OPEN_PHRASE
 db_file = open-phrase.db
 main_db_DATA = \
 	db/$(db_file) \
@@ -51,5 +49,4 @@ CLEANFILES = \
 DISTCLEANFILES = \
 	$(DBTAR) \
 	$(NULL)
-endif
 

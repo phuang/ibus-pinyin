@@ -18,31 +18,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-WORDLIST = wordlist
-ENGLISH_AWK = english.awk
-ENGLISH_DB = english.db
-
 SUBDIRS = \
 	db \
 	icons \
-	$(NULL)
-
-english_db_DATA = \
-        $(ENGLISH_DB) \
-        $(NULL)
-english_dbdir = $(pkgdatadir)/db
-
-$(ENGLISH_DB): $(WORDLIST) $(ENGLISH_AWK)
-	$(AM_V_GEN) \
-	$(RM) $@; \
-	$(AWK) -f $(srcdir)/$(ENGLISH_AWK) $(srcdir)/$(WORDLIST) | @SQLITE3@ $@ || \
-		( $(RM) $@ ; exit 1 )
-
-EXTRA_DIST = \
-	$(WORDLIST) \
-	$(ENGLISH_AWK) \
-	$(NULL)
-
-CLEANFILES = \
-	$(ENGLISH_DB) \
 	$(NULL)

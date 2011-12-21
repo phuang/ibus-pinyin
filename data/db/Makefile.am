@@ -18,6 +18,18 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
+if IBUS_BUILD_DB_ANDROID
+ANDROID_DIR=android
+endif
+
+if IBUS_BUILD_DB_OPEN_PHRASE
+OPEN_PHRASE_DIR=open-phrase
+endif
+
+if IBUS_BUILD_ENGLISH_INPUT_MODE
+ENGLISH_DIR=english
+endif
+
 main_db_DATA = \
 	create_index.sql \
 	$(NULL)
@@ -28,8 +40,9 @@ EXTRA_DIST = \
 	$(NULL)
 
 SUBDIRS = \
-	android \
-	open-phrase \
+	$(ANDROID_DIR) \
+	$(OPEN_PHRASE_DIR) \
+	$(ENGLISH_DIR) \
 	$(NULL)
 
 
