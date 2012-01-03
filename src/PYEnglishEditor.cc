@@ -358,7 +358,7 @@ EnglishEditor::EnglishEditor (PinyinProperties & props, Config &config)
                                      "ibus", "pinyin", "english-user.db", NULL);
 
     gboolean result = m_english_database->openDatabase
-        (".." G_DIR_SEPARATOR_S "data" G_DIR_SEPARATOR_S "english.db",
+        (".." G_DIR_SEPARATOR_S "data" G_DIR_SEPARATOR_S "db" G_DIR_SEPARATOR_S "english" G_DIR_SEPARATOR_S "english.db",
          "english-user.db") ||
         m_english_database->openDatabase
         (PKGDATADIR G_DIR_SEPARATOR_S "db" G_DIR_SEPARATOR_S "english.db", path);

@@ -209,6 +209,7 @@ data/Makefile
 data/db/Makefile
 data/db/android/Makefile
 data/db/open-phrase/Makefile
+data/db/english/Makefile
 data/icons/Makefile
 m4/Makefile
 ])
