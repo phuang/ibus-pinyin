@@ -19,34 +19,39 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-import sys
-import gtk
-import ibus
+
+import gettext
 import locale
 import os
-import version
-import gettext
+import sys
+
+from gi.repository import GLib
+from gi.repository import Gtk
+from gi.repository import IBus
 from xdg import BaseDirectory
+
+import version
 
 _ = lambda a : gettext.dgettext("ibus-pinyin", a)
 
 class PreferencesDialog:
-    def __init__(self,engine):
+    def __init__(self, engine):
         locale.setlocale(locale.LC_ALL, "")
         localedir = os.getenv("IBUS_LOCALEDIR")
         gettext.bindtextdomain("ibus-pinyin", localedir)
         gettext.bind_textdomain_codeset("ibus-pinyin", "UTF-8")
 
-        self.__bus = ibus.Bus()
+        self.__bus = IBus.Bus()
         self.__config = self.__bus.get_config()
-        self.__builder = gtk.Builder()
+        self.__builder = Gtk.Builder()
         self.__builder.set_translation_domain("ibus-pinyin")
         self.__builder.add_from_file("ibus-pinyin-preferences.ui")
         self.__dialog = self.__builder.get_object("dialog")
         self.__init_pages()
-        
+
         if engine == "pinyin":
             self.__config_namespace = "engine/Pinyin"
+            self.__values = dict(self.__config.get_values(self.__config_namespace))
             self.__init_general()
             self.__init_pinyin()
             self.__init_fuzzy()
@@ -54,17 +59,17 @@ class PreferencesDialog:
             self.__init_about()
         elif engine == "bopomofo":
             self.__config_namespace = "engine/Bopomofo"
+            self.__values = dict(self.__config.get_values(self.__config_namespace))
             self.__init_general()
             self.__init_bopomofo()
             self.__init_fuzzy()
             self.__init_dictionary()
             self.__init_about()
             self.__convert_fuzzy_pinyin_to_bopomofo()
-            
         else:
             print("Error: Unknown Engine")
             exit()
-        
+
         self.__pages.set_current_page(0)
 
     def __init_pages(self):
@@ -75,7 +80,7 @@ class PreferencesDialog:
         self.__page_fuzzy = self.__builder.get_object("pageFuzzy")
         self.__page_dictionary = self.__builder.get_object("pageDictionary")
         self.__page_about = self.__builder.get_object("pageAbout")
-        
+
         self.__page_general.hide()
         self.__page_pinyin_mode.hide()
         self.__page_bopomofo_mode.hide()
@@ -86,7 +91,7 @@ class PreferencesDialog:
     def __init_general(self):
         # page General
         self.__page_general.show()
-        
+
         # init state
         self.__init_chinese = self.__builder.get_object("InitChinese")
         self.__init_english = self.__builder.get_object("InitEnglish")
@@ -96,13 +101,10 @@ class PreferencesDialog:
         self.__init_half_punct = self.__builder.get_object("InitHalfPunct")
         self.__init_simp = self.__builder.get_object("InitSimplifiedChinese")
         self.__init_trad = self.__builder.get_object("IniTraditionalChinese")
-        
+
         # UI
         self.__lookup_table_page_size = self.__builder.get_object("LookupTablePageSize")
         self.__lookup_table_orientation = self.__builder.get_object("LookupTableOrientation")
-        renderer = gtk.CellRendererText()
-        self.__lookup_table_orientation.pack_start(renderer)
-        self.__lookup_table_orientation.set_attributes(renderer, text=0)
 
         # read values
         self.__init_chinese.set_active(self.__get_value("InitChinese", True))
@@ -130,7 +132,7 @@ class PreferencesDialog:
     def __init_pinyin(self):
         # page
         self.__page_pinyin_mode.show()
-        
+
         # pinyin
         self.__full_pinyin = self.__builder.get_object("FullPinyin")
         self.__incomplete_pinyin = self.__builder.get_object("IncompletePinyin")
@@ -138,10 +140,6 @@ class PreferencesDialog:
         self.__double_pinyin_schema = self.__builder.get_object("DoublePinyinSchema")
         # self.__double_pinyin_schema_label = self.__builder.get_object("labelDoublePinyinSchema")
         self.__double_pinyin_show_raw = self.__builder.get_object("DoublePinyinShowRaw")
-
-        renderer = gtk.CellRendererText()
-        self.__double_pinyin_schema.pack_start(renderer)
-        self.__double_pinyin_schema.set_attributes(renderer, text=0)
 
         # read value
         self.__incomplete_pinyin.set_active(self.__get_value("IncompletePinyin", True))
@@ -173,25 +171,20 @@ class PreferencesDialog:
         self.__incomplete_pinyin.connect("toggled", self.__toggled_cb, "IncompletePinyin")
         self.__double_pinyin_schema.connect("changed", __double_pinyin_schema_changed_cb)
         self.__double_pinyin_show_raw.connect("toggled", self.__toggled_cb, "DoublePinyinShowRaw")
-        
+
         self.__init_input_custom()
         self.__init_correct_pinyin()
-        
+
     def __init_bopomofo(self):
         # page Bopomodo Mode
         self.__page_bopomofo_mode.show()
-        
+
         # bopomofo mode
         self.__incomplete_bopomofo = self.__builder.get_object("IncompleteBopomofo")
         self.__bopomofo_keyboard_mapping = self.__builder.get_object("BopomofoKeyboardMapping")
-        renderer = gtk.CellRendererText()
-        self.__bopomofo_keyboard_mapping.pack_start(renderer)
-        self.__bopomofo_keyboard_mapping.set_attributes(renderer, text=0)
-        
+
         # selection mode
         self.__select_keys = self.__builder.get_object("SelectKeys")
-        self.__select_keys.pack_start(renderer)
-        self.__select_keys.set_attributes(renderer, text=0)
         self.__guide_key = self.__builder.get_object("GuideKey")
         self.__auxiliary_select_key_f = self.__builder.get_object("AuxiliarySelectKey_F")
         self.__auxiliary_select_key_kp = self.__builder.get_object("AuxiliarySelectKey_KP")
@@ -213,7 +206,7 @@ class PreferencesDialog:
             self.__set_value("BopomofoKeyboardMapping", widget.get_active())
         def __select_keys_changed_cb(widget):
             self.__set_value("SelectKeys", widget.get_active())
-        
+
         self.__bopomofo_keyboard_mapping.connect("changed", __bopomofo_keyboard_mapping_changed_cb)
         self.__incomplete_bopomofo.connect("toggled", self.__toggled_cb, "IncompletePinyin")
         self.__select_keys.connect("changed", __select_keys_changed_cb)
@@ -275,7 +268,7 @@ class PreferencesDialog:
     def __init_fuzzy(self):
         # page Fuzzy
         self.__page_fuzzy.show()
-        
+
         # fuzzy pinyin
         self.__fuzzy_pinyin = self.__builder.get_object("FuzzyPinyin")
         self.__fuzzy_pinyin_widgets = [
@@ -357,7 +350,7 @@ class PreferencesDialog:
     def __init_dictionary(self):
         # page Dictionary
         self.__page_dictionary.show()
-    
+
         # dictionary
         self.__special_phrases = self.__builder.get_object("SpecialPhrases")
         self.__edit_special_phrases = self.__builder.get_object("EditSpecialPhrases")
@@ -384,7 +377,7 @@ class PreferencesDialog:
     def __init_about(self):
         # page About
         self.__page_about.show()
-        
+
         self.__name_version = self.__builder.get_object("NameVersion")
         self.__name_version.set_markup(_("<big><b>IBus Pinyin %s</b></big>") % version.get_version())
 
@@ -395,14 +388,27 @@ class PreferencesDialog:
         self.__set_value(name, widget.get_active ())
 
     def __get_value(self, name, defval):
-        value = self.__config.get_value(self.__config_namespace, name, "test_default_value_9898")
-        if value != "test_default_value_9898":
-            return value
+        if name in self.__values:
+            var = self.__values[name]
+            if isinstance(defval, type(var)):
+                return var
         self.__set_value(name, defval)
         return defval
 
     def __set_value(self, name, val):
-        self.__config.set_value(self.__config_namespace, name, val)
+        var = None
+        if isinstance(val, bool):
+            var = GLib.Variant.new_boolean(val)
+        elif isinstance(val, int):
+            var = GLib.Variant.new_int32(val)
+        elif isinstance(val, str):
+            var = GLib.Variant.new_string(val)
+        else:
+            print >> sys.stderr, "val(%s) is not in support type." % repr(val)
+            return
+
+        self.__values[name] = val
+        self.__config.set_value(self.__config_namespace, name, var)
 
     def run(self):
         return self.__dialog.run()

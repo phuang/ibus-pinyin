@@ -16,7 +16,6 @@ BuildRequires:  libtool
 BuildRequires:  pkgconfig
 BuildRequires:  sqlite-devel
 BuildRequires:  libuuid-devel
-BuildRequires:  boost-devel >= 1.39
 BuildRequires:  ibus-devel >= 1.3
 
 # Requires(post): sqlite
@@ -52,7 +51,11 @@ The phrase database for ibus Pinyin and Bopomofo from android project.
 cp %{SOURCE1} data/db/open-phrase
 
 %build
-%configure --disable-static --enable-db-open-phrase
+%configure \
+  --disable-static \
+  --enable-db-open-phrase \
+  --disable-english-input-mode \
+  --disable-lua-extension
 # make -C po update-gmo
 make %{?_smp_mflags}
 
